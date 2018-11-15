@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<configurations>
+ <configuration name="">
+ <algorithm dll="OSCFAR">
+  <input type="Video" name="video"/>
+  <param name="rank" type="int" value="50"/>
+  <param name="size" type="int" value="64"/>
+  <param name="alpha" type="double" value="1.5"/>
+  <output type="BinaryVideo"/>
+ </algorithm>
+ </configuration>
+</configurations>

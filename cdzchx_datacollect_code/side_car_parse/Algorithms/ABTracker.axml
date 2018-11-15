@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<configurations>
+ <configuration name="">
+  <algorithm dll="ABTracker">
+   <input type="Extractions"/>
+   <param name="enabled" type="boolean" value="1"/>
+   <param name="rotationDuration" type="double" value="10"/>
+   <param name="timeScaling" type="double" value="1.0"/>
+   <param name="alpha" type="double" value="1.0"/>
+   <param name="beta" type="double" value="1.0"/>
+   <param name="associationRadius" type="double" value="10.0"/>
+   <param name="initiationCount" type="int" value="2"/>
+   <param name="initiationRotationCount" type="double" value="2.5"/>
+   <param name="coastRotationCount" type="double" value="5.5"/>
+   <param name="minRange" type="double" value="50.0" />
+   <param name="initiationInhibitRegions" type="string"
+	  value="/opt/sidecar/data/abtracker/initiationInhibitRegions.xml"/>
+   <output type="TSPI"/>
+  </algorithm>
+ </configuration>
+</configurations>

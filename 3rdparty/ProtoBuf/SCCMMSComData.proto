@@ -1,0 +1,66 @@
+///**************************************************************************
+//* @Project : cdzchx_camctrlserver
+//* @IDL Module: ZCHXFllow
+//* @File: ZCHXFllow.proto
+//* @Description:
+//*    
+//*
+//* @Copyright: Copyright (c) 2017
+//* @Company: 深圳置辰海信科技有限公司
+//* @WebSite: http://www.szcenterstar.com/
+//* @author 
+//*
+//* @Revision History
+//*
+//* <pre>
+//* ----------------------------------------------------------------------
+//*   Ver     Date       Who             Comments
+//*  ----- ----------  --------  ---------------------------------------
+//*   1.0  2017/02/07     邓华钢       初次定义完成Com口的数据结构
+//* ----------------------------------------------------------------------
+//* </pre>
+//**************************************************************************/
+
+
+package com.zhichenhaixin.proto;
+
+	//GPS信息
+	message GPSData	{
+		required double gps_lon = 1;	//经度
+		required double gps_lat = 2;	//纬度
+		required double gps_shipSpeed = 3; //航速，不要地速
+		required double gps_headAngle = 4; //航向角
+		required double gps_trackAngle = 5; //航迹向
+		required double gps_depth = 6;      //海深
+		required string gps_time = 7;       //GPS上传数据的时间
+		required string gps_timeArea = 8;   //GPS时区
+	}
+	
+	//海缆信息
+	message CableData {
+		required double glj_cb_zl = 1;      //鼓轮机海缆张力
+		required double glj_cb_speed = 2;   //鼓轮机海缆速度
+		required double glj_cb_len = 3;     //鼓轮机海缆长度绝对值
+		required double ltj_cb_zl = 4;      //轮胎机海缆张力
+		required double ltj_cb_speed = 5;   //轮胎机海缆速度
+		required double ltj_cb_len = 6;     //轮胎机海缆长度绝对值
+		required double tl_zl = 7;          //拖缆张力
+		required double tl_len = 8;         //拖缆长度绝对值
+		required double qd_zl = 9;          //脐带张力KN
+		required double qd_len = 10;         //脐带长度绝对值
+		required double cable_depth = 11;    //海缆埋深
+		required double li_hq = 12;		     //犁横倾
+		required double li_zq = 13;			 //犁纵倾
+		required uint32 d_zt = 14;     //灯状态
+	}
+	
+	//----------------------------------------------------------------------------------------------------------
+    // 串口信息（海缆和船舶GPS信息）
+    //----------------------------------------------------------------------------------------------------------
+	message ComDataApi {
+		optional GPSData wkGps = 1;
+		optional CableData wkCable = 2;
+    }
+
+	
+    

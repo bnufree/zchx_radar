@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<configurations>
+  <configuration name="">
+    <algorithm dll="ScanCorrelator">
+      <input type="Extractions"/>
+      <param name="numScans" type="int" value="2"/>
+      <param name="searchRadius" type="double" value="5"/>
+      <output type="Extractions"/>
+    </algorithm>
+  </configuration>
+</configurations>

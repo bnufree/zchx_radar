@@ -1,0 +1,231 @@
+///**************************************************************************
+//* @Project : cdzchx_radar
+//* @IDL Module: ZCHXRadar
+//* @File: ZCHXRadar.proto
+//* @Description:
+//*    雷达asterix欧标标准格式;
+//*
+//* @Copyright: Copyright (c) 2014
+//* @Company: 深圳置辰海信科技有限公司
+//* @WebSite: http://www.szcenterstar.com/
+//* @author 
+//*
+//* @Revision History
+//*
+//* <pre>
+//* ----------------------------------------------------------------------
+//*   Ver     Date       Who             Comments
+//*  ----- ----------  --------  ---------------------------------------
+//*   1.0  2015/11/23     李鹭         形成初稿
+//*   1.1  2017/05/08     何江         增加会遇 历史 防区预警ID
+//* ----------------------------------------------------------------------
+//* </pre>
+//**************************************************************************/
+
+
+//package com.zhichenhaixin.proto;
+package com.zhichenhaixin.proto;
+    //----------------------------------------------------------------------------------------------------------
+    // Message Type  This data item allows for a more convenient handling of the messages 
+    // at the receiver side by further defining the type of transaction.
+    //----------------------------------------------------------------------------------------------------------
+    //-|num|-------------Status Discription---------|------------中文-------------------
+    // | 0 | Undefined                              |  未定义(默认)
+    // | 1 | Target Report                          |  目标报告
+    // | 2 | Start of Update Cycle                  |  更新周期开始
+    // | 3 | Periodic Status Message                |  周期性的状态信息
+    // | 4 | Event-triggered Status Message         |  事件驱动的状态信息
+    //----------------------------------------------------------------------------------------------------------
+    enum MSGTYP {
+        MSGTYP_UNDEFINED  = 0;
+        TARGET_REPORT = 1;
+        START_OF_UPDATE_CYCLE  = 2;
+        PERIODIC_STATUS = 3;
+        EVENT_TRIGGERED_STATUS = 4;
+    }
+
+
+    //----------------------------------------------------------------------------------------------------------
+    // Track Type  航迹状态
+    //----------------------------------------------------------------------------------------------------------
+    //-|num|-------------Status Discription---------|------------中文-------------------
+    // | 0 | Confirmed track                        |  表示确认的航迹
+    // | 1 | Track in initiation phase              |  初始状态的航迹
+    // | 2 | Unknown track                          |  未知跟踪
+    //----------------------------------------------------------------------------------------------------------
+    enum CNF {
+        CONFIRMED_TRACK  = 0;
+        TENTATIVE_TRACK  = 1;
+        UNKNOWN_TRACK  = 2;
+    }
+
+    //----------------------------------------------------------------------------------------------------------
+    // extrapolation  外推法
+    //----------------------------------------------------------------------------------------------------------
+    //-|num|-------------Status Discription-----------------------------|------------中文-------------------
+    // | 0 | No extrapolation                                           |  没有推算
+    // | 1 | Predictable extrapolation due to sensor refresh period     |  在感知设备刷新周期中预推算
+    // | 2 | Predictable extrapolation in masked area                   |  在遮挡去中预推算
+    // | 3 | Extrapoltion due to unpredictable absence of detection     |  在盲区中预推算
+    //----------------------------------------------------------------------------------------------------------
+    enum CST {
+        CST_UNDEFINED  = 0;
+        PREDICTABLE_EXTRAPOLATION_DUE_PERIOD = 1;
+        PREDICTABLE_EXTRAPOLATION_IN_AREA  = 2;
+        EXTRAPOLATION_DUE_UNPREDICTABLE_DETECTION = 3;
+    }
+
+
+    //----------------------------------------------------------------------------------------------------------
+    // Track Position Code  位置来历
+    //----------------------------------------------------------------------------------------------------------
+    //-|num|-------------Status Discription---------|------------中文-------------------
+    // | 0 | Measured position                      |  测量出的位置
+    // | 1 | Smoothed position                      |  平滑插值的位置
+    //----------------------------------------------------------------------------------------------------------
+    enum STH {
+        MEASURED_POSITION  = 0;
+        SMOOTHED_POSITION  = 1;
+    }
+	
+	//-------------------------------------------------------------------------------------------
+	// 雷达会遇数据
+	//-------------------------------------------------------------------------------------------
+	message RadarMeet{
+		required uint32 trackNumber = 1;		       // 航迹号 I010/161
+		required double lat = 2;			           // WGS84坐标计算纬度 I010/041
+    	required double lon = 3;			           // WGS84坐标计算经度 I010/041
+		required double disrance = 4;				   // 距离
+		required uint64 UTC = 5;                       // 时间标记 
+	}
+	
+	//-------------------------------------------------------------------------------------------
+	// 单个雷达目标的历史轨迹单点数据
+	//-------------------------------------------------------------------------------------------
+	message RadarHistoryTrack{
+		required uint32 trackNumber = 1;		       // 航迹号 I010/161
+		required double wgs84PosLat = 2;			   // WGS84坐标计算纬度 I010/041
+    	required double wgs84PosLong = 3;			   // WGS84坐标计算经度 I010/041
+    	required float timeOfDay = 4;			       // 当日时间，世界标准时间(UTC)表示的绝对时间戳   I010/140
+    	optional CNF   trackType = 5;			       // 航迹状态: I010/170_CNF
+    	optional bool  trackLastReport = 6;		       // 当前目标最后一次上报 I010/170_TRE 
+    	optional CST   extrapolation = 7;			   // 外推法 I010/170_CST  
+        optional STH   trackPositionCode = 8;          // 位置来历 I010/170_STH
+		required double cog = 9;                       // 方位角
+        required double sog = 10;                      // 速度
+		required uint64 UTC  = 11;                     // 时间标记 
+	}
+	
+	//-------------------------------------------------------------------------------------------
+	// 单个雷达目标的历史轨迹
+	//-------------------------------------------------------------------------------------------
+	message RadarHistoryTracks{
+		repeated RadarHistoryTrack tracks = 1;			//
+	}
+	
+    //----------------------------------------------------------------------------------------------------------
+    // 雷达地面移动目标报告(cat010)
+    //----------------------------------------------------------------------------------------------------------
+    message TrackPoint {
+    	required int32 systemAreaCode = 1;			   // 数据源唯一标识符:系统区域代码 I010/010 _sac
+    	required int32 systemIdentificationCode = 2;   // 数据源唯一标识符:系统识别代码 I010/010 _sic
+        required MSGTYP  messageType = 3;              // 消息类型 I010/001
+    	required uint32 trackNumber = 4;		       // 航迹号 I010/161
+    	required float cartesianPosX = 5;	           // 笛卡尔坐标计算X位置 I010/042
+    	required float cartesianPosY = 6;			   // 笛卡尔坐标计算Y位置 I010/042
+    	required double wgs84PosLat = 7;			   // WGS84坐标计算纬度 I010/041
+    	required double wgs84PosLong = 8;			   // WGS84坐标计算经度 I010/041
+    	required float timeOfDay = 9;			       // 当日时间，世界标准时间(UTC)表示的绝对时间戳   I010/140
+    	optional CNF   trackType = 10;			       // 航迹状态: I010/170_CNF
+    	optional bool  trackLastReport = 11;		   // 当前目标最后一次上报 I010/170_TRE
+    	optional CST   extrapolation = 12;			   // 外推法 I010/170_CST
+        optional STH   trackPositionCode = 13;         // 位置来历 I010/170_STH
+        optional float sigmaX = 14;                    // x轴标准差     I010/500
+        optional float sigmaY = 15;                    // y轴标准差     I010/500
+        optional float sigmaXY = 16;                   // 2轴平方方差     I010/500  
+        optional float ampOfPriPlot = 17;              // 震荡波强度检测   I010/131
+        required double cartesianTrkVel_vx = 18;       // 迪卡尔坐标航迹计算x速度(米/秒)  I010/202
+        required double cartesianTrkVel_vy = 19;       // 迪卡尔坐标航迹计算y速度(米/秒)  I010/202
+        required double cog = 20;                      // 方位角
+        required double sog = 21;                      // 速度
+		optional RadarHistoryTracks tracks = 22;	   // 当前雷达的历史轨迹数据集
+        optional int32  isSmuggle = 23;                // 1为走私 0为非走私
+        optional double distance = 24;				   // 距离
+		optional int32  mode =25;                      // 模式 1:自动 2:手动
+		
+		optional string trackby = 26;                  // 跟踪套框
+		optional int32  fleetNumber = 27;              // 已方目标，用数字表示（用于指示目标属于某个特殊列表：1-	普通目标，2-	在“我方或友方目标列表中的目标”，3-	在“重点关注目标“列表中的目标）
+		optional int32  status = 28; 				   // 1-active, 2-dead-reckoning, 3-lost 目标状态，1-活跃，2-休眠-尝试跟踪中，3-丢失
+		optional string lonType=29;         		   // W 表示西经， E 表示东经。
+		optional string latType=30;         		   // N 表示北纬， S 表示南纬。
+		optional int64  warn_utc = 31;                 // 进入报警区域时间  时间戳（UTC）
+		optional int32  warn_status = 32;              // warn_status 预警状态 0无 1重点区域 2边界 3速度监控区 4危险圈 
+		optional string warn_color=33;				   // 告警防区等的告警颜色
+		optional int32  cameraId = 34;                 // 跟踪相机编号
+		
+        optional int32  targetType = 35;               // 标类型  0: 未知   4: 人   2: 车   6: 船
+        optional int32  sign_window = 36;              // 提示窗口 1:有提示窗口 0:不显示提示窗口
+        optional int32  is_warn = 37;                  // 离岸预警
+        optional string rtsp = 38;                     // rtsp视频地址
+        optional int32  fllow = 39;                    // 1:转动  2:联动跟踪 3:停止跟踪
+		
+		repeated RadarMeet pointMeet=40;			   // 会遇信息集合
+		optional int32  defenceId = 41; 			   // 预警防区id
+		optional string  defenceName = 42;			   // 预警防区名称
+
+    }
+	
+	//----------------------------------------------------------------------------------------------------------
+    // 对预警的雷达目标进行相机转动或者是跟踪
+    //----------------------------------------------------------------------------------------------------------
+	message FllowVo {
+        required bool  flag = 1;                    // 是否需要上大屏 true:需要   false:不需要
+		required bool  fllow = 2;                   // 是否需要跟踪 true：需要要跟踪  false: 不需要跟踪，只需要对相机进行转动
+        repeated TrackPoint trackPoints = 3;        // 轨迹点
+		required int32 mode = 4;                    // 模式 1:自动 2:手动
+    }
+
+     message RadarSurfaceTrack {
+        required int32 flag = 1;                    // 消息类型
+        required string sourceId = 2;               // 数据来源唯一识别符
+        required uint64 UTC  = 3;                   // 时间标记  
+        required int32 length = 4;                  // 消息个数 
+        repeated TrackPoint trackPoints = 5;        // 轨迹点  
+    }
+
+
+    //----------------------------------------------------------------------------------------------------------
+    // 雷达视频 cat240
+    //----------------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------
+    // Bit Resolution 比特分辨率
+    //------------------------------------------------------------------------------------------------
+    //-|num|-------------Status Discription-------------------|------------中文-------------------
+    // | 1 | Monobit Resolution Coding Length in bits: 1      |  单比特分辨率
+    // | 2 | Low Resolution Coding Length in bits: 2          |  低分辨率
+    // | 3 | Medium Resolution Coding Length in bits: 4       |  中分辨率
+    // | 4 | High Resolution Coding Length in bits: 8         |  高分辨率
+    // | 5 | Very High Resolution Coding Length in bits: 16   |  非常高分辨率
+    // | 6 | Ultra High Resolution Coding Length in bits: 32  |  超高分辨率
+    //------------------------------------------------------------------------------------------------
+    enum RES {
+        MONOBIT_RESOLUTION      = 1;
+        LOW_RESOLUTION          = 2; 
+        MEDIUM_RESOLUTION       = 3;
+        HIGH_RESOLUTION         = 4;
+        VERY_HIGH_RESOLUTION    = 5;
+        ULTRA_HIGH_RESOLUTION   = 6; 
+    }
+
+    message VideoFrame  {
+        required int32 systemAreaCode = 1;             // 系统区域代码 I240/010 _sac
+        required int32 systemIdentificationCode = 2;   // 系统识别代码 I240/010 _sic
+        required int32 msgIndex = 3;                   // 消息唯一序列号 
+        required uint32 azimuth = 4;                   // 扫描方位
+        optional uint32 heading = 5;                   // 航向
+        required double startRange = 6;                // 扫描起始距离 
+        required double rangeFactor = 7;               // 距离因子 或者 采样距离
+        required RES   bitResolution  = 8;             // 视频分辨率
+        required int32 timeOfDay  = 9;                 // 当日时间
+        repeated int32 amplitude = 10;                 // 幅度值集合 
+    }
