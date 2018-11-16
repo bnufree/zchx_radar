@@ -66,26 +66,6 @@ void RadarConfig::setGRadarNameList(const QStringList &value)
     gRadarNameList = value;
 }
 
-void RadarConfig::setLongitude( double longitude )
-{
-    longitude_ = longitude;
-}
-
-void RadarConfig::setLatitude( double latitude )
-{
-    latitude_ = latitude;
-}
-
-quint16 RadarConfig::getCmdPort() const
-{
-    return cmdPort_;
-}
-
-void RadarConfig::setCmdPort( const quint16 &cmdPort )
-{
-    cmdPort_ = cmdPort;
-}
-
 bool RadarConfig::saveRadarConfiguration()
 {
     QDir dir = qApp->applicationDirPath();
@@ -122,7 +102,7 @@ bool RadarConfig::saveRadarConfiguration()
         QDomElement radarnamenode = radarnode.firstChildElement( "name" );
         qCDebug( radarmsg ) << "radarname: " << radarnamenode.childNodes().size() << radarnamenode.text();
 
-        if ( radarnamenode.text() != radarName_ )
+        if ( radarnamenode.text() != mName )
         {
             continue;
         }
@@ -140,7 +120,7 @@ bool RadarConfig::saveRadarConfiguration()
                 if ( node.nodeName() == "latitude" )
                 {
                     QDomNode oldnode = node.firstChild();
-                    node.firstChild().setNodeValue( QString::number( latitude_, 'g', 9 ) );
+                    node.firstChild().setNodeValue( QString::number( mLat, 'g', 9 ) );
                     QDomNode newnode = node.firstChild();
                     node.replaceChild( newnode, oldnode );
                 }
@@ -148,19 +128,19 @@ bool RadarConfig::saveRadarConfiguration()
                 if ( node.nodeName() == "longitude" )
                 {
                     QDomNode oldnode = node.firstChild();
-                    node.firstChild().setNodeValue( QString::number( longitude_, 'g', 9 ) );
+                    node.firstChild().setNodeValue( QString::number( mLon, 'g', 9 ) );
                     QDomNode newnode = node.firstChild();
                     node.replaceChild( newnode, oldnode );
                 }
             }
         }
 
-        radarnode.firstChildElement( "commandhost" ).setAttribute( "host", cmdAddress_.toString() );
-        radarnode.firstChildElement( "commandhost" ).setAttribute( "port", cmdPort_ );
-        radarnode.firstChildElement( "video" ).setAttribute( "port", videoConfig_->GetPort() );
-        radarnode.firstChildElement( "video" ).setAttribute( "host", cmdAddress_.toString() );
-        radarnode.firstChildElement( "tspi" ).setAttribute( "port", tspiConfig_->GetPort() );
-        radarnode.firstChildElement( "tspi" ).setAttribute( "host", cmdAddress_.toString() );
+        radarnode.firstChildElement( "commandhost" ).setAttribute( "host", mCmdIP );
+        radarnode.firstChildElement( "commandhost" ).setAttribute( "port", mCmdPort);
+        radarnode.firstChildElement( "video" ).setAttribute( "port", mVideoConfig->GetPort() );
+        radarnode.firstChildElement( "video" ).setAttribute( "host", QString::fromStdString(mVideoConfig->GetHost()) );
+        radarnode.firstChildElement( "tspi" ).setAttribute( "port", mTSPIConfig->GetPort() );
+        radarnode.firstChildElement( "tspi" ).setAttribute( "host", QString::fromStdString(mTSPIConfig->GetHost()) );
     }
 
     QFile filexml( filepath );
@@ -180,35 +160,16 @@ bool RadarConfig::saveRadarConfiguration()
     emit radarInfoChanged();
 }
 
-QHostAddress RadarConfig::getCmdAddress() const
-{
-    return cmdAddress_;
-}
-
-void RadarConfig::changeAddress( const QString str )
-{
-    cmdAddress_.setAddress( str );
-}
-
-QString RadarConfig::getRadarName() const
-{
-    return radarName_;
-}
-
-void RadarConfig::setRadarName( const QString &radarName )
-{
-    radarName_ = radarName;
-}
 
 QStringList RadarConfig::getAllCommand()
 {
-    return mapCmd_.keys();
+    return mMapCmd.keys();
 }
 
 QByteArray RadarConfig::getRadarCommand( const QString &cmd )
 {
-    QString name = mapCmd_.value( cmd );
-    QString path = dir_.filePath( name );
+    QString name = mMapCmd.value( cmd );
+    QString path = mCfgDir.filePath( name );
     QFile file( path );
     file.open( QFile::ReadOnly );
     return file.readAll();
@@ -217,16 +178,16 @@ QByteArray RadarConfig::getRadarCommand( const QString &cmd )
 void RadarConfig::sendRadarCommand( const QString &cmd )
 {
     QTcpSocket cmdSocket;
-    cmdSocket.connectToHost( cmdAddress_, cmdPort_ );
+    cmdSocket.connectToHost( mCmdIP, mCmdPort );
 
     if ( cmdSocket.waitForConnected( 300 ) )
     {
         int wbytes = cmdSocket.write( getRadarCommand( cmd ) );
 
         if ( cmdSocket.waitForBytesWritten( 100 ) )
-            qInfo( radarmsg ) << "write succeed: " << cmdAddress_ << cmdPort_ << wbytes;
+            qInfo( radarmsg ) << "write succeed: " << mCmdIP << mCmdPort << wbytes;
         else
-            qCWarning( radarmsg ) << "write failed: " << cmdAddress_ << cmdPort_ << wbytes;
+            qCWarning( radarmsg ) << "write failed: " << mCmdIP << mCmdPort << wbytes;
     }
 }
 
@@ -242,8 +203,8 @@ bool RadarConfig::SetConfigurationFilePath( const std::string &path )
         return false;
     }
 
-    dir_ = info.dir();
-    dir_.cd( "radarctrldata" );
+    mCfgDir = info.dir();
+    mCfgDir.cd( "radarctrldata" );
 
     QFile file( filepath );
 
@@ -274,7 +235,7 @@ bool RadarConfig::SetConfigurationFilePath( const std::string &path )
         radarNameList.append(radarName);
         qCDebug( radarmsg ) << "radarname: " << radarnamenode.childNodes().size() << radarName;
 
-        if ( radarName == radarName_ )
+        if ( radarName == mName )
         {
             loadOK = Load( radarnode.toElement() );
             if ( !loadOK )
@@ -294,19 +255,21 @@ bool RadarConfig::SetConfigurationFilePath( const std::string &path )
 
 RadarConfig::RadarConfig( QObject *parent )
     : QObject( parent )
-    , name_( "Default" )
-    , gateCountMax_( 4000 )
-    , shaftEncodingMax_( 65535 )
-    , rotationRate_( 6.0 )
-    , rangeMin_( 1.0 )
-    , rangeMax_( 300.0 )
-    , rangeFactor_( CalculateRangeFactor() )
-    , beamWidth_( 0.001544 )
-    , latitude_( 37.0 + 49.0 / 60.0 + 7.83477 / 3600.0 )
-    , longitude_( -( 116.0 + 31.0 / 60.0 + 53.51066 / 3600.0 ) )
-    , height_( 0.0 )
-    , videoConfig_( new VideoConfig )
-    , tspiConfig_( new TSPIConfig )
+    , mName( "Default" )
+    , mGateCountMax( 4000 )
+    , mShaftEncodingMax( 65535 )
+    , mRotationRate( 6.0 )
+    , mRangeMin( 1.0 )
+    , mRangeMax( 300.0 )
+    , mRangeFactor( CalculateRangeFactor() )
+    , mBeamWidth( 0.001544 )
+    , mLat( 37.0 + 49.0 / 60.0 + 7.83477 / 3600.0 )
+    , mLon( -( 116.0 + 31.0 / 60.0 + 53.51066 / 3600.0 ) )
+    , mHeight( 0.0 )
+    , mVideoConfig( new VideoConfig )
+    , mTSPIConfig( new TSPIConfig )
+    , mHead(180.0)
+
 {
 }
 
@@ -314,93 +277,23 @@ RadarConfig::~RadarConfig()
 {
 }
 
-
-const QString & RadarConfig::GetName()
-{
-    return name_;
-}
-
-uint32_t RadarConfig::GetGateCountMax()
-{
-    return gateCountMax_;
-}
-
-uint32_t RadarConfig::GetShaftEncodingMax()
-{
-    return shaftEncodingMax_;
-}
-
-double RadarConfig::GetRotationRate()
-{
-    return rotationRate_;
-}
-
-double RadarConfig::GetRangeMin_deprecated()
-{
-    return rangeMin_;
-}
-
-double RadarConfig::GetRangeMax()
-{
-    return rangeMax_;
-}
-
-double RadarConfig::GetRangeFactor_deprecated()
-{
-    return rangeFactor_;
-}
-
-double RadarConfig::GetBeamWidth()
-{
-    return beamWidth_;
-}
-
 double RadarConfig::CalculateRangeFactor()
 {
-    return ( rangeMax_ - rangeMin_ ) / ( gateCountMax_ - 1 );
-}
-
-double RadarConfig::GetSiteLongitude()
-{
-    return longitude_;
-}
-
-double RadarConfig::GetSiteLatitude()
-{
-    return latitude_;
-}
-
-double RadarConfig::GetSiteHeight()
-{
-    return height_;
-}
-
-const VideoConfig *RadarConfig::getVideoConfig()
-{
-    return videoConfig_;
-}
-
-const TSPIConfig *RadarConfig::getTSPIConfig()
-{
-    return tspiConfig_;
+    mRangeFactor = (mRangeMax - mRangeMin) / (mGateCountMax - 1);
+    return mRangeFactor;
 }
 
 void RadarConfig::Load( const std::string &name, uint32_t gateCountMax, uint32_t shaftEncodingMax, double rotationRate,
                    double rangeMin, double rangeMax, double beamWidth )
 {
-    name_ = QString::fromStdString( name );
-    gateCountMax_ = gateCountMax;
-    shaftEncodingMax_ = shaftEncodingMax;
-    rotationRate_ = rotationRate;
-    rangeMin_ = rangeMin;
-    rangeMax_ = rangeMax;
-    beamWidth_ = beamWidth;
-    rangeFactor_ = CalculateRangeFactor();
-}
-
-uint64_t RadarConfig::getID()
-{
-    return id_;
+    mName = QString::fromStdString( name );
+    mGateCountMax = gateCountMax;
+    mShaftEncodingMax = shaftEncodingMax;
+    mRotationRate = rotationRate;
+    mRangeMin = rangeMin;
+    mRangeMax = rangeMax;
+    mBeamWidth = beamWidth;
+    mRangeFactor = CalculateRangeFactor();
 }
 
 bool RadarConfig::GetEntry( const QDomElement &config, const QString &name, QString &value, QString &units )
@@ -440,88 +333,88 @@ bool RadarConfig::Load( const QDomElement &config )
 
     if ( ! GetEntry( config, "id", value, units ) ) return false;
 
-    id_ = value.toLongLong();
+    mID = value.toLongLong();
 
     if ( ! GetEntry( config, "name", value, units ) ) return false;
 
-    name_ = value;
+    mName = value;
 
     if ( ! GetEntry( config, "gateCountMax", value, units ) ) return false;
 
-    gateCountMax_ = value.toUInt();
+    mGateCountMax = value.toUInt();
 
-    if ( gateCountMax_ < 2 )
+    if ( mGateCountMax < 2 )
     {
-        qCWarning( radarmsg ) << "invalid gateCountMax value - " << gateCountMax_ ;
+        qCWarning( radarmsg ) << "invalid gateCountMax value - " << mGateCountMax ;
         return false;
     }
 
     if ( ! GetEntry( config, "shaftEncodingMax", value, units ) ) return false;
 
-    shaftEncodingMax_ = value.toUInt();
+    mShaftEncodingMax = value.toUInt();
 
-    if ( shaftEncodingMax_ < 2 )
+    if ( mShaftEncodingMax < 2 )
     {
-        qCWarning( radarmsg ) << "invalid shaftEncodingMax value - " << shaftEncodingMax_ ;
+        qCWarning( radarmsg ) << "invalid shaftEncodingMax value - " << mShaftEncodingMax ;
         return false;
     }
 
     if ( ! GetEntry( config, "rangeMin", value, units ) ) return false;
 
-    rangeMin_ = value.toDouble();
+    mRangeMin = value.toDouble();
 
     if ( ! GetEntry( config, "rangeMax", value, units ) ) return false;
 
-    rangeMax_ = value.toDouble();
+    mRangeMax = value.toDouble();
 
-    if ( rangeMin_ >= rangeMax_ || rangeMin_ < 0.0 || rangeMax_ <= 0.0 )
+    if ( mRangeMin >= mRangeMax || mRangeMin < 0.0 || mRangeMax <= 0.0 )
     {
-        qCWarning( radarmsg ) << "invalid range specification - " << rangeMin_ << ","
-                              << rangeMax_ ;
+        qCWarning( radarmsg ) << "invalid range specification - " << mRangeMin << ","
+                              << mRangeMax ;
         return false;
     }
 
     if ( ! GetEntry( config, "rotationRate", value, units ) ) return false;
 
-    rotationRate_ = value.toDouble();
+    mRotationRate = value.toDouble();
 
-    if ( rotationRate_ <= 0.0 )
+    if ( mRotationRate <= 0.0 )
     {
-        qCWarning( radarmsg ) << "invalid rotationRate value - " << rotationRate_ ;
+        qCWarning( radarmsg ) << "invalid rotationRate value - " << mRotationRate ;
         return false;
     }
 
     if ( ! GetEntry( config, "beamWidth", value, units ) ) return false;
 
-    beamWidth_ = value.toDouble();
+    mBeamWidth = value.toDouble();
 
-    if ( beamWidth_ <= 0.0 )
+    if ( mBeamWidth <= 0.0 )
     {
-        qCWarning( radarmsg ) << "invalid beamWidth value - " << beamWidth_ ;
+        qCWarning( radarmsg ) << "invalid beamWidth value - " << mBeamWidth ;
         return false;
     }
 
-    rangeFactor_ = CalculateRangeFactor();
+    mRangeFactor = CalculateRangeFactor();
 
     if ( GetEntry( config, "latitude", value, units ) )
     {
-        latitude_ = value.toDouble();
+        mLat = value.toDouble();
 
-        if ( units == "radians" ) latitude_ = ZchxRadarUtils::radiansToDegrees( latitude_ );
+        if ( units == "radians" ) mLat = ZchxRadarUtils::radiansToDegrees( mLat );
     }
 
     if ( GetEntry( config, "longitude", value, units ) )
     {
-        longitude_ = value.toDouble();
+        mLon = value.toDouble();
 
-        if ( units == "radians" ) longitude_ = ZchxRadarUtils::radiansToDegrees( longitude_ );
+        if ( units == "radians" ) mLon = ZchxRadarUtils::radiansToDegrees( mLon );
     }
 
     if ( GetEntry( config, "height", value, units ) )
     {
-        height_ = value.toDouble();
+        mHeight = value.toDouble();
 
-        if ( units == "feet" ) height_ = ZchxRadarUtils::feetToMeters( height_ );
+        if ( units == "feet" ) mHeight = ZchxRadarUtils::feetToMeters( mHeight );
     }
 
     QDomElement video_element = config.firstChildElement( "video" );
@@ -532,7 +425,7 @@ bool RadarConfig::Load( const QDomElement &config )
         return false;
     }
 
-    videoConfig_->Load( video_element );
+    mVideoConfig->Load( video_element );
     QDomElement tspi_element = config.firstChildElement( "tspi" );
 
     if ( tspi_element.isNull() )
@@ -541,11 +434,11 @@ bool RadarConfig::Load( const QDomElement &config )
         return false;
     }
 
-    tspiConfig_->Load( tspi_element );
+    mTSPIConfig->Load( tspi_element );
 
     QDomElement cmdhostnode = config.firstChildElement( "commandhost" );
-    cmdAddress_.setAddress( cmdhostnode.attribute( "host" ) );
-    cmdPort_ = cmdhostnode.attribute( "port" ).toUShort();
+    mCmdIP =  cmdhostnode.attribute( "host" );
+    mCmdPort = cmdhostnode.attribute( "port" ).toUShort();
 
     QDomNodeList cmdlist = config.elementsByTagName( "command" );
 
@@ -554,7 +447,7 @@ bool RadarConfig::Load( const QDomElement &config )
         QDomElement cmdnode = cmdlist.at( i ).toElement();
         QString cmdname = cmdnode.attribute( "name" );
         QString cmdfile = cmdnode.text();
-        mapCmd_.insert( cmdname, cmdfile );
+        mMapCmd.insert( cmdname, cmdfile );
     }
 
     return true;

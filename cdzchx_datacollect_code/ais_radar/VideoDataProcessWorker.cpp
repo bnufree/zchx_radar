@@ -22,14 +22,12 @@ VideoDataProcessWorker::VideoDataProcessWorker(RadarConfig* cfg, QObject *parent
 void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
 {
     int len = raw.size();
-    LOG_FUNC_DBG<<mRadarCfg<<len;
     if(!mRadarCfg) return;
     QElapsedTimer  timer;
     timer.start();
-    LOG_FUNC_DBG<<" start";
-    int uLineNum = mRadarCfg->lineNum();
-    int uCellNum = mRadarCfg->cellNum();
-    int uHeading = mRadarCfg->heading();
+    int uLineNum = mRadarCfg->getShaftEncodingMax()+1;
+    int uCellNum = mRadarCfg->getGateCountMax();
+    int uHeading = mRadarCfg->getHead();
 
     radar_frame_pkt *packet = (radar_frame_pkt *)raw.data();//正常大小是17160
 

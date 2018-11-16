@@ -108,7 +108,7 @@ TrackMaintainer::checkDatabase()
 
     LOGDEBUG << "track database has " << trackDatabase_.size() << " entries" << std::endl;
 
-    double dropLimit = RadarConfig(0).GetRotationDuration() * missesBeforeDrop_;
+    double dropLimit = RadarConfig(0).getRotationDuration() * missesBeforeDrop_;
     LOGDEBUG << "drop duration " << dropLimit << std::endl;
 
     // Loop through the data base.

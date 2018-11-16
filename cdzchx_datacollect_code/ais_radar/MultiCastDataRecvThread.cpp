@@ -36,7 +36,7 @@ void MultiCastDataRecvThread::run()
 
      //connect(m_pUdpVideoSocket, SIGNAL(readyRead()), this, SLOT(updateVideoUdpProgress())); //由于是线程,信号槽慎用
      cout<<"m_pUdpVideoSocket大小:"<<m_pUdpVideoSocket->size();
-     //connect(m_pUdpVideoSocket,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayUdpVideoError(QAbstractSocket::SocketError)));
+     connect(m_pUdpVideoSocket,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayUdpVideoError(QAbstractSocket::SocketError)));
 
 
      while (m_pUdpVideoSocket->size()>=0) {
@@ -44,6 +44,7 @@ void MultiCastDataRecvThread::run()
              //1.	接收数据部分改为线程方式， 避免使用信号槽
              updateVideoUdpProgress();
          }
+         //qDebug()<<m_pUdpVideoSocket->error()<<m_pUdpVideoSocket->errorString();
      }
 }
 
@@ -63,13 +64,13 @@ void MultiCastDataRecvThread::displayUdpVideoError(QAbstractSocket::SocketError 
 
 void MultiCastDataRecvThread::updateVideoUdpProgress()
 {
+//    qDebug()<<"!!!!!!!!!!!!!!!!!!!!!!";
     if(m_pUdpVideoSocket == NULL)
     {
         return;
     }
     //cout<<"接收到数据了";
     //qDebug()<<"updateVideoUdpProgress thread id :"<<QThread::currentThreadId();
-
     QByteArray datagram;
     // 让datagram的大小为等待处理的数据报的大小，这样才能接收到完整的数据
     datagram.resize(m_pUdpVideoSocket->pendingDatagramSize());//pendingDatagramSize() 当前数据包大小
@@ -82,12 +83,12 @@ void MultiCastDataRecvThread::updateVideoUdpProgress()
     //data preprocess
     mRecvContent.append(datagram);
     int target_size = sizeof(BR24::Constants::radar_frame_pkt);
+//    qDebug()<<QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss zzz")<<"recv:"<<mRecvContent.size()<<" target:"<<target_size;
     if(mRecvContent.size() >= target_size)
     {
         QByteArray target = mRecvContent.mid(0, target_size);
         emit analysisRadar(target,m_sRadarVideoType,m_uLineNum,m_uCellNum,m_uHeading);
         mRecvContent = mRecvContent.right(mRecvContent.size() - target_size);
     }
-
 
 }

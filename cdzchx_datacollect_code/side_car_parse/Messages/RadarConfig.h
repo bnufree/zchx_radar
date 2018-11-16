@@ -25,6 +25,10 @@
 #include <QHostAddress>
 #include "MessagesGlobal.h"
 
+
+#define     RADAR_CAT240_STR        "cat240"
+#define     RADAR_ZCHX240_STR       "zchx240"
+
 class QDomElement;
 class QString;
 
@@ -56,13 +60,21 @@ class TSPIConfig;
     NOTE: the rationale for having RadarConfig done this way versus a singleton is lost to history. Perhaps
     backwards capability with some other system?
 */
+enum RADAR_TYPE{
+    RADAR_UNDEF = 0,
+    RADAT_LOWRANCE,
+    RADAR_AGILTRACK,
+    RADAR_CAT240 = RADAR_AGILTRACK,
+    RADAR_ZCHX240 = RADAT_LOWRANCE,
+};
+
 class RadarConfig : public QObject
 {
     Q_OBJECT
 public:
     /** Prohibit instances of RadarConfig class.
      */
-    RadarConfig(QObject *parent);
+    RadarConfig(QObject *parent = 0);
     ~RadarConfig();
 
     /** Use a new file path for radar configuration values.
@@ -103,63 +115,72 @@ public:
     /*!
      * \brief 获取当前雷达的ID
      */
-    uint64_t getID();
+    uint64_t getID() const {return mID;}
+    void     setID(uint64_t id) {mID = id;}
 
     /** Obtain the current radar configuration name
 
         \return config name
     */
-    const QString &GetName();
+
+    const QString &getName() const {return mName;}
+    void    setName(const QString& name) {mName = name;}
 
     /** Obtain the current max gate count value
 
         \return max gate count
     */
-    uint32_t GetGateCountMax();
+    uint32_t getGateCountMax() const {return mGateCountMax;}
+    void     setGateCountMax(uint32_t val) {mGateCountMax = val; CalculateRangeFactor();}
 
     /** Obtain the current max shaft encoding value
 
         \return max shaft encoding value
     */
-    uint32_t GetShaftEncodingMax();
+    uint32_t getShaftEncodingMax() const {return mShaftEncodingMax;}
+    void    setShaftEncodingMax(int val)  {mShaftEncodingMax = val;}
 
     /** Obtain the current rotation rate value.
 
         \return rotation rate in RPMs
     */
-    double GetRotationRate();
+    double getRotationRate() {return mRotationRate;}
+    void   setRotationRate(double val) {mRotationRate = val;}
 
     /** Obtain the current min range value, the range value associated with the first sample.
 
         \return min range value
     */
-    double GetRangeMin_deprecated();
+    double getRangeMin() {return mRangeMin;}
+    void   setRangeMin(double val) {mRangeMin = val; CalculateRangeFactor();}
 
     /** Obtain the current max range value, the range value associated with the gateCountMax_ - 1 sample.
 
         \return max range value
     */
-    double GetRangeMax();
+    double getRangeMax() {return mRangeMax;}
+    void   setRangeMax(double val) {mRangeMax = val; CalculateRangeFactor();}
 
     /** Obtain the multiplier used to convert from gate sample index values to a range value in kilometers.
 
         \return range factor
     */
-    double GetRangeFactor_deprecated();
+    double getRangeFactor() {return mRangeFactor;}
 
-    /** Obtain the current beam width value
+    /** Obtain the current beam width value //波束宽度
 
         \return beam width
     */
-    double GetBeamWidth();
+    double getBeamWidth() {return mBeamWidth;}
+    void   setBeamWidth(double val) {mBeamWidth = val;}
 
     /** Obtain the number radials in one revolution of the radar. This is an upper bound.
 
         \return
     */
-    uint32_t GetRadialCount()
+    uint32_t getRadialCount()
     {
-        return uint32_t( ::ceil( 2.0 * M_PI / GetBeamWidth() ) );
+        return uint32_t( ::ceil( 2.0 * M_PI / getBeamWidth() ) );
     }
 
     /** Obtain the range value for a gate sample index.
@@ -168,9 +189,9 @@ public:
 
         \return range in kilometers
     */
-    double GetRangeAt_deprecated( uint32_t gateIndex )
+    double getRangeAtIndex( uint32_t gateIndex )
     {
-        return gateIndex * GetRangeFactor_deprecated() + GetRangeMin_deprecated();
+        return gateIndex * getRangeFactor() + getRangeMin();
     }
 
     /** Obtain an azimuth reading in radians from a shaft encoding value
@@ -179,74 +200,126 @@ public:
 
         \return azimuth in radians
     */
-    double GetAzimuth( uint32_t shaftEncoding )
+    double getAzimuth( uint32_t shaftEncoding )
     {
-        return M_PI * 2.0 * shaftEncoding / ( GetShaftEncodingMax() + 1 );
+        return M_PI * 2.0 * shaftEncoding / ( getShaftEncodingMax() + 1 );
     }
 
     /** Obtain the duration in seconds of one rotation of the radar.
 
         \return duration in seconds
     */
-    double GetRotationDuration()
+    double getRotationDuration()
     {
-        return 60.0 / GetRotationRate();
+        return 60.0 / getRotationRate();
     }
 
     /** Obtain the latitude (north/south) of the site location.
 
         \return degrees latitude
     */
-    double GetSiteLatitude();
+    double getSiteLat() {return mLat;}
+    void   setSiteLat(int val) {mLat = val;}
 
     /** Obtain the longitude (east/west) of the site location.
 
         \return degrees longitude
     */
-    double GetSiteLongitude();
+    double getSiteLong() {return mLon;}
+     void   setSiteLon(int val) {mLon = val;}
 
     /** Obtain the height of the site location.
 
         \return height in meters
     */
-    double GetSiteHeight();
+    double getSiteHeight() {return mHeight;}
+    void   setSiteHeight(int val) {mHeight = val;}
 
 
     /** Obtain a read-only reference to  loaded VideoConfig objects.
 
         \return reference to VideoConfig
     */
-    const VideoConfig* getVideoConfig();
+    VideoConfig* getVideoConfig() {return mVideoConfig;}
+    void    setVideoConfig(VideoConfig* cfg)
+    {
+        if(mVideoConfig) delete mVideoConfig;
+        mVideoConfig = cfg;
+    }
 
     /** Obtain a read-only reference to  loaded TSPIConfig objects.
 
         \return reference to TSPIConfig
     */
-    const TSPIConfig* getTSPIConfig();
+    TSPIConfig* getTSPIConfig() {return mTSPIConfig;}
+    void        setTSPIConfig(TSPIConfig* cfg)
+    {
+        if(mTSPIConfig) delete mTSPIConfig;
+        mTSPIConfig = cfg;
+    }
 
-    QString getRadarName() const;
-    void setRadarName(const QString &radarName);
+    int getHead() {return mHead;}
+    void   setHead(int val) {mHead = val;}
+
+    QDir getCfgDir() {return mCfgDir;}
+    void   setCfgDir(const QDir& val) {mCfgDir = val;}
+
+    void    setCmdIP(const QString& ip) {mCmdIP = ip;}
+    QString getCmdIP() const {return mCmdIP;}
+
+    int     getCmdPort() const {return mCmdPort;}
+    void    setCmdPort(int val) {mCmdPort = val;}
+
+    int    getRadarType() const {return mRadarType;}
+    void    setRadarType(int val) {mRadarType = val;}
+    void    setRadarType(const QString& type)
+    {
+        if(type == RADAR_CAT240_STR)
+        {
+            mRadarType = RADAR_CAT240;
+        } else if(type == RADAR_ZCHX240_STR)
+        {
+            mRadarType = RADAR_ZCHX240;
+        } else
+        {
+            mRadarType = RADAR_UNDEF;
+        }
+    }
+
+    void    setLimit(bool val) {mIsLimitFilter = val;}
+    bool    getLimit() const {return mIsLimitFilter;}
+
+    void    setFilterFileName(const QString& val) {mFilterFileName = val;}
+    QString    getFilterFileName() const {return mFilterFileName;}
+
+    void    setLoopNum(int val) {mLoopNum = val;}
+    int    getLoopNum() const {return mLoopNum;}
+
+    void    setHeartTimeInterval(int val) {mHeartTimeInterval = val;}
+    int    getHeartTimeInterval() const {return mHeartTimeInterval;}
+
+    void    setDistance(int val) {mDistance = val;}
+    int    getDistance() const {return mDistance;}
+
+    void    setTrackClearTime(int val) {mTrackClearTime = val;}
+    int    getTrackClearTime() const {return mTrackClearTime;}
+
+    void    setReportIP(const QString& val) {mReportIP = val;}
+    QString    getReportIP() const {return mReportIP;}
+
+    void    setReportPort(int val) {mReportPort = val;}
+    int    getReportPort() const {return mReportPort;}
+
+    void    setReportOpen(bool val) {mReportOpen = val;}
+    bool    getReportOpen() const {return mReportOpen;}
 
     QStringList getAllCommand();
     QByteArray getRadarCommand(const QString &cmd);
 
-    QHostAddress getCmdAddress() const;
-    void  changeAddress(const QString str);
-
-    quint16 getCmdPort() const;
-    void setCmdPort(const quint16 &cmdPort);
-
     bool saveRadarConfiguration();
-
-    void setLatitude(double latitude);
-
-    void setLongitude(double longitude);
 
     static QStringList getGRadarNameList();
     static void setGRadarNameList(const QStringList &value);
-    int  lineNum() const {return mLineNum;}
-    int  cellNum() const {return mCellNum;}
-    int  heading() const {return mHeading;}
 
 public slots:
     void sendRadarCommand(const QString &cmd);
@@ -270,32 +343,39 @@ private:
     */
     void Initializer();
 
-    uint64_t id_;
-    QString name_;
-    uint32_t gateCountMax_;
-    uint32_t shaftEncodingMax_;
-    double rotationRate_;
-    double rangeMin_;
-    double rangeMax_;
-    double rangeFactor_;
-    double beamWidth_;
-    double latitude_;    ///< Radar site longitude (degrees)
-    double longitude_;   ///< Radar site latitude (degrees)
-    double height_;  ///< Radar site height (meters)
-    int     mLineNum;
-    int     mCellNum;
-    int     mHeading;
+    uint64_t                    mID;
+    QString                     mName;
+    uint32_t                    mGateCountMax;      //cell number
+    uint32_t                    mShaftEncodingMax;  //line number
+    double                      mRotationRate;
+    double                      mRangeMin;
+    double                      mRangeMax;
+    double                      mRangeFactor;
+    double                      mBeamWidth;
+    double                      mLat;    ///< Radar site longitude (degrees)
+    double                      mLon;   ///< Radar site latitude (degrees)
+    double                      mHeight;  ///< Radar site height (meters)
+    int                         mHead;
+    VideoConfig*                mVideoConfig;    //回波服务器设定
+    TSPIConfig*                 mTSPIConfig;      //雷达目标服务器设定
+    QDir                        mCfgDir;
+    QMap<QString, QString>      mMapCmd;
+    QString                     mCmdIP;
+    quint16                     mCmdPort;
+    int                         mRadarType;
 
-    VideoConfig *videoConfig_;
-    TSPIConfig *tspiConfig_;
-    QString radarName_;
+    bool                        mIsLimitFilter;   //是否执行目标过滤
+    QString                     mFilterFileName;    //过滤文件名称
+    int                         mLoopNum;           //循环次数
+    int                         mHeartTimeInterval;  //发送心跳消息的频率
+    int                         mDistance;          //范围限制距离大小
+    int                         mTrackClearTime;    //目标清除时间间隔
+    QString                     mReportIP;          //雷达参数报告IP
+    int                         mReportPort;        //雷达参数报告端口
+    bool                        mReportOpen;        //是否接收雷达参数报告
 
-    QDir dir_;
-    QMap<QString, QString> mapCmd_;
-    QHostAddress cmdAddress_;
-    quint16 cmdPort_;
 
-    static QStringList gRadarNameList;
+    static QStringList          gRadarNameList;
 };
 
 } // end namespace Message

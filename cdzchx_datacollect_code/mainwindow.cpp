@@ -18,7 +18,9 @@
 #include "ais_radar/zxhcprocessechodata.h"
 #include "ais_radar/zchxanalysisandsendradar.h"
 #include "ais_radar/zchxaisdataprocessor.h"
+
 #define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"
+
 class HqTableWidgetItem : public QTableWidgetItem
 {
 public:
@@ -81,14 +83,14 @@ MainWindow::MainWindow(QWidget *parent) :
     //接收模拟器上radar数据
     //qDebug()<<"MainWindow thread id :"<<QThread::currentThreadId();
     //Utils::Profiles::instance()->setDefault("Radar","Num",1);
-    int  uRadarNum = Utils::Profiles::instance()->value("Radar","Num").toInt();
+    initRadarCfgInfo();
     mRadarDataServerList.clear();
-    for(int i = 0;i<uRadarNum;i++)
+    foreach(int id, mRadarConfigMap.keys())
     {
         //接收雷达数据
-        ZCHXRadarDataServer *pRadarDataServer = new ZCHXRadarDataServer(i+1);
+        ZCHXRadarDataServer *pRadarDataServer = new ZCHXRadarDataServer(mRadarConfigMap[id]);
         //处理雷达数据并发送
-        ZCHXAnalysisAndSendRadar *pAnalysisAndSendRadar = new ZCHXAnalysisAndSendRadar(i+1);
+        ZCHXAnalysisAndSendRadar *pAnalysisAndSendRadar = new ZCHXAnalysisAndSendRadar(id);
         emit pRadarDataServer->startProcessSignal();//开启接收
         mRadarDataServerList.append(pRadarDataServer);
         mAnalysisAndSendRadarList.append(pAnalysisAndSendRadar);
@@ -120,6 +122,41 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->settingWidget, SIGNAL(signalRangeFactorChanged(double)), this, SLOT(slotRecvRangeFactorChanged(double)));
 
 
+}
+
+void MainWindow::initRadarCfgInfo()
+{
+    int  uRadarNum = Utils::Profiles::instance()->value("Radar","Num", 0).toInt();
+    if(uRadarNum == 0) return;
+    for(int i=1; i<=uRadarNum; i++)
+    {
+        //从配置文件读取
+        QString str_radar = QString("Radar_%1").arg(i);
+        ZCHX::Messages::RadarConfig* cfg = new ZCHX::Messages::RadarConfig;
+        cfg->setID(i);
+        cfg->setName(str_radar);
+        cfg->getTSPIConfig()->SetHost(Utils::Profiles::instance()->value(str_radar,"Track_IP").toString().toStdString());
+        cfg->getTSPIConfig()->SetPort(Utils::Profiles::instance()->value(str_radar,"Track_Port").toInt());
+        cfg->getVideoConfig()->SetHost(Utils::Profiles::instance()->value(str_radar,"Video_IP").toString().toStdString());
+        cfg->getVideoConfig()->SetPort(Utils::Profiles::instance()->value(str_radar,"Video_Port").toInt());
+        cfg->setSiteLat(Utils::Profiles::instance()->value(str_radar,"Centre_Lat").toDouble());
+        cfg->setSiteLon(Utils::Profiles::instance()->value(str_radar,"Centre_Lon").toDouble());
+        cfg->setRadarType(Utils::Profiles::instance()->value(str_radar,"Video_Type").toString());
+        cfg->setGateCountMax(Utils::Profiles::instance()->value(str_radar,"Cell_Num").toInt());
+        cfg->setShaftEncodingMax(Utils::Profiles::instance()->value(str_radar,"Line_Num").toInt());
+        cfg->setLimit(Utils::Profiles::instance()->value(str_radar,"Limit").toBool());
+        cfg->setLoopNum(Utils::Profiles::instance()->value(str_radar,"Loop_Num").toInt());
+        cfg->setHead(Utils::Profiles::instance()->value(str_radar,"Heading").toInt());
+        cfg->setHeartTimeInterval(Utils::Profiles::instance()->value(str_radar,"Heart_Time").toInt());
+        cfg->setCmdIP(Utils::Profiles::instance()->value(str_radar,"Heart_IP").toString());
+        cfg->setCmdPort(Utils::Profiles::instance()->value(str_radar,"Heart_Port").toInt());
+        cfg->setDistance(Utils::Profiles::instance()->value(str_radar,"Distance").toInt());
+        cfg->setTrackClearTime(Utils::Profiles::instance()->value(str_radar,"ClearTrack_Time").toInt());
+        cfg->setReportIP(Utils::Profiles::instance()->value(str_radar,"Report_IP").toString());
+        cfg->setReportPort(Utils::Profiles::instance()->value(str_radar,"Report_Port").toInt());
+        cfg->setReportOpen(Utils::Profiles::instance()->value(str_radar,"Report_Open").toBool());
+        mRadarConfigMap[cfg->getID()] = cfg;
+    }
 }
 
 void MainWindow::initUI()

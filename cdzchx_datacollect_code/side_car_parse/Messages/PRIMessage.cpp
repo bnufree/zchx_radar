@@ -142,13 +142,13 @@ PRIMessage::loadArray( const QSharedPointer<QByteArray> &raw, uint32_t &count )
 double
 PRIMessage::getAzimuthStart() const
 {
-    return radarConfig_->GetAzimuth( riuInfo_.shaftEncoding );
+    return radarConfig_->getAzimuth( riuInfo_.shaftEncoding );
 }
 
 double
 PRIMessage::getAzimuthEnd() const
 {
-    return ZchxRadarUtils::normalizeRadians( radarConfig_->GetAzimuth( riuInfo_.shaftEncoding ) + radarConfig_->GetBeamWidth() );
+    return ZchxRadarUtils::normalizeRadians( radarConfig_->getAzimuth( riuInfo_.shaftEncoding ) + radarConfig_->getBeamWidth() );
 }
 
 std::ostream &

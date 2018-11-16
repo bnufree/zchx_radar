@@ -16,7 +16,7 @@ using namespace ZCHX::Messages;
 
 TrackInitiator::TrackInitiator() :
     param_searchRadius(kDefaultSearchRadius),
-    param_scanTime(time_t(RadarConfig(0).GetRotationDuration())),
+    param_scanTime(time_t(RadarConfig(0).getRotationDuration())),
     param_numScans(kDefaultNumScans),
     param_assumedAltitude(/*kDefaultAssumedAltitude*/1.0),
     param_minRange(kDefaultMinRange)
@@ -75,9 +75,9 @@ TrackInitiator::process(const Messages::Extractions::Ref& msg)
 
             GEO_LOCATION* origin = new GEO_LOCATION;
             GeoIns->geoInitLocation(origin,
-                            RadarConfig(0).GetSiteLatitude(),
-                            RadarConfig(0).GetSiteLongitude(),
-                            RadarConfig(0).GetSiteHeight(),
+                            RadarConfig(0).getSiteLat(),
+                            RadarConfig(0).getSiteLong(),
+                            RadarConfig(0).getSiteHeight(),
                             GEO_DATUM_DEFAULT,
                             "Radar");
 
@@ -141,7 +141,7 @@ TrackInitiator::process(const Messages::Extractions::Ref& msg)
 void
 TrackInitiator::init()
 {
-    double rMax = RadarConfig(0).GetRangeMax();
+    double rMax = RadarConfig(0).getRangeMax();
     currentTrackNum_ = 0;
 
     // Initialize the buffer

@@ -10,6 +10,9 @@
 #include "ais_radar/zxhcprocessechodata.h"
 #include "ais_radar/zchxanalysisandsendradar.h"
 #include "ais_radar/zchxaisdataprocessor.h"
+#include "side_car_parse/Messages/RadarConfig.h"
+#include "side_car_parse/Messages/VideoConfig.h"
+#include "side_car_parse/Messages/TSPIConfig.h"
 
 class QLabel;
 class ZCHXAisDataServer;
@@ -30,6 +33,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void  initUI();
+    void  initRadarCfgInfo();
 
 signals:
     void signalOpenRadar();
@@ -105,6 +109,7 @@ private:
 
 
     ZXHCProcessEchoData *mProcessEchoData;
+    QMap<int, ZCHX::Messages::RadarConfig*> mRadarConfigMap;
 };
 
 #endif // MAINWINDOW_H

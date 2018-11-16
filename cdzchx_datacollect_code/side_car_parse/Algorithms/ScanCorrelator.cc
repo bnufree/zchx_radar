@@ -23,7 +23,7 @@ ScanCorrelator::ScanCorrelator(RadarConfig* cfg, QObject* parent) : QObject(pare
 {
     if(cfg_)
     {
-        param_scanTime = (time_t(cfg_->GetRotationDuration()));
+        param_scanTime = (time_t(cfg_->getRotationDuration()));
     }
     //param_searchRadius->connectChangedSignalTo(boost::bind(&ScanCorrelator::on_searchRadius_changed, this, _1));
     //param_scanTime->connectChangedSignalTo(boost::bind(&ScanCorrelator::on_scanTime_changed, this, _1));
@@ -82,7 +82,7 @@ void
 ScanCorrelator::init()
 {
     if(!cfg_) return;
-    double rMax = cfg_->GetRangeMax();
+    double rMax = cfg_->getRangeMax();
 
     // Initialize the buffer
     indexOffset = int(ceil(rMax / searchRadius)) + 1;

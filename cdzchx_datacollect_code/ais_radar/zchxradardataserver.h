@@ -19,9 +19,13 @@
 #include "radarccontroldefines.h"
 #include "MultiCastDataRecvThread.h"
 #include "VideoDataProcessWorker.h"
+#include "zchxRadarHeartWorker.h"
+#include "zchxRadarCtrlWorker.h"
+#include "zchxRadarReportWorker.h"
 #include <QCoreApplication>
 #include <QDebug>
 #include <QDataStream>
+#include "side_car_parse/Messages/RadarConfig.h"
 
 typedef com::zhichenhaixin::proto::RadarVideo  ITF_RadarVideo;
 typedef com::zhichenhaixin::proto::TrackPoint  ITF_RadarPoint;
@@ -29,7 +33,7 @@ class ZCHXRadarDataServer : public QObject
 {
     Q_OBJECT
 public:
-    explicit ZCHXRadarDataServer(int uSourceID = 1,QObject *parent = 0);
+    explicit ZCHXRadarDataServer(ZCHX::Messages::RadarConfig* cfg,QObject *parent = 0);
     ~ZCHXRadarDataServer();
     int   sourceID() const;
 
@@ -83,38 +87,18 @@ private:
     void parseRadarControlSetting(INFOTYPE infotype);
 
 private:
-    int m_uSourceID;
-
     QUdpSocket *m_pUdpTrackSocket;
     QUdpSocket *m_pUdpVideoSocket;
     QUdpSocket *m_pUdpReportSocket;
-    QString m_sTrackIP;
-    int  m_uTrackPort;
-    QString m_sVideoIP;
-    int  m_uVideoPort;
-    QString m_sReportIP;
-    int m_uReportPort;
-    bool m_bReportOpen;
-
-    QUdpSocket *m_pHeartSocket;//心跳
-    QTimer     *m_pHeartTimer;
-    int m_uHeartTime;
-    QString m_sHeartIP;
-    int  m_uHeartPort;
-    QString m_sOptRadarIP;
-    int  m_uOptRadarPort;
-
-
-    QString m_sRadarVideoType;//cat010-新科，Lowrance-小雷达
-    int  m_uCellNum;//一条线上多少个点
-    int  m_uLineNum;//一圈多少条线
-    int  m_uHeading;//雷达方位
-
     QThread m_workThread;
     MultiCastDataRecvThread *mDataRecvThread;//接收雷达数据线程类
     VideoDataProcessWorker  *mVideoWorker;  //回波数据生成类
+    zchxRadarHeartWorker    *mHeartObj;     //心跳工作对象
+    zchxRadarCtrlWorker     *mCtrlObj;      //雷达控制对象
+    zchxRadarReportWorker   *mReportObj;    //雷达参数报告
     QMap<INFOTYPE, RadarStatus>   mRadarStatusMap; //雷达状态容器
     UINT8       mRadarPowerStatus;//雷达状态
+    ZCHX::Messages::RadarConfig*        mRadarConfig;
 
 
 

@@ -43,41 +43,38 @@ public:
 
         \return true if successful
     */
-    static bool Load(const QDomElement& config);
+    bool Load(const QDomElement& config);
 
 
-    static void Load(const std::string& name, const std::string& type, const std::string& domain,
+    void Load(const std::string& name, const std::string& type, const std::string& domain,
                      const std::string& nativeHost, const std::string& host, uint16_t port, const std::string& transport);
 
     /** Obtain the current zeromq configuration name
 
         \return config name
     */
-    static const std::string& GetName();
-    static const std::string& GetType();
-    static const std::string& GetDomain();
-    static const std::string& GetFullName();
-    static const std::string& GetNativeHost();
-    static const std::string& GetHost();
-    static uint16_t GetPort();
-    static const std::string& GetTransport();
+    const std::string& GetName();
+    const std::string& GetType();
+    const std::string& GetDomain();
+    const std::string& GetFullName();
+    const std::string& GetNativeHost();
+    const std::string& GetHost();
+    uint16_t GetPort();
+    const std::string& GetTransport();
+    void SetPort(const uint16_t &port);
+    void SetHost(const std::string& host) {host_ = host;}
 
-
-
-
-
-    static void SetPort(const uint16_t &port);
 
 private:
 
-    static std::string name_;
-    static std::string type_;
-    static std::string domain_;
-    static std::string fullName_;
-    static std::string nativeHost_;
-    static std::string host_;
-    static uint16_t port_;
-    static std::string transport_;
+     std::string name_;
+     std::string type_;
+     std::string domain_;
+     std::string fullName_;
+     std::string nativeHost_;
+     std::string host_;
+     uint16_t port_;
+     std::string transport_;
 
 };
 

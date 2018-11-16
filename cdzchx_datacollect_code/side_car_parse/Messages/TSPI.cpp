@@ -43,7 +43,7 @@ QMap<QString, GEO_LOCATION*> TSPI::originMap;
 
 const GEO_LOCATION *TSPI::GetOrigin() const
 {
-    GEO_LOCATION* origin_ = originMap.value(radarConfig_->getRadarName(), NULL);
+    GEO_LOCATION* origin_ = originMap.value(radarConfig_->getName(), NULL);
     if(origin_)
         return origin_;
 
@@ -59,9 +59,9 @@ const GEO_LOCATION *TSPI::GetOrigin() const
         // geoInitLocation() expects lat/lon in degrees, height in meters.
         //
         GeoIns->geoInitLocation(origin_,
-                        radarConfig_->GetSiteLatitude(),
-                        radarConfig_->GetSiteLongitude(),
-                        radarConfig_->GetSiteHeight(),
+                        radarConfig_->getSiteLat(),
+                        radarConfig_->getSiteLong(),
+                        radarConfig_->getSiteHeight(),
                         GEO_DATUM_DEFAULT,
                         "Radar");
 
@@ -70,7 +70,7 @@ const GEO_LOCATION *TSPI::GetOrigin() const
         qCInfo(radarmsg) << "EFG: " << origin_->e << ' ' << origin_->f << ' '
                      << origin_->g ;
 
-        originMap.insert(radarConfig_->getRadarName(), origin_);
+        originMap.insert(radarConfig_->getName(), origin_);
     }
 
     return origin_;

@@ -58,6 +58,7 @@ public:
     const std::string& GetTransport() const;
 
     void SetPort(const uint16_t &port);
+    void SetHost(const std::string& host) {host_ = host;}
 
 private:
     std::string name_;

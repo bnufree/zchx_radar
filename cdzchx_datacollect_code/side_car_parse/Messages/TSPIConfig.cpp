@@ -26,14 +26,14 @@
 
 using namespace ZCHX::Messages;
 
-std::string TSPIConfig::name_ = "Default";
-std::string TSPIConfig::type_ = "TSPI";
-std::string TSPIConfig::domain_ = "local";
-std::string TSPIConfig::fullName_ = "Default.local";
-std::string TSPIConfig::nativeHost_ = "heron-VirtualBox";
-std::string TSPIConfig::host_ = "192.168.60.22";
-uint16_t TSPIConfig::port_ = 4646;
-std::string TSPIConfig::transport_ = "_zeromq";
+//std::string TSPIConfig::name_ = "Default";
+//std::string TSPIConfig::type_ = "TSPI";
+//std::string TSPIConfig::domain_ = "local";
+//std::string TSPIConfig::fullName_ = "Default.local";
+//std::string TSPIConfig::nativeHost_ = "heron-VirtualBox";
+//std::string TSPIConfig::host_ = "192.168.60.22";
+//uint16_t TSPIConfig::port_ = 4646;
+//std::string TSPIConfig::transport_ = "_zeromq";
 
 const std::string&
 TSPIConfig::GetName() { return name_; }
