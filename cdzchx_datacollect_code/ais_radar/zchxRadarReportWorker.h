@@ -2,33 +2,26 @@
 #define ZCHXRADARREPORTWORKER_H
 
 #include <QObject>
-#include <QUdpSocket>
-#include "side_car_parse/Messages/RadarConfig.h"
+#include "zchxMulticastDataSocket.h"
+#include "radarccontroldefines.h"
 
-
-using namespace ZCHX::Messages;
-
-class zchxRadarReportWorker : public QObject
+class zchxRadarReportWorker : public zchxMulticastDataScoket
 {
     Q_OBJECT
 public:
-    explicit zchxRadarReportWorker(RadarConfig* cfg, QThread* thread, QObject *parent = 0);
-    bool    isFine() const {return mInit;}
-    QUdpSocket* socket() {return mSocket;}
-private:
-    void init();
-    void processReport(const QByteArray& bytes, size_t len);
+    explicit zchxRadarReportWorker(const QString& host,
+                                   int port,
+                                   QThread* thread,
+                                   QObject* parent = 0);
+    void processRecvData(const QByteArray &data);
+    void updateValue(INFOTYPE controlType, int value);
+
 signals:
-
-public slots:
-    void slotRecvReportData();
-    void displayUdpReportError(QAbstractSocket::SocketError);
+    void signalRadarStatusChanged(const RadarStatus& sts);
 
 private:
-    QUdpSocket*     mSocket;
-    RadarConfig*    mRadarCfg;
     QThread*        mWorkThread;
-    bool            mInit;
+    QMap<INFOTYPE, RadarStatus>   mRadarStatusMap; //雷达状态容器
 };
 
 #endif // ZCHXRADARREPORTWORKER_H

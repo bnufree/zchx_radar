@@ -1,5 +1,5 @@
-#ifndef ZCHXMULTICASTDATARECEIVER_H
-#define ZCHXMULTICASTDATARECEIVER_H
+#ifndef ZCHXMULTICASTDATASOCKET_H
+#define ZCHXMULTICASTDATASOCKET_H
 
 #include <QObject>
 #include <QUdpSocket>
@@ -9,13 +9,20 @@ enum DataRecvMode{
     ModeSyncRecv, //同步接收
 };
 
-class zchxMulticastDataReceiver : public QObject
+class zchxMulticastDataScoket : public QObject
 {
     Q_OBJECT
 public:
-    explicit zchxMulticastDataReceiver(const QString& host, int port, const QString& tag, int data_size = 0, int mode = ModeAsyncRecv, QObject *parent = 0);
+    explicit zchxMulticastDataScoket(const QString& host,
+                                     int port,
+                                     const QString& tag,
+                                     int data_size = 0,
+                                     int mode = ModeAsyncRecv,
+                                     QObject *parent = 0);
     QUdpSocket* socket() {return mSocket;}
     void startRecv();
+    virtual void processRecvData(const QByteArray& data);
+    bool isFine() const {return mInit;}
 private:
     void init();
 
@@ -26,6 +33,7 @@ signals:
 public slots:
     virtual void slotReadyReadMulticastData();
     virtual void slotDisplayUdpReportError(QAbstractSocket::SocketError);
+    void    slotWriteData(const QByteArray& data);
 
 private:
     QString     mHost;
@@ -38,4 +46,4 @@ private:
     QUdpSocket  *mSocket;
 };
 
-#endif // ZCHXMULTICASTDATARECEIVER_H
+#endif // ZCHXMULTICASTDATASOCKET_H

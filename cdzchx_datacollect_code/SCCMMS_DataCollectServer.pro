@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-ZCHX_3RD_PATH = H:/workspace/2018_dataprocessor/trunk/3rdparty
+ZCHX_3RD_PATH = ../3rdparty
 SIDE_CAR_PARSE_DIR = $$PWD/side_car_parse/
 if(!exists($$ZCHX_3RD_PATH)){
     message($$ZCHX_3RD_PATH does not exist)
@@ -99,13 +99,13 @@ SOURCES += main.cpp\
     side_car_parse/Messages/Video.cpp \
     side_car_parse/Messages/VideoConfig.cpp \
     side_car_parse/Messages/Track.cc \
-    ais_radar/MultiCastDataRecvThread.cpp \
     ais_radar/VideoDataProcessWorker.cpp \
     ais_radar/TargetExtractionWorker.cpp \
     ais_radar/zchxRadarHeartWorker.cpp \
     ais_radar/zchxRadarCtrlWorker.cpp \
     ais_radar/zchxRadarReportWorker.cpp \
-    ais_radar/zchxMulticastDataReceiver.cpp
+    ais_radar/zchxMulticastDataSocket.cpp \
+    ais_radar/VideoDataRecvThread.cpp
 
 HEADERS  += mainwindow.h \
     Log.h \
@@ -192,13 +192,13 @@ HEADERS  += mainwindow.h \
     side_car_parse/Algorithms/TargetImage.h \
     side_car_parse/Algorithms/TargetSize.h \
     side_car_parse/Algorithms/VideoStorage.h \
-    ais_radar/MultiCastDataRecvThread.h \
     ais_radar/VideoDataProcessWorker.h \
     ais_radar/TargetExtractionWorker.h \
     ais_radar/zchxRadarHeartWorker.h \
     ais_radar/zchxRadarCtrlWorker.h \
     ais_radar/zchxRadarReportWorker.h \
-    ais_radar/zchxMulticastDataReceiver.h
+    ais_radar/zchxMulticastDataSocket.h \
+    ais_radar/VideoDataRecvThread.h
 
 FORMS    += mainwindow.ui \
     ais_radar/zchxradaraissetting.ui \

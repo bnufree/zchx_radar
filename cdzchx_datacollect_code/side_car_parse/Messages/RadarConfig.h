@@ -321,6 +321,10 @@ public:
     static QStringList getGRadarNameList();
     static void setGRadarNameList(const QStringList &value);
 
+    QString getVideoIP();
+    int     getVideoPort();
+
+
 public slots:
     void sendRadarCommand(const QString &cmd);
 

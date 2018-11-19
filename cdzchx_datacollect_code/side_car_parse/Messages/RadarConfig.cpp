@@ -283,6 +283,16 @@ double RadarConfig::CalculateRangeFactor()
     return mRangeFactor;
 }
 
+QString RadarConfig::getVideoIP()
+{
+    return QString(getVideoConfig()->GetHost());
+}
+
+int RadarConfig::getVideoPort()
+{
+    return getVideoConfig()->GetPort();
+}
+
 void RadarConfig::Load( const std::string &name, uint32_t gateCountMax, uint32_t shaftEncodingMax, double rotationRate,
                    double rangeMin, double rangeMax, double beamWidth )
 {

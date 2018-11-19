@@ -2,23 +2,26 @@
 #define ZCHXRADARCTRLWORKER_H
 
 #include <QObject>
-#include <QUdpSocket>
-#include "side_car_parse/Messages/RadarConfig.h"
-
-using namespace ZCHX::Messages::RadarConfig;
+#include "zchxMulticastDataSocket.h"
+#include "radarccontroldefines.h"
 
 class zchxRadarCtrlWorker : public QObject
 {
     Q_OBJECT
 public:
-    explicit zchxRadarCtrlWorker(QUdpSocket* socket, RadarConfig* cfg, QObject *parent = 0);
+    explicit zchxRadarCtrlWorker(zchxMulticastDataScoket* soc,
+                                 QObject *parent = 0);
+    void open();
+    void close();
+    void setCtrValue(INFOTYPE infotype, int value);
+private:
+    QByteArray UINT82ByteArray(UINT8* arr, int count);
 
 signals:
-
+    void sendCtrlData(const QByteArray& data);
 public slots:
 private:
-    QUdpSocket*     mCtrlSocket;
-    RadarConfig*    mRadarCfg;
+    zchxMulticastDataScoket*     mCtrlSocket;
 };
 
 #endif // ZCHXRADARCTRLWORKER_H

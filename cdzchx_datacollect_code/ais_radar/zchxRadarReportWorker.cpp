@@ -1,82 +1,28 @@
 #include "zchxRadarReportWorker.h"
 #include "common.h"
 
-zchxRadarReportWorker::zchxRadarReportWorker(RadarConfig* cfg, QThread* thread, QObject *parent) :
-    QObject(parent),
-    mSocket(Q_NULLPTR),
-    mRadarCfg(cfg),
-    mWorkThread(thread),
-    mInit(false)
+zchxRadarReportWorker::zchxRadarReportWorker(const QString& host,
+                                             int port,
+                                             QThread* thread,
+                                             QObject* parent) :
+    zchxMulticastDataScoket(host, port, "RADAR_REPORT", 0, ModeAsyncRecv, parent),
+    mWorkThread(thread)
 {
-   init();
-   if(mInit && mWorkThread)
+   if(mWorkThread && isFine())
    {
        this->moveToThread(mWorkThread);
    }
 }
 
-void zchxRadarReportWorker::init()
+void zchxRadarReportWorker::processRecvData(const QByteArray &data)
 {
-    if(!mRadarCfg) return;
-    if(mRadarCfg->getReportIP().length() == 0 || mRadarCfg->getReportPort() == 0 || mRadarCfg->getReportOpen() == false) return;
-
-    mSocket = new QUdpSocket();
-
-    if(!mSocket->bind(QHostAddress::AnyIPv4, mRadarCfg->getReportPort(),QAbstractSocket::ShareAddress))
-    {
-        LOG_FUNC_DBG<<"bind report failed--";
-        return;
-    }
-
-    mSocket->setSocketOption(QAbstractSocket::MulticastLoopbackOption, 0);//禁止本机接收
-    if(!mSocket->joinMulticastGroup(QHostAddress(mRadarCfg->getReportIP())))
-    {
-         LOG_FUNC_DBG<<"joinMuticastGroup report failed--";
-         return;
-    }
-
-    connect(mSocket, SIGNAL(readyRead()),this, SLOT(slotRecvReportData()));
-    connect(mSocket,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayUdpReportError(QAbstractSocket::SocketError)));
-
-    mInit = true;
-
-    LOG_FUNC_DBG<<"init radar "<<mRadarCfg->getName() << " heart work succeed.";
-    return;
-}
-
-
-void zchxRadarReportWorker::slotRecvReportData()
-{
-    if(!mSocket) return;
-    QByteArray datagram;
-    // 让datagram的大小为等待处理的数据报的大小，这样才能接收到完整的数据
-    datagram.resize(mSocket->pendingDatagramSize());//pendingDatagramSize() 当前数据包大小
-    // 接收数据报，将其存放到datagram中
-    mSocket->readDatagram(datagram.data(), datagram.size());//readDatagram将不大于指定长度的数据保存到datagram.data()
-    qint64 utc = QDateTime::currentMSecsSinceEpoch();
-    QString sContent = tr("receive radar report data,size = %1").arg(datagram.size());
-    emit signalSendRecvedContent(utc,"REPORT_RECEIVE",sContent);
-//    cout<<"接收到雷达状态数据啦"<<datagram;
-//    cout<<"----------------";
-    ProcessReport(datagram, datagram.size());
-}
-
-void zchxRadarReportWorker::displayUdpReportError(QAbstractSocket::SocketError e)
-{
-    LOG_FUNC_DBG<<mSocket->errorString()<<e;
-}
-
-void zchxRadarReportWorker::processReport(const QByteArray& bytes, size_t len)
-{
-    //cout<<"状态-------------"<<QString::fromStdString(bytes.toHex().data());
-
-    emit signalSendRecvedContent(QDateTime::currentMSecsSinceEpoch(), "RadarRpoert", QString::fromStdString(bytes.toHex().data()));
+    LOG_FUNC_DBG<<data.toHex().toUpper();
     if(len < 3 ) return;
-    unsigned char val = bytes[1];
+    //开始解析数据
+    unsigned char val = data[1];
     //cout<<val;
     if (val == 0xC4)
     {
-        //cout<<"解析雷达数据-------------------------------------------";
         switch ((len << 8) + bytes[0])
         {
         case (18 << 8) + 0x01:
@@ -199,14 +145,11 @@ void zchxRadarReportWorker::processReport(const QByteArray& bytes, size_t len)
     return ;
 }
 
-void ZCHXRadarDataServer::updateValue(INFOTYPE controlType, int value)
+void zchxRadarReportWorker::updateValue(INFOTYPE controlType, int value)
 {
     //检查值的范围
-    if(controlType <= INFOTYPE::UNKNOWN ||  controlType > INFOTYPE::RESVERED)
-    {
-        return;
-    }
-    //cout<<"mRadarStatusMap容器大小--------------"<<mRadarStatusMap.size();
+    if(controlType <= INFOTYPE::UNKNOWN ||  controlType >= INFOTYPE::RESVERED) return;
+
     if(!mRadarStatusMap.contains(controlType))
     {
         mRadarStatusMap[controlType] = RadarStatus(controlType);
@@ -215,7 +158,6 @@ void ZCHXRadarDataServer::updateValue(INFOTYPE controlType, int value)
     //cout<<"sts.value"<<sts.value<<"value"<<value;
     if(sts.value != value)
     {
-
         sts.value = value;
         emit signalRadarStatusChanged(mRadarStatusMap.values(), m_uSourceID);
     }

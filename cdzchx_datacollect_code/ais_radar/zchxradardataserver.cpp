@@ -68,14 +68,24 @@ ZCHXRadarDataServer::ZCHXRadarDataServer(ZCHX::Messages::RadarConfig* cfg, QObje
     parseRadarControlSetting(TARGET_SEPARATION);
 
     //初始化心跳
-    mHeartObj = new zchxRadarHeartWorker(mRadarConfig, new QThread, this);
+    mHeartObj = new zchxRadarHeartWorker(mRadarConfig->getCmdIP(),
+                                         mRadarConfig->getCmdPort(),
+                                         mRadarConfig->getHeartTimeInterval() * 1000,
+                                         new QThread,
+                                         this);
     //初始化雷达控制
     if(mHeartObj->isFine())
     {
-        mCtrlObj = new zchxRadarCtrlWorker(mHeartObj->socket(), mRadarConfig, this);
+        mCtrlObj = new zchxRadarCtrlWorker(mHeartObj, this);
     }
     //初始化雷达参数报告
-    mReportObj = new zchxRadarReportWorker(mRadarConfig, new QThread, this);
+    if(mRadarConfig->getReportOpen())
+    {
+        mReportObj = new zchxRadarReportWorker(mRadarConfig->getReportIP(),
+                                               mRadarConfig->getReportPort(),
+                                               new QThread,
+                                               this);
+    }
 
 
     connect(this,SIGNAL(startProcessSignal()),this,SLOT(startProcessSlot()));
@@ -83,9 +93,11 @@ ZCHXRadarDataServer::ZCHXRadarDataServer(ZCHX::Messages::RadarConfig* cfg, QObje
     m_workThread.start();
 
     //独立线程接收数据
-    mDataRecvThread = new MultiCastDataRecvThread(m_sVideoIP, m_uVideoPort, m_sRadarVideoType, m_uCellNum, m_uLineNum, m_uHeading, this);
-    mVideoWorker = new VideoDataProcessWorker(new RadarConfig(0));
-    connect(mDataRecvThread, SIGNAL(analysisRadar(QByteArray,QString,int,int,int)), mVideoWorker, SLOT(slotRecvVideoRawData(QByteArray)));
+    mDataRecvThread = new VideoDataRecvThread(mRadarConfig->getVideoIP(),
+                                              mRadarConfig->getVideoPort(),
+                                              this);
+    mVideoWorker = new VideoDataProcessWorker(mRadarConfig);
+    connect(mDataRecvThread, SIGNAL(analysisRadar(QByteArray)), mVideoWorker, SLOT(slotRecvVideoRawData(QByteArray)));
     //connect(mVideoWorker, SIGNAL(signalSendTrackPoint(QList<TrackPoint>)), this, SLOT(slotRecvTrackPoint(QList<TrackPoint>)));
 }
 
@@ -108,64 +120,18 @@ ZCHXRadarDataServer::~ZCHXRadarDataServer()
         delete m_pUdpVideoSocket;
         m_pUdpVideoSocket = NULL;
     }
-    if(m_pHeartTimer)
-    {
-        m_pHeartTimer->stop();
-        delete m_pHeartTimer;
-        m_pHeartTimer = NULL;
-    }
-    if(m_pHeartSocket)
-    {
-        delete m_pHeartSocket;
-        m_pHeartSocket  = NULL;
-    }
+
 
 }
 
 void ZCHXRadarDataServer::openRadar()//打开雷达
 {
-
-    //m_asio_server->send_peer_message(radarSourceId, (char *)(Down + 0), 3);
-    //m_asio_server->send_peer_message(radarSourceId, (char *)(Down + 3), 3);
-    qint64 utc = QDateTime::currentMSecsSinceEpoch();
-    QString sContent = tr("radar ip = %1,port = %2").arg(m_sHeartIP).arg(m_uHeartPort);
-    emit signalSendRecvedContent(utc,"OPEN_RADAR",sContent);
-    //qDebug()<<"close radar"<<m_sHeartIP<<m_sHeartIP;
-    QHostAddress objHost(m_sHeartIP);
-    unsigned char Boot[6] = { 0x00, 0xc1, 0x01, 0x01, 0xc1, 0x01 }; //00 c1 01/01 c1 01
-//    qint64 s1 = m_pHeartSocket->writeDatagram((char *)(Boot + 0),3,objHost,m_uHeartPort);
-//    qint64 s2 = m_pHeartSocket->writeDatagram((char *)(Boot + 3),3,objHost,m_uHeartPort);
-//    cout<<"s1"<<s1<<"s2"<<s2;
-
-    QByteArray line;
-    line.resize(3);
-    line[0] = 0x00;
-    line[1] = 0xc1;
-    line[2] = 0x01;
-    cout<<line;
-    m_pHeartSocket->writeDatagram(line,objHost,m_uHeartPort);
-    line[0] = 0x01;
-    line[1] = 0xc1;
-    line[2] = 0x01;
-    m_pHeartSocket->writeDatagram(line,objHost,m_uHeartPort);
-
-
+    if(mCtrlObj) mCtrlObj->open();
 }
 
 void ZCHXRadarDataServer::closeRadar()//关闭雷达
 {
-    qint64 utc = QDateTime::currentMSecsSinceEpoch();
-    QString sContent = tr("radar ip = %1,port = %2").arg(m_sHeartIP).arg(m_uHeartPort);
-    emit signalSendRecvedContent(utc,"CLOSE_RADAR",sContent);
-    //qDebug()<<"open radar"<<m_sOptRadarIP<<m_uOptRadarPort;
-    QHostAddress objHost(m_sHeartIP);
-    unsigned char Down[6] = { 0x00, 0xc1, 0x01, 0x01, 0xc1, 0x00 }; //00 c1 01  /01 c1 00
-    m_pHeartSocket->writeDatagram((char *)(Down + 0),3,objHost,m_uHeartPort);
-    m_pHeartSocket->writeDatagram((char *)(Down + 3),3,objHost,m_uHeartPort);
-
-    //m_asio_server->send_peer_message(radarSourceId, (char *)(Boot + 0), 3);
-    //m_asio_server->send_peer_message(radarSourceId, (char *)(Boot + 3), 3);
-
+    if(mCtrlObj) mCtrlObj->close();
 }
 
 void ZCHXRadarDataServer::startProcessSlot()
@@ -269,213 +235,7 @@ void ZCHXRadarDataServer::analysisRadar(const QByteArray &sRadarData, const QStr
 
 void ZCHXRadarDataServer::setControlValue(INFOTYPE infotype, int value)
 {
-    cout<<"上传雷达状态值!!!!!setControlValue";
-    emit signalSendRecvedContent(QDateTime::currentMSecsSinceEpoch(), "RadarControl", QString("%1:%2").arg(RadarStatus::getTypeString(infotype)).arg(value));
-
-    //检查当前值是否存在
-    if(mRadarStatusMap.contains(infotype))
-    {
-        RadarStatus& sts = mRadarStatusMap[infotype];
-        if(sts.value != value)
-        {
-            QHostAddress objHost(m_sHeartIP);
-            switch (infotype) {
-            case INFOTYPE::POWER:
-            {
-                if(value >= sts.min && value <= sts.max)
-                {
-                    if(value == 0)
-                    {
-                        closeRadar();
-                    } else
-                    {
-                        openRadar();
-                    }
-                }
-                break;
-            }
-            case INFOTYPE::SCAN_SPEED:
-            {
-                if(value >= sts.min && value <= sts.max)
-                {
-                    UINT8 cmd[] = {0x0f, 0xc1, (UINT8)value  }; //00 c1 01  /01 c1 00
-                    m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                }
-
-                break;
-            }
-            case INFOTYPE::ANTENNA_HEIGHT:
-            {
-                if(value >= sts.min && value <= sts.max)
-                {
-                    int v = value * 1000;  // radar wants millimeters, not meters
-                    int v1 = v / 256;
-                    int v2 = v & 255;
-                    UINT8 cmd[10] = { 0x30, 0xc1, 0x01, 0, 0, 0, (UINT8)v2, (UINT8)v1, 0, 0 };
-                    m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                }
-
-                break;
-            }
-            case INFOTYPE::BEARING_ALIGNMENT:
-            {
-                if(value >= sts.min && value <= sts.max)
-                {
-                    if (value < 0)  value += 360;
-                    int v = value * 10;
-                    int v1 = v / 256;
-                    int v2 = v & 255;
-                    UINT8 cmd[4] = { 0x05, 0xc1, (UINT8)v2, (UINT8)v1 };
-                    m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                }
-
-                break;
-            }
-            case INFOTYPE::RANG:
-            {
-                if(value >= 50 && value <= 72704)
-                {
-                    unsigned int decimeters = (unsigned int)value * 10;
-                    UINT8 cmd[] = { 0x03,0xc1,
-                        (UINT8)((decimeters >> 0) & 0XFFL),
-                        (UINT8)((decimeters >> 8) & 0XFFL),
-                        (UINT8)((decimeters >> 16) & 0XFFL),
-                    };
-                    m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                }
-
-                break;
-            }
-            case INFOTYPE::GAIN:
-            {
-                if(value >= sts.min && value <= sts.max)
-                {
-                    if(value < 0)
-                    {
-                        // 自动增益
-                        UINT8 cmd[] = {0x06, 0xc1, 0, 0, 0, 0, 0x01, 0, 0, 0, 0xad };
-                        m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                    } else if (value >= 0) {
-                        // Manual Gain
-                        int v = (value + 1) * 255 / 100;
-                        if (v > 255) v = 255;
-                        UINT8 cmd[] = { 0x06, 0xc1, 0, 0, 0, 0, 0, 0, 0, 0, (UINT8)v };
-                        m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                    }
-                }
-
-                break;
-            }
-            case INFOTYPE::SEA_CLUTTER:
-            {
-                if(value >= sts.min && value <= sts.max)
-                {
-                    if(value < 0)
-                    {
-                        // 自动
-                        UINT8 cmd[11] = { 0x06, 0xc1, 0x02, 0, 0, 0, 0x01, 0, 0, 0, 0xd3 };
-                        m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                    } else if (value >= 0) {
-                        // Manual
-                        int v = (value + 1) * 255 / 100;
-                        if (v > 255) v = 255;
-                        UINT8 cmd[] = { 0x06, 0xc1, 0x02, 0, 0, 0, 0, 0, 0, 0, (UINT8)v };
-                        m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                    }
-                }
-
-                break;
-            }
-
-            case INFOTYPE::RAIN_CLUTTER: // 8
-            {
-                if (value >= sts.min &&  value <= sts.max)
-                {
-                    int v = (value + 1) * 255 / 100;
-                    if (v > 255) v = 255;
-                    UINT8 cmd[] = { 0x06, 0xc1, 0x04, 0, 0, 0, 0, 0, 0, 0, (UINT8)v };
-                    m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                }
-                break;
-            }
-            case INFOTYPE::NOISE_REJECTION: // 9
-            {
-                if (value >= sts.min &&  value <= sts.max)
-                {
-                    UINT8 cmd[] = { 0x21, 0xc1, (UINT8)value };
-                    m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                }
-                break;
-            }
-            case INFOTYPE::SIDE_LOBE_SUPPRESSION: // 10
-            {
-                if (value >= sts.min &&  value <= sts.max)
-                {
-                    if (value < 0) {
-                        //自动
-                        UINT8 cmd[] = {0x06, 0xc1, 0x05, 0, 0, 0, 0x01, 0, 0, 0, 0xc0 };
-                        m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                    }else {
-                        int v = (value + 1) * 255 / 100;
-                        if (v > 255) v = 255;
-                        UINT8 cmd[] = { 0x6, 0xc1, 0x05, 0, 0, 0, 0, 0, 0, 0, (UINT8)v };
-                        m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                    }
-                }
-                break;
-            }
-            case INFOTYPE::INTERFERENCE_REJECTION: // 11
-            {
-                if (value >= sts.min &&  value <= sts.max)
-                {
-                    UINT8 cmd[] = { 0x08, 0xc1, (UINT8)value };
-                    m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                }
-                break;
-            }
-            case INFOTYPE::LOCAL_INTERFERENCE_REJECTION:  // 12
-            {
-
-                if (value >= sts.min &&  value <= sts.max)
-                {
-                    if (value < 0) value = 0;
-                    if (value > 3) value = 3;
-                    UINT8 cmd[] = { 0x0e, 0xc1, (UINT8)value };
-                    m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                }
-                break;
-            }
-            case INFOTYPE::TARGET_EXPANSION: // 13
-            {
-                if (value >= sts.min &&  value <= sts.max){
-                    UINT8 cmd[] = { 0x09, 0xc1, (UINT8)value };
-                    m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                }
-                break;
-            }
-                break;
-            case INFOTYPE::TARGET_BOOST: // 14
-            {
-                if (value >= sts.min &&  value <= sts.max){
-                    UINT8 cmd[] = { 0x0a, 0xc1, (UINT8)value };
-                    m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                }
-                break;
-            }
-            case INFOTYPE::TARGET_SEPARATION: // 15
-            {
-
-                if (value >= sts.min &&  value <= sts.max){
-                    UINT8 cmd[] = { 0x22, 0xc1, (UINT8)value };
-                    m_pHeartSocket->writeDatagram((char *)(cmd),sizeof(cmd),objHost,m_uHeartPort);
-                }
-                break;
-            }
-            default:
-                break;
-            }
-        }
-    }
+    if(mCtrlObj) mCtrlObj->setCtrValue(infotype, value);
 
 }
 
@@ -486,7 +246,7 @@ void ZCHXRadarDataServer::setControlValue(INFOTYPE infotype, int value)
 
 int ZCHXRadarDataServer::sourceID() const
 {
-    return m_uSourceID;
+    return mRadarConfig->getID();
 }
 
 void ZCHXRadarDataServer::parseRadarControlSetting(INFOTYPE infotype)

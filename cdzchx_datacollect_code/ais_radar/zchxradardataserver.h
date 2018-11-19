@@ -17,7 +17,7 @@
 #include <QThread>
 #include "zchxfunction.h"
 #include "radarccontroldefines.h"
-#include "MultiCastDataRecvThread.h"
+#include "VideoDataRecvThread.h"
 #include "VideoDataProcessWorker.h"
 #include "zchxRadarHeartWorker.h"
 #include "zchxRadarCtrlWorker.h"
@@ -91,12 +91,11 @@ private:
     QUdpSocket *m_pUdpVideoSocket;
     QUdpSocket *m_pUdpReportSocket;
     QThread m_workThread;
-    MultiCastDataRecvThread *mDataRecvThread;//接收雷达数据线程类
+    VideoDataRecvThread *mDataRecvThread;//接收雷达数据线程类
     VideoDataProcessWorker  *mVideoWorker;  //回波数据生成类
     zchxRadarHeartWorker    *mHeartObj;     //心跳工作对象
     zchxRadarCtrlWorker     *mCtrlObj;      //雷达控制对象
-    zchxRadarReportWorker   *mReportObj;    //雷达参数报告
-    QMap<INFOTYPE, RadarStatus>   mRadarStatusMap; //雷达状态容器
+    zchxRadarReportWorker   *mReportObj;    //雷达参数报告    
     UINT8       mRadarPowerStatus;//雷达状态
     ZCHX::Messages::RadarConfig*        mRadarConfig;
 
