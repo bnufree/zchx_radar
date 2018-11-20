@@ -29,6 +29,7 @@ public:
         \return true if successful, false otherwise
     */
     //bool startup();
+    bool process(const Messages::Video::Ref& msg, Messages::BinaryVideo::Ref& out);
 
 private:
     size_t getNumInfoSlots() const { return kNumSlots; }
@@ -46,7 +47,7 @@ private:
 
         \return true if successful, false otherwise
     */
-    bool process(const Messages::Video::Ref& in);
+
 
     /** Notifiation that the threshold value has been changed by an external entitiy.
 

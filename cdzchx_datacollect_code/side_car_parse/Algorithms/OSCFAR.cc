@@ -140,9 +140,11 @@ bool OSCFAR::process(const Messages::Video::Ref& in, Messages::BinaryVideo::Ref&
     size_t index = 0;
     while (1) {
         size_t pos = index + halfWindowSize;
-        bool passed = in[pos] > (alpha * slidingWindow.getThreshold(thresholdIndex));
+        short value =  slidingWindow.getThreshold(thresholdIndex);
+        short threshold = alpha * value;
+        bool passed = in[pos] > threshold;
         out[pos] = passed;
-
+        qDebug()<<pos<<threshold<<in[pos]<<out[pos];
         // Check that we can safely continue and index into the input array.
         //
         if (index == limit) { break; }

@@ -16,7 +16,7 @@ public:
                                   QThread* thread,
                                   QObject *parent = 0);
 
-    void    startHeart() {if(mHeartTimer) mHeartTimer->start();}
+    void    startHeart();
 
 signals:
 

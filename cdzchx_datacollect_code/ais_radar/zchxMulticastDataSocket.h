@@ -27,9 +27,8 @@ private:
     void init();
 
 signals:
-    void signalRecvMulticastData(qint64 utc, const QString& tag, int dataSize);
+    void signalRecvMulticastData(qint64 utc, const QString& tag, const QString& dataSize);
     void signalSendRecvData(const QByteArray& data);
-
 public slots:
     virtual void slotReadyReadMulticastData();
     virtual void slotDisplayUdpReportError(QAbstractSocket::SocketError);

@@ -69,13 +69,8 @@ ScanCorrelator::process(const Messages::Extractions::Ref& msg, Messages::Extract
 #endif
 
         if (index->getCorrelated() && (index->getNumCorrelations() >= num_scans)) result->push_back(*index);
-
-        //        if(index->getCorrelations()>0)
-        //            result->push_back(*index);
     }
     return true;
-
-//    return send(result);
 }
 
 void

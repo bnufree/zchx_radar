@@ -9,6 +9,7 @@ QRadarStatusSettingWidget::QRadarStatusSettingWidget(int radarID, QWidget *paren
     ui(new Ui::QRadarStatusSettingWidget)
 {
     ui->setupUi(this);
+    mValueSpinBoxMap.clear();
 }
 
 QRadarStatusSettingWidget::~QRadarStatusSettingWidget()
@@ -19,6 +20,7 @@ QRadarStatusSettingWidget::~QRadarStatusSettingWidget()
 void QRadarStatusSettingWidget::setRadarReportSeting(const QList<RadarStatus> &report)
 {
     //清理所有的元素
+    mValueSpinBoxMap.clear();
     QGridLayout *layout = qobject_cast<QGridLayout*>(this->layout());
     if(!layout)
     {
@@ -67,6 +69,8 @@ void QRadarStatusSettingWidget::setRadarReportSeting(const QList<RadarStatus> &r
             row++;
             col = 0;
         }
+
+        mValueSpinBoxMap[elelmentID] = box;
     }
 }
 
@@ -79,6 +83,15 @@ void QRadarStatusSettingWidget::slotValueChanged(int val)
     if(num.indexIn(name) >= 0)
     {
         int type = num.cap().toInt();
-        emit signalRadarConfigChanged(mRadarID, type , val);
+        emit signalRadarConfigChanged( type , val);
     }
+}
+
+void QRadarStatusSettingWidget::slotValueChangedFromServer(int type, int value)
+{
+    QSpinBox *box = mValueSpinBoxMap[type];
+    if(!box) return;
+    disconnect(box,SIGNAL(valueChanged(int)),this,SLOT(slotValueChanged(int)));
+    box->setValue(value);
+    connect(box,SIGNAL(valueChanged(int)),this,SLOT(slotValueChanged(int)));
 }

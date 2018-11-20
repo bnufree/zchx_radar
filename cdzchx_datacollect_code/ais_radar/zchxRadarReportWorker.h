@@ -17,7 +17,7 @@ public:
     void updateValue(INFOTYPE controlType, int value);
 
 signals:
-    void signalRadarStatusChanged(const RadarStatus& sts);
+    void signalRadarStatusChanged(int type, int value);
 
 private:
     QThread*        mWorkThread;

@@ -88,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent) :
     foreach(int id, mRadarConfigMap.keys())
     {
         //接收雷达数据
-        ZCHXRadarDataServer *pRadarDataServer = new ZCHXRadarDataServer(mRadarConfigMap[id]);
+        ZCHXRadarDataServer *pRadarDataServer = new ZCHXRadarDataServer(mRadarConfigMap[id], 0);
         //处理雷达数据并发送
         ZCHXAnalysisAndSendRadar *pAnalysisAndSendRadar = new ZCHXAnalysisAndSendRadar(id);
         emit pRadarDataServer->startProcessSignal();//开启接收
@@ -143,7 +143,7 @@ void MainWindow::initRadarCfgInfo()
         cfg->setSiteLon(Utils::Profiles::instance()->value(str_radar,"Centre_Lon").toDouble());
         cfg->setRadarType(Utils::Profiles::instance()->value(str_radar,"Video_Type").toString());
         cfg->setGateCountMax(Utils::Profiles::instance()->value(str_radar,"Cell_Num").toInt());
-        cfg->setShaftEncodingMax(Utils::Profiles::instance()->value(str_radar,"Line_Num").toInt());
+        cfg->setShaftEncodingMax(Utils::Profiles::instance()->value(str_radar,"Line_Num").toInt() - 1);
         cfg->setLimit(Utils::Profiles::instance()->value(str_radar,"Limit").toBool());
         cfg->setLoopNum(Utils::Profiles::instance()->value(str_radar,"Loop_Num").toInt());
         cfg->setHead(Utils::Profiles::instance()->value(str_radar,"Heading").toInt());

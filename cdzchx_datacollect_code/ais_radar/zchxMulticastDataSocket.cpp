@@ -1,5 +1,6 @@
 #include "zchxMulticastDataSocket.h"
 #include "common.h"
+#include <QThread>
 
 zchxMulticastDataScoket::zchxMulticastDataScoket(const QString& host, int port, const QString& tag, int data_size, int mode, QObject *parent)
     : QObject(parent),
@@ -66,7 +67,7 @@ void zchxMulticastDataScoket::slotReadyReadMulticastData()
     // 接收数据报，将其存放到datagram中
     mSocket->readDatagram(datagram.data(), dataSize);
     qint64 utc = QDateTime::currentMSecsSinceEpoch();
-    emit signalSendRecvedContent(utc, mTag, QString("data size:%1").arg(dataSize));
+    emit signalRecvMulticastData(utc, mTag, QString("data size:%1").arg(dataSize));
     if(mDataSize == 0)
     {
         processRecvData(datagram);
@@ -88,7 +89,11 @@ void zchxMulticastDataScoket::startRecv()
         if(mSocket->hasPendingDatagrams())
         {
             slotReadyReadMulticastData();
+        } else
+        {
+            LOG_FUNC_DBG<<"no data received";
         }
+        QThread::msleep(100);
     }
 }
 

@@ -13,7 +13,8 @@ public:
                                  QObject *parent = 0);
     void open();
     void close();
-    void setCtrValue(INFOTYPE infotype, int value);
+public slots:
+    void setCtrValue(int infotype, int value);
 private:
     QByteArray UINT82ByteArray(UINT8* arr, int count);
 

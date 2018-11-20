@@ -2,6 +2,7 @@
 #include "side_car_parse/Messages/Video.h"
 #include "side_car_parse/Algorithms/OSCFAR.h"
 #include "side_car_parse/Algorithms/ScanCorrelator.h"
+#include "side_car_parse/Algorithms/Threshold.h"
 using namespace ZCHX::Messages;
 using namespace ZCHX::Algorithms;
 
@@ -27,23 +28,46 @@ void TargetExtractionWorker::slotRecvRawVideoDataList(const ITF_VideoFrameList &
             QByteArray *bytes = new QByteArray();
             bytes->resize(frame.ByteSize());
             frame.SerializeToArray(bytes->data(), bytes->size());
+            LOG_FUNC_DBG<<"index:"<<frame.msgindex();
             //振幅值赋值给video
             Video::Ref video(Video::Make(QSharedPointer<QByteArray>(bytes)));
+//            for(int i=0; i<video->size();i++)
+//            {
+//                LOG_FUNC_DBG<<QString("video[%1] = %2").arg(i).arg(video[i]);
+//            }
             //通过振幅和阈值设定,将video转换为BinaryVideo
             BinaryVideo::Ref binary(BinaryVideo::Make("OSCFAR", video));
-            OSCFAR far;
-            if(!far.process(video, binary)) continue;
+//            OSCFAR far;
+//            if(!far.process(video, binary))
+//            {
+//                LOG_FUNC_DBG<<"init bianry video failed.";
+//                continue;
+//            }
+
+            Threshold process;
+            process.process(video, binary);
+//            for(int i=0; i<binary->size();i++)
+//            {
+//                LOG_FUNC_DBG<<QString("binary[%1] = %2").arg(i).arg(binary[i]);
+//            }
+            binary->setRadarConfig(mRadarCfg);
+
             //对BinaryVideo进行抽取
-            Extractions::Ref extractions;
-            if(!mExtractObj->process(binary, extractions)) continue;
-            ScanCorrelator corr(mRadarCfg);
-            //对抽取的目标进行校正,设定correct属性
-            Extractions::Ref result;
-            if(!corr.process(extractions, result)) continue;
-            //目标进行标号等操作
-            mTrackerObj->processInput(result, pnts);
+            Extractions::Ref extractions(Extractions::Make("Extract", binary));
+
+            if(mExtractObj->process(binary, extractions))
+            {
+                ScanCorrelator corr(mRadarCfg);
+                //对抽取的目标进行校正,设定correct属性
+                Extractions::Ref result;
+                if(!corr.process(extractions, result)) continue;
+                //目标进行标号等操作
+                mTrackerObj->processInput(result, pnts);
+            }
+            LOG_FUNC_DBG<<"extraction size:"<<extractions->getSize();
         }
     }
+    LOG_FUNC_DBG<<" pnts size:"<<pnts.size();
     emit signalSendTrackPoint(pnts.values());
     LOG_FUNC_DBG_END;
 }

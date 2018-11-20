@@ -1,7 +1,7 @@
 #include "zchxRadarCtrlWorker.h"
 #include "common.h"
 
-zchxRadarCtrlWorker::zchxRadarCtrlWorker(zchxMulticastDataScoket* soc,
+zchxRadarCtrlWorker::zchxRadarCtrlWorker(zchxMulticastDataScoket* socket,
                                          QObject *parent) :
     QObject(parent),
     mCtrlSocket(socket)
@@ -39,7 +39,7 @@ QByteArray zchxRadarCtrlWorker::UINT82ByteArray(UINT8 *arr, int count)
     return res;
 }
 
-void zchxRadarCtrlWorker::setCtrValue(INFOTYPE infotype, int value)
+void zchxRadarCtrlWorker::setCtrValue(int infotype, int value)
 {
     LOG_FUNC_DBG<<infotype<<value;;
 
@@ -189,7 +189,4 @@ void zchxRadarCtrlWorker::setCtrValue(INFOTYPE infotype, int value)
     default:
         break;
     }
-}
-}
-
 }

@@ -14,12 +14,13 @@ zchxRadarReportWorker::zchxRadarReportWorker(const QString& host,
    }
 }
 
-void zchxRadarReportWorker::processRecvData(const QByteArray &data)
+void zchxRadarReportWorker::processRecvData(const QByteArray &bytes)
 {
-    LOG_FUNC_DBG<<data.toHex().toUpper();
+    LOG_FUNC_DBG<<bytes.toHex().toUpper();
+    int len = bytes.size();
     if(len < 3 ) return;
     //开始解析数据
-    unsigned char val = data[1];
+    unsigned char val = bytes[1];
     //cout<<val;
     if (val == 0xC4)
     {
@@ -28,28 +29,21 @@ void zchxRadarReportWorker::processRecvData(const QByteArray &data)
         case (18 << 8) + 0x01:
         {
             RadarReport_01C4_18 *s = (RadarReport_01C4_18 *)bytes.data();
-            if (mRadarPowerStatus != s->radar_status)
+            switch (bytes[2])
             {
-                mRadarPowerStatus = s->radar_status;
-                switch (bytes[2])
-                {
-                case 0x01:
-                    cout<<"待机状态";
-                    //ZCHXLOG_DEBUG("reports status RADAR_STANDBY");
-                    updateValue(INFOTYPE::POWER,0);
-                    break;
-                case 0x02:
-                    cout<<"传输状态";
-                    //ZCHXLOG_DEBUG("reports status TRANSMIT");
-                    updateValue(INFOTYPE::POWER,1);
-                    break;
-                case 0x05:
-                    cout<<"唤醒状态";
-                    //ZCHXLOG_DEBUG("reports status WAKING UP");
-                    break;
-                default:
-                    break;
-                }
+            case 0x01:
+                //ZCHXLOG_DEBUG("reports status RADAR_STANDBY");
+                updateValue(INFOTYPE::POWER,0);
+                break;
+            case 0x02:
+                //ZCHXLOG_DEBUG("reports status TRANSMIT");
+                updateValue(INFOTYPE::POWER,1);
+                break;
+            case 0x05:
+                //ZCHXLOG_DEBUG("reports status WAKING UP");
+                break;
+            default:
+                break;
             }
             break;
         }
@@ -139,8 +133,6 @@ void zchxRadarReportWorker::processRecvData(const QByteArray &data)
         }
     }
     else if(bytes[1] == 0xF5){
-        cout<<"不知道是什么东西";
-        //ZCHXLOG_DEBUG("unknown: buf[1]=0xF5");
     }
     return ;
 }
@@ -149,6 +141,7 @@ void zchxRadarReportWorker::updateValue(INFOTYPE controlType, int value)
 {
     //检查值的范围
     if(controlType <= INFOTYPE::UNKNOWN ||  controlType >= INFOTYPE::RESVERED) return;
+    if(controlType == INFOTYPE::RANG) LOG_FUNC_DBG<<value;
 
     if(!mRadarStatusMap.contains(controlType))
     {
@@ -159,7 +152,7 @@ void zchxRadarReportWorker::updateValue(INFOTYPE controlType, int value)
     if(sts.value != value)
     {
         sts.value = value;
-        emit signalRadarStatusChanged(mRadarStatusMap.values(), m_uSourceID);
+        emit signalRadarStatusChanged(controlType, value);
     }
 
 }

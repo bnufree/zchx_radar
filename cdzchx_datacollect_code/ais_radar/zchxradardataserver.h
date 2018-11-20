@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <QDataStream>
 #include "side_car_parse/Messages/RadarConfig.h"
+#include "qradarstatussettingwidget.h"
 
 typedef com::zhichenhaixin::proto::RadarVideo  ITF_RadarVideo;
 typedef com::zhichenhaixin::proto::TrackPoint  ITF_RadarPoint;
@@ -33,7 +34,7 @@ class ZCHXRadarDataServer : public QObject
 {
     Q_OBJECT
 public:
-    explicit ZCHXRadarDataServer(ZCHX::Messages::RadarConfig* cfg,QObject *parent = 0);
+    explicit ZCHXRadarDataServer(ZCHX::Messages::RadarConfig* cfg, QRadarStatusSettingWidget* widget, QObject *parent = 0);
     ~ZCHXRadarDataServer();
     int   sourceID() const;
 
@@ -60,22 +61,8 @@ public slots:
     void displayUdpTrackError(QAbstractSocket::SocketError error);
     void updateTrackUdpProgress();
 
-    //video
-//    void displayUdpVideoError(QAbstractSocket::SocketError error);
-//    void updateVideoUdpProgress();
-    //report
-    void displayUdpReportError(QAbstractSocket::SocketError error);
-    void updateReportUdpProgress();
-    void ProcessReport(const QByteArray& bytes, size_t len);
-
-
-    //4g雷达 IP 236.6.7.10  port 6680
-    //6g雷达 IP 236.6.7.100  port 6132
-    //开关控制 IP 236.6.101.100  port 6133
-    void heartProcessSlot();//心跳通信
     //雷达控制
     void setControlValue(INFOTYPE infotype, int value);
-    void updateValue(INFOTYPE controlType, int value);
     void slotRecvTrackPoint(const QList<TrackPoint>& list);
 private slots:
     void analysisRadar(const QByteArray &sRadarData,const QString &sRadarType,
@@ -83,9 +70,7 @@ private slots:
 
 private:
     void init();
-
-    void parseRadarControlSetting(INFOTYPE infotype);
-
+    void initStatusWidget();
 private:
     QUdpSocket *m_pUdpTrackSocket;
     QUdpSocket *m_pUdpVideoSocket;
@@ -98,6 +83,7 @@ private:
     zchxRadarReportWorker   *mReportObj;    //雷达参数报告    
     UINT8       mRadarPowerStatus;//雷达状态
     ZCHX::Messages::RadarConfig*        mRadarConfig;
+    QRadarStatusSettingWidget*          mStatusWidget;
 
 
 

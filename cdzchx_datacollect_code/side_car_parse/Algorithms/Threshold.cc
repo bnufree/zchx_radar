@@ -12,8 +12,9 @@ using namespace ZCHX;
 using namespace ZCHX::Algorithms;
 using namespace ZCHX::Messages;
 
-Threshold::Threshold() : threshold_(kDefaultThreshold)
+Threshold::Threshold() : threshold_(/*kDefaultThreshold*/30)
 {
+    thresholdValue_ = threshold_;
     //threshold_->connectChangedSignalTo(boost::bind(&Threshold::thresholdChanged, this, _1));
 }
 
@@ -30,24 +31,19 @@ Threshold::Threshold() : threshold_(kDefaultThreshold)
 struct ThresholdFilter {
     Threshold::DatumType threshold_;
     ThresholdFilter(Threshold::DatumType v) : threshold_(v) {}
-    bool operator()(Threshold::DatumType v) const { return v >= threshold_; }
+    bool operator()(Threshold::DatumType v) const {
+        return v >= threshold_;
+    }
 };
 
 bool
-Threshold::process(const Video::Ref& in)
+Threshold::process(const Messages::Video::Ref& in, Messages::BinaryVideo::Ref& out)
 {
-    LOGDEBUG << std::endl;
-
-    BinaryVideo::Ref out(BinaryVideo::Make("Threshold", in));
-
+    if(!out) out = BinaryVideo::Ref(BinaryVideo::Make("Threshold", in));
     // Fill output message with boolean values that represent whether or not sample values were >= thresholdValue_.
     //
     std::transform(in->begin(), in->end(), std::back_inserter<>(out->getData()), ThresholdFilter(thresholdValue_));
-
-    //LOGDEBUG << *out.get() << std::endl;
-    bool rc = /*send(out)*/true;
-    LOGDEBUG << "rc: " << rc << std::endl;
-    return rc;
+    return true;
 }
 
 void

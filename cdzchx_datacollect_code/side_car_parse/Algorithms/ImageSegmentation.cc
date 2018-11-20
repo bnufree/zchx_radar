@@ -122,7 +122,7 @@ ImageSegmentation::MergePendingTargetsAndSegment(RANGEBIN start, RANGEBIN stop)
         newTarget->AddDataToLastRow(start, stop);
         UpdateRangeToTargetMap(start, stop, m_nextMap, newTarget);
         m_openTargets.push_back(newTarget);
-        // LOGDEBUG << "created a new target with range=[" << start << ", " << stop << "]" << std::endl;
+        LOG_FUNC_DBG << "created a new target with range=[" << start << ", " << stop << "]";
         break;
     case 1:
         // the range [start,stop] is associated with only a single Target, simply add the
@@ -132,7 +132,7 @@ ImageSegmentation::MergePendingTargetsAndSegment(RANGEBIN start, RANGEBIN stop)
         newTarget->ClearMergePending();
         newTarget->AddDataToLastRow(start, stop);
         UpdateRangeToTargetMap(start, stop, m_nextMap, newTarget);
-        // LOGDEBUG << "updated a target with range=[" << start << ", " << stop << "]" << std::endl;
+        LOG_FUNC_DBG << "updated a target with range=[" << start << ", " << stop << "]";
         break;
     default:
         // the range was associated with 2 or more Targets, merge the Targets and the range
@@ -140,7 +140,7 @@ ImageSegmentation::MergePendingTargetsAndSegment(RANGEBIN start, RANGEBIN stop)
 
         // remove all Targets in m_mergePendingTargets from m_openTargets. each "*ri" can only
         //  occur once in m_openTargets, so this is faster than using std::remove)
-        // LOGDEBUG << "merging Targets (";
+        LOG_FUNC_DBG << "merging Targets (";
         TargetVector::iterator ri;
         for (ri = m_mergePendingTargets.begin(); ri != m_mergePendingTargets.end(); ri++) {
             TargetList::iterator rj;
@@ -154,7 +154,7 @@ ImageSegmentation::MergePendingTargetsAndSegment(RANGEBIN start, RANGEBIN stop)
                 }
             }
         }
-        // LOGDEBUG << ") and range [" << start << ", " << stop << "]" << std::endl;
+        LOG_FUNC_DBG << ") and range [" << start << ", " << stop << "]" ;
 
         // merge all Targets in m_mergePendingTargets with [start:stop] into newTarget
         //  this will also update the m_currentMap vector
@@ -193,7 +193,7 @@ ImageSegmentation::AppendScanLine(const BinaryScanLine& binLine, AZIMUTH az, Tar
     for (RANGEBIN range = 0; range < (RANGEBIN)binLine.size(); range++) {
         if (binLine[range] && !lastBin) {
             // the start of a Target
-            // LOGDEBUG << "starting a Target at az=" << az << " range=" << range << std::endl;
+            LOG_FUNC_DBG << "starting a Target at az=" << az << " range=" << range;
             IdentifyNeighborsAndSetMergePending(range);
             startOfTarget = range;
             lastBin = true;
@@ -202,7 +202,7 @@ ImageSegmentation::AppendScanLine(const BinaryScanLine& binLine, AZIMUTH az, Tar
             IdentifyNeighborsAndSetMergePending(range);
         } else if (!binLine[range] && lastBin) {
             // end of a Target
-            // LOGDEBUG << "ending a Target at az=" << az << " range=" << range-1 << std::endl;
+            LOG_FUNC_DBG << "ending a Target at az=" << az << " range=" << range-1;
             MergePendingTargetsAndSegment(startOfTarget, range - 1);
             lastBin = false;
         }
@@ -210,7 +210,7 @@ ImageSegmentation::AppendScanLine(const BinaryScanLine& binLine, AZIMUTH az, Tar
 
     if (lastBin) {
         // the row ended with an open Target
-        // LOGDEBUG << "ending a Target at az=" << az << " range=" << ((RANGEBIN)binLine.size())-1 << std::endl;
+        LOG_FUNC_DBG << "ending a Target at az=" << az << " range=" << ((RANGEBIN)binLine.size())-1;
         MergePendingTargetsAndSegment(startOfTarget, ((RANGEBIN)binLine.size()) - 1);
     }
 
@@ -231,8 +231,8 @@ ImageSegmentation::AppendScanLine(const BinaryScanLine& binLine, AZIMUTH az, Tar
                 //  waste. instead, truncate it to one row to conserve memory and keep
                 //  going.
                 TargetSize size = (*region)->GetSize();
-                LOGDEBUG << "truncating a Target rangebin=[" << size.minRange << ", " << size.maxRange << "] az=["
-                         << size.minAz << ", " << size.maxAz << "]" << std::endl;
+                LOG_FUNC_DBG << "truncating a Target rangebin=[" << size.minRange << ", " << size.maxRange << "] az=["
+                         << size.minAz << ", " << size.maxAz << "]";
                 (*region)->TruncateToOneRow();
             }
 

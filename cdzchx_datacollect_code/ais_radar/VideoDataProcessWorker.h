@@ -29,6 +29,7 @@ private:
     QThread     mThread;
     RadarConfig *mRadarCfg;
     TargetExtractionWorker  *mExtract;
+    QMap<int, ITF_VideoFrame> mVideoMap;
     
 };
 

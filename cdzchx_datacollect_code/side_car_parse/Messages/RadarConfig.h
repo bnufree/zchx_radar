@@ -324,6 +324,9 @@ public:
     QString getVideoIP();
     int     getVideoPort();
 
+    QString getTrackIP();
+    int     getTrackPort();
+
 
 public slots:
     void sendRadarCommand(const QString &cmd);

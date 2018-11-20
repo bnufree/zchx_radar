@@ -3,10 +3,13 @@
 
 #include <QWidget>
 #include "radarccontroldefines.h"
+#include <QMap>
 
 namespace Ui {
 class QRadarStatusSettingWidget;
 }
+
+class QSpinBox;
 
 class QRadarStatusSettingWidget : public QWidget
 {
@@ -17,13 +20,15 @@ public:
     ~QRadarStatusSettingWidget();
     void setRadarReportSeting(const QList<RadarStatus> &report);
 signals:
-    void signalRadarConfigChanged(int radarID, int type, int value);
+    void signalRadarConfigChanged(int type, int value);
 public slots:
     void slotValueChanged(int val);
+    void slotValueChangedFromServer(int type, int value);
 
 private:
     Ui::QRadarStatusSettingWidget *ui;
     int mRadarID;
+    QMap<int, QSpinBox*>     mValueSpinBoxMap;
 };
 
 #endif // QRADARSTATUSSETTINGWIDGET_H

@@ -51,6 +51,7 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
         radar_line *line = &packet->line[scanline];
         // Validate the spoke,低位在前高位在后
         int spoke = line->common.scan_number[0] | (line->common.scan_number[1] << 8);
+        //qDebug()<<"scan line number:"<<spoke;
         //扫描线的头长度检查.正常是24
         bool check_flag = true;
         if (line->common.headerLen != 0x18)
@@ -132,9 +133,10 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
         for (int range = 0; range < uCellNum; range++)
         {
             int value =  (int)(line->data[range]);
-            video.set_amplitude(range, value);
+            video.mutable_amplitude()->Add(value);
         }
         videoList.append(video);
+        //mVideoMap[video.msgindex()] = video;
     }
 
     //发送给算法线程进行回波->VIDEO->BINARYVIDEO处理
@@ -142,7 +144,11 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
     {
         emit signalSendVideoFrameDataList(videoList);
     }
+//    if(mVideoMap.size() == SPOKES)
+//    {
+//        emit signalSendVideoFrameDataList(mVideoMap.values());
+//    }
 
-    LOG_FUNC_DBG<<" end:"<<timer.elapsed();
+    LOG_FUNC_DBG<<" end:"<<timer.elapsed()<<mVideoMap.size();
 
 }

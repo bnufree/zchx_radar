@@ -5,9 +5,9 @@
 #include <QDateTime>
 
 #define     LOGDEBUG        std::cout
-#define     LOG_FUNC_DBG         qDebug()<<this->metaObject()->className()<<"::"<<__FUNCTION__<<__LINE__
-#define     LOG_FUNC_DBG_START         qDebug()<<this->metaObject()->className()<<"::"<<__FUNCTION__<<"Start"
-#define     LOG_FUNC_DBG_END         qDebug()<<this->metaObject()->className()<<"::"<<__FUNCTION__<<"ENd"
+#define     LOG_FUNC_DBG         qDebug()<<__FUNCTION__<<__LINE__
+#define     LOG_FUNC_DBG_START         qDebug()<<__FUNCTION__<<"Start"
+#define     LOG_FUNC_DBG_END         qDebug()<<__FUNCTION__<<"End"
 
 class TimeStamp {
 public:

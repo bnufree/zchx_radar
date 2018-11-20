@@ -285,12 +285,22 @@ double RadarConfig::CalculateRangeFactor()
 
 QString RadarConfig::getVideoIP()
 {
-    return QString(getVideoConfig()->GetHost());
+    return QString::fromStdString(getVideoConfig()->GetHost());
 }
 
 int RadarConfig::getVideoPort()
 {
     return getVideoConfig()->GetPort();
+}
+
+QString RadarConfig::getTrackIP()
+{
+    return QString::fromStdString(getTSPIConfig()->GetHost());
+}
+
+int RadarConfig::getTrackPort()
+{
+    return getTSPIConfig()->GetPort();
 }
 
 void RadarConfig::Load( const std::string &name, uint32_t gateCountMax, uint32_t shaftEncodingMax, double rotationRate,

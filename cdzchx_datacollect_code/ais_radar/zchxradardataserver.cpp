@@ -36,8 +36,9 @@
 
 //////////////////////////////////////////////////////////////////////////////////////
 //static uint8_t BR24MARK[] = {0x00, 0x44, 0x0d, 0x0e};
-ZCHXRadarDataServer::ZCHXRadarDataServer(ZCHX::Messages::RadarConfig* cfg, QObject *parent)
+ZCHXRadarDataServer::ZCHXRadarDataServer(ZCHX::Messages::RadarConfig* cfg, QRadarStatusSettingWidget* widget, QObject *parent)
     : QObject(parent),
+      mStatusWidget(widget),
       mRadarPowerStatus(0),
       mRadarConfig(cfg),
       mDataRecvThread(Q_NULLPTR),
@@ -50,23 +51,9 @@ ZCHXRadarDataServer::ZCHXRadarDataServer(ZCHX::Messages::RadarConfig* cfg, QObje
     qRegisterMetaType<RadarStatus>("const RadarStatus&");
     qRegisterMetaType<QList<RadarStatus>>("const QList<RadarStatus>&");
 
-    //读取雷达控制的设定值
-    parseRadarControlSetting(POWER);
-    parseRadarControlSetting(SCAN_SPEED);
-    parseRadarControlSetting(ANTENNA_HEIGHT);
-    parseRadarControlSetting(BEARING_ALIGNMENT);
-    parseRadarControlSetting(RANG);
-    parseRadarControlSetting(GAIN);
-    parseRadarControlSetting(SEA_CLUTTER);
-    parseRadarControlSetting(RAIN_CLUTTER);
-    parseRadarControlSetting(NOISE_REJECTION);
-    parseRadarControlSetting(SIDE_LOBE_SUPPRESSION);
-    parseRadarControlSetting(INTERFERENCE_REJECTION);
-    parseRadarControlSetting(LOCAL_INTERFERENCE_REJECTION);
-    parseRadarControlSetting(TARGET_EXPANSION);
-    parseRadarControlSetting(TARGET_BOOST);
-    parseRadarControlSetting(TARGET_SEPARATION);
-
+    //读取雷达控制的设定值,初始化状态控制
+    initStatusWidget();
+#if 0
     //初始化心跳
     mHeartObj = new zchxRadarHeartWorker(mRadarConfig->getCmdIP(),
                                          mRadarConfig->getCmdPort(),
@@ -77,7 +64,12 @@ ZCHXRadarDataServer::ZCHXRadarDataServer(ZCHX::Messages::RadarConfig* cfg, QObje
     if(mHeartObj->isFine())
     {
         mCtrlObj = new zchxRadarCtrlWorker(mHeartObj, this);
+        if(mStatusWidget)
+        {
+            connect(mStatusWidget, SIGNAL(signalRadarConfigChanged(int,int)), mCtrlObj, SLOT(setCtrValue(int,int)));
+        }
     }
+#endif
     //初始化雷达参数报告
     if(mRadarConfig->getReportOpen())
     {
@@ -85,8 +77,11 @@ ZCHXRadarDataServer::ZCHXRadarDataServer(ZCHX::Messages::RadarConfig* cfg, QObje
                                                mRadarConfig->getReportPort(),
                                                new QThread,
                                                this);
+        if(mStatusWidget)
+        {
+            connect(mReportObj, SIGNAL(signalRadarStatusChanged(int, int)), mStatusWidget, SLOT(slotValueChangedFromServer(int,int)));
+        }
     }
-
 
     connect(this,SIGNAL(startProcessSignal()),this,SLOT(startProcessSlot()));
     moveToThread(&m_workThread);
@@ -98,7 +93,7 @@ ZCHXRadarDataServer::ZCHXRadarDataServer(ZCHX::Messages::RadarConfig* cfg, QObje
                                               this);
     mVideoWorker = new VideoDataProcessWorker(mRadarConfig);
     connect(mDataRecvThread, SIGNAL(analysisRadar(QByteArray)), mVideoWorker, SLOT(slotRecvVideoRawData(QByteArray)));
-    //connect(mVideoWorker, SIGNAL(signalSendTrackPoint(QList<TrackPoint>)), this, SLOT(slotRecvTrackPoint(QList<TrackPoint>)));
+    connect(mVideoWorker, SIGNAL(signalSendTrackPoint(QList<TrackPoint>)), this, SLOT(slotRecvTrackPoint(QList<TrackPoint>)));
 }
 
 ZCHXRadarDataServer::~ZCHXRadarDataServer()
@@ -122,6 +117,21 @@ ZCHXRadarDataServer::~ZCHXRadarDataServer()
     }
 
 
+}
+
+void ZCHXRadarDataServer::initStatusWidget()
+{
+    //widget存在的情况下,才解析参数进行显示控制
+    if(!mStatusWidget) return;
+    QList<RadarStatus> list;
+    for(int i=POWER; i<RESVERED; i++)
+    {
+        QString str_radar_cmd = QString("Radar_Command_%1").arg(sourceID());
+        QStringList strlist = Utils::Profiles::instance()->value(str_radar_cmd, RadarStatus::getTypeString(INFOTYPE(i),STR_MODE_ENG)).toStringList();
+        if(strlist.length() < 2) return;
+        list.append(RadarStatus(INFOTYPE(i), strlist[0].toInt(), strlist[1].toInt()));
+    }
+    mStatusWidget->setRadarReportSeting(list);
 }
 
 void ZCHXRadarDataServer::openRadar()//打开雷达
@@ -156,7 +166,7 @@ void ZCHXRadarDataServer::updateTrackUdpProgress()
 {
     if(m_pUdpTrackSocket == NULL)
         return;
-    QString str_radar = QString("Radar_%1").arg(m_uSourceID);
+    QString str_radar = QString("Radar_%1").arg(sourceID());
     QString sRadarType = Utils::Profiles::instance()->value(str_radar,"Track_Type").toString();
     QByteArray datagram;
     // 让datagram的大小为等待处理的数据报的大小，这样才能接收到完整的数据
@@ -178,43 +188,27 @@ void ZCHXRadarDataServer::init()
     m_pUdpTrackSocket = NULL;
     m_pUdpVideoSocket = NULL;
 
-    m_pHeartTimer = new QTimer();
-    connect(m_pHeartTimer,SIGNAL(timeout()),this,SLOT(heartProcessSlot()));
-    m_pHeartTimer->start(m_uHeartTime*1000);//开始心跳
-    cout<<"开始心跳";
-
     m_pUdpTrackSocket = new QUdpSocket();
     //udp接收(组播形式)
     //此处的bind连接端口，采用ShareAddress模式(即允许其它的服务连接到相同的地址和端口，特别是
     //用在多客户端监听同一个服务器端口等时特别有效)，和ReuseAddressHint模式(重新连接服务器)
-    if(!m_pUdpTrackSocket->bind(QHostAddress::AnyIPv4,m_uTrackPort,QAbstractSocket::ShareAddress))
+    if(!m_pUdpTrackSocket->bind(QHostAddress::AnyIPv4,mRadarConfig->getTrackPort(),QAbstractSocket::ShareAddress))
         qDebug()<<"bind track failed--";
 
-    if(!m_pUdpTrackSocket->joinMulticastGroup(QHostAddress(m_sTrackIP)))
+    if(!m_pUdpTrackSocket->joinMulticastGroup(QHostAddress(mRadarConfig->getTrackIP())))
         qDebug()<<"joinMuticastGroup track failed--";
     qDebug()<<"joinMuticastGroup track succeed-- ";
     connect(m_pUdpTrackSocket, SIGNAL(readyRead()),this, SLOT(updateTrackUdpProgress()));
     connect(m_pUdpTrackSocket,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayUdpTrackError(QAbstractSocket::SocketError)));
 
 
+    if(mHeartObj) mHeartObj->startHeart();
     //改为独立进程
-    if(mDataRecvThread)  mDataRecvThread->start(); //以线程1的方式接收数据
-    //u2_workThread->start(); //以线程2的方式接收数据
-//    m_pUdpVideoSocket = new QUdpSocket();
-//    //udp接收(组播形式)
-//    //此处的bind连接端口，采用ShareAddress模式(即允许其它的服务连接到相同的地址和端口，特别是
-//    //用在多客户端监听同一个服务器端口等时特别有效)，和ReuseAddressHint模式(重新连接服务器)
-//    if(!m_pUdpVideoSocket->bind(QHostAddress::AnyIPv4,m_uVideoPort,QAbstractSocket::ShareAddress))
-//        qDebug()<<"bind video failed--";
-
-//    if(!m_pUdpVideoSocket->joinMulticastGroup(QHostAddress(m_sVideoIP)))
-//        qDebug()<<"joinMuticastGroup video failed--";
-//    qDebug()<<"joinMuticastGroup video succeed-- ";
-
-//    connect(m_pUdpVideoSocket, SIGNAL(readyRead()),this, SLOT(updateVideoUdpProgress()));
-//    connect(m_pUdpVideoSocket,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayUdpVideoError(QAbstractSocket::SocketError)));
-
-
+    if(mDataRecvThread)
+    {
+        LOG_FUNC_DBG<<" start video receive thread";
+        mDataRecvThread->start();
+    }
 
 }
 
@@ -249,15 +243,6 @@ int ZCHXRadarDataServer::sourceID() const
     return mRadarConfig->getID();
 }
 
-void ZCHXRadarDataServer::parseRadarControlSetting(INFOTYPE infotype)
-{
-    QString str_radar_cmd = QString("Radar_Command_%1").arg(m_uSourceID);
-    QStringList list = Utils::Profiles::instance()->value(str_radar_cmd,\
-                                                           RadarStatus::getTypeString(infotype,STR_MODE_ENG)\
-                                                          ).toStringList();
-    if(list.length() < 2) return;
-    mRadarStatusMap[infotype] = RadarStatus(infotype, list[0].toInt(), list[1].toInt());
-}
 
 QByteArray ZCHXRadarDataServer::HexStringToByteArray(QString HexString)
 {

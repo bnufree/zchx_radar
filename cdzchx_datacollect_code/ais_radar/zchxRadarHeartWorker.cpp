@@ -23,6 +23,11 @@ zchxRadarHeartWorker::zchxRadarHeartWorker(const QString& host,
    }
 }
 
+void zchxRadarHeartWorker::startHeart()
+{
+     if(mHeartTimer) mHeartTimer->start();
+}
+
 void zchxRadarHeartWorker::slotHeartJob()
 {
     if(!isFine()) return;
@@ -31,14 +36,14 @@ void zchxRadarHeartWorker::slotHeartJob()
     line.resize(2);
     line[0] = 0Xa0;
     line[1] = 0xc1;
-    writeData(line);
+    slotWriteData(line);
     line[0] = 0x03;
     line[1] = 0xc2;
-    writeData(line);
+    slotWriteData(line);
     line[0] = 0x04;
     line[1] = 0xc2;
-    writeData(line);
+    slotWriteData(line);
     line[0] = 0x05;
     line[1] = 0xc2;
-    writeData(line);
+    slotWriteData(line);
 }
