@@ -55,19 +55,24 @@ void TargetExtractionWorker::slotRecvRawVideoDataList(const ITF_VideoFrameList &
             //对BinaryVideo进行抽取
             Extractions::Ref extractions(Extractions::Make("Extract", binary));
 
-            if(mExtractObj->process(binary, extractions))
+            mExtractObj->process(binary, extractions);
+            LOG_FUNC_DBG<<"extraction size:"<<extractions->size();
+            if(extractions->size() > 0)
             {
+#if 0
                 ScanCorrelator corr(mRadarCfg);
                 //对抽取的目标进行校正,设定correct属性
                 Extractions::Ref result;
                 if(!corr.process(extractions, result)) continue;
                 //目标进行标号等操作
                 mTrackerObj->processInput(result, pnts);
+#endif
+                mTrackerObj->processInput(extractions, pnts);
             }
-            LOG_FUNC_DBG<<"extraction size:"<<extractions->getSize();
+
         }
     }
-    LOG_FUNC_DBG<<" pnts size:"<<pnts.size();
+    qDebug()<<" pnts size:"<<pnts.size();
     emit signalSendTrackPoint(pnts.values());
     LOG_FUNC_DBG_END;
 }

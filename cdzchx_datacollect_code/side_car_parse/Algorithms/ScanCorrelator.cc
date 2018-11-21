@@ -29,6 +29,7 @@ ScanCorrelator::ScanCorrelator(RadarConfig* cfg, QObject* parent) : QObject(pare
     //param_scanTime->connectChangedSignalTo(boost::bind(&ScanCorrelator::on_scanTime_changed, this, _1));
 
     on_scanTime_changed(param_scanTime);
+    startup();
 }
 
 void

@@ -4,10 +4,10 @@
 #include <QDebug>
 #include <QDateTime>
 
-#define     LOGDEBUG        std::cout
-#define     LOG_FUNC_DBG         qDebug()<<__FUNCTION__<<__LINE__
-#define     LOG_FUNC_DBG_START         qDebug()<<__FUNCTION__<<"Start"
-#define     LOG_FUNC_DBG_END         qDebug()<<__FUNCTION__<<"End"
+#define     LOGDEBUG        if(1) std::cout
+#define     LOG_FUNC_DBG        if(1) qDebug()<<__FUNCTION__<<__LINE__
+#define     LOG_FUNC_DBG_START   if(1)      qDebug()<<__FUNCTION__<<"Start"
+#define     LOG_FUNC_DBG_END     if(1)    qDebug()<<__FUNCTION__<<"End"
 
 class TimeStamp {
 public:

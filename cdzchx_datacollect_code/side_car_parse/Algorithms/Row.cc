@@ -34,7 +34,7 @@ Row::GetFirstRangeBin()
 #ifdef VERIFY_ROW
     if (!minRangeValid) {
         std::cout << "invalid first range bin";
-        abort();
+        //abort();
     }
 #endif
     return minRange;
@@ -46,7 +46,7 @@ Row::GetLastRangeBin()
 #ifdef VERIFY_ROW
     if (!maxRangeValid) {
         std::cout << "invalid last range bin";
-        abort();
+        //abort();
     }
 #endif
     return maxRange;
@@ -101,15 +101,15 @@ Row::FillArray(BINARYDATA* dest, RANGEBIN startRange, RANGEBIN stopRange)
 #ifdef VERIFY_ROW
     if (!maxRangeValid || !minRangeValid) {
         std::cout << "invalid fill array";
-        abort();
+        //abort();
     }
     if (startRange > minRange) {
         std::cout << "invalid fill array";
-        abort();
+        //abort();
     }
     if (stopRange < maxRange) {
         std::cout << "invalid fill array";
-        abort();
+        //abort();
     }
 #endif
 

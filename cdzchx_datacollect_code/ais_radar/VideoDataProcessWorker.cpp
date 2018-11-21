@@ -4,7 +4,6 @@
 #include "zchxfunction.h"
 
 using namespace BR24::Constants;
-#define SPOKES (4096)
 static uint8_t BR24MARK[] = {0x00, 0x44, 0x0d, 0x0e};
 
 VideoDataProcessWorker::VideoDataProcessWorker(RadarConfig* cfg, QObject *parent) :         QObject(parent),
@@ -13,6 +12,7 @@ VideoDataProcessWorker::VideoDataProcessWorker(RadarConfig* cfg, QObject *parent
 {
     qRegisterMetaType<ITF_VideoFrame>("const ITF_VideoFrame&");
     qRegisterMetaType<ITF_VideoFrameList>("const ITF_VideoFrameList&");
+    qRegisterMetaType<QList<TrackPoint>>("const QList<TrackPoint>&");
     connect(this, SIGNAL(signalSendVideoFrameDataList(ITF_VideoFrameList)), mExtract, SLOT(slotRecvRawVideoDataList(ITF_VideoFrameList)));
     connect(mExtract, SIGNAL(signalSendTrackPoint(QList<TrackPoint>)), this, SIGNAL(signalSendTrackPoint(QList<TrackPoint>)));
     moveToThread(&mThread);
@@ -51,7 +51,7 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
         radar_line *line = &packet->line[scanline];
         // Validate the spoke,低位在前高位在后
         int spoke = line->common.scan_number[0] | (line->common.scan_number[1] << 8);
-        //qDebug()<<"scan line number:"<<spoke;
+        qDebug()<<"scan line number:"<<spoke;
         //扫描线的头长度检查.正常是24
         bool check_flag = true;
         if (line->common.headerLen != 0x18)
@@ -68,8 +68,8 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
         if(!check_flag) continue;
 
 
-        int range_raw = 0;
-        int angle_raw = 0;
+        unsigned int range_raw = 0;
+        unsigned int angle_raw = 0;
         short int heading_raw = (line->common.heading[1] << 8) | line->common.heading[0];
         double range_meters = 0;
         //检查雷达的类型
@@ -82,8 +82,8 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
             LOG_FUNC_DBG<<"recv br24 data:" << range_raw<<angle_raw<<range_meters;
         } else {
             // 4G mode
-            short int large_range = (line->br4g.largerange[1] << 8) | line->br4g.largerange[0];
-            short int small_range = (line->br4g.smallrange[1] << 8) | line->br4g.smallrange[0];
+             short int large_range = (line->br4g.largerange[1] << 8) | line->br4g.largerange[0];
+             short int small_range = (line->br4g.smallrange[1] << 8) | line->br4g.smallrange[0];
             angle_raw = (line->br4g.angle[1] << 8) | line->br4g.angle[0];
             if (large_range == 0x80) {
                 if (small_range == -1) {
@@ -95,12 +95,12 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
             } else {
                 range_raw = large_range * 256;
             }
-            range_meters = range_raw / 4;
-            LOG_FUNC_DBG<<"recv br24 data:" << range_raw<<angle_raw<<range_meters<<large_range<<small_range;
+            range_meters = range_raw / 4.0;
+            //LOG_FUNC_DBG<<"recv br24 data:" << range_raw<<angle_raw<<range_meters<<large_range<<small_range;
         }
 
         int azimuth_cell = uLineNum;
-        bool radar_heading_valid = (((heading_raw) & ~(HEADING_TRUE_FLAG | (azimuth_cell - 1))) == 0);
+        bool radar_heading_valid = (((heading_raw) & ~(HEADING_TRUE_FLAG | HEADING_MASK)) == 0);
         double heading;
         if (radar_heading_valid)
         {
@@ -114,7 +114,7 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
 
         angle_raw = MOD_ROTATION2048(angle_raw / 2);
         double start_range = 0.0 ;
-        double range_factor = range_meters/uCellNum;
+        double range_factor = range_meters/(uCellNum-1);
         LOG_FUNC_DBG<<"range_meter:"<<range_meters<<" cellNum:"<<uCellNum<<" range_factor"<<range_factor;
 
         double dAzimuth = angle_raw*(360.0/(uLineNum/2))+uHeading;
@@ -149,6 +149,6 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
 //        emit signalSendVideoFrameDataList(mVideoMap.values());
 //    }
 
-    LOG_FUNC_DBG<<" end:"<<timer.elapsed()<<mVideoMap.size();
+//    LOG_FUNC_DBG<<" end:"<<timer.elapsed()<<mVideoMap.size();
 
 }

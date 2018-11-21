@@ -286,7 +286,7 @@ public:
     {
         if ((op.m_rows * op.m_cols) != (m_rows * m_cols)) {
             LOGDEBUG << "TargetImage::operator& : unable to and image arrays together";
-            abort();
+            //abort();
         }
 
         BINARYDATA* result = new BINARYDATA[m_rows * m_cols];

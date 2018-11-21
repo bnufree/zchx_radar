@@ -50,6 +50,7 @@ SegmentedTargetImage::UpdateMinMaxRanges(RANGEBIN start, RANGEBIN stop)
         m_minRangeValid = true;
         m_minRange = start;
     }
+    LOG_FUNC_DBG<<this<<"range["<<m_minRange<<", "<<m_maxRange<<"]";
 }
 
 void
@@ -60,7 +61,7 @@ SegmentedTargetImage::AddDataToLastRow(RANGEBIN start, RANGEBIN stop)
 #ifdef VERIFY_SEGMENTS
     if (stop < start) {
         LOGDEBUG << "TargetImage::AddDataToLastRow : attempted to add an invalid segment" << std::endl;
-        abort();
+        //abort();
     }
 #endif
     // LOGDEBUG << "SegmentedTargetImage::AddDataToLastRow : exit" << std::end;
@@ -97,7 +98,7 @@ SegmentedTargetImage::Merge(TargetVector& mergers, RANGEBIN start, RANGEBIN stop
 #ifdef VERIFY_SEGMENTS
                 if (masterIm->m_image[srcRow + destRowOffset].az != mergers[i]->m_image[srcRow].az) {
                     LOGDEBUG<< "SegmentedTargetImage::Merge : tried to merge incompatible rows (az)" << std::endl;
-                    abort();
+                    //abort();
                 }
 #endif
                 if ((srcRow + 1) == mergers[i]->m_image.size()) {

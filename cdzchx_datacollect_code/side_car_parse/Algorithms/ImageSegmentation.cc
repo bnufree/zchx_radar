@@ -27,7 +27,7 @@ ImageSegmentation::PopClosedTarget()
 {
     if (m_closedTargets.size() <= 0) {
         LOGDEBUG << "ImageSegmentation::PopClosedTarget : No images to return" << std::endl;
-        abort();
+        return 0;
     }
 
     SegmentedTargetImagePtr temp;
@@ -122,7 +122,7 @@ ImageSegmentation::MergePendingTargetsAndSegment(RANGEBIN start, RANGEBIN stop)
         newTarget->AddDataToLastRow(start, stop);
         UpdateRangeToTargetMap(start, stop, m_nextMap, newTarget);
         m_openTargets.push_back(newTarget);
-        LOG_FUNC_DBG << "created a new target with range=[" << start << ", " << stop << "]";
+        LOG_FUNC_DBG << "created a new target with range=[" << start << ", " << stop << "]"<<newTarget.get();
         break;
     case 1:
         // the range [start,stop] is associated with only a single Target, simply add the
@@ -130,9 +130,10 @@ ImageSegmentation::MergePendingTargetsAndSegment(RANGEBIN start, RANGEBIN stop)
         newTarget = m_mergePendingTargets.front();
         newTarget->SetUpdated();
         newTarget->ClearMergePending();
+        LOG_FUNC_DBG << "update a target"<<newTarget.get()<<"with range=[" << newTarget.get()->GetSize().minRange << ", " << newTarget.get()->GetSize().maxRange << "]";
         newTarget->AddDataToLastRow(start, stop);
         UpdateRangeToTargetMap(start, stop, m_nextMap, newTarget);
-        LOG_FUNC_DBG << "updated a target with range=[" << start << ", " << stop << "]";
+        LOG_FUNC_DBG << "updated a target with range=[" << start << ", " << stop << "]"<<newTarget.get()<<" new range=[" << newTarget.get()->GetSize().minRange << ", " << newTarget.get()->GetSize().maxRange << "]";
         break;
     default:
         // the range was associated with 2 or more Targets, merge the Targets and the range
@@ -218,26 +219,27 @@ ImageSegmentation::AppendScanLine(const BinaryScanLine& binLine, AZIMUTH az, Tar
 
     TargetList::iterator region;
     for (region = m_openTargets.begin(); region != m_openTargets.end();) {
-        if ((*region)->WasUpdated()) {
-            (*region)->FinalizeRow(az);
+        SegmentedTargetImagePtr ptr = *region;
+        if (ptr->WasUpdated()) {
+            ptr->FinalizeRow(az);
 
-            (*region)->ClearUpdated();
+            ptr->ClearUpdated();
 
-            if ((*region)->GetSize() > discardSize) {
+            if (ptr->GetSize() > discardSize) {
                 // this Target has violated some constraint. we could remove it completely,
                 //  but that would require updating m_currentMap, which could be costly.
                 //  further, since the Target isn't acutally closed, it will probably just
                 //  be recreated on the next scan line, so deleting it would just be a
                 //  waste. instead, truncate it to one row to conserve memory and keep
                 //  going.
-                TargetSize size = (*region)->GetSize();
+                TargetSize size = ptr->GetSize();
                 LOG_FUNC_DBG << "truncating a Target rangebin=[" << size.minRange << ", " << size.maxRange << "] az=["
                          << size.minAz << ", " << size.maxAz << "]";
-                (*region)->TruncateToOneRow();
+                ptr->TruncateToOneRow();
             }
 
             // determine the most number of rows any target has
-            m_maxRowDepth = std::max(m_maxRowDepth, (*region)->GetRowCount());
+            m_maxRowDepth = std::max(m_maxRowDepth, ptr->GetRowCount());
 
             region++;
 

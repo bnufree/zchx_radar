@@ -84,7 +84,7 @@ TSPIConfig::Load(const std::string& name, const std::string& type, const std::st
 bool
 TSPIConfig::Load(const QDomElement& config)
 {
-    qCDebug(radarmsg) << "TSPIConfig::Load" ;
+    //qCDebug(radarmsg) << "TSPIConfig::Load" ;
 
     name_ = config.attribute("name").toStdString();
     type_ = config.attribute("type").toStdString();

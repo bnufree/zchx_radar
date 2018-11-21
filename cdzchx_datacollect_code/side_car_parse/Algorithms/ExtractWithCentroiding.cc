@@ -61,7 +61,7 @@ ExtractWithCentroiding::process(const Messages::BinaryVideo::Ref& msg, Messages:
         if (!extractions) extractions = Messages::Extractions::Make("Extract", msg);
 
         SegmentedTargetImagePtr target = m_is.PopClosedTarget();
-
+        if(!target) continue;
         TargetSize size = target->GetSize();
 
         if (!(size > minCentroidSize)) { // notice, this is not the same as size < minCentroidSize
@@ -69,7 +69,7 @@ ExtractWithCentroiding::process(const Messages::BinaryVideo::Ref& msg, Messages:
             TargetPosition pos = size.Center();
             float range = msg->getRangeAt(pos.range);
             extractions->push_back(Messages::Extraction(QDateTime::currentMSecsSinceEpoch(), range, pos.az, 0.0));
-            LOGDEBUG << "target found at az=" << pos.az << " range=" << range << " rangebin=" << pos.range;
+            LOG_FUNC_DBG << "target found at az=" << pos.az << " range=" << range << "km range bin=" << pos.range;
         } else {
             // this target is too large, send to the centroider for
             //  further resolution
@@ -98,7 +98,7 @@ ExtractWithCentroiding::process(const Messages::BinaryVideo::Ref& msg, Messages:
                 extractions->push_back(Messages::Extraction(QDateTime::currentMSecsSinceEpoch(), cenRange, cenPos.az, 0.0));
 
                 LOGDEBUG << "  centroided target found at az=" << cenPos.az << " range=" << cenRange
-                         << " rangebin=" << cenPos.range << std::endl;
+                         << "km range bin=" << cenPos.range << std::endl;
             }
         }
     }

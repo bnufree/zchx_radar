@@ -7,7 +7,7 @@
 
 using namespace BR24::Constants;
 
-#define     FAKE_FILE_DATA      0
+#define     FAKE_FILE_DATA      1
 
 VideoDataRecvThread::VideoDataRecvThread(const QString host,
                                          int port,
@@ -29,19 +29,22 @@ void VideoDataRecvThread::run()
     LOG_FUNC_DBG<<"!!!!";
     if(FAKE_FILE_DATA)
     {
-        int index = 1;
+        int index = 0;
         while (true) {
             QFile file(QDir::currentPath()+tr("/data/video_%1.dat").arg(index%4+1));
             qDebug()<<file.fileName()<<file.exists();
-
+            int num = 0;
             if(file.open(QIODevice::ReadOnly))
             {
                 while (!file.atEnd()) {
+                    //QByteArray array = file.read(sizeof(radar_frame_pkt));
+                    num++;
                     analysisRadar(file.read(sizeof(radar_frame_pkt)));
-                    QThread::sleep(60);
+                    QThread::msleep(10000);
                 }
                 file.close();
             }
+            qDebug()<<"file:"<<file.fileName()<<" contains packets:"<<num++;
             index++;
         }
     } else

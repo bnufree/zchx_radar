@@ -52,7 +52,7 @@ const GEO_LOCATION *TSPI::GetOrigin() const
     // !!! creating the origin.
     //
     if (! origin_) {
-        qCDebug(radarmsg) << "GetOrigin" ;
+        //qCDebug(radarmsg) << "GetOrigin" ;
 
         origin_ = new GEO_LOCATION;
 
@@ -150,7 +150,7 @@ TSPI::MakeXYZ(const std::string& producer, const std::string& id, double when,
 TSPI::Ref
 TSPI::Make(const QSharedPointer<QByteArray>& raw)
 {
-    qCDebug(radarmsg) << "Make" ;
+    //qCDebug(radarmsg) << "Make" ;
 
     Ref ref(new TSPI);
     ref->load(raw);
@@ -191,7 +191,7 @@ TSPI::TSPI(const std::string& producer, const std::string& tag, double when,
     : Header(producer, GetMetaTypeInfo()), when_(when), flags_(0),
       tag_(tag), llh_(), rae_(), xyz_()
 {
-    qCDebug(radarmsg) << "TSPI" ;
+    //qCDebug(radarmsg) << "TSPI" ;
     qCInfo(radarmsg) << "tag: " << QString::fromStdString(tag) << " when: " << when << " rng: " << rae.r_
                  << " az: " << rae.a_ << " el: " << rae.e_ ;
 
@@ -218,7 +218,7 @@ TSPI::TSPI(const std::string& producer, const std::string& tag, double when,
     : Header(producer, GetMetaTypeInfo()), when_(when), flags_(0),
       tag_(tag), llh_(), rae_(), xyz_()
 {
-    qCDebug(radarmsg) << "TSPI" ;
+    //qCDebug(radarmsg) << "TSPI" ;
     qCInfo(radarmsg) << "when: " << when << " lat: " << llh.lat_ << " lon: "
                  << llh.lon_ << " hgt: " << llh.hgt_ ;
 
@@ -237,7 +237,7 @@ TSPI::TSPI(const std::string& producer, const std::string& tag, double when,
     : Header(producer, GetMetaTypeInfo()), when_(when), flags_(0),
       tag_(tag), llh_(), rae_(), xyz_()
 {
-    qCDebug(radarmsg) << "TSPI" ;
+    //qCDebug(radarmsg) << "TSPI" ;
     qCInfo(radarmsg) << "when: " << when << " x: " << xyz.x_ << " y: " << xyz.y_
                  << " z: " << xyz.z_ ;
     xyz_.resize(3);
@@ -271,7 +271,7 @@ TSPI::TSPI(const std::string& producer)
 void
 TSPI::calculateLLH() const
 {
-    qCDebug(radarmsg) << "calculateLLH" ;
+    //qCDebug(radarmsg) << "calculateLLH" ;
 
     // Convert from earth-centered to longitude, latitude, height (geodetic). NOTE: geoEfg2Llh() expects lat/lon
     // in radians, height in meters.
@@ -295,7 +295,7 @@ TSPI::getLatitudeLongitudeHeight() const
 void
 TSPI::calculateRAE() const
 {
-    qCDebug(radarmsg) << "calculateRAE" ;
+    //qCDebug(radarmsg) << "calculateRAE" ;
 
     if (xyz_.empty())
         calculateXYZ();
@@ -352,7 +352,7 @@ TSPI::getXYZ() const
 void
 TSPI::load(const QSharedPointer<QByteArray>& raw)
 {
-    qCDebug(radarmsg) << "load" ;
+    //qCDebug(radarmsg) << "load" ;
     Super::load(raw);
 
     com::zhichenhaixin::proto::TrackPoint trackPoint;
@@ -394,7 +394,7 @@ TSPI::load(const QSharedPointer<QByteArray>& raw)
 
         if ((wgs84PosLat !=0.0) && (wgs84PosLong !=0.0))
         {
-            qCDebug(radarmsg) << "calculateLLH" ;
+            //qCDebug(radarmsg) << "calculateLLH" ;
 
             InitFromLLH llh = InitFromLLH(wgs84PosLat, wgs84PosLong, 0);
             llh_.resize(3);

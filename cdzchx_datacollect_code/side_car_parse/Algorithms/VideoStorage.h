@@ -43,7 +43,7 @@ public:
     {
         if (pri >= GetDepth()) {
             LOGDEBUG << "VideoStorage::GetWindow : pri too large" ;
-            abort();
+            //abort();
         }
         return &(m_video[pri]);
     }
@@ -53,12 +53,12 @@ public:
     {
         if (!size.priValid) {
             LOGDEBUG << "VideoStorage::GetWindow : unable to extract video data";
-            abort();
+            //abort();
         }
 
         if ((PRI_COUNT)m_video.size() < size.priCount) {
             LOGDEBUG << "VideoStorage::GetWindow : too few lines in history to extract video";
-            abort();
+            //abort();
         }
 
         RANGEBIN rows = size.priCount;

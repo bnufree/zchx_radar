@@ -114,12 +114,12 @@ BinaryVideo::~BinaryVideo()
 Video::Ref
 BinaryVideo::getVideoBasis() const
 {
-    qCDebug(radarmsg) << "getVideoBasis" ;
+    //qCDebug(radarmsg) << "getVideoBasis" ;
 
     Header::Ref basis(getBasis());
     Video::Ref video;
     while (basis) {
-    qCDebug(radarmsg) << basis.get() ;
+    //qCDebug(radarmsg) << basis.get() ;
     if (basis->getMetaTypeInfo().isa(Messages::MetaTypeInfo::Value::kVideo)) {
         video = boost::dynamic_pointer_cast<Video>(basis);
         break;

@@ -91,7 +91,7 @@ extern "C" {
 
 MetaTypeInfo::SequenceGenerator::SequenceGenerator()
 {
-    qCDebug(radarmsg) << "SequenceGenerator" ;
+    //qCDebug(radarmsg) << "SequenceGenerator" ;
     int rc = ::pthread_key_create(&perThreadInfoKey_, &MetaTypeInfoDestroyPerThreadInfoStub);
     if (rc)
     {
@@ -101,7 +101,7 @@ MetaTypeInfo::SequenceGenerator::SequenceGenerator()
 
 MetaTypeInfo::SequenceGenerator::~SequenceGenerator()
 {
-    qCDebug(radarmsg) << "~SequenceGenerator" ;
+    //qCDebug(radarmsg) << "~SequenceGenerator" ;
     int rc = ::pthread_key_delete(perThreadInfoKey_);
     if (rc)
     {
@@ -112,10 +112,10 @@ MetaTypeInfo::SequenceGenerator::~SequenceGenerator()
 MetaTypeInfo::SequenceType
 MetaTypeInfo::SequenceGenerator::getNextSequenceNumber()
 {
-    qCDebug(radarmsg) << "getNextSequenceNumber" ;
+    //qCDebug(radarmsg) << "getNextSequenceNumber" ;
     PerThreadInfo* pti = static_cast<PerThreadInfo*>(::pthread_getspecific(perThreadInfoKey_));
     if (! pti) {
-        qCDebug(radarmsg) << "created new PerThreadInfo object" ;
+        //qCDebug(radarmsg) << "created new PerThreadInfo object" ;
        pti = new PerThreadInfo();
        ::pthread_setspecific(perThreadInfoKey_, pti);
     }
@@ -145,10 +145,10 @@ struct MetaTypeInfo::Registrations
 void
 MetaTypeInfo::Registrations::add(int key, MetaTypeInfo* info)
 {
-    qCDebug(radarmsg) << "add " << keys_.size() << ' ' << infos_.size();
+    //qCDebug(radarmsg) << "add " << keys_.size() << ' ' << infos_.size();
 
     if (keys_.empty() || key > keys_.back()) {
-        qCDebug(radarmsg) << "adding to back";
+        //qCDebug(radarmsg) << "adding to back";
         keys_.push_back(key);
         infos_.push_back(info);
     }
@@ -164,7 +164,7 @@ MetaTypeInfo::Registrations::add(int key, MetaTypeInfo* info)
     }
 
     size_t index(pos - keys_.begin());
-    qCDebug(radarmsg) << keys_.size() << ' ' << index ;
+    //qCDebug(radarmsg) << keys_.size() << ' ' << index ;
     keys_.insert(pos, key);
     infos_.insert(infos_.begin() + index, info);
     }
@@ -175,7 +175,7 @@ MetaTypeInfo::Registrations::add(int key, MetaTypeInfo* info)
 void
 MetaTypeInfo::Registrations::dump() const
 {
-    qCDebug(radarmsg) << "dump" ;
+    //qCDebug(radarmsg) << "dump" ;
     MetaTypeInfoVector::const_iterator pos(infos_.begin());
     MetaTypeInfoVector::const_iterator end(infos_.end());
     while (pos != end) {
@@ -187,7 +187,7 @@ MetaTypeInfo::Registrations::dump() const
 void
 MetaTypeInfo::Registrations::remove(int key)
 {
-    qCDebug(radarmsg) << "remove" << keys_.size() << ' ' << infos_.size();
+    //qCDebug(radarmsg) << "remove" << keys_.size() << ' ' << infos_.size();
 
     KeyVector::iterator pos(std::lower_bound(keys_.begin(), keys_.end(), key));
     if (pos == keys_.end()) {
@@ -196,7 +196,7 @@ MetaTypeInfo::Registrations::remove(int key)
     }
 
     size_t index(pos - keys_.begin());
-    qCDebug(radarmsg) << keys_.size() << ' ' << index;
+    //qCDebug(radarmsg) << keys_.size() << ' ' << index;
     keys_.erase(pos);
     infos_.erase(infos_.begin() + index);
     dump();
@@ -205,7 +205,7 @@ MetaTypeInfo::Registrations::remove(int key)
 const MetaTypeInfo*
 MetaTypeInfo::Registrations::find(int key) const
 {
-    qCDebug(radarmsg) << "Find" << key;
+    //qCDebug(radarmsg) << "Find" << key;
 
     KeyVector::const_iterator pos(std::lower_bound(keys_.begin(), keys_.end(),
                                                    key));
@@ -221,7 +221,7 @@ MetaTypeInfo::Registrations::find(int key) const
 const MetaTypeInfo*
 MetaTypeInfo::Registrations::find(const std::string& name) const
 {
-   qCDebug(radarmsg) << "find(name)" << QString::fromStdString(name) ;
+   //qCDebug(radarmsg) << "find(name)" << QString::fromStdString(name) ;
 
     MetaTypeInfoVector::const_iterator pos(infos_.begin());
     MetaTypeInfoVector::const_iterator end(infos_.end());
@@ -264,7 +264,7 @@ MetaTypeInfo::~MetaTypeInfo()
 void
 MetaTypeInfo::unregister()
 {
-    qCDebug(radarmsg) << "unregister"  << static_cast<uint32_t>(key_) << '/' << QString::fromStdString(name_);
+    //qCDebug(radarmsg) << "unregister"  << static_cast<uint32_t>(key_) << '/' << QString::fromStdString(name_);
     lock_guard_type locker(mutex_);
     registrations_->remove(GetValueValue(key_));
 }

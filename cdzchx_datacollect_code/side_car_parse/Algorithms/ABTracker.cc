@@ -22,7 +22,7 @@ ABTracker::ABTracker(QObject* parent) :QObject(parent),
     initiationCount_(kDefaultInitiationCount),
     initiationRotationCount_(kDefaultInitiationRotationCount),
     coastRotationCount_( kDefaultCoastRotationCount),
-    minRange_( kDefaultMinRange),
+    minRange_( /*kDefaultMinRange*/0),
    /* reset_(Parameter::NotificationValue::Make("reset", "Reset", 0)),*/ trackIdGenerator_(), tracks_(), trackCount_(0),
     initiatingCount_(0), coastingCount_(0)
 {
