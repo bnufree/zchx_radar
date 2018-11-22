@@ -26,7 +26,7 @@ SegmentedTargetImagePtr
 ImageSegmentation::PopClosedTarget()
 {
     if (m_closedTargets.size() <= 0) {
-        LOGDEBUG << "ImageSegmentation::PopClosedTarget : No images to return" << std::endl;
+        LOG_FUNC_DBG << "ImageSegmentation::PopClosedTarget : No images to return" << endl;
         return 0;
     }
 
@@ -45,17 +45,17 @@ ImageSegmentation::Dump()
 
     count = 0;
     for (region = m_openTargets.begin(); region != m_openTargets.end(); region++) {
-        LOGDEBUG << "--- Open Target #" << count++ << " ---" << std::endl;
+        LOG_FUNC_DBG << "--- Open Target #" << count++ << " ---" << endl;
         (*region)->Dump();
     }
 
     count = 0;
     for (region = m_closedTargets.begin(); region != m_closedTargets.end(); region++) {
-        LOGDEBUG << "--- Closed Target #" << count++ << " ---" << std::endl;
+        LOG_FUNC_DBG << "--- Closed Target #" << count++ << " ---" << endl;
         (*region)->Dump();
     }
 
-    LOGDEBUG << "---most recent PRI range->target mapping---" << std::endl;
+    LOG_FUNC_DBG << "---most recent PRI range->target mapping---" << endl;
     std::vector<SegmentedTargetImagePtr>::iterator range;
     for (range = m_currentMap.begin(); range != m_currentMap.end(); range++) {
         if ((*range)) {
@@ -64,17 +64,17 @@ ImageSegmentation::Dump()
             for (region = m_openTargets.begin(); region != m_openTargets.end(); region++) {
                 count++;
                 if ((*range) == (*region)) {
-                    LOGDEBUG << count << ",";
+                    LOG_FUNC_DBG << count << ",";
                     found = true;
                     break;
                 }
             }
-            if (!found) { LOGDEBUG << "?,"; }
+            if (!found) { LOG_FUNC_DBG << "?,"; }
         } else {
-            LOGDEBUG << "N,";
+            LOG_FUNC_DBG << "N,";
         }
     }
-    LOGDEBUG << std::endl;
+    LOG_FUNC_DBG << endl;
 }
 
 void
@@ -130,10 +130,10 @@ ImageSegmentation::MergePendingTargetsAndSegment(RANGEBIN start, RANGEBIN stop)
         newTarget = m_mergePendingTargets.front();
         newTarget->SetUpdated();
         newTarget->ClearMergePending();
-        LOG_FUNC_DBG << "update a target"<<newTarget.get()<<"with range=[" << newTarget.get()->GetSize().minRange << ", " << newTarget.get()->GetSize().maxRange << "]";
+        LOG_FUNC_DBG << "update exist target"<<newTarget.get()<<"with range=[" << newTarget.get()->GetSize().minRange << ", " << newTarget.get()->GetSize().maxRange << "]";
         newTarget->AddDataToLastRow(start, stop);
         UpdateRangeToTargetMap(start, stop, m_nextMap, newTarget);
-        LOG_FUNC_DBG << "updated a target with range=[" << start << ", " << stop << "]"<<newTarget.get()<<" new range=[" << newTarget.get()->GetSize().minRange << ", " << newTarget.get()->GetSize().maxRange << "]";
+        LOG_FUNC_DBG << "updated exist target with range=[" << start << ", " << stop << "]"<<newTarget.get()<<" to be merged next";
         break;
     default:
         // the range was associated with 2 or more Targets, merge the Targets and the range
@@ -149,7 +149,7 @@ ImageSegmentation::MergePendingTargetsAndSegment(RANGEBIN start, RANGEBIN stop)
             for (rj = m_openTargets.begin(); rj != m_openTargets.end(); rj++) {
                 count++;
                 if ((*ri) == (*rj)) {
-                    // LOGDEBUG << count-1 << ",";
+                    // LOG_FUNC_DBG << count-1 << ",";
                     m_openTargets.erase(rj);
                     break;
                 }
@@ -166,7 +166,7 @@ ImageSegmentation::MergePendingTargetsAndSegment(RANGEBIN start, RANGEBIN stop)
         newTarget->ClearMergePending();
         newTarget->SetUpdated();
         m_openTargets.push_back(newTarget);
-        // LOGDEBUG << "merge done" << std::endl;
+        // LOG_FUNC_DBG << "merge done" << endl;
         break;
     }
 

@@ -22,7 +22,7 @@ bool CFAR::reset()
 bool CFAR::processEstimate(const Video::Ref& estMsg)
 {
     uint32_t sequenceCounter = estMsg->getSequenceCounter();
-    LOGDEBUG << sequenceCounter << std::endl;
+    LOG_FUNC_DBG << sequenceCounter << endl;
 
     Video::Ref vidMsg;
     while (!videoBuffer_.empty()) {
@@ -62,14 +62,14 @@ bool CFAR::processEstimate(const Video::Ref& estMsg)
     }
 
     bool rc = /*send(outMsg)*/true;
-    LOGDEBUG << "send: " << rc << std::endl;
+    LOG_FUNC_DBG << "send: " << rc << endl;
 
     return rc;
 }
 
 bool CFAR::processVideo(const Video::Ref& vidMsg)
 {
-    LOGDEBUG << vidMsg->getSequenceCounter() << std::endl;
+    LOG_FUNC_DBG << vidMsg->getSequenceCounter() << endl;
     videoBuffer_.add(vidMsg);
     return true;
 }

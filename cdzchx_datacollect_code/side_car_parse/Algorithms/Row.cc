@@ -88,9 +88,9 @@ Row::DumpSorted()
 {
     // precondition: row is sorted
     for (std::vector<Segment>::size_type i = 0; i < mask.size(); i++) {
-        for (RANGEBIN r = mask[i].start; r <= mask[i].stop; r++) LOGDEBUG << "x";
+        for (RANGEBIN r = mask[i].start; r <= mask[i].stop; r++) LOG_FUNC_DBG << "x";
         if ((i + 1) < mask.size()) {
-            for (RANGEBIN f = mask[i].stop + 1; f < mask[i + 1].start; f++) LOGDEBUG << " ";
+            for (RANGEBIN f = mask[i].stop + 1; f < mask[i + 1].start; f++) LOG_FUNC_DBG << " ";
         }
     }
 }

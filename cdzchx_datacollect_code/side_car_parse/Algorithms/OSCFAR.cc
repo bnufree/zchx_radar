@@ -97,13 +97,13 @@ OSCFAR::OSCFAR() : windowSize_(kDefaultSize), thresholdIndex_(kDefaultRank), alp
 bool OSCFAR::process(const Messages::Video::Ref& in, Messages::BinaryVideo::Ref& out )
 {
     double alpha = alpha_;
-    LOGDEBUG<< "pri size: " << in->size() << " alpha " << alpha << std::endl;
+    LOG_FUNC_DBG<< "pri size: " << in->size() << " alpha " << alpha << endl;
 
     // Nothing to do if the input data size is smaller than our window size.
     //
     size_t windowSize = windowSize_;
     if (windowSize > in->size()) {
-        LOGDEBUG << "windowSize > in->size()" << std::endl;
+        LOG_FUNC_DBG << "windowSize > in->size()" << endl;
         return false;
     }
 
@@ -113,9 +113,9 @@ bool OSCFAR::process(const Messages::Video::Ref& in, Messages::BinaryVideo::Ref&
     double indexIntoWindow = (percentile / 100.0) * windowSize;
     size_t thresholdIndex = static_cast<size_t>(std::floor(indexIntoWindow));
 
-    LOGDEBUG << "thresholdIndex " << thresholdIndex << std::endl;
+    LOG_FUNC_DBG << "thresholdIndex " << thresholdIndex << endl;
     if (thresholdIndex >= windowSize) {
-        LOGDEBUG << "Threshold index >= window size";
+        LOG_FUNC_DBG << "Threshold index >= window size";
         return false;
     }
 

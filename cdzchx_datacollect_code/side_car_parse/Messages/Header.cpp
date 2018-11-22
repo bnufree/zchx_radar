@@ -41,7 +41,7 @@ Header::Header( const QSharedPointer<QByteArray> &raw )
     , createdTimeStamp_()
     , basis_()
 {
-    qCDebug( radarmsg ) << "Header(0)" ;
+    //qCDebug( radarmsg ) << "Header(0)" ;
     load( raw );
 }
 

@@ -285,7 +285,10 @@ QString ZCHXRadarDataServer::ByteArrayToHexString(QByteArray &ba)
 
 void ZCHXRadarDataServer::slotRecvTrackPoint(const QList<TrackPoint> &list)
 {
-
+//    qDebug()<<"recv track point size:"<<list.size();
+//    foreach (TrackPoint pc, list) {
+//        qDebug()<<pc;
+//    }
 }
 
 

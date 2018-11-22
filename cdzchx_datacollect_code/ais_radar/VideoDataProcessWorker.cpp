@@ -51,7 +51,7 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
         radar_line *line = &packet->line[scanline];
         // Validate the spoke,低位在前高位在后
         int spoke = line->common.scan_number[0] | (line->common.scan_number[1] << 8);
-        qDebug()<<"scan line number:"<<spoke;
+        //qDebug()<<"scan line number:"<<spoke;
         //扫描线的头长度检查.正常是24
         bool check_flag = true;
         if (line->common.headerLen != 0x18)

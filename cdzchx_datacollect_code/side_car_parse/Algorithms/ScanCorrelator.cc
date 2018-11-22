@@ -13,7 +13,7 @@ using namespace ZCHX::Messages;
 #ifdef SCAN_CORR_DEBUG
 #include <iostream>
 using std::cerr;
-using std::endl;
+using endl;
 #endif
 
 ScanCorrelator::ScanCorrelator(RadarConfig* cfg, QObject* parent) : QObject(parent),

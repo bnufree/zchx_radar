@@ -2,6 +2,7 @@
 #define TARGETSIZE_H
 
 #include "ImageDataTypes.h"
+#include <QDebug>
 
 // TargetPosition is used to store the (range, az) position of a target (usually the center
 // of the target)
@@ -84,6 +85,7 @@ public:
 };
 
 std::ostream& operator<<(std::ostream& os, const TargetSize& size);
+QDebug operator<<(QDebug debug, const TargetSize& size);
 
 /** \file
  */

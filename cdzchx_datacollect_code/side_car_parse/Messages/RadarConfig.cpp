@@ -100,7 +100,7 @@ bool RadarConfig::saveRadarConfiguration()
     {
         QDomNode radarnode = listradar.at( i );
         QDomElement radarnamenode = radarnode.firstChildElement( "name" );
-        qCDebug( radarmsg ) << "radarname: " << radarnamenode.childNodes().size() << radarnamenode.text();
+        //qCDebug( radarmsg ) << "radarname: " << radarnamenode.childNodes().size() << radarnamenode.text();
 
         if ( radarnamenode.text() != mName )
         {
@@ -233,7 +233,7 @@ bool RadarConfig::SetConfigurationFilePath( const std::string &path )
         QDomElement radarnamenode = radarnode.firstChildElement( "name" );
         QString radarName = radarnamenode.text();
         radarNameList.append(radarName);
-        qCDebug( radarmsg ) << "radarname: " << radarnamenode.childNodes().size() << radarName;
+        //qCDebug( radarmsg ) << "radarname: " << radarnamenode.childNodes().size() << radarName;
 
         if ( radarName == mName )
         {
@@ -318,7 +318,7 @@ void RadarConfig::Load( const std::string &name, uint32_t gateCountMax, uint32_t
 
 bool RadarConfig::GetEntry( const QDomElement &config, const QString &name, QString &value, QString &units )
 {
-    qCDebug( radarmsg ) << "RadarConfig::GetEntry" ;
+    //qCDebug( radarmsg ) << "RadarConfig::GetEntry" ;
     QDomElement element = config.firstChildElement( name );
 
     if ( element.isNull() )
@@ -335,13 +335,13 @@ bool RadarConfig::GetEntry( const QDomElement &config, const QString &name, QStr
     }
 
     value = element.text();
-    qCDebug( radarmsg ) << "name: " << name << " value: " << value ;
+    //qCDebug( radarmsg ) << "name: " << name << " value: " << value ;
     return true;
 }
 
 bool RadarConfig::Load( const QDomElement &config )
 {
-    qCDebug( radarmsg ) << "RadarConfig::Load" ;
+    //qCDebug( radarmsg ) << "RadarConfig::Load" ;
 
     if ( ! config.hasChildNodes() )
     {

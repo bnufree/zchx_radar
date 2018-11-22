@@ -49,10 +49,10 @@ TrackInitiator::process(const Messages::Extractions::Ref& msg)
         corr(d);
 
         Extraction& ext(d.extraction_);
-        LOGDEBUG << "correlated? " << ext.getCorrelated() << " at " << ext.getX() << ", " << ext.getY() << std::endl;
+        LOG_FUNC_DBG << "correlated? " << ext.getCorrelated() << " at " << ext.getX() << ", " << ext.getY() << endl;
 
         if (ext.getCorrelated() && ext.getNumCorrelations() >= num_scans - 1) {
-            LOGDEBUG << "extraction is correlated for " << (ext.getNumCorrelations() + 1) << " scans " << std::endl;
+            LOG_FUNC_DBG << "extraction is correlated for " << (ext.getNumCorrelations() + 1) << " scans " << endl;
 
             // Make new Track Message
             Messages::Track::Ref trk(Track::Make("TrackInitiator"));
@@ -61,8 +61,8 @@ TrackInitiator::process(const Messages::Extractions::Ref& msg)
             trk->setType(Messages::Track::kTentative);
             trk->setTrackNumber(currentTrackNum_++);
 
-            LOGDEBUG << "sending track message type " << trk->getType() << std::endl;
-            LOGDEBUG << "sending track message Num: " << trk->getTrackNumber() << std::endl;
+            LOG_FUNC_DBG << "sending track message type " << trk->getType() << endl;
+            LOG_FUNC_DBG << "sending track message Num: " << trk->getTrackNumber() << endl;
 
             // Set track estimate = last known measurement in this hypothesis convert the last measurement to
             // llh compute elevation angle given assumed altitude
@@ -129,7 +129,7 @@ TrackInitiator::process(const Messages::Extractions::Ref& msg)
 
             trk->setVelocity(llh_vel);
 
-            LOGDEBUG << "sending new track report for track " << trk->getTrackNumber() << std::endl;
+            LOG_FUNC_DBG << "sending new track report for track " << trk->getTrackNumber() << endl;
 
             //return send(trk);
         }
@@ -161,17 +161,17 @@ TrackInitiator::corrCell(Data& d, Entry& candidates)
 
     Extraction& ext = d.extraction_;
 
-    LOGDEBUG << "cell count: " << candidates.size() << endl;
+    LOG_FUNC_DBG << "cell count: " << candidates.size() << endl;
 
     Entry::iterator ci = candidates.begin();
     Entry::iterator end = candidates.end();
     while (ci != end) {
         double delta = d.when_ - ci->when_;
         if (delta > t_old_) {
-            LOGDEBUG << "too old. delta=" << delta << " threshold=" << t_old_ << endl;
+            LOG_FUNC_DBG << "too old. delta=" << delta << " threshold=" << t_old_ << endl;
 
             if (delta > t_veryold_) {
-                LOGDEBUG << "very old, erase." << endl;
+                LOG_FUNC_DBG << "very old, erase." << endl;
                 ci = candidates.erase(ci);
             } else {
                 ++ci;
@@ -182,7 +182,7 @@ TrackInitiator::corrCell(Data& d, Entry& candidates)
         // Ignore new entries
         //
         if (delta < t_new_) {
-            LOGDEBUG << "too new." << endl;
+            LOG_FUNC_DBG << "too new." << endl;
             ++ci;
             continue;
         }
@@ -194,10 +194,10 @@ TrackInitiator::corrCell(Data& d, Entry& candidates)
         float dx = ext.getX() - other.getX();
         float dy = ext.getY() - other.getY();
         float dist2 = dx * dx + dy * dy;
-        LOGDEBUG << "too far? ";
+        LOG_FUNC_DBG << "too far? ";
 
         if (dist2 < searchRadius2_) {
-            LOGDEBUG << "no.  correlating." << endl;
+            LOG_FUNC_DBG << "no.  correlating." << endl;
 
             ext.setCorrelated(true);
             int num_scans = other.getNumCorrelations() + 1;
@@ -212,7 +212,7 @@ TrackInitiator::corrCell(Data& d, Entry& candidates)
             return;
         }
 
-        LOGDEBUG << "yes." << endl;
+        LOG_FUNC_DBG << "yes." << endl;
         ++ci;
     }
 }
@@ -220,7 +220,7 @@ TrackInitiator::corrCell(Data& d, Entry& candidates)
 void
 TrackInitiator::corr(Data& d)
 {
-    LOGDEBUG << std::endl;
+    LOG_FUNC_DBG << endl;
 
     // Determine which bin this extraction belongs to (add +1) to shift the logical data buffer within the
     // larger buffer
@@ -230,11 +230,11 @@ TrackInitiator::corr(Data& d)
 
     d.extraction_.setCorrelated(false);
 
-    LOGDEBUG << "Correlating extraction (" << d.extraction_.getX() << ", " << d.extraction_.getY() << ") into [" << binX
-             << ", " << binY << "] numBins=" << numBins_ << std::endl;
+    LOG_FUNC_DBG << "Correlating extraction (" << d.extraction_.getX() << ", " << d.extraction_.getY() << ") into [" << binX
+             << ", " << binY << "] numBins=" << numBins_ << endl;
 
     if (binX < 1 || binX >= numBins_ - 1 || binY < 1 || binY >= numBins_ - 1) {
-        LOGDEBUG << "Bad bin #, bailing" << endl;
+        LOG_FUNC_DBG << "Bad bin #, bailing" << endl;
         return;
     }
 

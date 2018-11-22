@@ -3,11 +3,14 @@
 
 #include "Vector.h"
 #include "protobuf/ZCHXRadar.pb.h"
+#include "Messages/RadarConfig.h"
 
 using namespace com::zhichenhaixin::proto;
+using namespace ZCHX::Messages;
 namespace ZCHX {
 namespace Messages {
 class Extraction;
+class RadarConfig;
 }
 namespace Algorithms {
 
@@ -37,7 +40,7 @@ public:
 
         \param pos initial position of the track
     */
-    ABTrack(ABTracker& owner, uint32_t id, double when, const Geometry::Vector& pos);
+    ABTrack(ABTracker& owner, uint32_t id, double when, const Geometry::Vector& pos, RadarConfig* cfg);
 
     /** Obtain the track's unique ID tag
 
@@ -85,6 +88,7 @@ public:
     /** Change the track state to kDropping and send out a TSPI message with the current position.
      */
     void drop();
+    std::string state();
 
 private:
     /** Check the track length to see if we have an active track.
@@ -104,6 +108,8 @@ private:
     Geometry::Vector initialPosition_;
     std::string id_;
     std::vector<double> initiationTimeStamps_;
+
+    RadarConfig* cfg_;
 
     State state_;
 };

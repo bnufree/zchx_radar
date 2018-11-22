@@ -115,7 +115,7 @@ Track::Track() :
 //Track::loadV1(ACE_InputCDR& cdr)
 //{
 //    static Logger::ProcLog log("loadV1", Log());
-//    LOGINFO << "BEGIN" << std::endl;
+//    LOGINFO << "BEGIN" << endl;
 
 //    cdr >> batchNum_;
 //    cdr >> totalInBatch_;
@@ -200,18 +200,18 @@ Track::printData(std::ostream& os) const
 {
     os << "Track: " << trackNum_ << " When: " << std::setprecision(15) << when_
        << " LLH: " << ZchxRadarUtils::radiansToDegrees(llh_[GEO_LAT]) << "/" << ZchxRadarUtils::radiansToDegrees(llh_[GEO_LON]) << "/"
-       << llh_[GEO_HGT] << " Flags: " << flags_ << std::endl;
+       << llh_[GEO_HGT] << " Flags: " << flags_ << endl;
 
     os << "Prediction at time " << std::setprecision(15) << predictionTime_ << ": "
        << ZchxRadarUtils::radiansToDegrees(llh_prediction_[GEO_LAT]) << "/" << ZchxRadarUtils::radiansToDegrees(llh_prediction_[GEO_LON])
-       << "/" << llh_prediction_[GEO_HGT] << std::endl;
+       << "/" << llh_prediction_[GEO_HGT] << endl;
 
     os << "Extraction at time " << std::setprecision(15) << extractionTime_ << ": "
        << ZchxRadarUtils::radiansToDegrees(aer_extraction_[GEO_AZ]) << "/" << ZchxRadarUtils::radiansToDegrees(aer_extraction_[GEO_EL])
-       << "/" << aer_extraction_[GEO_RNG] << std::endl;
+       << "/" << aer_extraction_[GEO_RNG] << endl;
 
     os << "Velocity: " << ZchxRadarUtils::radiansToDegrees(llh_velocity_[GEO_LAT]) << "/"
-       << ZchxRadarUtils::radiansToDegrees(llh_velocity_[GEO_LON]) << "/" << llh_velocity_[GEO_HGT] << std::endl;
+       << ZchxRadarUtils::radiansToDegrees(llh_velocity_[GEO_LON]) << "/" << llh_velocity_[GEO_HGT] << endl;
 
     return os;
 }
@@ -226,7 +226,7 @@ Track::printDataXML(std::ostream& os) const
 //void
 //Track::loadXML(XmlStreamReader& xsr)
 //{
-//    std::cerr << "loadXML" << std::endl;
+//    std::cerr << "loadXML" << endl;
 
 //    Header::loadXML(xsr);
 //    if (!xsr.readNextEntityAndValidate("plot")) ::abort();
@@ -241,8 +241,8 @@ Track::printDataXML(std::ostream& os) const
 void
 Track::dump() const
 {
-    LOGDEBUG << "Track: " << trackNum_ << " When: " << when_ << std::endl;
+    LOG_FUNC_DBG << "Track: " << trackNum_ << " When: " << when_ << endl;
 
-    LOGDEBUG << "LLH: " << ZchxRadarUtils::radiansToDegrees(getLatitude()) << ' ' << ZchxRadarUtils::radiansToDegrees(getLongitude())
-             << ' ' << getHeight() << std::endl;
+    LOG_FUNC_DBG << "LLH: " << ZchxRadarUtils::radiansToDegrees(getLatitude()) << ' ' << ZchxRadarUtils::radiansToDegrees(getLongitude())
+             << ' ' << getHeight() << endl;
 }

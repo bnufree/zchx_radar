@@ -148,7 +148,7 @@ public:
 
 
     /** Utility functor that inserts a textual representation of a Header's header data into a std::ostream
-    object. Example of it use: \code LOGDEBUG << msg.headerPrinter() << std::endl; \endcode Relies on
+    object. Example of it use: \code LOG_FUNC_DBG << msg.headerPrinter() << endl; \endcode Relies on
     Header::printHeader() to do the actual conversion of header information to text, which derived classes
     may override.
     */
@@ -167,7 +167,7 @@ public:
     HeaderPrinter headerPrinter() const { return HeaderPrinter(*this); }
 
     /** Utility functor that inserts a textual representation of message data into a std::ostream object.
-    Example of it use: \code LOGDEBUG << msg.dataPrinter() << std::endl; \endcode Relies on
+    Example of it use: \code LOG_FUNC_DBG << msg.dataPrinter() << endl; \endcode Relies on
     Header::printData() to do the actual conversion of data to text, which derived classes may override.
     */
     struct DataPrinter
@@ -185,7 +185,7 @@ public:
     DataPrinter dataPrinter() const { return DataPrinter(*this); }
 
     /** Utility functor that inserts an XML representation of message data into a std::ostream object. Example
-    of it use: \code LOGDEBUG << msg.xmlPrinter() << std::endl; \endcode Relies on Header::printData() to do
+    of it use: \code LOG_FUNC_DBG << msg.xmlPrinter() << endl; \endcode Relies on Header::printData() to do
     the actual conversion of data to text, which derived classes may override.
     */
     struct XMLPrinter
@@ -292,7 +292,7 @@ protected:
 };
 
 /** Convenience operator overload that inserts a textual representation of a message's header and data into a
-    std::ostream object. Example of its use: \code LOGDEBUG << msg << std::endl; \endcode Relies on
+    std::ostream object. Example of its use: \code LOG_FUNC_DBG << msg << endl; \endcode Relies on
     Header::print() to do the actual conversion of data to text, which derived classes may override. To just
     show header or data, use the output stream inserters printHeader or printData.
 

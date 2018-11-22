@@ -46,7 +46,7 @@ TrackMaintainer::reset()
 void
 TrackMaintainer::processAlarm()
 {
-    LOGDEBUG << "checking database - trks " << trackDatabase_.size() << std::endl;
+    LOG_FUNC_DBG << "checking database - trks " << trackDatabase_.size() << endl;
     checkDatabase();
 }
 
@@ -60,8 +60,8 @@ TrackMaintainer::processAlarm()
 bool
 TrackMaintainer::processInput(const Messages::Track::Ref& msg)
 {
-    LOGDEBUG << msg->headerPrinter() << std::endl;
-    LOGDEBUG << msg->dataPrinter() << std::endl;
+    //LOG_FUNC_DBG << msg->headerPrinter() << endl;
+    //LOG_FUNC_DBG << msg->dataPrinter() << endl;
 
     if (msg->getFlags() == Track::kNew || msg->getFlags() == Track::kCorrected) { updateDatabase(msg); }
 
@@ -71,13 +71,13 @@ TrackMaintainer::processInput(const Messages::Track::Ref& msg)
 void
 TrackMaintainer::updateDatabase(const Messages::Track::Ref& msg)
 {
-    LOGDEBUG << "track database has " << trackDatabase_.size() << " entries" << std::endl;
+    LOG_FUNC_DBG << "track database has " << trackDatabase_.size() << " entries" << endl;
 
     // Find existing entry in map or create a new one
     //
     Mapping::iterator it = trackDatabase_.find(msg->getTrackNumber());
     if (it == trackDatabase_.end()) {
-        LOGDEBUG << "new entry for track num " << msg->getTrackNumber() << std::endl;
+        LOG_FUNC_DBG << "new entry for track num " << msg->getTrackNumber() << endl;
         it = trackDatabase_.insert(Mapping::value_type(msg->getTrackNumber(), TrackMsgVector())).first;
     }
 
@@ -90,7 +90,7 @@ TrackMaintainer::updateDatabase(const Messages::Track::Ref& msg)
     //Time::TimeStamp now = Time::TimeStamp::Now();
     epoch_ = QDateTime::currentMSecsSinceEpoch() - msg->getExtractionTime();
 
-    LOGDEBUG << "epoch " << epoch_ << std::endl;
+    LOG_FUNC_DBG << "epoch " << epoch_ << endl;
 }
 
 /** This method checks for tracks that need to be promoted from tentative to firm and also for tracks that have
@@ -106,16 +106,16 @@ void
 TrackMaintainer::checkDatabase()
 {
 
-    LOGDEBUG << "track database has " << trackDatabase_.size() << " entries" << std::endl;
+    LOG_FUNC_DBG << "track database has " << trackDatabase_.size() << " entries" << endl;
 
     double dropLimit = RadarConfig(0).getRotationDuration() * missesBeforeDrop_;
-    LOGDEBUG << "drop duration " << dropLimit << std::endl;
+    LOG_FUNC_DBG << "drop duration " << dropLimit << endl;
 
     // Loop through the data base.
     //
     Mapping::iterator it = trackDatabase_.begin();
     while (it != trackDatabase_.end()) {
-        LOGDEBUG << "track database entry " << it->first << std::endl;
+        LOG_FUNC_DBG << "track database entry " << it->first << endl;
 
         const TrackMsgVector& tracks(it->second);
         const Messages::Track::Ref& track(tracks.back());
@@ -125,10 +125,10 @@ TrackMaintainer::checkDatabase()
         // Check to see if track is promotable
         //
         if (track->getType() == Track::kTentative) {
-            LOGDEBUG << "tentative track with " << tracks.size()
-                     << " msgs. Threshold= " << hitsBeforePromote_ << std::endl;
+            LOG_FUNC_DBG << "tentative track with " << tracks.size()
+                     << " msgs. Threshold= " << hitsBeforePromote_ << endl;
             if (tracks.size() >= hitsBeforePromote_) {
-                LOGDEBUG << "track should be promoted " << std::endl;
+                LOG_FUNC_DBG << "track should be promoted " << endl;
                 report = Track::Make("TrackMaintainer", track);
                 report->setFlags(Track::kPromoted);
             }
@@ -138,7 +138,7 @@ TrackMaintainer::checkDatabase()
         //
         double now = QDateTime::currentMSecsSinceEpoch();
         if ((now - (epoch_ + track->getExtractionTime())) > dropLimit) {
-            LOGDEBUG << "dropping track " << it->first << std::endl;
+            LOG_FUNC_DBG << "dropping track " << it->first << endl;
 
             report = Track::Make("TrackMaintainer", track);
             report->setFlags(Track::kDropping);
@@ -177,8 +177,7 @@ TrackMaintainer::checkDatabase()
             default: break;
             };
 
-            LOGDEBUG << "maintained track: " << report->getTrackNumber() << " flag: " << flag << " type: " << type
-                     << std::endl;
+            //LOG_FUNC_DBG << "maintained track: " << report->getTrackNumber() << " flag: " << flag << " type: " << type<< endl;
         }
     }
 }

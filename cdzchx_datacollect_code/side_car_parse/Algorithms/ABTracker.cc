@@ -13,7 +13,9 @@ using namespace ZCHX;
 using namespace ZCHX::Algorithms;
 using namespace ZCHX::Algorithms::ABTrackerUtils;
 
-ABTracker::ABTracker(QObject* parent) :QObject(parent),
+ABTracker::ABTracker(RadarConfig* cfg, QObject* parent) :
+    cfg_(cfg),
+    QObject(parent),
     enabled_(kDefaultEnabled), rotationDuration_(kDefaultRotationDuration),
     timeScaling_(kDefaultTimeScaling),
     alpha_(kDefaultAlpha),
@@ -28,6 +30,7 @@ ABTracker::ABTracker(QObject* parent) :QObject(parent),
 {
     associationRadius2_ = associationRadius_;
     associationRadius2_ *= associationRadius2_;
+    endParameterChanges();
     //reset_->connectChangedSignalTo(boost::bind(&ABTracker::resetNotification, this, _1));
     //associationRadius_->connectChangedSignalTo(boost::bind(&ABTracker::associationRadiusChanged, this, _1));
 }
@@ -69,7 +72,7 @@ ABTracker::resetTracker()
 bool
 ABTracker::processInput(const Messages::Extractions::Ref& msg, QMap<int, TrackPoint>& pnts)
 {
-    LOGDEBUG << std::endl;
+    //qDebug()<<"extraction size:" <<msg.get()->getSize();
 
     // For each Extraction report in the message call updateTracks.
     //
@@ -86,7 +89,7 @@ ABTracker::updateTracks(const Messages::Extraction& plot, QMap<int, TrackPoint>&
 {
     double when = plot.getWhen();
 
-    LOGDEBUG << "when: " << when << " range: " << plot.getRange() << " az: " << plot.getAzimuth() << std::endl;
+    //qDebug() << "when: " << when << " range: " << plot.getRange() << " az: " << plot.getAzimuth();
 
     ABTrack* found = 0;
     if (plot.getRange() >= minRange_) {
@@ -105,6 +108,7 @@ ABTracker::updateTracks(const Messages::Extraction& plot, QMap<int, TrackPoint>&
         while (pos != end) {
             ABTrack* track = *pos++;
             double distance = track->getProximityTo(when, v);
+            //qDebug()<<"distance:"<<distance<<best;
             if (distance < best) {
                 found = track;
                 best = distance;
@@ -115,18 +119,19 @@ ABTracker::updateTracks(const Messages::Extraction& plot, QMap<int, TrackPoint>&
         // kInitiating state.
         //
         if (!found) {
-            found = new ABTrack(*this, ++trackIdGenerator_, when, v);
-            LOGDEBUG << "created new track - " << found->getId() << std::endl;
+            found = new ABTrack(*this, ++trackIdGenerator_, when, v, cfg_);
+            qDebug() << "created new track - " << found->getId().data()<<found->state().data();
             tracks_.push_back(found);
             ++trackCount_;
         } else {
-            LOGDEBUG << "found existing track - " << found->getId() << std::endl;
+            qDebug() << "found existing track - " << found->getId().data()<<found->state().data();
 
             // Apply the Extraction plot to the found track
             //
             found->updatePosition(when, v);
         }
     }
+    qDebug()<<"current track cache size:"<<tracks_.size();
 
     // Revisit all of the tracks, emitting TSPI messages for those that are
     // dropping and the one that was updated above.
@@ -142,8 +147,13 @@ ABTracker::updateTracks(const Messages::Extraction& plot, QMap<int, TrackPoint>&
             {
                 pnts[point.tracknumber()] = point;
             }
+            if(point.tracklastreport())
+            {
+                qDebug()<<"remove track num:"<<point.tracknumber();
+                pnts.remove(point.tracknumber());
+            }
             if (track->isDropping()) {
-                LOGDEBUG << "dropping track " << track->getId() << std::endl;
+                LOG_FUNC_DBG << "dropping track " << track->getId().data() << endl;
                 delete track;
                 pos = tracks_.erase(pos);
                 --trackCount_;

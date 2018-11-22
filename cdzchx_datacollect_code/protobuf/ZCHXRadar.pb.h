@@ -6,6 +6,7 @@
 
 #include <string>
 #include <QList>
+#include <QDebug>
 #include <google/protobuf/stubs/common.h>
 
 #if GOOGLE_PROTOBUF_VERSION < 2006000
@@ -916,6 +917,11 @@ class TrackPoint : public ::google::protobuf::Message {
   inline ::std::string* mutable_defencename();
   inline ::std::string* release_defencename();
   inline void set_allocated_defencename(::std::string* defencename);
+  friend QDebug operator <<(QDebug os, const TrackPoint& point)
+  {
+      os<<point.tracknumber()<<point.timeofday()<<QString::number(point.wgs84poslong(), 'f', 10)<<QString::number(point.wgs84poslat(), 'f', 10);
+          return os;
+  }
 
   // @@protoc_insertion_point(class_scope:com.zhichenhaixin.proto.TrackPoint)
  private:

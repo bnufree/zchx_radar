@@ -42,7 +42,7 @@ public:
     VideoScanLineVector* GetPRI(PRI_COUNT pri)
     {
         if (pri >= GetDepth()) {
-            LOGDEBUG << "VideoStorage::GetWindow : pri too large" ;
+            LOG_FUNC_DBG << "VideoStorage::GetWindow : pri too large" ;
             //abort();
         }
         return &(m_video[pri]);
@@ -52,12 +52,12 @@ public:
     VideoTargetImagePtr GetWindow(const TargetSize& size)
     {
         if (!size.priValid) {
-            LOGDEBUG << "VideoStorage::GetWindow : unable to extract video data";
+            LOG_FUNC_DBG << "VideoStorage::GetWindow : unable to extract video data";
             //abort();
         }
 
         if ((PRI_COUNT)m_video.size() < size.priCount) {
-            LOGDEBUG << "VideoStorage::GetWindow : too few lines in history to extract video";
+            LOG_FUNC_DBG << "VideoStorage::GetWindow : too few lines in history to extract video";
             //abort();
         }
 

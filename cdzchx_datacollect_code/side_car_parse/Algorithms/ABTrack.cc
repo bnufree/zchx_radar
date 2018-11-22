@@ -10,8 +10,8 @@ using namespace ZCHX::Messages;
 using namespace ZCHX::Algorithms;
 using namespace ZCHX::Algorithms::ABTrackerUtils;
 
-ABTrack::ABTrack(ABTracker& owner, uint32_t id, double when, const Geometry::Vector& pos) :
-    owner_(owner), t0_(), initialPosition_(pos), id_(""), state_(kInitiating)
+ABTrack::ABTrack(ABTracker& owner, uint32_t id, double when, const Geometry::Vector& pos, RadarConfig*  cfg) :
+    owner_(owner), t0_(), initialPosition_(pos), id_(""), state_(kInitiating), cfg_(cfg)
 {
     std::ostringstream os;
     os << id;
@@ -24,7 +24,7 @@ ABTrack::ABTrack(ABTracker& owner, uint32_t id, double when, const Geometry::Vec
 void
 ABTrack::checkIfInitiated(double when)
 {
-    LOGDEBUG << "when: " << when << std::endl;
+    LOG_FUNC_DBG << "when: " << when << endl;
 
     initiationTimeStamps_.push_back(when);
 
@@ -44,7 +44,7 @@ ABTrack::checkIfInitiated(double when)
     // Only become active if after pruning we have the required amount of hits.
     //
     if (initiationTimeStamps_.size() >= owner_.getInitiationCount()) {
-        LOGDEBUG << "track " << id_ << " is now alive" << std::endl;
+        LOG_FUNC_DBG << "track " << id_ .data()<< " is now alive" << endl;
         initiationTimeStamps_.clear();
         state_ = kAlive;
     }
@@ -53,7 +53,7 @@ ABTrack::checkIfInitiated(double when)
 double
 ABTrack::getProximityTo(double when, const Geometry::Vector& pos)
 {
-    LOGDEBUG << id_ << " when: " << when << std::endl;
+    LOG_FUNC_DBG << id_ .data()<< " when: " << when << endl;
 
     // How much time has passed since the last update?
     //
@@ -63,12 +63,12 @@ ABTrack::getProximityTo(double when, const Geometry::Vector& pos)
     //
     if (state_ == kInitiating) {
         if (deltaTime >= owner_.getScaledMaxInitiationDuration()) {
-            LOGDEBUG << id_ << " uninitiating - " << deltaTime << std::endl;
+            LOG_FUNC_DBG << id_.data() << " uninitiating - " << deltaTime << endl;
             state_ = kUninitiating;
         }
     } else if (state_ == kAlive) {
         if (deltaTime >= owner_.getScaledMaxCoastDuration()) {
-            LOGDEBUG << id_ << " dropping - " << deltaTime << std::endl;
+            LOG_FUNC_DBG << id_.data() << " dropping - " << deltaTime << endl;
             state_ = kDropping;
         }
     }
@@ -86,7 +86,7 @@ ABTrack::getProximityTo(double when, const Geometry::Vector& pos)
     position -= pos;
     double value = position.getMagnitudeSquared();
 
-    LOGDEBUG << id_ << " return: " << value << std::endl;
+    LOG_FUNC_DBG << id_.data() << " return: " << value << endl;
     return value;
 }
 
@@ -94,13 +94,13 @@ void
 ABTrack::updatePosition(double when, const Geometry::Vector& pos)
 {
     static const double kMinDeltaTime = 1.0E-3;
-    LOGDEBUG<< id_ << " when: " << when << std::endl;
+    LOG_FUNC_DBG<< id_.data() << " when: " << when << endl;
 
     // Calculate the delta time
     //
     double deltaTime = when - t0_.when_;
     if (deltaTime < kMinDeltaTime) {
-        LOGDEBUG << "delta too small - " << deltaTime << std::endl;
+        LOG_FUNC_DBG << "delta too small - " << deltaTime << endl;
         return;
     }
 
@@ -153,13 +153,15 @@ ABTrack::updatePosition(double when, const Geometry::Vector& pos)
 TrackPoint ABTrack::emitPosition()
 {
     TrackPoint point;
-    point.set_tracknumber(-1);
-    if (state_ == kInitiating) return point;
+    point.set_tracknumber(0);
+    //if (state_ == kInitiating) return point;
     TSPI::Ref msg = TSPI::MakeRAE(owner_.metaObject()->className(), id_, t0_.when_, t0_.position_.getMagnitude() * 1000.0,
-                                t0_.position_.getDirection(), t0_.position_.getZ());
+                                t0_.position_.getDirection(), t0_.position_.getZ(), cfg_);
+    if (state_ == kDropping)
+    {
+        msg->setDropping();
+    }
     point = msg->toTrackPoint();
-
-    if (state_ == kDropping) msg->setDropping();
     return point;
 
     //return owner_.send(msg);
@@ -170,4 +172,27 @@ ABTrack::drop()
 {
     state_ = kDropping;
     emitPosition();
+}
+
+std::string ABTrack::state()
+{
+    std::string str;
+    switch (state_) {
+    case kInitiating:
+        str = "initiating";
+        break;
+    case kAlive:
+        str = "alive";
+        break;
+    case kDropping:
+        str = "drop";
+        break;
+    case kUninitiating:
+        str = "uninitiating";
+        break;
+    default:
+        str = "undef";
+        break;
+    }
+    return str;
 }

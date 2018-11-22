@@ -26,7 +26,8 @@ private:
     QThread mThread;
     RadarConfig *mRadarCfg;
     ExtractWithCentroiding  *mExtractObj;
-    ABTracker               *mTrackerObj;
+    ABTracker               *mTrackerObj;    
+    QMap<int, TrackPoint>   mPnts;
 };
 
 #endif // TARGETEXTRACTIONWORKER_H

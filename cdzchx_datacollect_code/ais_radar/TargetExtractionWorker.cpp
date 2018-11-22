@@ -10,8 +10,9 @@ TargetExtractionWorker::TargetExtractionWorker(RadarConfig* cfg, QObject *parent
     QObject(parent),
     mRadarCfg(cfg),
     mExtractObj(new ZCHX::Algorithms::ExtractWithCentroiding),
-    mTrackerObj(new ZCHX::Algorithms::ABTracker)
+    mTrackerObj(new ZCHX::Algorithms::ABTracker(cfg))
 {
+    mPnts.clear();
     moveToThread(&mThread);
     mThread.start();
 }
@@ -20,7 +21,6 @@ void TargetExtractionWorker::slotRecvRawVideoDataList(const ITF_VideoFrameList &
 {
     LOG_FUNC_DBG_START;
     if(!mExtractObj || !mTrackerObj) return;
-    QMap<int, TrackPoint> pnts;
     if(list.size() > 0)
     {
         foreach (ITF_VideoFrame frame, list) {
@@ -56,7 +56,7 @@ void TargetExtractionWorker::slotRecvRawVideoDataList(const ITF_VideoFrameList &
             Extractions::Ref extractions(Extractions::Make("Extract", binary));
 
             mExtractObj->process(binary, extractions);
-            LOG_FUNC_DBG<<"extraction size:"<<extractions->size();
+            //LOG_FUNC_DBG<<"extraction size:"<<extractions->size();
             if(extractions->size() > 0)
             {
 #if 0
@@ -67,13 +67,16 @@ void TargetExtractionWorker::slotRecvRawVideoDataList(const ITF_VideoFrameList &
                 //目标进行标号等操作
                 mTrackerObj->processInput(result, pnts);
 #endif
-                mTrackerObj->processInput(extractions, pnts);
+                mTrackerObj->processInput(extractions, mPnts);
             }
 
         }
     }
-    qDebug()<<" pnts size:"<<pnts.size();
-    emit signalSendTrackPoint(pnts.values());
+    qDebug()<<" pnts size:"<<mPnts.size();
+    if(mPnts.size() > 0)
+    {
+        emit signalSendTrackPoint(mPnts.values());
+    }
     LOG_FUNC_DBG_END;
 }
 

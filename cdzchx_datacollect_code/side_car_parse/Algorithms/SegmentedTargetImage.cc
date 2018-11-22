@@ -8,17 +8,17 @@ SegmentedTargetImage::Dump()
     for (Rows::iterator i = m_image.begin(); i != m_image.end(); i++) {
         // loop through each row
         (*i).Sort();
-        LOGDEBUG << std::setw(3) << rowCount-- << ":";
-        for (RANGEBIN r = 0; r < (*i).GetFirstRangeBin(); r++) LOGDEBUG << " ";
+        LOG_FUNC_DBG << "std::setw(3)" << rowCount-- << ":";
+        for (RANGEBIN r = 0; r < (*i).GetFirstRangeBin(); r++) LOG_FUNC_DBG << " ";
         (*i).DumpSorted();
-        LOGDEBUG << std::endl;
+        LOG_FUNC_DBG << endl;
     }
-    LOGDEBUG << "cur:";
+    LOG_FUNC_DBG << "cur:";
     if (!m_currentRow.Empty()) {
-        for (RANGEBIN r = 0; r < m_currentRow.GetFirstRangeBin(); r++) LOGDEBUG << " ";
+        for (RANGEBIN r = 0; r < m_currentRow.GetFirstRangeBin(); r++) LOG_FUNC_DBG << " ";
         m_currentRow.DumpSorted();
     }
-    LOGDEBUG << std::endl;
+    LOG_FUNC_DBG << endl;
 }
 
 TargetSize
@@ -56,26 +56,26 @@ SegmentedTargetImage::UpdateMinMaxRanges(RANGEBIN start, RANGEBIN stop)
 void
 SegmentedTargetImage::AddDataToLastRow(RANGEBIN start, RANGEBIN stop)
 {
-    // LOGDEBUG << "SegmentedTargetImage::AddDataToLastRow : start=" << start << " stop=" << stop << std::end;
+    // LOG_FUNC_DBG << "SegmentedTargetImage::AddDataToLastRow : start=" << start << " stop=" << stop << std::end;
     m_currentRow.AddMask(Segment(start, stop));
 #ifdef VERIFY_SEGMENTS
     if (stop < start) {
-        LOGDEBUG << "TargetImage::AddDataToLastRow : attempted to add an invalid segment" << std::endl;
+        LOG_FUNC_DBG << "TargetImage::AddDataToLastRow : attempted to add an invalid segment" << endl;
         //abort();
     }
 #endif
-    // LOGDEBUG << "SegmentedTargetImage::AddDataToLastRow : exit" << std::end;
+    // LOG_FUNC_DBG << "SegmentedTargetImage::AddDataToLastRow : exit" << std::end;
 }
 
 void
 SegmentedTargetImage::FinalizeRow(AZIMUTH az)
 {
-    // LOGDEBUG << "SegmentedTargetImage::FinalizeRow : az=" << az << std::end;
+    // LOG_FUNC_DBG << "SegmentedTargetImage::FinalizeRow : az=" << az << std::end;
     m_currentRow.az = az;
     m_image.push_back(m_currentRow);
     UpdateMinMaxRanges(m_currentRow.GetFirstRangeBin(), m_currentRow.GetLastRangeBin());
     m_currentRow.ResetMask();
-    // LOGDEBUG << "SegmentedTargetImage::FinalizeRow : exit" << az << std::end;
+    // LOG_FUNC_DBG << "SegmentedTargetImage::FinalizeRow : exit" << az << std::end;
 }
 
 SegmentedTargetImagePtr
@@ -89,6 +89,9 @@ SegmentedTargetImage::Merge(TargetVector& mergers, RANGEBIN start, RANGEBIN stop
         if (mergers[i]->m_image.size() > masterIm->m_image.size()) { masterIm = mergers[i]; }
     }
 
+    int minRange = masterIm.get()->GetSize().minRange;
+    int maxRange = masterIm.get()->GetSize().maxRange;
+
     // starting at the bottom of the images, merge the rows
     for (TargetVector::size_type i = 0; i < mergers.size(); i++) {
         if (mergers[i] != masterIm) {
@@ -97,7 +100,7 @@ SegmentedTargetImage::Merge(TargetVector& mergers, RANGEBIN start, RANGEBIN stop
                 // merge dest row (srcRow+destRowOffset) with src row (srcRow)
 #ifdef VERIFY_SEGMENTS
                 if (masterIm->m_image[srcRow + destRowOffset].az != mergers[i]->m_image[srcRow].az) {
-                    LOGDEBUG<< "SegmentedTargetImage::Merge : tried to merge incompatible rows (az)" << std::endl;
+                    LOG_FUNC_DBG<< "SegmentedTargetImage::Merge : tried to merge incompatible rows (az)" << endl;
                     //abort();
                 }
 #endif
@@ -108,15 +111,19 @@ SegmentedTargetImage::Merge(TargetVector& mergers, RANGEBIN start, RANGEBIN stop
                 } else {
                     masterIm->m_image[srcRow + destRowOffset].Merge(mergers[i]->m_image[srcRow]);
                 }
+
             }
+            if(minRange > mergers[i]->GetSize().minRange) minRange = mergers[i]->GetSize().minRange;
+            if(maxRange < mergers[i]->GetSize().maxRange) maxRange = mergers[i]->GetSize().maxRange;
             // if this is the "next" row, then update the references in teh nextMap
             masterIm->m_currentRow.Merge(mergers[i]->m_currentRow, &nextMap, &masterIm);
         }
     }
 
-    masterIm->AddDataToLastRow(start, stop);
-    UpdateRangeToTargetMap(start, stop, nextMap, masterIm);
-
+//    masterIm->AddDataToLastRow(start, stop);
+//    UpdateRangeToTargetMap(start, stop, nextMap, masterIm);
+    masterIm->AddDataToLastRow(minRange, maxRange);
+    UpdateRangeToTargetMap(minRange, maxRange, nextMap, masterIm);
     return masterIm;
 }
 

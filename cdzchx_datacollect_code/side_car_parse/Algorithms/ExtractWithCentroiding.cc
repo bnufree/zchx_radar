@@ -79,7 +79,7 @@ ExtractWithCentroiding::process(const Messages::BinaryVideo::Ref& msg, Messages:
             // [maxRange, maxAz].  the images are (priCount) x (maxRange-minRange+1)
             // pixels.
 
-            LOGDEBUG << "centroiding a target:" << size << " dRange=" << msg->getRangeAt(size.RangeExtent());
+            LOG_FUNC_DBG << "centroiding a target:" << size << " dRange=" << msg->getRangeAt(size.RangeExtent());
 
             BinaryTargetImagePtr mask = target->MakeBinaryTargetImage();
             VideoTargetImagePtr video = m_videoHistory.GetWindow(size);
@@ -97,8 +97,8 @@ ExtractWithCentroiding::process(const Messages::BinaryVideo::Ref& msg, Messages:
 
                 extractions->push_back(Messages::Extraction(QDateTime::currentMSecsSinceEpoch(), cenRange, cenPos.az, 0.0));
 
-                LOGDEBUG << "  centroided target found at az=" << cenPos.az << " range=" << cenRange
-                         << "km range bin=" << cenPos.range << std::endl;
+                LOG_FUNC_DBG << "  centroided target found at az=" << cenPos.az << " range=" << cenRange
+                         << "km range bin=" << cenPos.range << endl;
             }
         }
     }

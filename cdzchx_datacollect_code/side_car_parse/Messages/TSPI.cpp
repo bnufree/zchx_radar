@@ -65,10 +65,10 @@ const GEO_LOCATION *TSPI::GetOrigin() const
                         GEO_DATUM_DEFAULT,
                         "Radar");
 
-        qCInfo(radarmsg) << "LLH: " << origin_->lat << ' ' << origin_->lon
-                     << ' ' << origin_->hgt ;
-        qCInfo(radarmsg) << "EFG: " << origin_->e << ' ' << origin_->f << ' '
-                     << origin_->g ;
+//        qCInfo(radarmsg) << "LLH: " << origin_->lat << ' ' << origin_->lon
+//                     << ' ' << origin_->hgt ;
+//        qCInfo(radarmsg) << "EFG: " << origin_->e << ' ' << origin_->f << ' '
+//                     << origin_->g ;
 
         originMap.insert(radarConfig_->getName(), origin_);
     }
@@ -125,9 +125,9 @@ TSPI::GetSystemIdTag(uint16_t systemId)
 
 TSPI::Ref
 TSPI::MakeRAE(const std::string& producer, const std::string& id, double when,
-              double r, double a, double e)
+              double r, double a, double e, RadarConfig* cfg)
 {
-    Ref ref(new TSPI(producer, id, when, InitFromRAE(r, a, e)));
+    Ref ref(new TSPI(producer, id, when, InitFromRAE(r, a, e), cfg));
     return ref;
 }
 
@@ -187,13 +187,14 @@ TSPI::MakeEFGCoordinateFromRawBytes(const uint8_t* ptr)
 
 
 TSPI::TSPI(const std::string& producer, const std::string& tag, double when,
-           const InitFromRAE& rae)
+           const InitFromRAE& rae, RadarConfig* cfg)
     : Header(producer, GetMetaTypeInfo()), when_(when), flags_(0),
       tag_(tag), llh_(), rae_(), xyz_()
 {
+    setRadarConfig(cfg);
     //qCDebug(radarmsg) << "TSPI" ;
-    qCInfo(radarmsg) << "tag: " << QString::fromStdString(tag) << " when: " << when << " rng: " << rae.r_
-                 << " az: " << rae.a_ << " el: " << rae.e_ ;
+//    qCInfo(radarmsg) << "tag: " << QString::fromStdString(tag) << " when: " << when << " rng: " << rae.r_
+//                 << " az: " << rae.a_ << " el: " << rae.e_ ;
 
 
 
@@ -279,9 +280,9 @@ TSPI::calculateLLH() const
     llh_.resize(3);
     GeoIns->geoEfg2Llh(GEO_DATUM_DEFAULT, const_cast<double*>(efg_),
                &llh_[GEO_LAT], &llh_[GEO_LON], &llh_[GEO_HGT]);
-    qCInfo(radarmsg)  << "LLH: " << ZchxRadarUtils::radiansToDegrees(llh_[GEO_LAT]) << ' '
-                  << ZchxRadarUtils::radiansToDegrees(llh_[GEO_LON]) << ' '
-                  << llh_[GEO_HGT] ;
+//    qCInfo(radarmsg)  << "LLH: " << ZchxRadarUtils::radiansToDegrees(llh_[GEO_LAT]) << ' '
+//                  << ZchxRadarUtils::radiansToDegrees(llh_[GEO_LON]) << ' '
+//                  << llh_[GEO_HGT] ;
 }
 
 const TSPI::Coord&
@@ -371,17 +372,17 @@ TSPI::load(const QSharedPointer<QByteArray>& raw)
         float  timeOfDay = trackPoint.timeofday();
 
 
-        qCDebug(radarmsg) << "trackPoint:"<< "  \n"
-                      << "systemAreaCode: "<< systemAreaCode << "  \n"
-                      << "systemIdentificationCode :" << systemIdentificationCode << "  \n"
-                      << "trackNumber :" << trackNumber << " \n"
-                      << "cartesianPosX  :" << cartesianPosX << "  \n"
-                      << "cartesianPosY :" << cartesianPosY << " \n"
-                      << "wgs84PosLat:" << wgs84PosLat  << " \n"
-                      << "wgs84PosLong:" << wgs84PosLong  << " \n"
-                      << "cog:" << cog  << " \n"
-                      << "sog:" << sog  << " \n"
-                      << "timeOfDay :" << timeOfDay << " \n";
+//        qCDebug(radarmsg) << "trackPoint:"<< "  \n"
+//                      << "systemAreaCode: "<< systemAreaCode << "  \n"
+//                      << "systemIdentificationCode :" << systemIdentificationCode << "  \n"
+//                      << "trackNumber :" << trackNumber << " \n"
+//                      << "cartesianPosX  :" << cartesianPosX << "  \n"
+//                      << "cartesianPosY :" << cartesianPosY << " \n"
+//                      << "wgs84PosLat:" << wgs84PosLat  << " \n"
+//                      << "wgs84PosLong:" << wgs84PosLong  << " \n"
+//                      << "cog:" << cog  << " \n"
+//                      << "sog:" << sog  << " \n"
+//                      << "timeOfDay :" << timeOfDay << " \n";
 
         //@todo  载入数据到 data_容器
         QString tag;
@@ -436,7 +437,7 @@ TSPI::load(const QSharedPointer<QByteArray>& raw)
 
 
 
-TrackPoint& TSPI::toTrackPoint() const
+TrackPoint TSPI::toTrackPoint() const
 {
     TrackPoint trackPoint;
     trackPoint.set_tracknumber(QString::fromStdString(tag_).toInt());
@@ -446,8 +447,13 @@ TrackPoint& TSPI::toTrackPoint() const
     trackPoint.set_messagetype(static_cast<com::zhichenhaixin::proto::MSGTYP>(1));
     trackPoint.set_cartesianposx(getX());
     trackPoint.set_cartesianposy(getY());
-    trackPoint.set_wgs84poslong(getLongitude());
-    trackPoint.set_wgs84poslat(getLatitude());
+    trackPoint.set_wgs84poslong(ZchxRadarUtils::radiansToDegrees(getLongitude()));
+    trackPoint.set_wgs84poslat(ZchxRadarUtils::radiansToDegrees(getLatitude()));
+    trackPoint.set_tracklastreport(false);
+    if(isDropping())
+    {
+        trackPoint.set_tracklastreport(true);
+    }
     return trackPoint;
 }
 
@@ -477,18 +483,18 @@ TSPI::printDataXML(std::ostream& os) const
 void
 TSPI::dump() const
 {
-    qCDebug(radarmsg) << "dump" ;
-    qCDebug(radarmsg) << "Tag: " << QString::fromStdString(tag_) << " When: " <<  when_ ;
-    qCDebug(radarmsg) << "EFG: " << efg_[GEO_E] <<  ' '
-                  << efg_[GEO_F] << ' '
-                  << efg_[GEO_G] ;
-    qCDebug(radarmsg) << "LLH: " << ZchxRadarUtils::radiansToDegrees(getLatitude()) << ' '
-                  << ZchxRadarUtils::radiansToDegrees(getLongitude()) << ' '
-                  << getHeight() ;
-    qCDebug(radarmsg) << "RAE: " << getRange() << ' '
-                  << ZchxRadarUtils::radiansToDegrees(getAzimuth()) << ' '
-                  << ZchxRadarUtils::radiansToDegrees(getElevation()) ;
-    qCDebug(radarmsg) << "XYZ: " << getX() << ' '
-                  << getY() << ' '
-                  << getZ() ;
+//    qCDebug(radarmsg) << "dump" ;
+//    qCDebug(radarmsg) << "Tag: " << QString::fromStdString(tag_) << " When: " <<  when_ ;
+//    qCDebug(radarmsg) << "EFG: " << efg_[GEO_E] <<  ' '
+//                  << efg_[GEO_F] << ' '
+//                  << efg_[GEO_G] ;
+//    qCDebug(radarmsg) << "LLH: " << ZchxRadarUtils::radiansToDegrees(getLatitude()) << ' '
+//                  << ZchxRadarUtils::radiansToDegrees(getLongitude()) << ' '
+//                  << getHeight() ;
+//    qCDebug(radarmsg) << "RAE: " << getRange() << ' '
+//                  << ZchxRadarUtils::radiansToDegrees(getAzimuth()) << ' '
+//                  << ZchxRadarUtils::radiansToDegrees(getElevation()) ;
+//    qCDebug(radarmsg) << "XYZ: " << getX() << ' '
+//                  << getY() << ' '
+//                  << getZ() ;
 }

@@ -95,7 +95,8 @@ public:
     */
     static Ref MakeRAE( const std::string &producer, const std::string &tag,
                         double when, double range, double azimuth,
-                        double elevation );
+                        double elevation,
+                        RadarConfig* cfg);
 
     /** Class factory that creates new reference-counted TSPI message objects from latitude, longitude, and
         height values.
@@ -157,7 +158,7 @@ public:
         \return stream read from
     */
     void load( const QSharedPointer<QByteArray> &raw );
-    TrackPoint& toTrackPoint() const;
+    TrackPoint toTrackPoint() const;
 
     /** Print out a textual representation of the TSPI message. Override of Header::print().
 
@@ -385,7 +386,7 @@ private:
     TSPI( const std::string &producer );
 
     TSPI( const std::string &producer, const std::string &tag, double when,
-          const InitFromRAE &rae );
+          const InitFromRAE &rae, RadarConfig* cfg );
 
     TSPI( const std::string &producer, const std::string &tag, double when,
           const InitFromLLH &llh );

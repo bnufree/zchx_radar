@@ -27,7 +27,7 @@ public:
 
         \param log device used for log messages
     */
-    explicit ABTracker(QObject* parent = NULL);
+    explicit ABTracker(RadarConfig* cfg, QObject* parent = NULL);
 
     /** Implementation of the Algorithm::startup interface. Register runtime parameters and data processors.
 
@@ -159,6 +159,7 @@ private:
 
     double scaledMaxInitiationDuration_;
     double scaledMaxCoastDuration_;
+    RadarConfig* cfg_;
 };
 
 } // end namespace Algorithms

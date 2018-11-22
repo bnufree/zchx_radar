@@ -128,7 +128,7 @@ Centroid::Process()
                 p = a;
                 break;
             }
-        out << tppos.range - m_mask->GetSize().minRange << "," << p << std::endl;
+        out << tppos.range - m_mask->GetSize().minRange << "," << p << endl;
     }
     out.close();
 

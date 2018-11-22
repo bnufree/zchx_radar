@@ -40,7 +40,7 @@ void VideoDataRecvThread::run()
                     //QByteArray array = file.read(sizeof(radar_frame_pkt));
                     num++;
                     analysisRadar(file.read(sizeof(radar_frame_pkt)));
-                    QThread::msleep(10000);
+                    QThread::msleep(10);
                 }
                 file.close();
             }

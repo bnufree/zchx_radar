@@ -106,11 +106,11 @@ public:
     // print the image in a printer-friendly format
     void Dump()
     {
-        LOGDEBUG << m_rows << "x" << m_cols << " range=" << m_minRange << " az=" << m_az->front()<<std::endl;
+        LOG_FUNC_DBG << m_rows << "x" << m_cols << " range=" << m_minRange << " az=" << m_az->front()<<endl;
         for (int r = 0; r < m_rows; r++) {
-            LOGDEBUG <<std::setw(3)<<(*m_az)[r] << ":";
-            for (int c = 0; c < m_cols; c++) { LOGDEBUG << (m_data[(r * m_cols) + c] ? "X" : " "); }
-            LOGDEBUG<<std::endl;
+            LOG_FUNC_DBG /*<<std::setw(3)*/<<(*m_az)[r] << ":";
+            for (int c = 0; c < m_cols; c++) { LOG_FUNC_DBG << (m_data[(r * m_cols) + c] ? "X" : " "); }
+            LOG_FUNC_DBG<<endl;
         }
     }
 
@@ -119,7 +119,7 @@ public:
     {
         for (int r = 0; r < m_rows; r++) {
             for (int c = 0; c < m_cols; c++) { os << (int)m_data[(r * m_cols) + c] << ", "; }
-            os << std::endl;
+            os << endl;
         }
     }
 
@@ -285,7 +285,7 @@ public:
     BinaryTargetImagePtr operator&&(const TargetImage& op)
     {
         if ((op.m_rows * op.m_cols) != (m_rows * m_cols)) {
-            LOGDEBUG << "TargetImage::operator& : unable to and image arrays together";
+            LOG_FUNC_DBG << "TargetImage::operator& : unable to and image arrays together";
             //abort();
         }
 
