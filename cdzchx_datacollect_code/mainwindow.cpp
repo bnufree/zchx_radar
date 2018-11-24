@@ -106,6 +106,7 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(this, SIGNAL(signalcloseRadar()), pRadarDataServer, SLOT(closeRadar()));
         connect(pRadarDataServer, SIGNAL(signalRadarStatusChanged(QList<RadarStatus>, int)), ui->settingWidget, SLOT(slotRecvRadarReportInfo(QList<RadarStatus>,int)));
         connect(pAnalysisAndSendRadar, SIGNAL(signalRadiusFactorUpdated(double,double)), ui->settingWidget, SLOT(slotUpdateRealRangeFactor(double,double)));
+        connect(pRadarDataServer, SIGNAL(signalRecvTrackPoint(QList<TrackPoint>)), pAnalysisAndSendRadar, SLOT(sendTrackSlot(QList<TrackPoint>)));
 
         //显示分析页面
         //connect(pAnalysisAndSendRadar, SIGNAL(show_info(QString,double,float)), this, SLOT(show_info_slot(QString,double,float)));//打印txt

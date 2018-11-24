@@ -40,7 +40,8 @@ void VideoDataRecvThread::run()
                     //QByteArray array = file.read(sizeof(radar_frame_pkt));
                     num++;
                     analysisRadar(file.read(sizeof(radar_frame_pkt)));
-                    QThread::msleep(10);
+                    QThread::msleep(100);
+                    qDebug()<<"file:"<<file.fileName()<<" contains packets:"<<num;
                 }
                 file.close();
             }

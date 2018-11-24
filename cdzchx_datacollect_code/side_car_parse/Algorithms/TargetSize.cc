@@ -19,14 +19,14 @@ operator<<(std::ostream& os, const TargetSize& size)
 QDebug
 operator<<(QDebug debug, const TargetSize& size)
 {
-    if (size.maxRangeValid && size.minRangeValid) {
+    //if (size.maxRangeValid && size.minRangeValid) {
         debug << " bins=[" << size.minRange << ", " << size.maxRange << "]"
            << " dbins=" << size.RangeExtent();
-    }
-    if (size.minAzValid && size.maxAzValid) {
+    //}
+   // if (size.minAzValid && size.maxAzValid) {
         debug << " az=[" << size.minAz << ", " << size.maxAz << "]"
            << " dAz=" << AZIMUTH_EXTENT(size.minAz, size.maxAz);
-    }
+    //}
     if (size.priValid) { debug << " priCount=" << size.priCount; }
     return debug;
 }

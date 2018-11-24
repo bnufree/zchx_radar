@@ -49,7 +49,8 @@ ZCHXRadarDataServer::ZCHXRadarDataServer(ZCHX::Messages::RadarConfig* cfg, QRada
 
 {
     qRegisterMetaType<RadarStatus>("const RadarStatus&");
-    qRegisterMetaType<QList<RadarStatus>>("const QList<RadarStatus>&");
+    qRegisterMetaType<QList<RadarStatus>>("const QList<RadarStatus>&");    
+    qRegisterMetaType<QList<TrackPoint>>("const QList<TrackPoint>&");
 
     //读取雷达控制的设定值,初始化状态控制
     initStatusWidget();
@@ -73,10 +74,7 @@ ZCHXRadarDataServer::ZCHXRadarDataServer(ZCHX::Messages::RadarConfig* cfg, QRada
     //初始化雷达参数报告
     if(mRadarConfig->getReportOpen())
     {
-        mReportObj = new zchxRadarReportWorker(mRadarConfig->getReportIP(),
-                                               mRadarConfig->getReportPort(),
-                                               new QThread,
-                                               this);
+        mReportObj = new zchxRadarReportWorker(mRadarConfig->getReportIP(), mRadarConfig->getReportPort(), new QThread);
         if(mStatusWidget)
         {
             connect(mReportObj, SIGNAL(signalRadarStatusChanged(int, int)), mStatusWidget, SLOT(slotValueChangedFromServer(int,int)));
@@ -88,12 +86,10 @@ ZCHXRadarDataServer::ZCHXRadarDataServer(ZCHX::Messages::RadarConfig* cfg, QRada
     m_workThread.start();
 
     //独立线程接收数据
-    mDataRecvThread = new VideoDataRecvThread(mRadarConfig->getVideoIP(),
-                                              mRadarConfig->getVideoPort(),
-                                              this);
+    mDataRecvThread = new VideoDataRecvThread(mRadarConfig->getVideoIP(), mRadarConfig->getVideoPort());
     mVideoWorker = new VideoDataProcessWorker(mRadarConfig);
     connect(mDataRecvThread, SIGNAL(analysisRadar(QByteArray)), mVideoWorker, SLOT(slotRecvVideoRawData(QByteArray)));
-    connect(mVideoWorker, SIGNAL(signalSendTrackPoint(QList<TrackPoint>)), this, SLOT(slotRecvTrackPoint(QList<TrackPoint>)));
+    connect(mVideoWorker, SIGNAL(signalSendTrackPoint(QList<TrackPoint>)), this, SIGNAL(signalRecvTrackPoint(QList<TrackPoint>)));
 }
 
 ZCHXRadarDataServer::~ZCHXRadarDataServer()
@@ -285,10 +281,8 @@ QString ZCHXRadarDataServer::ByteArrayToHexString(QByteArray &ba)
 
 void ZCHXRadarDataServer::slotRecvTrackPoint(const QList<TrackPoint> &list)
 {
-//    qDebug()<<"recv track point size:"<<list.size();
-//    foreach (TrackPoint pc, list) {
-//        qDebug()<<pc;
-//    }
+    qDebug()<<"recv track point size:"<<list.size();
+    emit signalRecvTrackPoint(list);
 }
 
 

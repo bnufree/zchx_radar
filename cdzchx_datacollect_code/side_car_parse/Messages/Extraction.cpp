@@ -29,7 +29,7 @@ using namespace ZCHX::Messages;
 MetaTypeInfo Extractions::metaTypeInfo_(MetaTypeInfo::Value::kExtractions, "Extractions",
                                         &Extractions::CDRLoader);
 
-Extraction::Extraction(qint64 when, double range, double azimuth, double elevation)
+Extraction::Extraction(double when, double range, double azimuth, double elevation)
     : when_(when), range_(range), azimuth_(azimuth), elevation_(elevation), x_(range * ::sin(azimuth)),
       y_(range * ::cos(azimuth))
 {

@@ -4,11 +4,11 @@
 #include <QDebug>
 #include <QDateTime>
 
-#define     DBG_TRACK_PROCESS           0
-#define     LOG_FUNC_DBG_DEP        if(1) std::cout
-#define     LOG_FUNC_DBG        if(DBG_TRACK_PROCESS) qDebug()<<__FUNCTION__<<__LINE__
-#define     LOG_FUNC_DBG_START   if(DBG_TRACK_PROCESS)      qDebug()<<__FUNCTION__<<"Start"
-#define     LOG_FUNC_DBG_END     if(DBG_TRACK_PROCESS)    qDebug()<<__FUNCTION__<<"End"
+#define     DBG_TRACK_PROCESS                           0
+#define     LOG_FUNC_DBG_DEP                            if(1) std::cout
+#define     LOG_FUNC_DBG                                if(DBG_TRACK_PROCESS)       qDebug()<<__FUNCTION__<<__LINE__
+#define     LOG_FUNC_DBG_START                          if(DBG_TRACK_PROCESS)       qDebug()<<__FUNCTION__<<"Start"
+#define     LOG_FUNC_DBG_END                            if(DBG_TRACK_PROCESS)       qDebug()<<__FUNCTION__<<"End"
 
 class TimeStamp {
 public:

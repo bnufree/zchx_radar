@@ -14,7 +14,7 @@ class ExtractWithCentroiding
 {
 public:
     ExtractWithCentroiding();
-    bool process(const Messages::BinaryVideo::Ref& msg, Messages::Extractions::Ref& out);
+    void Binary2Extraction(const Messages::BinaryVideo::Ref& msg, Messages::Extractions::Ref& out);
 private:
 
     ImageSegmentation m_is;

@@ -43,7 +43,7 @@ public:
 
         \param azimuth azimuth of the artifact (radians)
     */
-    Extraction(qint64 when, double range, double azimuth, double elevation);
+    Extraction(double when, double range, double azimuth, double elevation);
 
     /** Constructor for objects loaded from an ACE input stream.
 
@@ -51,7 +51,7 @@ public:
     */
     Extraction(const QSharedPointer<QByteArray>& raw);
 
-    qint64 getWhen() const { return when_; }
+    double getWhen() const { return when_; }
 
     /** Obtain the range of the extraction.
 
@@ -116,7 +116,7 @@ public:
 
 private:
 
-    qint64 when_;
+    double when_;
     double range_;		///< Range of extracted object
     double azimuth_;		///< Azimuth of extracted object
     double elevation_;		///< Elevation of extracted object

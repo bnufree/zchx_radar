@@ -55,7 +55,8 @@ void TargetExtractionWorker::slotRecvRawVideoDataList(const ITF_VideoFrameList &
             //对BinaryVideo进行抽取
             Extractions::Ref extractions(Extractions::Make("Extract", binary));
 
-            mExtractObj->process(binary, extractions);
+            mExtractObj->Binary2Extraction(binary, extractions);
+
             //LOG_FUNC_DBG<<"extraction size:"<<extractions->size();
             if(extractions->size() > 0)
             {
@@ -65,9 +66,10 @@ void TargetExtractionWorker::slotRecvRawVideoDataList(const ITF_VideoFrameList &
                 Extractions::Ref result;
                 if(!corr.process(extractions, result)) continue;
                 //目标进行标号等操作
-                mTrackerObj->processInput(result, pnts);
+                mTrackerObj->processInput(result, mPnts);
+#else
+                mTrackerObj->Extraction2Track(extractions, mPnts);
 #endif
-                mTrackerObj->processInput(extractions, mPnts);
             }
 
         }

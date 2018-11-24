@@ -50,6 +50,7 @@ signals:
     void analysisCatRadar(const QByteArray &sRadarData,
                                int uLineNum,int uCellNum,int uHeading,const QString &sType);//新科雷达
     void signalRadarStatusChanged(const QList<RadarStatus>& sts, int radarID);
+    void signalRecvTrackPoint(const QList<TrackPoint> &list);
 
 public slots:
     QByteArray HexStringToByteArray(QString HexString); //16进制字符串转字节数组

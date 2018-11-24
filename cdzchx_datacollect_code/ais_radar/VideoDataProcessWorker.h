@@ -25,11 +25,11 @@ signals:
 
 public slots:
     void    slotRecvVideoRawData(const QByteArray& raw);
+    void    slotSendTrackPoint(const QList<TrackPoint>& list);
 private:
     QThread     mThread;
     RadarConfig *mRadarCfg;
     TargetExtractionWorker  *mExtract;
-    QMap<int, ITF_VideoFrame> mVideoMap;
     
 };
 

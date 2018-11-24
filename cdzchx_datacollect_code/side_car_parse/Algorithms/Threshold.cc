@@ -12,7 +12,7 @@ using namespace ZCHX;
 using namespace ZCHX::Algorithms;
 using namespace ZCHX::Messages;
 
-Threshold::Threshold() : threshold_(/*kDefaultThreshold*/30)
+Threshold::Threshold() : threshold_(/*kDefaultThreshold*/100)
 {
     thresholdValue_ = threshold_;
     //threshold_->connectChangedSignalTo(boost::bind(&Threshold::thresholdChanged, this, _1));

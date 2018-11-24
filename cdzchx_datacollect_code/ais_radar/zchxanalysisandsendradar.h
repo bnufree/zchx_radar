@@ -18,6 +18,9 @@
 #include <QFile>
 #include "zchxgettrackprocess.h"
 #include <QTimer>
+
+using namespace com::zhichenhaixin::proto;
+
 #define SPOKES (4096)
 class ZCHXAnalysisAndSendRadar : public QObject
 {
@@ -56,6 +59,7 @@ public slots:
                              const QPixmap &prePixmap);//接收余辉图片
     void sendTrackSlot(int uKey, ITF_Track_point radarPoint);
     void sendTrackSlot(const TrackObjList& list);
+    void sendTrackSlot(const QList<TrackPoint>& list);
     void setRangeFactor(double factor);
 private:
     void readRadarLimitFormat();//读取雷达限制区域文件

@@ -637,6 +637,19 @@ void ZCHXAnalysisAndSendRadar::sendTrackSlot(const TrackObjList &list)
     sendRadarTrack();
 }
 
+void ZCHXAnalysisAndSendRadar::sendTrackSlot(const QList<TrackPoint> &list)
+{
+    qDebug()<<__FUNCTION__<<__LINE__<<list.size();
+    foreach (TrackPoint obj, list) {
+        m_radarPointMap_1[obj.tracknumber()] = obj;
+    }
+    m_radarPointMap = m_radarPointMap_1;
+    m_radarPointMap_1.clear();
+    //cout<<"发送_2 大小为:"<<m_radarPointMap.size();
+    clearRadarTrack();
+    sendRadarTrack();
+}
+
 void ZCHXAnalysisAndSendRadar::readRadarLimitFormat()
 {
     QString path = QCoreApplication::applicationDirPath();
@@ -1210,63 +1223,18 @@ void ZCHXAnalysisAndSendRadar::sendRadarTrack()
     QString sTopic = m_sTrackTopic;
     QByteArray sTopicArray = sTopic.toUtf8();
     QByteArray sTimeArray = QString::number(QDateTime::currentMSecsSinceEpoch()).toUtf8();
-    QByteArray sNumArray = sNum.toUtf8();
-
-    //zmq_bind(m_pTrackLisher, sIPport.toLatin1().data());//
+    com::zhichenhaixin::proto::TrackPointList list;
+    for(int i=0; i<m_radarPointMap.keys().size(); i++)
+    {
+        ITF_TrackPoint *point = list.add_tracks();
+        point->CopyFrom(m_radarPointMap.value(m_radarPointMap.keys()[i]));
+    }
+    QByteArray content;
+    content.resize(list.ByteSize());
+    list.SerializeToArray(content.data(), content.size());
     zmq_send(m_pTrackLisher, sTopicArray.data(), sTopicArray.size(), ZMQ_SNDMORE);
     zmq_send(m_pTrackLisher, sTimeArray.data(), sTimeArray.size(), ZMQ_SNDMORE);
-    zmq_send(m_pTrackLisher, sNumArray.data(), sNumArray.size(), ZMQ_SNDMORE);
-    QMap<int,com::zhichenhaixin::proto::TrackPoint>::iterator itor = m_radarPointMap.begin();
-    std::vector<std::pair<double, double>> latLonVec;
-    latLonVec.clear();
-    QVector<com::zhichenhaixin::proto::TrackPoint> filterRadarPointVec;
-    filterRadarPointVec.clear();
-    //先过滤
-    for(itor;itor!=m_radarPointMap.end();itor++)
-    {
-        com::zhichenhaixin::proto::TrackPoint objRadarPoint = itor.value();
-
-        if(m_bLimit)
-        {
-            if(!inLimitAreaForTrack(objRadarPoint.wgs84poslat(),objRadarPoint.wgs84poslong()))
-            {
-                continue;
-            }
-        }
-        std::pair<double, double> latLonPair(objRadarPoint.wgs84poslat(),objRadarPoint.wgs84poslong());
-        latLonVec.push_back(latLonPair);
-
-        filterRadarPointVec.append(objRadarPoint);
-    }
-    int uFilterNum = filterRadarPointVec.size();
-    emit show_video(m_radarPointMap.size(),uFilterNum);
-    for(int i = 0;i<uFilterNum;i++)
-    {
-        com::zhichenhaixin::proto::TrackPoint objRadarPoint = filterRadarPointVec[i];
-        QByteArray sendData;
-        sendData.resize(objRadarPoint.ByteSize());
-        objRadarPoint.SerializePartialToArray(sendData.data(),sendData.size());
-        if(i!=uFilterNum-1)
-        {
-            zmq_send(m_pTrackLisher, sendData.data(), sendData.size(), ZMQ_SNDMORE);
-        }
-        else
-        {
-            zmq_send(m_pTrackLisher, sendData.data(), sendData.size(), 0);
-        }
-
-//        QString str = QString::number(objRadarPoint.timeofday()).toUtf8();
-//        cout<<"原始数据时间:"<<str;
-    }
-    m_latLonVec = latLonVec; //雷达目标经纬度集合
-    qint64 utc = QDateTime::currentMSecsSinceEpoch();
-    QString sContent = tr("send analysis radar track data,num = %1").arg(uFilterNum);
-    emit signalSendRecvedContent(utc,"TRACK________SEND",sContent);
-//    QDateTime curDateTime = QDateTime::currentDateTime();
-//    QDateTime startDateTime(QDate(curDateTime.date().year(),curDateTime.date().month(),
-//                                  curDateTime.date().day()),QTime(0, 0));
-//    int time_of_day = startDateTime.secsTo(curDateTime);
-//    cout<<"雷达目标解析完成推送时间:" <<time_of_day ;
+    zmq_send(m_pTrackLisher, content.data(), content.size(), 0);
 }
 
 void ZCHXAnalysisAndSendRadar::clearRadarTrack()

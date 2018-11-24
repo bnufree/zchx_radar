@@ -24,8 +24,8 @@ ExtractWithCentroiding::ExtractWithCentroiding() :
 }
 
 
-bool
-ExtractWithCentroiding::process(const Messages::BinaryVideo::Ref& msg, Messages::Extractions::Ref& extractions)
+void
+ExtractWithCentroiding::Binary2Extraction(const Messages::BinaryVideo::Ref& msg, Messages::Extractions::Ref& extractions)
 {
     TargetSize minDiscardTargetSize;
     TargetSize minCentroidSize;
@@ -33,17 +33,20 @@ ExtractWithCentroiding::process(const Messages::BinaryVideo::Ref& msg, Messages:
     Messages::Video::Ref video(msg->getVideoBasis());
 
     // setup centroiding and discard sizes
-    minCentroidSize.maxRange =
-        (RANGEBIN)((m_centroidRangeMin- video->getRangeMin()) / video->getRangeFactor());
+    double minVideoRange = video->getRangeMin();
+    double range_factor = video->getRangeFactor();
+    //qDebug()<<minVideoRange<<range_factor;
+    minCentroidSize.maxRange = (RANGEBIN)((m_centroidRangeMin- minVideoRange) / range_factor);
     minCentroidSize.maxRangeValid = true;
     minCentroidSize.maxAz = (AZIMUTH)(m_centroidAzMin);
     minCentroidSize.maxAzValid = true;
 
-    minDiscardTargetSize.maxRange =
-        (RANGEBIN)((m_discardRangeMin - video->getRangeMin()) / video->getRangeFactor());
+    minDiscardTargetSize.maxRange = (RANGEBIN)((m_discardRangeMin - minVideoRange) / range_factor);
     minDiscardTargetSize.maxRangeValid = true;
     minDiscardTargetSize.maxAz = (AZIMUTH)(m_discardAzMin);
     minDiscardTargetSize.maxAzValid = true;
+
+    //qDebug()<<minCentroidSize<<minDiscardTargetSize;
 
     // create a vector for extractions
     //Messages::Extractions::Ref extractions;
@@ -68,7 +71,7 @@ ExtractWithCentroiding::process(const Messages::BinaryVideo::Ref& msg, Messages:
 
             TargetPosition pos = size.Center();
             float range = msg->getRangeAt(pos.range);
-            extractions->push_back(Messages::Extraction(QDateTime::currentMSecsSinceEpoch(), range, pos.az, 0.0));
+            extractions->push_back(Messages::Extraction(QDateTime::currentMSecsSinceEpoch() / 1000.0, range, pos.az, 0.0));
             LOG_FUNC_DBG << "target found at az=" << pos.az << " range=" << range << "km range bin=" << pos.range;
         } else {
             // this target is too large, send to the centroider for
@@ -95,7 +98,7 @@ ExtractWithCentroiding::process(const Messages::BinaryVideo::Ref& msg, Messages:
 
                 float cenRange = msg->getRangeAt(cenPos.range);
 
-                extractions->push_back(Messages::Extraction(QDateTime::currentMSecsSinceEpoch(), cenRange, cenPos.az, 0.0));
+                extractions->push_back(Messages::Extraction(QDateTime::currentMSecsSinceEpoch() / 1000.0, cenRange, cenPos.az, 0.0));
 
                 LOG_FUNC_DBG << "  centroided target found at az=" << cenPos.az << " range=" << cenRange
                          << "km range bin=" << cenPos.range << endl;
@@ -105,5 +108,4 @@ ExtractWithCentroiding::process(const Messages::BinaryVideo::Ref& msg, Messages:
 
     // discard any un-need video data
     m_videoHistory.SetDepth(m_is.GetMaxRowDepth());
-    return true;
 }

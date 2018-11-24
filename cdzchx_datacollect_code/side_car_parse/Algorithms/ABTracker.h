@@ -97,7 +97,7 @@ public:
     double getScaledMaxInitiationDuration() const { return scaledMaxInitiationDuration_; }
 
     double getScaledMaxCoastDuration() const { return scaledMaxCoastDuration_; }
-    bool processInput(const Messages::Extractions::Ref& msg, QMap<int, TrackPoint>& pnts);
+    void Extraction2Track(const Messages::Extractions::Ref& msg, QMap<int, TrackPoint>& pnts);
 
 private:
     bool updateTracks(const Messages::Extraction& plot, QMap<int, TrackPoint>& pnts);

@@ -12,11 +12,16 @@ VideoDataProcessWorker::VideoDataProcessWorker(RadarConfig* cfg, QObject *parent
 {
     qRegisterMetaType<ITF_VideoFrame>("const ITF_VideoFrame&");
     qRegisterMetaType<ITF_VideoFrameList>("const ITF_VideoFrameList&");
-    qRegisterMetaType<QList<TrackPoint>>("const QList<TrackPoint>&");
     connect(this, SIGNAL(signalSendVideoFrameDataList(ITF_VideoFrameList)), mExtract, SLOT(slotRecvRawVideoDataList(ITF_VideoFrameList)));
     connect(mExtract, SIGNAL(signalSendTrackPoint(QList<TrackPoint>)), this, SIGNAL(signalSendTrackPoint(QList<TrackPoint>)));
     moveToThread(&mThread);
     mThread.start();
+}
+
+void VideoDataProcessWorker::slotSendTrackPoint(const QList<TrackPoint> &list)
+{
+    qDebug()<<__FUNCTION__<<__LINE__;
+    emit signalSendTrackPoint(list);
 }
 
 void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
@@ -28,6 +33,7 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
     int uLineNum = mRadarCfg->getShaftEncodingMax()+1;
     int uCellNum = mRadarCfg->getGateCountMax();
     int uHeading = mRadarCfg->getHead();
+    QList<int>      factor_list;
 
     radar_frame_pkt *packet = (radar_frame_pkt *)raw.data();//正常大小是17160
 
@@ -79,7 +85,7 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
             range_raw = ((line->br24.range[2] & 0xff) << 16 | (line->br24.range[1] & 0xff) << 8 | (line->br24.range[0] & 0xff));
             angle_raw = (line->br24.angle[1] << 8) | line->br24.angle[0];
             range_meters = (int)((double)range_raw * 10.0 / sqrt(2.0));
-            LOG_FUNC_DBG<<"recv br24 data:" << range_raw<<angle_raw<<range_meters;
+            //LOG_FUNC_DBG<<"recv br24 data:" << range_raw<<angle_raw<<range_meters;
         } else {
             // 4G mode
              short int large_range = (line->br4g.largerange[1] << 8) | line->br4g.largerange[0];
@@ -115,10 +121,10 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
         angle_raw = MOD_ROTATION2048(angle_raw / 2);
         double start_range = 0.0 ;
         double range_factor = range_meters/(uCellNum-1);
-        LOG_FUNC_DBG<<"range_meter:"<<range_meters<<" cellNum:"<<uCellNum<<" range_factor"<<range_factor;
+        //LOG_FUNC_DBG<<"range_meter:"<<range_meters<<" cellNum:"<<uCellNum<<" range_factor"<<range_factor;
 
         double dAzimuth = angle_raw*(360.0/(uLineNum/2))+uHeading;
-        LOG_FUNC_DBG<<"dAzimuth:"<<dAzimuth<<"angle_raw"<<angle_raw<<"uHeading"<<uHeading; //1_扫描方位,angle_raw(0-2047),uHeading(180)
+        //LOG_FUNC_DBG<<"dAzimuth:"<<dAzimuth<<"angle_raw"<<angle_raw<<"uHeading"<<uHeading; //1_扫描方位,angle_raw(0-2047),uHeading(180)
         //更新雷达回波数据
         ITF_VideoFrame video;
         video.set_systemareacode(1);
@@ -136,7 +142,11 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
             video.mutable_amplitude()->Add(value);
         }
         videoList.append(video);
-        //mVideoMap[video.msgindex()] = video;
+        int int_range = qRound(range_factor * 10000);
+        if(!factor_list.contains(int_range))
+        {
+            factor_list.append(int_range);
+        }
     }
 
     //发送给算法线程进行回波->VIDEO->BINARYVIDEO处理
@@ -144,11 +154,6 @@ void VideoDataProcessWorker::slotRecvVideoRawData(const QByteArray &raw)
     {
         emit signalSendVideoFrameDataList(videoList);
     }
-//    if(mVideoMap.size() == SPOKES)
-//    {
-//        emit signalSendVideoFrameDataList(mVideoMap.values());
-//    }
-
-//    LOG_FUNC_DBG<<" end:"<<timer.elapsed()<<mVideoMap.size();
+    LOG_FUNC_DBG<<" total elapsed time(msec):"<<timer.elapsed()<<" with range_factors:"<<factor_list<<" video list:"<<videoList.size();
 
 }

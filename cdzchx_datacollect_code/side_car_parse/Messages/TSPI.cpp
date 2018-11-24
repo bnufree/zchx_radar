@@ -450,6 +450,10 @@ TrackPoint TSPI::toTrackPoint() const
     trackPoint.set_wgs84poslong(ZchxRadarUtils::radiansToDegrees(getLongitude()));
     trackPoint.set_wgs84poslat(ZchxRadarUtils::radiansToDegrees(getLatitude()));
     trackPoint.set_tracklastreport(false);
+    trackPoint.set_cartesiantrkvel_vx(0);
+    trackPoint.set_cartesiantrkvel_vy(0);
+    trackPoint.set_cog(0.0);
+    trackPoint.set_sog(0.0);
     if(isDropping())
     {
         trackPoint.set_tracklastreport(true);

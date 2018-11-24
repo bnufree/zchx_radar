@@ -70,12 +70,12 @@ SegmentedTargetImage::AddDataToLastRow(RANGEBIN start, RANGEBIN stop)
 void
 SegmentedTargetImage::FinalizeRow(AZIMUTH az)
 {
-    // LOG_FUNC_DBG << "SegmentedTargetImage::FinalizeRow : az=" << az << std::end;
+    LOG_FUNC_DBG << "SegmentedTargetImage::FinalizeRow : az=" << az;
     m_currentRow.az = az;
     m_image.push_back(m_currentRow);
     UpdateMinMaxRanges(m_currentRow.GetFirstRangeBin(), m_currentRow.GetLastRangeBin());
     m_currentRow.ResetMask();
-    // LOG_FUNC_DBG << "SegmentedTargetImage::FinalizeRow : exit" << az << std::end;
+    LOG_FUNC_DBG << "SegmentedTargetImage::FinalizeRow : exit" << az<<m_image.size() ;
 }
 
 SegmentedTargetImagePtr

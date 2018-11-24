@@ -27,5 +27,5 @@ INCLUDEPATH += $$PWD/$$ZMQ_Version/include
 LIBS += -L$$PWD/$$ZMQ_Version/lib -llibzmq-v120-mt-4_0_4
 
 Zmq_install.files += $$PWD/$$ZMQ_Version/bin/libzmq-v120-mt-4_0_4.dll
-Zmq_install.path = ../build/bin/
+Zmq_install.path = $${IDE_APP_PATH}/
 INSTALLS += Zmq_install
