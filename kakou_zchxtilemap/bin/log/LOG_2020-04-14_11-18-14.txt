@@ -1,0 +1,568 @@
+[2020-04-14 11:18:14] Debug: [] [0] style: "background-color:rgb(203,199,131);"
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect: No such signal qt::zchxMapWidget::signalCreateWarringLINE(ZCHX::Data::ITF_WarringZone)
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect:  (receiver name: 'MainWindow')
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect: No such slot qt::MainWindow::onSignalSendCurPos(double,double)
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect:  (receiver name: 'MainWindow')
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect: No such signal qt::zchxMapWidget::signalIsSelected4CameraVideoWarn(ZCHX::Data::ITF_CameraVideoWarn)
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect:  (receiver name: 'MainWindow')
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect: No such signal qt::zchxMapWidget::signalIsSelected4CameraDev(ZCHX::Data::ITF_CameraRod)
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect:  (receiver name: 'MainWindow')
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect: No such signal qt::zchxMapWidget::signalIsDoubleClicked4WarringLine(ZCHX::Data::ITF_WarringZone)
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect:  (receiver name: 'MainWindow')
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect: No such signal qt::zchxMapWidget::signalIsDoubleClicked4CameraVideoWarn(ZCHX::Data::ITF_CameraVideoWarn)
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect:  (receiver name: 'MainWindow')
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect: No such signal qt::MainWindow::signalIsDoubleClicked4ChannelZone(ZCHX::Data::ITF_Channel)
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect:  (receiver name: 'MainWindow')
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect: No such signal qt::MainWindow::signalIsDoubleClicked4MooringZone(ZCHX::Data::ITF_Mooring)
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect:  (receiver name: 'MainWindow')
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect: No such signal qt::MainWindow::signalIsDoubleClicked4CardMouthZone(ZCHX::Data::ITF_CardMouth)
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect:  (receiver name: 'MainWindow')
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect: No such signal qt::MainWindow::signalIsDoubleClicked4StatistcLineZone(ZCHX::Data::ITF_StatistcLine)
+[2020-04-14 11:18:14] Warning: [] [0] QObject::connect:  (receiver name: 'MainWindow')
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\testmainwindow.cpp] [565] 0 "Ais" true
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\testmainwindow.cpp] [565] 1 "Ais盲区示意图" true
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\testmainwindow.cpp] [565] 2 "雷达目标" true
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\testmainwindow.cpp] [565] 3 "雷达回波图像" true
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\testmainwindow.cpp] [565] 4 "雷达目标余晖" true
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\testmainwindow.cpp] [565] 5 "雷达屏蔽区域" true
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:18:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:18:29] Debug: [] [0] left mouse press event: QPoint(1297,797)
+[2020-04-14 11:18:44] Debug: [] [0] left mouse press event: QPoint(975,797)
+[2020-04-14 11:18:59] Debug: [] [0] left mouse press event: QPoint(1311,856)
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:19:04] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:19:09] Debug: [] [0] left mouse press event: QPoint(916,407)
+[2020-04-14 11:19:09] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:19:09] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:19:09] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:19:09] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:09] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:19:09] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:19:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:19:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:19:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:19:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:19:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:19:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:19:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:19:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:19:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:19:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:19:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:19:14] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:19:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:19:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:19:22] Debug: [] [0] left mouse press event: QPoint(1126,405)
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:19:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:19:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:19:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:19:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:19:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:19:50] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:19:55] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:19:59] Debug: [] [0] left mouse press event: QPoint(824,418)
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:20:00] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:20:05] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:20:10] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:20:15] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:20:20] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:20:25] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:20:30] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:20:35] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:20:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:20:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:20:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:20:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:20:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:20:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:20:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:20:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:20:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:20:40] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:20:41] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:20:41] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:20:41] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:20:41] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:20:41] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:20:41] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:20:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:20:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:20:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:20:45] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:46] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:20:46] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:20:46] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:20:46] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:46] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:20:46] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:20:46] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:20:46] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:20:46] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:20:46] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:20:46] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:20:46] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:20:46] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:20:46] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:20:51] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:20:56] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:21:01] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:21:06] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:21:11] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:21:16] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:21:21] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("AIS")
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 1
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5153" ("Chart")
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 2
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5151" ("RadarTrack")
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5153
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 3
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5689" ("RadarVideo")
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "5657" ("RadarRect")
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [84] start connect to server: "127.0.0.1" "10086" ("Limit_Area")
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5151
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 4
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 5
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [30] data recv has been canceled: 6
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5689
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:5657
+[2020-04-14 11:21:26] Debug: [..\..\..\..\cloud\radar\kakou_zchxtilemap\app\radar\zchxradarutils.cpp] [60] connect to server succeed. tcp://127.0.0.1:10086
+[2020-04-14 11:21:28] Warning: [] [0] QThread: Destroyed while thread is still running
