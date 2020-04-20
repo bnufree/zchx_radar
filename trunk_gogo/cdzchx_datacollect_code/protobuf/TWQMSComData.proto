@@ -1,0 +1,95 @@
+///**************************************************************************
+//* @Project : TWQMSComData
+//* @IDL Module: TWQMSComData
+//* @File: TWQMSComData.proto
+//* @Description:
+//*    
+//*
+//* @Copyright: Copyright (c) 2017
+//* @Company: 深圳置辰海信科技有限公司
+//* @WebSite: http://www.szcenterstar.com/
+//* @author 
+//*
+//* @Revision History
+//*
+//* <pre>
+//* ----------------------------------------------------------------------
+//*   Ver     Date       Who             Comments
+//*  ----- ----------  --------  ---------------------------------------
+//*   1.0  2017/02/07     邓华钢       初次定义完成Com口的数据结构
+//*   1.1  2018/08/20     陈思颐       在GPS结构体中加入船体编号成员
+//* ----------------------------------------------------------------------
+//* </pre>
+//**************************************************************************/
+
+
+	package com.zhichenhaixin.gps.proto;
+	message		GPS{//船体的位置信息
+		required	int64		ship_update_time = 1;		//船体数据更新时间(GPS时间,水上罗盘更新时间,导航设备时间,DP时间四者的最新时间)
+		required	double		ship_lat = 2;				//纬度位置
+		required	double		ship_lon = 3;				//经度位置
+		required	double		ship_speed = 4;				//船速
+		required	double		ship_head = 5;				//航首向
+		required	double		ship_course = 6;			//航向(航迹向)
+		required	bool		sts = 7;
+		required	string		ship_id = 8;				//船体编号
+	}
+	
+	message		ZS{
+		required	double ZS = 1;		//浊度
+		required	double TEMP = 2;	//温度
+		required	int64	time = 3;	//时间
+		required	bool	sts =4;		//设备是否启用
+	}
+	
+	message		RDO{
+		required	double RDO = 1;		//溶解氧
+		required	double TEMP = 2;	//温度
+		required	int64	time = 3;	//时间
+		required	bool	sts = 4;	//设备是否启用
+	}
+	
+	message		ORP{
+		required	double ORP = 1;		//氧化还原电位
+		required	int64	time = 2;	//时间
+		required	bool	sts = 3;	//设备是否启用
+	}
+	
+	message		DDM{
+		required	double DDM = 1;		//透明度(电导率)
+		required	double TEMP = 2;	//温度
+		required	int64	time = 3;	//时间
+		required	bool	sts = 4;	//设备是否启用
+	}
+	
+	message		NHN{
+		required	double NHN = 1;		//氨氮
+		required	double TEMP = 2;	//温度
+		required	int64	time = 3;	//时间
+		required	bool	sts = 4;	//设备是否启用
+	}
+	
+	message		WL{	
+		required	double PRESS = 1;		//水压
+		required	double TEMP = 2;		//温度
+		required	double LVL	= 3;		//水位
+		required	int64	time = 4;	//时间
+		required	bool	sts = 5;	//设备是否启用
+	}		
+		
+	message DevInfo { //有关采集设备的信息
+		required	GPS			gps_info = 1;
+		required	ZS			zs_info = 2;
+		required	RDO			rdo_info = 3;
+		required	ORP			orp_info = 4;
+		required	DDM			ddm_info = 5;
+		required	NHN			nhn_info = 7;
+		required	WL			wl_info = 8;
+		required	string		site_id = 9;
+		required	int64		cur_utc_time = 10;
+	}
+	
+	message DevInfoList { //推送至客户端
+		repeated DevInfo devInfo = 1;  		//数据集合
+		optional int32 length = 2;          //数据长度
+	}

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<configurations>
+ <configuration name="">
+ <algorithm dll="CFAR">
+  <input type="Video" name="video"/>
+  <input type="Video" name="estimate"/>
+  <param name="alpha" type="double" value="1.6"/>
+  <output type="BinaryVideo"/>
+ </algorithm>
+ </configuration>
+</configurations>

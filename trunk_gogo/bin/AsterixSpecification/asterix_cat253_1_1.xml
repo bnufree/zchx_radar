@@ -1,0 +1,349 @@
+<Category id="253" name="remote station monitoring and control information" ver="1.1">
+  <DataItem id="010">
+    <DataItemName>Data Source Identifier</DataItemName>
+    <DataItemDefinition>Identification of the system from which the data are received.</DataItemDefinition>
+    <DataItemFormat desc="2-octet fixed length Data Item.">
+      <Fixed length="2">
+        <Bits from="16" to="9">
+          <BitsShortName>SAC</BitsShortName>
+          <BitsName>System Area Code</BitsName>
+        </Bits>
+        <Bits from="8" to="1">
+          <BitsShortName>SIC</BitsShortName>
+          <BitsName>System Identification Code</BitsName>
+        </Bits>
+      </Fixed>
+    </DataItemFormat>
+  </DataItem>
+  <DataItem id="015">
+    <DataItemName>Local Data Source Identifier</DataItemName>
+    <DataItemDefinition>Identification of the local system from which the data are received.</DataItemDefinition>
+    <DataItemFormat desc="1-octet fixed length Data Item.">
+      <Fixed length="1">
+        <Bits from="8" to="1">
+          <BitsShortName>Local ID</BitsShortName>
+          <BitsName>Local Identifier per SAC/SIC</BitsName>
+        </Bits>
+      </Fixed>
+    </DataItemFormat>
+  </DataItem>
+  <DataItem id="020">
+    <DataItemName>Data Destination Identifier</DataItemName>
+    <DataItemDefinition>Identification of the system to which the data must be sent.</DataItemDefinition>
+    <DataItemFormat desc="Repetitive data lenght item">
+      <Repetitive>
+        <Fixed length="2">
+          <Bits from="16" to="9">
+            <BitsShortName>SAC</BitsShortName>
+            <BitsName>System Area Code</BitsName>
+          </Bits>
+          <Bits from="8" to="1">
+            <BitsName>System Identification Code</BitsName>
+            <BitsShortName>SIC</BitsShortName>
+          </Bits>
+        </Fixed>
+      </Repetitive>
+    </DataItemFormat>
+  </DataItem>
+  <DataItem id="025">
+    <DataItemName>Data Destination and Local Identifier</DataItemName>
+    <DataItemDefinition>Identification of the system to which the data must be sent.</DataItemDefinition>
+    <DataItemFormat desc="Repetitive data lenght item">
+      <Repetitive>
+        <Fixed length="3">
+          <Bits from="24" to="17">
+            <BitsShortName>SAC</BitsShortName>
+            <BitsName>System Area Code</BitsName>
+          </Bits>
+          <Bits from="16" to="9">
+            <BitsName>System Identification Code</BitsName>
+            <BitsShortName>SIC</BitsShortName>
+          </Bits>
+          <Bits from="8" to="1">
+            <BitsShortName>Local ID</BitsShortName>
+            <BitsName>Local Identifier per SAC/SIC</BitsName>
+          </Bits>
+        </Fixed>
+      </Repetitive>
+    </DataItemFormat>
+  </DataItem>
+  <DataItem id="030">
+    <DataItemName>Source Application Identifier</DataItemName>
+    <DataItemDefinition>Identification of the Source Application Identifier the message originates from.</DataItemDefinition>
+    <DataItemFormat desc="2-octet fixed length Data Item.">
+      <Fixed length="2">
+        <Bits from="16" to="1">
+          <BitsShortName>SAI</BitsShortName>
+          <BitsName>Source Application Identifier</BitsName>
+        </Bits>
+      </Fixed>
+    </DataItemFormat>
+  </DataItem>
+  <DataItem id="035">
+    <DataItemName>Data Origin Identifier</DataItemName>
+    <DataItemDefinition>dentification of the site which originally sent the data.(not necessarily the same as the sender given in I253/010 and I253/015)</DataItemDefinition>
+    <DataItemFormat desc="3-octet fixed length Data Item.">
+      <Fixed length="3">
+        <Bits from="24" to="17">
+          <BitsShortName>OAC</BitsShortName>
+          <BitsName>Origin Area Code</BitsName>
+        </Bits>
+        <Bits from="16" to="9">
+          <BitsShortName>OIC</BitsShortName>
+          <BitsName>Origin Identification Code</BitsName>
+        </Bits>
+        <Bits from="8" to="1">
+          <BitsShortName>Local ID</BitsShortName>
+          <BitsName>Local Identifier per SAC/SIC</BitsName>
+        </Bits>
+      </Fixed>
+    </DataItemFormat>
+  </DataItem>
+  <DataItem id="040">
+    <DataItemName>Message Type Identifier</DataItemName>
+    <DataItemDefinition>The Message Type Identifier defines what kind of CAT 253 message was sent and identifies some basic properties of the message.</DataItemDefinition>
+    <DataItemFormat desc="1-octet fixed length Data Item.">
+      <Fixed length="1">
+        <Bits bit="8">
+          <BitsShortName>PI</BitsShortName>
+          <BitsName>Priority Identifier</BitsName>
+        </Bits>
+        <Bits bit="7">
+          <BitsShortName>D</BitsShortName>
+          <BitsName>Delivery bit</BitsName>
+        </Bits>
+        <Bits from="6" to="1">
+          <BitsShortName>MIT</BitsShortName>
+          <BitsName>Message Type Identifier</BitsName>
+          <BitsValue val="1">Time and Day</BitsValue>
+          <BitsValue val="2">Connect Request</BitsValue>
+          <BitsValue val="3">Connect Response</BitsValue>
+          <BitsValue val="4">Connect Release</BitsValue>
+          <BitsValue val="5">Command Token Request</BitsValue>
+          <BitsValue val="6">Command Token Release</BitsValue>
+          <BitsValue val="7">Command Token Assign</BitsValue>
+          <BitsValue val="8">Command Message</BitsValue>
+          <BitsValue val="9">Complete Status Transfer Message</BitsValue>
+          <BitsValue val="10">Delta Status Transfer Message</BitsValue>
+          <BitsValue val="11">Complete Status Transfer Request Message</BitsValue>
+          <BitsValue val="12">Centre Exchange Message</BitsValue>
+          <BitsValue val="13">Centre Status Message</BitsValue>
+          <BitsValue val="14">Centre Transparent Message</BitsValue>
+          <BitsValue val="15">Centre Resynchronisation Request Message</BitsValue>
+          <BitsValue val="16">Radar Monitoring Start Message</BitsValue>
+          <BitsValue val="17">Radar Monitoring Stop Message</BitsValue>
+          <BitsValue val="18">Acknowledgement</BitsValue>
+          <BitsValue val="19">Error</BitsValue>
+          <BitsValue val="20">Alarm</BitsValue>
+          <BitsValue val="21">Alive Message</BitsValue>
+        </Bits>
+      </Fixed>
+    </DataItemFormat>
+  </DataItem>
+  <DataItem id="050">
+    <DataItemName>Message Sequence Identifier</DataItemName>
+    <DataItemDefinition>The Item Message Sequence Identifier contains consecutively incremented message counters for each receiving application. The ID counters shall be incremented by the originator application.</DataItemDefinition>
+    <DataItemFormat desc="Repetitive data lenght item">
+      <Repetitive>
+        <Fixed length="2">
+          <Bits from="16" to="1">
+            <BitsShortName>MSID</BitsShortName>
+            <BitsName>Message Sequence Identifiers</BitsName>
+          </Bits>
+        </Fixed>
+      </Repetitive>
+    </DataItemFormat>
+  </DataItem>
+  <DataItem id="060">
+    <DataItemName>Blocking Information</DataItemName>
+    <DataItemDefinition>The Blocking Information contains the total number of blocks (TNB)which have been generated out of one larger message and the block number (BN) of the current block in this sequence.</DataItemDefinition>
+    <DataItemFormat desc="2-octet fixed length Data Item.">
+      <Fixed length="2">
+        <Bits from="16" to="9">
+          <BitsShortName>TNB</BitsShortName>
+          <BitsName>Total Number of Blocks</BitsName>
+        </Bits>
+        <Bits from="8" to="1">
+          <BitsShortName>BN</BitsShortName>
+          <BitsName>Block Number of current block in sequence</BitsName>
+        </Bits>
+      </Fixed>
+    </DataItemFormat>
+  </DataItem>
+  <DataItem id="070">
+    <DataItemName>Time of Day</DataItemName>
+    <DataItemDefinition>Absolute time stamping expressed as UTC time.</DataItemDefinition>
+    <DataItemFormat desc="3-octet fixed length Data Item.">
+      <Fixed length="3">
+        <Bits from="24" to="1">
+          <BitsShortName>ToD</BitsShortName>
+          <BitsName>LSB = 1/128s</BitsName>
+          <BitsUnit scale="0.0078125">s</BitsUnit>
+        </Bits>
+      </Fixed>
+    </DataItemFormat>
+  </DataItem>
+  <DataItem id="080">
+    <DataItemName>Application Data Structure</DataItemName>
+    <DataItemDefinition>Data item I253/080 conveys the structure and identity of the user data that is contained in the data item I253/090. The format of the transferred information is described below.</DataItemDefinition>
+    <DataItemFormat desc="Variable length Data Item comprising a first part of oneoctet, followed by one-octet extents as necessary.">
+      <Variable>
+        <Fixed length="4">
+          <Bits from="32" to="17">
+            <BitsShortName>START INDEX</BitsShortName>
+            <BitsName>Provides identity of first object value to be transferred as part of the application data item. Index refers to an ordered list of objects previously agreed between client and server.</BitsName>
+          </Bits>
+          <Bits from="16" to="9">
+            <BitsShortName>COUNT</BitsShortName>
+            <BitsName>Indicates the number of object values with the same status to be transferred as part of the data field, starting with “Start Index” and using the consecutive numbers following this index. Thus, objects with the same status are bundled.</BitsName>
+          </Bits>
+          <Bits from="8" to="2">
+            <BitsShortName>STATUS</BitsShortName>
+            <BitsName>Provides common status information for all objects in the data field:
+                        bit 8 = 0 non-stale data
+                              = 1 stale data
+                        bit 7 = 0 real data
+                              = 1 simulated data
+                        bit 6 = 0 monitored object under remote control
+                              = 1 monitored object under local control
+                        bit 5 = 0 no data included
+                              = 1 data included
+                        bit 1 = 0 End of item
+                              = 1 Extension into another status segment;
+                </BitsName>
+          </Bits>
+          <Bits bit="1" fx="1">
+            <BitsShortName>FX</BitsShortName>
+            <BitsValue val="0">end of data item</BitsValue>
+            <BitsValue val="1">extension into first extent</BitsValue>
+          </Bits>
+        </Fixed>
+      </Variable>
+    </DataItemFormat>
+  </DataItem>
+  <DataItem id="090">
+    <DataItemName>Application Data</DataItemName>
+    <DataItemDefinition>Data item I253/090 contains the monitoring data that is to be transmitted from server to client as a sequence of octets. The contents of this octet sequence are defined with the item I253/080</DataItemDefinition>
+    <DataItemFormat desc="Repetitive data lenght item">
+      <Repetitive>
+        <Fixed length="16">
+          <Bits from="128" to="121">
+            <BitsShortName>Message1</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits>
+          <Bits from="120" to="113">
+            <BitsShortName>Message2</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits>
+          <Bits from="112" to="105">
+            <BitsShortName>Message3</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits>
+          <Bits from="104" to="97">
+            <BitsShortName>Message4</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits>
+            <Bits from="96" to="89">
+            <BitsShortName>Message5</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits>
+          <Bits from="88" to="81">
+            <BitsShortName>Message6</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits>    
+          <Bits from="80" to="73">
+            <BitsShortName>Message7</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits> 
+          <Bits from="72" to="65">
+            <BitsShortName>Message8</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits>   
+          <Bits from="64" to="57">
+            <BitsShortName>Message9</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits> 
+          <Bits from="56" to="49">
+            <BitsShortName>Message10</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits> 
+          <Bits from="48" to="41">
+            <BitsShortName>Message11</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits>   
+          <Bits from="40" to="33">
+            <BitsShortName>Message12</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits> 
+          <Bits from="32" to="25">
+            <BitsShortName>Message13</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits>   
+          <Bits from="24" to="17">
+            <BitsShortName>Message14</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits> 
+          <Bits from="16" to="9">
+            <BitsShortName>Message15</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits>  
+          <Bits from="8" to="1">
+            <BitsShortName>Message16</BitsShortName>
+            <BitsName>block of 128 bits containing the application data to be transferred. The identity and the structure of this application data is specified in I253/080</BitsName>
+          </Bits>                                                     
+        </Fixed>
+      </Repetitive>
+    </DataItemFormat>
+  </DataItem>
+  - <!-- Special Purpose Field - content unknown 
+  --> 
+- <DataItem id="SP" rule="unknown">
+  <DataItemName>Special Purpose Field</DataItemName> 
+  <DataItemDefinition>SP</DataItemDefinition> 
+- <DataItemFormat desc="Explicit">
+- <Explicit>
+- <Fixed length="1">
+- <Bits from="8" to="1" bit="0" encode="unsigned" fx="0">
+  <BitsShortName>SP</BitsShortName> 
+  <BitsName>SP</BitsName> 
+  </Bits>
+  </Fixed>
+  </Explicit>
+  </DataItemFormat>
+  <DataItemNote /> 
+  </DataItem>
+- <!-- Special Purpose Field - content unknown 
+  --> 
+- <DataItem id="RFS" rule="unknown">
+  <DataItemName>Reserved Expansion Field</DataItemName> 
+  <DataItemDefinition>RFS</DataItemDefinition> 
+- <DataItemFormat desc="Explicit">
+- <Explicit>
+- <Fixed length="1">
+- <Bits from="8" to="1" bit="0" encode="unsigned" fx="0">
+  <BitsShortName>RFS</BitsShortName> 
+  <BitsName>RFS</BitsName> 
+  </Bits>
+  </Fixed>
+  </Explicit>
+  </DataItemFormat>
+  <DataItemNote /> 
+  </DataItem>
+  <UAP>
+    <UAPItem bit="0" frn="1" len="2">010</UAPItem>
+    <UAPItem bit="1" frn="2" len="1">015</UAPItem>
+    <UAPItem bit="2" frn="3" len="1+2n">020</UAPItem>
+    <UAPItem bit="3" frn="4" len="1+3n">025</UAPItem>
+    <UAPItem bit="4" frn="5" len="2">030</UAPItem>
+    <UAPItem bit="5" frn="6" len="3">035</UAPItem>
+    <UAPItem bit="6" frn="7" len="1">040</UAPItem>
+    <UAPItem bit="7" frn="FX" len="-">-</UAPItem>
+    <UAPItem bit="8" frn="8" len="1+2n">050</UAPItem>
+    <UAPItem bit="9" frn="9" len="2">060</UAPItem>
+    <UAPItem bit="10" frn="10" len="3">070</UAPItem>
+    <UAPItem bit="11" frn="11" len="4+">080</UAPItem>
+    <UAPItem bit="12" frn="12" len="1+16n">090</UAPItem>
+    <UAPItem bit="13" frn="13" len="1+">SP</UAPItem>
+    <UAPItem bit="14" frn="14" len="1+">RFS</UAPItem>
+  </UAP>
+</Category>

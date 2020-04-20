@@ -1,0 +1,68 @@
+///**************************************************************************
+//* @Project : cdzchx_radar
+//* @IDL Module: ZCHXRadar
+//* @File: ZCHXRadar.proto
+//* @Description:
+//*    雷达asterix欧标标准格式;
+//*
+//* @Copyright: Copyright (c) 2014
+//* @Company: 深圳置辰海信科技有限公司
+//* @WebSite: http://www.szcenterstar.com/
+//* @author 
+//*
+//* @Revision History
+//*
+//* <pre>
+//* ----------------------------------------------------------------------
+//*   Ver     Date       Who             Comments
+//*  ----- ----------  --------  ---------------------------------------
+//*   1.0  2015/11/23     李鹭         形成初稿
+//*   1.1  2017/05/08     何江         增加会遇 历史 防区预警ID
+//* ----------------------------------------------------------------------
+//* </pre>
+//**************************************************************************/
+
+
+//package com.zhichenhaixin.proto;
+package com.zhichenhaixin.proto;
+    
+	
+	
+	//----------------------------------------------------------------------------------------------------------
+    // 雷达视频  回波图片余辉图片及位置信息
+    //----------------------------------------------------------------------------------------------------------
+	message RadarVideo
+	{
+		required uint64 radarId = 1;                    // 雷达站ID
+        required string radarName = 2;                  // 雷达站名称
+        required double latitude = 3;			        // 雷达站 WGS84坐标计算纬度 I010/041
+    	required double longitude = 4;			        // 雷达站 WGS84坐标计算经度 I010/041
+        required uint64 UTC = 5;                        // 时间标记  
+        required bytes imageData  = 6;                 // 回波图像数据
+        required bytes curImageData  = 7;                 // 余辉图像数据
+                required bytes preImageData  = 8;              // 前一张去色图像数据
+        required uint32 width = 9;                      // 图像宽度
+        required uint32 height = 10;                     // 图像高度
+                required double radius = 11;			            //半径
+                required uint32 curIndex = 12;                     // 当前显示索引
+                required uint32 loopNum = 13;                     // 余辉循环数
+	}
+	
+        //----------------------------------------------------------------------------------------------------------
+    // 雷达视频  回波振幅数据位置信息
+    //----------------------------------------------------------------------------------------------------------
+        message RadarVideoPoint
+        {
+
+        required string radarName = 2;                  // 雷达站名称
+        required double latitude = 3;			        // 雷达站 WGS84坐标计算纬度 I010/041
+        required double longitude = 4;			        // 雷达站 WGS84坐标计算经度 I010/041
+        required uint64 UTC = 5;                        // 时间标记
+        required bytes imageData  = 6;                 // 图像数据
+                required bytes preImageData  = 7;              // 前一张去色图像数据
+        required uint32 width = 8;                      // 图像宽度
+        required uint32 height = 9;                     // 图像高度
+                required double radius = 10;			            //半径
+                required uint32 curIndex = 11;                     // 当前显示索引
+                required uint32 loopNum = 12;                     // 余辉循环数
+        }

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<configurations>
+ <configuration name="">
+  <algorithm dll="TrackMaintainer">
+   <input type="Track"/>
+   <output type="Track"/>
+   <param name="enabled" type="bool" value="1"/>
+   <param name="missesBeforeDrop" type="int" value="3"/>
+   <param name="hitsBeforePromote" type="int" value="3"/>
+  </algorithm>
+ </configuration>
+</configurations>

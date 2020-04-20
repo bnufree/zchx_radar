@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<configurations>
+  <configuration name="">
+    <algorithm dll="TrackInitiator">
+      <input type="Extractions"/>
+      <param name="numScans" type="int" value="2"/>
+      <param name="searchRadius" type="double" value="5"/>
+      <param name="minRange" type="double" value="10" />
+      <param name="assumedAltitude" type="double" value="7620" />
+      <output type="Track"/>	
+    </algorithm>
+  </configuration>
+</configurations>
