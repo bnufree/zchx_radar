@@ -1,6 +1,8 @@
 ﻿#include "zchxfunction.h"
 #include <QPointF>
 #include <QDebug>
+#include <QLine>
+
 #define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"
 
 RADAR_VIDEO_DATA::RADAR_VIDEO_DATA()
@@ -377,6 +379,11 @@ Latlon mercatorToLatlon(const Mercator& mct)
     return Latlon(y, x);
 }
 
+Mercator latlonToMercator(double lat, double lon)
+{
+    return latlonToMercator(Latlon(lat, lon));
+}
+
 Mercator latlonToMercator(const Latlon& ll)
 {
     //qDebug()<<"wgs:"<<wgs84.mLon<<wgs84.mLat;
@@ -385,6 +392,111 @@ Mercator latlonToMercator(const Latlon& ll)
     my = my * EARTH_HALF_CIRCUL_LENGTH / 180;
 
     return Mercator(mx, my);
+}
+
+bool MercatorLine::isValid() const
+{
+    return start.distanceToLine(end, end) > 1.0;
+}
+
+bool MercatorLine::isPointIn(const Mercator &point, double width) const
+{
+    //将直线按照设定的宽度往两边进行平移得到一个旋转的矩形,检查点是否在矩形区域内
+    //计算直线的角度
+    double angle = atan2(end.mY - start.mY, end.mX - start.mX);
+    QLineF line(start.mX, start.mY, end.mX, end.mY);
+    QLineF low = line.translated(width * 0.5 * sin(angle), -width *0.5 * cos(angle));
+    QLineF high = line.translated(-width * 0.5* sin(angle), width *0.5 * cos(angle));
+    //将平行线转换成多边形
+    QPolygonF poly;
+    poly.append(low.p1());
+    poly.append(low.p2());
+    poly.append(high.p2());
+    poly.append(high.p1());
+    poly.append(low.p1());
+    return poly.contains(point.toPointF());
+}
+
+PNTPOSTION MercatorLine::pointPos(double& dist_to_line, double& dist_div_line, const Mercator &point)
+{
+    //检查目标直线是不是一个点的情况
+    if(!isValid()) return POS_UNDETERMINED;
+
+    //检查目标点是否在线段的端点上
+    if(point == start)
+    {
+        dist_to_line = 0.0;
+        dist_div_line = 0.0;
+        return POS_ON_VERTEX;
+    } else if(point == end)
+    {
+        dist_to_line = 0.0;
+        dist_div_line = length();
+        return POS_ON_VERTEX;
+    }
+    //开始判断点的位置关系
+    //如果想判断一个点是否在线段上，那么要满足以下两个条件：
+    //（1）（Q - P1） * （P2 - P1）= 0；
+    //（2）Q在以P1，P2为对角顶点的矩形内；
+    //第一点通俗点理解就是要求Q、P1、P2三点共线；当第一个满足后，就应该考虑是否\
+    //会出现Q在P1P2延长线或反向延长线这种情况。此时第     二个条件就对Q点的横纵\
+    //坐标进行了限制，要求横纵坐标要在P1P2两点的最小值和最大值之间，也就是说保证\
+    //了Q在P1P2之间。
+    //叉积的结果还是一个向量，二维向量的叉积是垂直于两个向量形成的平面的一个向\
+    //量。这行公式实际上求的是标量。
+    //计算是这样的，对于向量a（x1，y1），b（x2，y2）
+    //他们的叉积a×b=x1y2-y1x2
+    //如果向量AP×AB的叉积为正，则向量AP在向量AB的顺时针方向，反之为逆时针方向，
+    //当两个向量的乘积为0的时候，A，B，P三点共线
+    //将点转换成平面的点
+    Mercator p0 = point;
+    Mercator p1 = start;
+    Mercator p2 = end;
+    //检查目标点的坐标是否在线段外
+    double max_x = p1.mX < p2.mX ? p2.mX : p1.mX;
+    double min_x = p1.mX < p2.mX ? p1.mX : p2.mX;
+    double max_y = p1.mY < p2.mY ? p2.mY : p1.mY;
+    double min_y = p1.mY < p2.mY ? p1.mY : p2.mY;
+    if(p0.mX < min_x || p0.mX > max_x || p0.mY < min_y || p0.mY > max_y)
+    {
+        //点在线段外
+        return POS_UNDETERMINED;
+    }
+
+    //计算向量P1P0和P1P2
+    QVector2D v10(p0.mX - p1.mX, p0.mY - p1.mY);
+    QVector2D v12(p2.mX - p1.mX, p2.mY - p1.mY);
+    //计算向量的叉积
+    double cross_product = v10.x() * v12.y() - v10.y() * v12.x();
+    //点在线段上
+    if(fabs(cross_product) <= DOUBLE_EPS)
+    {
+        dist_to_line = 0.0;
+        dist_div_line = point.distanceToLine(start, start);
+        if(dist_div_line < 1 || fabs(dist_div_line - length()) < 1)
+        {
+            return POS_ON_VERTEX;
+        }
+        return POS_ON_LINE;
+    } else
+    {
+        //点在线的两边
+        //1)计算点到起点的距离
+        double start_dis = point.distanceToLine(start, start);
+        //2)计算到直线的距离
+        dist_to_line = distanceToMe(point);
+        //3)勾股定理计算分割距离
+        dist_div_line = sqrt(start_dis * start_dis - dist_to_line * dist_to_line);
+
+        return cross_product > DOUBLE_EPS? POS_RIGHT:POS_LEFT;
+    }
+    return POS_UNDETERMINED;
+}
+
+
+PNTPOSTION MercatorLine::pointPos(double& dist_to_line, double& dist_div_line, double lat, double lon)
+{
+    return pointPos(dist_to_line, dist_div_line, latlonToMercator(Latlon(lat, lon)));
 }
 
 double timeOfDay()

@@ -161,7 +161,7 @@ ZCHXAnalysisAndSendRadar::ZCHXAnalysisAndSendRadar(int id, QObject *parent)
     //回波块解析
     bool process_sync = false;
     m_VideoProcessor =  new ZCHXRadarVideoProcessor(m_uSourceID, this);
-    m_targetTrack = new zchxRadarTargetTrack(radar_num, Latlon(m_dCentreLat, m_dCentreLon), clear_track_time, this);
+    m_targetTrack = new zchxRadarTargetTrack(radar_num, Latlon(m_dCentreLat, m_dCentreLon), clear_track_time, true, this);
     m_targetTrack->setAdjustCogEnabled(cog_adjust);
     m_targetTrack->setTargetMergeDis(merge_dis);
     m_targetTrack->setDirectionInvertVal(dir_invert);
@@ -893,12 +893,23 @@ void ZCHXAnalysisAndSendRadar::analysisLowranceRadarSlot(const QByteArray &sRada
         }
         //角度值强制变成偶数
         int origin_angle_raw = angle_raw;
+        if(0){
+            //雷达扫描线检测
+            static QMap<int, int> counterMap;
+            if(counterMap.contains(spoke) && counterMap[spoke] != origin_angle_raw)
+            {
+                qDebug()<<"error spoke angle find now:"<<spoke<<origin_angle_raw<<counterMap[spoke];
+            } else
+            {
+                counterMap[spoke] = origin_angle_raw;
+            }
+
+        }
         if(angle_raw % 2)
         {
             angle_raw += 1;
         }
         if(angle_raw == 4096) angle_raw = 0;
-//        qDebug()<<"spoke:"<<spoke<<" angle:"<<angle_raw<<(line->br24.angle[1] << 8)<< line->br24.angle[0]<<" origion:"<<origin_angle_raw;
         angle_raw = MOD_ROTATION2048(angle_raw / 2);  //让方向和一圈的扫描线个数保持一致(2048)
         //qDebug()<<"spoke:"<<spoke<<" angle:"<<angle_raw;
         double start_range = 0.0 ;        

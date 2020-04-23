@@ -6,6 +6,7 @@
 #include <QPointF>
 #include <QTime>
 #include <QDebug>
+#include <QVector2D>
 #include "zchxradarcommon.h"
 
 const double PI = 3.1415926;
@@ -237,6 +238,35 @@ struct Mercator
     {
         return Mercator(mX +dx, mY + dy);
     }
+
+    bool operator ==(const Mercator& other) const
+    {
+        return distanceToLine(other, other) < 1.0;
+    }
+
+//    double distanceToPoint(double lat, double lon) const
+//    {
+//        return distanceToPoint(latlonToMercator(lat, lon));
+//    }
+
+    double distanceToPoint(const Mercator& other) const
+    {
+        return distanceToLine(other, other);
+    }
+
+    double distanceToLine(const Mercator& line_start, const Mercator& line_end) const
+    {
+        QVector2D now(mX, mY);
+        QVector2D start(line_start.mX, line_start.mY);
+        QVector2D direction(line_end.mX - line_start.mX, line_end.mY - line_start.mY);
+        direction.normalize();
+        return now.distanceToLine(start, direction);
+    }
+
+    QPointF toPointF() const
+    {
+        return QPointF(mX, mY);
+    }
 };
 
 struct Latlon{
@@ -258,6 +288,58 @@ struct Latlon{
 
 Latlon mercatorToLatlon(const Mercator& mct);
 Mercator latlonToMercator(const Latlon& ll);
+Mercator latlonToMercator(double lat, double lon);
+
+enum PNTPOSTION{
+    POS_UNDETERMINED = -1,
+    POS_ON_LINE = 0,        //点在直线上
+    POS_LEFT,//左侧
+    POS_RIGHT,//右侧
+    POS_AHEAD,//前方
+    POS_AFTER,//后方
+    POS_ON_VERTEX,
+
+};
+
+
+struct      MercatorLine
+{
+public:
+
+    Mercator    start;
+    Mercator    end;
+    MercatorLine(double start_lat, double start_lon, double end_lat, double end_lon)
+    {
+        start = latlonToMercator(Latlon(start_lat, start_lon));
+        end = latlonToMercator(Latlon(end_lat, end_lon));
+    }
+
+    bool    isPointIn(const Mercator& point, double width) const;
+
+    double distanceToMe(const Mercator& point) const
+    {
+        return point.distanceToLine(start, end);
+    }
+
+    double distanceToMe(double lat, double lon) const
+    {
+        return distanceToMe(latlonToMercator(Latlon(lat, lon)));
+    }
+
+    double length() const
+    {
+        return start.distanceToLine(end, end);
+    }
+
+    bool isValid() const;
+
+    PNTPOSTION pointPos(double& dist_to_line, double& dist_div_line, double lat, double lon);
+    PNTPOSTION pointPos(double& dist_to_line, double& dist_div_line, const Mercator& point);
+
+
+};
+
+
 
 class zchxPosConverter
 {
