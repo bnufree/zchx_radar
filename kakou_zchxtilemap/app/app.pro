@@ -4,8 +4,14 @@
 #
 #-------------------------------------------------
 
-CONFIG(release, debug|release):OutDir=Release
-CONFIG(debug, debug|release):OutDir=Debug
+CONFIG(release, debug|release){
+    OutDir=Release
+    DEFINES += FILE_LOG
+}
+CONFIG(debug, debug|release){
+    OutDir=Debug
+    DEFINES += STD_LOG
+}
 
 PSFW_3RDPARTYPATH = $${PWD}/3rdParty
 IDE_APP_PATH = $$dirname(PWD)/bin/

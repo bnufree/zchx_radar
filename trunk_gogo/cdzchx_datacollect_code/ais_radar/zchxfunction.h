@@ -234,7 +234,7 @@ struct Mercator
         mY = y;
     }
 
-    Mercator offset(double dx, double dy)
+    Mercator offset(double dx, double dy) const
     {
         return Mercator(mX +dx, mY + dy);
     }
@@ -305,13 +305,20 @@ enum PNTPOSTION{
 struct      MercatorLine
 {
 public:
-
+    Mercator    center;
     Mercator    start;
     Mercator    end;
     MercatorLine(double start_lat, double start_lon, double end_lat, double end_lon)
     {
         start = latlonToMercator(Latlon(start_lat, start_lon));
         end = latlonToMercator(Latlon(end_lat, end_lon));
+    }
+
+    void  setCenter(double lat, double lon)
+    {
+        center = latlonToMercator(lat, lon);
+        start = start.offset(-center.mX, -center.mY);
+        end = end.offset(-center.mX, -center.mY);
     }
 
     bool    isPointIn(const Mercator& point, double width) const;
@@ -381,11 +388,13 @@ private:
 class zchxTimeElapsedCounter
 {
 public:
-    zchxTimeElapsedCounter(const QString& func)
+    zchxTimeElapsedCounter(const QString& func, bool debug = true)
     {
+        mDebug = debug;
         mFunc = func;
         mTimer.start();
         mTotal = 0;
+//        if(mDebug)  qDebug()<<mFunc<<" init start";
     }
     ~zchxTimeElapsedCounter()
     {
@@ -409,13 +418,14 @@ public:
     {
         qint64 counter = mTimer.elapsed();
         mTotal += counter;
-        qDebug()<<mFunc<<" elapsed:"<<counter<< "and total msecs:"<<mTotal;
+        if(mDebug)  qDebug()<<mFunc<<" elapsed:"<<counter<< "and total msecs:"<<mTotal;
     }
 
 private:
     QString mFunc;
     QTime   mTimer;
     qint64  mTotal;
+    bool    mDebug;
 };
 
 

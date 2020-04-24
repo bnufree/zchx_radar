@@ -84,7 +84,9 @@ int main(int argc, char *argv[])
         QString appName = QString::fromStdString(argv[0]);
         qDebug()<<"appName:"<<appName;
     }
+#ifdef FILE_LOG
     qInstallMessageHandler(logMessageOutputQt5);
+#endif
     TestMainWindow w;
     w.showMaximized();
     return a.exec();

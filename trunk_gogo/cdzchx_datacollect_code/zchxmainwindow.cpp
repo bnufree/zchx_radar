@@ -62,7 +62,13 @@ zchxMainWindow::zchxMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
-    this->setWindowTitle(QStringLiteral("采集器7.0.5 OpenCPN回波处理"));
+    this->setWindowTitle(QStringLiteral("采集器7.1.0 目标路径搜索"));
+
+    MercatorLine line(30.123456, 104.123456, 30.123456, 104.123457);
+//    line.setCenter(30, 104);
+    Mercator now = latlonToMercator(30.123456, 104.123456);
+    bool sts = line.isPointIn(now, 100);
+    qDebug()<<"line area contains:"<<sts;
 
     //this->resize(800, 600);
     //this->resize(1367, 784);

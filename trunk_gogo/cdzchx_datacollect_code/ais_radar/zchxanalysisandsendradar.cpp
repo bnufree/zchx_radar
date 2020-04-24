@@ -159,7 +159,7 @@ ZCHXAnalysisAndSendRadar::ZCHXAnalysisAndSendRadar(int id, QObject *parent)
 
 
     //回波块解析
-    bool process_sync = false;
+    bool process_sync = true;
     m_VideoProcessor =  new ZCHXRadarVideoProcessor(m_uSourceID, this);
     m_targetTrack = new zchxRadarTargetTrack(radar_num, Latlon(m_dCentreLat, m_dCentreLon), clear_track_time, true, this);
     m_targetTrack->setAdjustCogEnabled(cog_adjust);

@@ -324,6 +324,15 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
         m_pEcdisWin->itfSetLocalMarkData(marks);
     }
 
+    QAction *btn = new QAction(QStringLiteral("测距"), this);
+    ui->menuBar->addAction(QStringLiteral("测距"),this, SLOT(slotTestDistance()));
+
+}
+
+void TestMainWindow::slotTestDistance()
+{
+    qDebug()<<"now start distance measure";
+    m_pEcdisWin->itfToolBarMeasureDistance();
 }
 
 TestMainWindow::~TestMainWindow()

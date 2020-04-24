@@ -405,8 +405,12 @@ bool MercatorLine::isPointIn(const Mercator &point, double width) const
     //计算直线的角度
     double angle = atan2(end.mY - start.mY, end.mX - start.mX);
     QLineF line(start.mX, start.mY, end.mX, end.mY);
+//    qDebug()<<"base line:"<<line;
     QLineF low = line.translated(width * 0.5 * sin(angle), -width *0.5 * cos(angle));
+//    qDebug()<<"low:"<<low;
     QLineF high = line.translated(-width * 0.5* sin(angle), width *0.5 * cos(angle));
+//    qDebug()<<"high:"<<high;
+    Mercator target = point.offset(-center.mX, -center.mY);
     //将平行线转换成多边形
     QPolygonF poly;
     poly.append(low.p1());
@@ -414,7 +418,19 @@ bool MercatorLine::isPointIn(const Mercator &point, double width) const
     poly.append(high.p2());
     poly.append(high.p1());
     poly.append(low.p1());
-    return poly.contains(point.toPointF());
+
+    bool sts = poly.containsPoint(target.toPointF(), Qt::OddEvenFill);
+#if 0
+    //计算线之间的距离
+    Mercator p1(low.p2().x(), low.p2().y());
+    Mercator p2(high.p2().x(), high.p2().y());
+
+    Latlon ll1 = mercatorToLatlon(p1);
+    Latlon ll2 = mercatorToLatlon(p2);
+    double dis = getDisDeg(ll1.lat, ll1.lon, ll2.lat, ll2.lon);
+    qDebug()<<"poly:"<<poly<<" target:"<<target.toPointF()<<" contains:"<<sts<<dis;
+#endif
+    return sts;
 }
 
 PNTPOSTION MercatorLine::pointPos(double& dist_to_line, double& dist_div_line, const Mercator &point)

@@ -45,7 +45,15 @@ public:
         est_count = 0;
         time_of_day = rect->timeofday();
     }
-    ~TargetNode() {children.clear(); if(rect) delete rect;}
+    ~TargetNode()
+    {
+        children.clear();
+        if(rect)
+        {
+//            qDebug()<<"node has been delete now. node num:"<<rect->rectnumber();
+            delete rect;
+        }
+    }
     QList<TargetNode*> getAllBranchLastChild()
     {
         QList<TargetNode*> result;
@@ -93,6 +101,7 @@ public slots:
 protected:
     void     run();
 private:
+    void        splitAllRoutesIntoTargets(TargetNode* node, TargetNode* routeNode);
     void        updateConfirmedRoute(TargetNode* node, zchxRadarRectDefList& left_list);
     void        updateDetermineRoute(TargetNode* node, zchxRadarRectDefList& left_list);
     TargetNode*        checkNodeConfirmed(TargetNode* node);

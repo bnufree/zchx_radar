@@ -69,6 +69,7 @@ public slots:
     void slotAisChartLayerDisplay(bool sts);
     void slotSetMapSource();
     void slotSetDataSource(bool sts);
+    void slotTestDistance();
 private:
     void getLonlatListFromFile(const QString& file, QList<PointData>& list);
     bool getLayerDisplay(const QString& layer);

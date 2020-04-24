@@ -4,8 +4,8 @@
 
 const bool track_debug = false;
 
-const double point_near_line = 100;
-const double point_near_point = 60;
+const double point_near_line = 200;
+const double ship_max_speed = 5;            //约等于10节
 
 
 zchxRadarTargetTrack::zchxRadarTargetTrack(int id, const Latlon& ll, int clear_time,  bool route, QObject *parent)
@@ -34,9 +34,13 @@ bool zchxRadarTargetTrack::getTask(zchxRadarTrackTask &task)
 {
     QMutexLocker locker(&mMutex);
     if(mTaskList.size() == 0) return false;
-    task = mTaskList.last();
-    if(track_debug) qDebug()<<"delete unprocessed task size:"<<mTaskList.size() - 1;
-    mTaskList.clear();
+    task = mTaskList.takeLast();
+    if(mTaskList.size() > 0)
+    {
+        qDebug()<<"delete unprocessed task size:"<<mTaskList.size();
+         mTaskList.clear();
+    }
+
 }
 
 void zchxRadarTargetTrack::run()
@@ -458,13 +462,13 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
     double old_lat = src->centerlatitude();
     double old_lon = src->centerlongitude();
     double old_cog = src->cog();
+    //计算当前的时间间隔, 根据时间间隔算预估可能移动距离
+    float delta_time = list_time - old_time;
+    if(delta_time < 0) delta_time += (3600* 24);
     if(cog_usefull)
     {
-        //计算当前的时间间隔, 根据时间间隔算预估位置点
-        float delta_time = list_time - old_time;
         //计算当前目标可能的预估位置
         double est_lat = 0.0, est_lon = 0.0;
-        if(delta_time < 0) delta_time += (3600* 24);
         float est_distance = old_sog * delta_time;
         distbearTolatlon1(old_lat, old_lon, est_distance, old_cog, &est_lat, &est_lon);
         //预估点和前一位置连线，若当前点在连线附近，则认为是下一个点。点存在多个，则取预估位置距离最近的点。
@@ -502,7 +506,7 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
             Mercator now = latlonToMercator(next.centerlatitude(), next.centerlongitude());
                         //计算点到预估位置的距离
             double distance = now.distanceToPoint(latlonToMercator(old_lat, old_lon));
-            if(distance < point_near_point)
+            if(distance <  delta_time * ship_max_speed)
             {
                 result.append(list.takeAt(k));
                 continue;
@@ -516,7 +520,7 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
 
 void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRectDefList& left_list)
 {
-    zchxTimeElapsedCounter counter(__FUNCTION__);
+//    zchxTimeElapsedCounter counter(__FUNCTION__);
     if(!topNode || !topNode->cog_confirmed) return;
     //当前的时间确认
     if(left_list.size() == 0) return;
@@ -613,7 +617,7 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
 
 void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRectDefList &left_list)
 {
-    zchxTimeElapsedCounter counter(__FUNCTION__);
+//    zchxTimeElapsedCounter counter(__FUNCTION__);
     if(!topNode || topNode->cog_confirmed) return;
     //当前的时间确认
     if(left_list.size() == 0) return;
@@ -650,11 +654,13 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
         last_child->children.append(QSharedPointer<TargetNode>(new TargetNode(now_rect)));
         if(!update_branch) update_branch = true;
         topNode->time_of_day = list_time;
+        if(track_debug) qDebug()<<"update root node:"<<pre_rect->rectnumber()<<" with possible route index"<<i<<"  cog "<<cog<<" sog:"<<sog;
     }
     if(update_branch) return;
     //更新根节点
     zchxRadarRectDefList result = getDirDeterminTargets(left_list, topNode->rect, false);
     pre_rect = topNode->rect;
+    bool root_update = false;
     for(int i=0; i<result.size(); i++)
     {
         zchxRadarRectDef total = result[i];
@@ -666,19 +672,31 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
         double delta_time = list_time - topNode->rect->timeofday();
         if(delta_time <= 0) delta_time += (3600 * 24);
         double cal_dis = last_pos.distanceTo(cur_pos);
-        double sog = cal_dis / delta_time;
-        total.set_sog(sog);
-        total.set_cog(cog);
-        topNode->children.append(QSharedPointer<TargetNode>(new TargetNode(total)));
+        if(cal_dis > 1.0)
+        {
+            double sog = cal_dis / delta_time;
+            total.set_sog(sog);
+            total.set_cog(cog);
+            topNode->children.append(QSharedPointer<TargetNode>(new TargetNode(total)));
+            if(track_debug) qDebug()<<"update root node:"<<pre_rect->rectnumber()<<" with possible child:(distance, cog, sog) "<<cal_dis<<cog<<sog;
+            root_update = true;
+        }
+    }
+    if(result.size() > 0 && !root_update)
+    {
+        //所有目标都距离太近,将根节点的时间更新
         topNode->time_of_day = list_time;
+        topNode->rect->set_timeofday(list_time);
+
     }
 }
 
 //检查所有目标路径点的个数。若路径存在3个点，则目标航迹确定为对应路径。返回第一层节点对象
 TargetNode* zchxRadarTargetTrack::checkNodeConfirmed(TargetNode *node)
 {
+//    zchxTimeElapsedCounter counter(__FUNCTION__);
     if(!node || node->children.size() == 0) return 0;
-    for(int i=0; node->children.size(); i++)
+    for(int i=0; i<node->children.size(); i++)
     {
         //取得路径的第一个节点
         TargetNode *child_lvl1 = node->children[i].data();
@@ -691,6 +709,7 @@ TargetNode* zchxRadarTargetTrack::checkNodeConfirmed(TargetNode *node)
         //将目标确认信息添加
         node->cog_confirmed = true;
         node->est_count = 0;
+        if(track_debug) qDebug()<<"now target "<<child_lvl1->rect->rectnumber()<<" has been confirmed:"<<child_lvl1->rect->cog()<<child_lvl1->rect->sog()<<child_lvl2->rect->cog()<<child_lvl2->rect->sog();
         return child_lvl1;
     }
 
@@ -701,7 +720,7 @@ TargetNode* zchxRadarTargetTrack::checkNodeConfirmed(TargetNode *node)
 void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &task)
 {
     if(task.size() == 0) return;
-    zchxTimeElapsedCounter counter(__FUNCTION__);
+//    zchxTimeElapsedCounter counter(__FUNCTION__);
     zchxRadarRectDefList temp_list(task);             //保存的未经处理的所有矩形单元
     if(mTargetNodeMap.size() != 0)
     {
@@ -723,23 +742,7 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
             TargetNode *route_node = checkNodeConfirmed(node);
             if(!route_node) continue;
             //目标确认,将路径进行分离,确认的路径保留,未确认的路径移除并作为单独的目标再次加入,等待下一个周期到来时进行继续更新
-            for(int i=0; i<node->children.size();)
-            {
-                //取得路径的第一个节点
-                qDebug()<<"i = "<<i<<node->children.size();
-                TargetNode *child_lvl1 = node->children[i].data();
-                if(!child_lvl1) continue;
-                if(child_lvl1 == route_node)
-                {
-                    //路径点保留
-                    i++;
-                    continue;
-                }
-                //将节点移除
-                QSharedPointer<TargetNode> topNode = node->children.takeAt(i);
-                //生成新的目标点迹数据
-                appendNode(topNode.data());
-            }
+            splitAllRoutesIntoTargets(node, route_node);
         }
 
     }
@@ -756,6 +759,30 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
     deleteExpiredNode();
     //现在将目标进行输出
     outputTargets();
+}
+
+void zchxRadarTargetTrack::splitAllRoutesIntoTargets(TargetNode *node, TargetNode *routeNode)
+{
+    zchxTimeElapsedCounter counter(__FUNCTION__);
+    if(!node || !routeNode) return;
+    //目标确认,将路径进行分离,确认的路径保留,未确认的路径移除并作为单独的目标再次加入,等待下一个周期到来时进行继续更新
+    for(int i=0; i<node->children.size();)
+    {
+        //取得路径的第一个节点
+        qDebug()<<"i = "<<i<<node->children.size();
+        TargetNode *child_lvl1 = node->children[i].data();
+        if(!child_lvl1) continue;
+        if(child_lvl1 == routeNode)
+        {
+            //路径点保留
+            i++;
+            continue;
+        }
+        //将节点移除
+        QSharedPointer<TargetNode> topNode = node->children.takeAt(i);
+        //生成新的目标点迹数据
+        appendNode(topNode.data());
+    }
 }
 
 void zchxRadarTargetTrack::deleteExpiredNode()
@@ -792,6 +819,10 @@ void zchxRadarTargetTrack::updateTrackPointWithNode(zchxRadarSurfaceTrack& list,
     zchxTrackPoint *trackObj = list.add_trackpoints();
     if(!trackObj) return;
     zchxRadarRectDef *target = child->rect;
+     if(!node->cog_confirmed)
+     {
+         target = node->rect;
+     }
 
     LatLong startLatLong(mCenter.lon, mCenter.lat);
     //编号
@@ -937,6 +968,7 @@ int zchxRadarTargetTrack::getCurrentRectNum()
 
 void zchxRadarTargetTrack::process(const zchxRadarTrackTask &task)
 {
+    zchxTimeElapsedCounter counter(QString(metaObject()->className()) + " : " + QString(__FUNCTION__));
     if(mProcessWithRoute)
     {
         processWithPossibleRoute(task);
