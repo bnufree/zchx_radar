@@ -460,7 +460,7 @@ bool zchxRadarTargetTrack::isPointInPredictionArea(zchxRadarRectDef *src, double
 
 bool zchxRadarTargetTrack::isPointInPredictionArea(zchxRadarRectDef *src, Latlon ll)
 {
-    if(!src || src->predictionareas_size()) return false;
+    if(!src || src->predictionareas_size() == 0) return false;
     for(int i=0; i<src->predictionareas_size(); i++)
     {
 
@@ -472,9 +472,9 @@ bool zchxRadarTargetTrack::isPointInPredictionArea(zchxRadarRectDef *src, Latlon
             double lat = area.area(k).latitude();
             double lon = area.area(k).longitude();
             poly.append(latlonToMercator(lat, lon).toPointF());
-            bool sts = poly.containsPoint(latlonToMercator(ll).toPointF(), Qt::OddEvenFill);
-            if(sts) return true;
         }
+        bool sts = poly.containsPoint(latlonToMercator(ll).toPointF(), Qt::OddEvenFill);
+        if(sts) return true;
     }
 
     return false;
@@ -687,6 +687,10 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
             if(!last_child) continue;
             pre_rect = last_child->rect;
             qDebug()<<"child number:"<<topNode->rect->rectnumber()<<" time:"<<pre_rect->timeofday()<<" sog:"<<pre_rect->sog()<<" cog:"<<pre_rect->cog()<<" route index:"<<i;
+            if(topNode->rect->rectnumber() == 150011)
+            {
+                bool debug = true;
+            }
             //根据分支节点的速度和角度取得待更新的矩形单元,这里的矩形单元数只有一个
             zchxRadarRectDefList result = getDirDeterminTargets(left_list, pre_rect, true);
             if(result.size() == 0)
@@ -880,10 +884,10 @@ void zchxRadarTargetTrack::updateTrackPointWithNode(zchxRadarSurfaceTrack& list,
     zchxTrackPoint *trackObj = list.add_trackpoints();
     if(!trackObj) return;
     zchxRadarRectDef *target = child->rect;
-     if(!node->cog_confirmed)
-     {
-         target = node->rect;
-     }
+//     if(!node->cog_confirmed)
+//     {
+//         target = node->rect;
+//     }
 
     LatLong startLatLong(mCenter.lon, mCenter.lat);
     //编号
@@ -895,8 +899,8 @@ void zchxRadarTargetTrack::updateTrackPointWithNode(zchxRadarSurfaceTrack& list,
     if(!node->cog_confirmed)
     {
         trackObj->set_sog(0.0);
-        trackObj->set_trackconfirmed(false);
         trackObj->set_cog(0);
+        trackObj->set_trackconfirmed(false);
     } else
     {
         trackObj->set_trackconfirmed(true);
