@@ -38,6 +38,7 @@ void protobuf_ShutdownFile_ZCHXRadarVideo_2eproto();
 class singleVideoBlock;
 class pixelPoint;
 class fixRectPixelImg;
+class predictionArea;
 class RadarRectDef;
 class RadarRect;
 class RadarRects;
@@ -326,6 +327,88 @@ class fixRectPixelImg : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class predictionArea : public ::google::protobuf::Message {
+ public:
+  predictionArea();
+  virtual ~predictionArea();
+
+  predictionArea(const predictionArea& from);
+
+  inline predictionArea& operator=(const predictionArea& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const predictionArea& default_instance();
+
+  void Swap(predictionArea* other);
+
+  // implements Message ----------------------------------------------
+
+  predictionArea* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const predictionArea& from);
+  void MergeFrom(const predictionArea& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .com.zhichenhaixin.proto.singleVideoBlock area = 1;
+  inline int area_size() const;
+  inline void clear_area();
+  static const int kAreaFieldNumber = 1;
+  inline const ::com::zhichenhaixin::proto::singleVideoBlock& area(int index) const;
+  inline ::com::zhichenhaixin::proto::singleVideoBlock* mutable_area(int index);
+  inline ::com::zhichenhaixin::proto::singleVideoBlock* add_area();
+  inline const ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::singleVideoBlock >&
+      area() const;
+  inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::singleVideoBlock >*
+      mutable_area();
+
+  // @@protoc_insertion_point(class_scope:com.zhichenhaixin.proto.predictionArea)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::singleVideoBlock > area_;
+  friend void  protobuf_AddDesc_ZCHXRadarVideo_2eproto();
+  friend void protobuf_AssignDesc_ZCHXRadarVideo_2eproto();
+  friend void protobuf_ShutdownFile_ZCHXRadarVideo_2eproto();
+
+  void InitAsDefaultInstance();
+  static predictionArea* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class RadarRectDef : public ::google::protobuf::Message {
  public:
   RadarRectDef();
@@ -522,6 +605,18 @@ class RadarRectDef : public ::google::protobuf::Message {
   inline bool realdata() const;
   inline void set_realdata(bool value);
 
+  // repeated .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
+  inline int predictionareas_size() const;
+  inline void clear_predictionareas();
+  static const int kPredictionAreasFieldNumber = 20;
+  inline const ::com::zhichenhaixin::proto::predictionArea& predictionareas(int index) const;
+  inline ::com::zhichenhaixin::proto::predictionArea* mutable_predictionareas(int index);
+  inline ::com::zhichenhaixin::proto::predictionArea* add_predictionareas();
+  inline const ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::predictionArea >&
+      predictionareas() const;
+  inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::predictionArea >*
+      mutable_predictionareas();
+
   // @@protoc_insertion_point(class_scope:com.zhichenhaixin.proto.RadarRectDef)
  private:
   inline void set_has_rectnumber();
@@ -582,6 +677,7 @@ class RadarRectDef : public ::google::protobuf::Message {
   double sog_;
   double cog_;
   ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::pixelPoint > pixelpnts_;
+  ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::predictionArea > predictionareas_;
   friend void  protobuf_AddDesc_ZCHXRadarVideo_2eproto();
   friend void protobuf_AssignDesc_ZCHXRadarVideo_2eproto();
   friend void protobuf_ShutdownFile_ZCHXRadarVideo_2eproto();
@@ -1409,6 +1505,40 @@ fixRectPixelImg::mutable_points() {
 
 // -------------------------------------------------------------------
 
+// predictionArea
+
+// repeated .com.zhichenhaixin.proto.singleVideoBlock area = 1;
+inline int predictionArea::area_size() const {
+  return area_.size();
+}
+inline void predictionArea::clear_area() {
+  area_.Clear();
+}
+inline const ::com::zhichenhaixin::proto::singleVideoBlock& predictionArea::area(int index) const {
+  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.predictionArea.area)
+  return area_.Get(index);
+}
+inline ::com::zhichenhaixin::proto::singleVideoBlock* predictionArea::mutable_area(int index) {
+  // @@protoc_insertion_point(field_mutable:com.zhichenhaixin.proto.predictionArea.area)
+  return area_.Mutable(index);
+}
+inline ::com::zhichenhaixin::proto::singleVideoBlock* predictionArea::add_area() {
+  // @@protoc_insertion_point(field_add:com.zhichenhaixin.proto.predictionArea.area)
+  return area_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::singleVideoBlock >&
+predictionArea::area() const {
+  // @@protoc_insertion_point(field_list:com.zhichenhaixin.proto.predictionArea.area)
+  return area_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::singleVideoBlock >*
+predictionArea::mutable_area() {
+  // @@protoc_insertion_point(field_mutable_list:com.zhichenhaixin.proto.predictionArea.area)
+  return &area_;
+}
+
+// -------------------------------------------------------------------
+
 // RadarRectDef
 
 // required uint32 rectNumber = 1;
@@ -1877,6 +2007,36 @@ inline void RadarRectDef::set_realdata(bool value) {
   set_has_realdata();
   realdata_ = value;
   // @@protoc_insertion_point(field_set:com.zhichenhaixin.proto.RadarRectDef.realData)
+}
+
+// repeated .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
+inline int RadarRectDef::predictionareas_size() const {
+  return predictionareas_.size();
+}
+inline void RadarRectDef::clear_predictionareas() {
+  predictionareas_.Clear();
+}
+inline const ::com::zhichenhaixin::proto::predictionArea& RadarRectDef::predictionareas(int index) const {
+  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.RadarRectDef.predictionAreas)
+  return predictionareas_.Get(index);
+}
+inline ::com::zhichenhaixin::proto::predictionArea* RadarRectDef::mutable_predictionareas(int index) {
+  // @@protoc_insertion_point(field_mutable:com.zhichenhaixin.proto.RadarRectDef.predictionAreas)
+  return predictionareas_.Mutable(index);
+}
+inline ::com::zhichenhaixin::proto::predictionArea* RadarRectDef::add_predictionareas() {
+  // @@protoc_insertion_point(field_add:com.zhichenhaixin.proto.RadarRectDef.predictionAreas)
+  return predictionareas_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::predictionArea >&
+RadarRectDef::predictionareas() const {
+  // @@protoc_insertion_point(field_list:com.zhichenhaixin.proto.RadarRectDef.predictionAreas)
+  return predictionareas_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::predictionArea >*
+RadarRectDef::mutable_predictionareas() {
+  // @@protoc_insertion_point(field_mutable_list:com.zhichenhaixin.proto.RadarRectDef.predictionAreas)
+  return &predictionareas_;
 }
 
 // -------------------------------------------------------------------

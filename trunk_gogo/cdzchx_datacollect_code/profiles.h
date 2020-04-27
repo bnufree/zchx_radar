@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QSettings>
-#include <QDebug>
+//#include <QDebug>
 #include <QTextCodec>
 
 #define     PROFILES_INSTANCE       Utils::Profiles::instance()

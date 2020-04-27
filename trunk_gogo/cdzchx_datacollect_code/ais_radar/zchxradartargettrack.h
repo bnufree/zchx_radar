@@ -92,6 +92,7 @@ public:
     void        setDirectionInvertVal(double val) {mDirectionInvertThresholdVal = val;}
     void        setTargetMergeDis(double val){mTargetMergeDis = val;}
     void        setAdjustCogEnabled(bool sts) {mAdjustCogEnabled = sts;}
+    void        setRangefactor(double factor) {mRangeFactor = factor;}
 public slots:
     void        appendTask(const zchxRadarRectDefList& task);
     void        process(const zchxRadarTrackTask& task);
@@ -123,6 +124,10 @@ private:
     void        dumpTargetDistance(const QString &tag, double merge_dis);
     void        checkTargetRectAfterUpdate(double merge_dis);
     zchxRadarRectDefList   getDirDeterminTargets(zchxRadarRectDefList &list, zchxRadarRectDef* src, bool cog_usefull);
+    void        makePredictionArea(zchxRadarRectDef* rect, double width, double delta_time = 10.0);
+    bool        isPointInPredictionArea(zchxRadarRectDef* src, double lat, double lon);
+    bool        isPointInPredictionArea(zchxRadarRectDef* src, Latlon ll);
+    bool        isPointInPredictionArea(zchxRadarRectDef* src, zchxRadarRectDef* dest);
 
 signals:
     void        signalSendTracks(const zchxRadarSurfaceTrack& track);
@@ -144,6 +149,7 @@ private:
     TargetNodeMap               mTargetNodeMap;                     //保存目标还未定性的点
     bool                        mProcessWithRoute;
     int                         mMaxEstCount;                       //目标的最大预推次数
+    double                      mRangeFactor;
 };
 
 #endif // ZCHXRADARTARGETTRACK_H

@@ -7,8 +7,6 @@
 #include "aisbaseinfosetting.h"
 #include "ais/zchxaisdataserver.h"
 #include "ais_radar/zchxradardataserver.h"
-#include "ais_radar/zchxradarechodatachange.h"
-#include "ais_radar/zxhcprocessechodata.h"
 #include "ais_radar/zchxanalysisandsendradar.h"
 #include "ais/zchxaisdataprocessor.h"
 #include "dialog_log.h"

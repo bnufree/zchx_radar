@@ -3,7 +3,7 @@
 #include "../profiles.h"
 #include <QRegExp>
 #include <QFileDialog>
-#define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"
+#include <QDebug>
 
 QRadarParamSetting::QRadarParamSetting(QWidget *parent) :
     QWidget(parent),
@@ -368,14 +368,14 @@ void QRadarParamSetting::on_pushButton_clicked()
     {
         //匹配成功
         name = na.cap(0);
-        cout<<"name"<<name;
+        qDebug()<<"name"<<name;
     }
-    cout<<"打印区域文件地址";
+    qDebug()<<"打印区域文件地址";
     pathName = "."+name;
-    cout<<"地址pathName"<< pathName;
+    qDebug()<<"地址pathName"<< pathName;
     if(pathName == ".")
     {
-        cout<<"打开失败";
+        qDebug()<<"打开失败";
         //anterior_file_name = Utils::Profiles::instance()->value("Radar_1","Limit_File").toString();
         ui->limitfile_lineEdit->setText(anterior_file_name);
     }

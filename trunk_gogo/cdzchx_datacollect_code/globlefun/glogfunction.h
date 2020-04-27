@@ -3,7 +3,7 @@
 
 #include <string>
 #include <QObject>
-#include <QDebug>
+//#include <QDebug>
 #include <QColor>
 #include <vector>
 #include <QVector2D>

@@ -4,6 +4,7 @@
 #include <QTableWidgetItem>
 #include <QDebug>
 #define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"
+
 float_setting::float_setting(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::float_setting)
@@ -43,7 +44,6 @@ void float_setting::on_add_pushButton_clicked()
 {
     int cols=ui->table1->columnCount();
     int rows=ui->table1->rowCount();
-    qDebug()<<rows;
     ui->table1->insertRow(rows);
     for(int i=0;i<cols;i++)
     {

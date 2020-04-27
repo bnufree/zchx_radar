@@ -8,7 +8,7 @@
 #include <QString>
 #include <QDialog>
 #include <QFileDialog>
-#include <QDebug>
+//#include <QDebug>
 #include "profiles.h"
 #include <QPainter>
 #include <QPixmap>

@@ -1,6 +1,6 @@
 ﻿#include "comselectedcombobox.h"
 #include <QSerialPortInfo>
-#include <QDebug>
+//#include <QDebug>
 #include <QSerialPort>
 
 QComPortSelectedComboBox::QComPortSelectedComboBox(QWidget *parent) : QComboBox(parent)

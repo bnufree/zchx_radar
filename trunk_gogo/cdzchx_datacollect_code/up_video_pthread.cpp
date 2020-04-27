@@ -4,9 +4,8 @@
 #include <QString>
 #include <QDialog>
 #include <QFileDialog>
-#include <QDebug>
+#include "Log.h"
 #include <QDirIterator>
-#define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"
 
 up_video_pthread::up_video_pthread(QString str,QString filename,QObject *parent) : type(str),file_name(filename),QThread(parent)
 {
@@ -53,19 +52,12 @@ void up_video_pthread::readAllFile(QString path)
             QFileInfo file_info = dir_iterator.fileInfo();
             QString file_path = file_info.absoluteFilePath();
             string_list.append(file_path);
-            cout<<"file_path"<<file_path;
+            ZCHX_LOG_OUT("file_path")<<file_path;
             QFile video_file(file_path);
             if(!video_file.open(QIODevice::ReadOnly)){
-                   //ReadOnly文件不存在，打开失败
-                   //WriteOnly文件不存在，会自动创建文件
-                   //ReadWrite文件不存在，会自动创建文件
-                   //Append文件不存在，会自动创建文件
-                   //Truncate文件不存在，打开失败
-                   //Text文件不存在，打开失败
-                   //Unbuffered文件不存在，打开失败
-                   cout<<"打开失败";
+                   ZCHX_LOG_OUT("打开失败");
                }else{
-                   cout<<"打开成功";
+                   ZCHX_LOG_OUT("打开成功");
                    //操作文件
                    int a =17160;
                    while (1)
@@ -83,7 +75,7 @@ void up_video_pthread::readAllFile(QString path)
                        }
                        if(video_file.atEnd())
                        {
-                           cout<<"str"<<file_path;
+                           ZCHX_LOG_OUT("str:")<<file_path;
                            break;
                        }
 

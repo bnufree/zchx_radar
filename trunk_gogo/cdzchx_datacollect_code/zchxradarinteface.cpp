@@ -4,7 +4,7 @@
 #include <QThread>
 #include <QDateTime>
 #include <QProcess>
-#include <QDebug>
+//#include <QDebug>
 #include "profiles.h"
 #include "Log.h"
 #include <QLabel>
@@ -14,8 +14,6 @@
 #include "zmq.hpp"
 #include "ais/zchxaisdataserver.h"
 #include "ais_radar/zchxradardataserver.h"
-#include "ais_radar/zchxradarechodatachange.h"
-#include "ais_radar/zxhcprocessechodata.h"
 #include "ais_radar/zchxanalysisandsendradar.h"
 #include "ais/zchxaisdataprocessor.h"
 #include "dialog_set.h"
@@ -68,9 +66,7 @@ public:
 
 zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     QMainWindow(parent),
-    mpRadarEchoDataChange(0),
     radarId(ID),
-    mProcessEchoData(0),
     mReportSimulateThread(0),
     mRadarDataServer(0),
     mAnalysisAndSendRadar(0),
@@ -485,11 +481,6 @@ void zchxradarinteface::slotUpdateVirtualIpString(const QString &msg)
 
 zchxradarinteface::~zchxradarinteface()
 {
-    if(mpRadarEchoDataChange)
-    {
-        delete mpRadarEchoDataChange;
-        mpRadarEchoDataChange = NULL;
-    }
     if(mRadarDataServer)
     {
         mRadarDataServer->deleteLater();

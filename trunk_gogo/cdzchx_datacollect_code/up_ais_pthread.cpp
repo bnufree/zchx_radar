@@ -4,9 +4,9 @@
 #include <QString>
 #include <QDialog>
 #include <QFileDialog>
-#include <QDebug>
 #include "profiles.h"
-#define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"
+#include "Log.h"
+
 up_ais_pthread::up_ais_pthread(QString filename, int interval, QObject *parent)
     : mFileName(filename)
     , mInterval(interval)
@@ -21,10 +21,10 @@ void up_ais_pthread::run()
     QFile ais_file(mFileName);
     if(!ais_file.open(QIODevice::ReadOnly))
     {
-        cout<<"打开失败"<<mFileName;
+        ZCHX_LOG_OUT("打开失败")<<mFileName;
         return;
     }
-    cout<<"打开成功"<<mFileName;
+    ZCHX_LOG_OUT("打开成功")<<mFileName;
 
     //操作文件
     while(!mIsOver)
@@ -40,7 +40,7 @@ void up_ais_pthread::run()
         }
         if(ais_file.atEnd())
         {
-            cout<<"解析完毕";
+            ZCHX_LOG_OUT("解析完毕");
             ais_file.seek(0);
         }
         msleep(mInterval * 1000);

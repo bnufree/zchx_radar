@@ -2,7 +2,7 @@
 #include "Log.h"
 #include "QProcess"
 #include <QHostInfo>
-#include <QDebug>
+//#include <QDebug>
 #include <QDateTime>
 #include <QNetworkInterface>
 

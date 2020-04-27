@@ -6,8 +6,6 @@
 #include "aisbaseinfosetting.h"
 #include "ais/zchxaisdataserver.h"
 #include "ais_radar/zchxradardataserver.h"
-#include "ais_radar/zchxradarechodatachange.h"
-#include "ais_radar/zxhcprocessechodata.h"
 #include "ais_radar/zchxanalysisandsendradar.h"
 #include "ais/zchxaisdataprocessor.h"
 #include "dialog_log.h"
@@ -32,8 +30,6 @@
 
 class QLabel;
 class ZCHXRadarDataServer;
-class ZCHXRadarEchoDataChange;
-class ZXHCProcessEchoData;
 class ZCHXAnalysisAndSendRadar;
 class zchxSimulateThread;
 
@@ -209,9 +205,6 @@ private:
     ZCHXRadarDataServer* mRadarDataServer;
     ZCHXAnalysisAndSendRadar* mAnalysisAndSendRadar;
     QList<AIS_Setting*> mAisSettingList;
-
-    ZCHXRadarEchoDataChange *mpRadarEchoDataChange;
-    ZXHCProcessEchoData *mProcessEchoData;
     //串口类
     ComDataMgr      *mComDataMgr;
     ComDataPubWorker* mOutWorker;

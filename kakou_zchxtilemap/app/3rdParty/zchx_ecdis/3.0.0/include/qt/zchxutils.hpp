@@ -1955,6 +1955,7 @@ public:
     int   referHeight;
     bool  isRealSize;                           //1:实际的最大长度来确定大小 0:参考实时目标来推断矩形框的大小
     QPolygon        pixPoints;                   //矩形块回波块对应的图片点列和图片大小.这个只在某些层级显示,且大小固定不变
+    QList<ITF_SingleVideoBlockList>    predictionAreas;         //目标的预推区域
 //    int             pixWidth;
 //    int             pixHeight;
 

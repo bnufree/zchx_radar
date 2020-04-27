@@ -1,5 +1,5 @@
 #include "ZCHXRadarVideoProcessor.h"
-#include <QDebug>
+//#include <QDebug>
 #include <math.h>
 #include <QMutex>
 #include <QPixmap>
@@ -51,6 +51,10 @@ ZCHXRadarVideoProcessor::ZCHXRadarVideoProcessor(int radar_id, QObject *parent)
     mVideoExtractionWorker->setTargetLenthRange(minLen, maxLen);
     mVideoExtractionWorker->setLimitAvailable(Utils::Profiles::instance()->value(m_radarSec, "Limit").toBool());
 
+    //
+    setRangeFactor(10.0);
+    setAvgShipSpeed(5.0);
+
     setStackSize(64000000);
 }
 
@@ -60,6 +64,29 @@ ZCHXRadarVideoProcessor::~ZCHXRadarVideoProcessor()
     {
         delete mVideoExtractionWorker;
     }
+}
+
+void ZCHXRadarVideoProcessor::setRangeFactor(double factor)
+{
+    mRangeFactor = factor;
+    updateCycleCount();
+    if(mTracker) mTracker->setRangefactor(factor);
+}
+
+void ZCHXRadarVideoProcessor::setAvgShipSpeed(double speed)
+{
+    mAvgShipSpeed = speed;
+    updateCycleCount();
+}
+
+void ZCHXRadarVideoProcessor::updateCycleCount()
+{
+    if(mAvgShipSpeed > 0 && mRangeFactor > 0)
+    {
+        mVideoCycleCount = mRangeFactor / mAvgShipSpeed;
+        mVideoCycleCount += 1;
+    }
+
 }
 
 void ZCHXRadarVideoProcessor::appendSrcData(const zchxRadarVideoTask &task)
@@ -77,10 +104,12 @@ void ZCHXRadarVideoProcessor::appendSrcData(const zchxRadarVideoTask &task)
         {
             //数据已经满足多个周期回波叠加, 构建新的回波数据,新的回波数据以以前的回波数据作为基础
             ZCHXRadarVideoProcessorData newData;
+#if 0
             for(int i=1; i<mVideoCycleCount; i++)
             {
                 newData.append(data[i]);
             }
+#endif
             newData.append(task);
             mTaskList.append(newData);
         } else
@@ -98,12 +127,18 @@ bool ZCHXRadarVideoProcessor::getProcessData(ZCHXRadarVideoProcessorData& task)
     if(temp.size() == mVideoCycleCount)
     {
         task = temp;
+#if 0
         //移除以前的任务,保留最近的一个任务,便于下一个回波过来的时候合成新的任务
         while (mTaskList.size() > 1) {
             mTaskList.takeFirst();
         }
         //将任务的第一个回波删除
         temp.takeFirst();
+#else
+        int size = mTaskList.size();
+        qDebug()<<"remove unprocessed video task size:"<<size-1;
+        mTaskList.clear();
+#endif
         return true;
     }
     return false;
@@ -177,11 +212,13 @@ void ZCHXRadarVideoProcessor::process(const ZCHXRadarVideoProcessorData& task)
     if(task.size() == 0) return;
     //首先将所有任务的回波都合成一个回波图形
     QMap<int,RADAR_VIDEO_DATA> RadarVideo = task[0].m_RadarVideo;
-//    for(int i=0; i<task.size(); i++)
-//    {
-//        qDebug()<<"task time:"<<task[i].m_TimeStamp;
-//    }
-//    qDebug()<<"data time:"<<task[0].m_TimeStamp<<task.size();
+#if 0
+    for(int i=0; i<task.size(); i++)
+    {
+        qDebug()<<"task time:"<<task[i].m_TimeStamp;
+    }
+    qDebug()<<"data time:"<<task[0].m_TimeStamp<<task.size();
+#endif
     for(int i=1; i<task.size(); i++)
     {
         QMap<int,RADAR_VIDEO_DATA> tempVideo = task[i].m_RadarVideo;
@@ -218,7 +255,7 @@ void ZCHXRadarVideoProcessor::process(const ZCHXRadarVideoProcessorData& task)
     int ratio = 1;
     double uMultibeamPixmapWidth = (RadarVideo.first().m_uTotalCellNum)*2 * ratio - 1;
     double uMultibeamPixmapHeight = (RadarVideo.first().m_uTotalCellNum)*2 * ratio - 1;
-    qDebug()<<"image width:"<<uMultibeamPixmapWidth<<uMultibeamPixmapHeight;
+//    qDebug()<<"image width:"<<uMultibeamPixmapWidth<<uMultibeamPixmapHeight;
     QPixmap objPixmap(uMultibeamPixmapWidth,uMultibeamPixmapHeight);
     objPixmap.fill(Qt::transparent);//用透明色填充
     QPainter objPainter(&objPixmap);

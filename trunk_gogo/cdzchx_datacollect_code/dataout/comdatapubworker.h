@@ -6,7 +6,7 @@
 #include<QThread>
 #include "zmq.h"
 #include<ZmqMonitorThread.h>
-#include <QDebug>
+//#include <QDebug>
 //#define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"
 
 enum    DataOutputMode{

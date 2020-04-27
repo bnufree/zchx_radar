@@ -2,7 +2,7 @@
 #include "zchxaischartworker.h"
 #include "dataout/zchxdataoutputservermgr.h"
 
-#include <QDebug>
+//#include <QDebug>
 #include <QDateTime>
 #include <QFile>
 #include <QDir>

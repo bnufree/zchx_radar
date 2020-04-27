@@ -541,6 +541,28 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
         QColor rectColor = mRect.blockColor;
         if(!mRect.current.isRealData) rectColor = Qt::green;
         drawPolygon(painter, Qt::transparent, rectColor, mRect.current.pixPoints, mRect.current.centerlatitude, mRect.current.centerlongitude);
+        //画出目标的预推区域
+        if(mRect.current.predictionAreas.size() > 0)
+        {
+            for(int i=0; i<mRect.current.predictionAreas.size(); i++)
+            {
+                ITF_SingleVideoBlockList src = mRect.current.predictionAreas[i];
+                QPolygonF shapePnts;
+                for(int k=0; k<src.size(); k++)
+                {
+                    ITF_SingleVideoBlock block = src[k];
+                    shapePnts.append(mView->framework()->LatLon2Pixel(block.latitude, block.longitude).toPointF());
+                }
+
+                painter->save();
+                painter->setPen(Qt::darkMagenta);
+                painter->setBrush(Qt::transparent);
+                painter->drawPolygon(shapePnts);
+                painter->drawText(shapePnts.boundingRect().center(), QString::number(mRect.rectNumber));
+                painter->restore();
+            }
+        }
+
     } else
     {
         QPolygonF shapePnts;

@@ -1,8 +1,9 @@
 ﻿#ifndef __LOG_H__
 #define __LOG_H__
 
-#include<stdio.h>
-#include <QString>
+#include    <stdio.h>
+#include    <QString>
+#include    <QDebug>
 /*******************************************************************
 * @版权信息：
 * @文件名称：Log.h
@@ -21,8 +22,7 @@ typedef enum _tagENUM_LOG_TYPE
 }LOG_TYPE;
 
 
-
-
+#define             ZCHX_LOG_OUT(str)            qDebug()<<(str)
 
 #define LOG_FILE_PATH		250
 #define MAX_LOG_ROW_SIZE	500				//一行日志的大小

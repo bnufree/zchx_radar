@@ -1,6 +1,6 @@
 #include "beidoudata.h"
 #include "ui_beidoudata.h"
-#include <qDebug>
+//#include <QDebug>
 #include <QWidget>
 #include "profiles.h"
 #define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"

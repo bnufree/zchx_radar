@@ -1,5 +1,5 @@
 #include "updatevideoudpthread.h"
-#include <QDebug>
+//#include <QDebug>
 #include "BR24.hpp"
 #include <QNetworkInterface>
 #include <QDir>

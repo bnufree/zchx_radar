@@ -31,6 +31,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* fixRectPixelImg_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   fixRectPixelImg_reflection_ = NULL;
+const ::google::protobuf::Descriptor* predictionArea_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  predictionArea_reflection_ = NULL;
 const ::google::protobuf::Descriptor* RadarRectDef_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   RadarRectDef_reflection_ = NULL;
@@ -105,8 +108,24 @@ void protobuf_AssignDesc_ZCHXRadarVideo_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(fixRectPixelImg));
-  RadarRectDef_descriptor_ = file->message_type(3);
-  static const int RadarRectDef_offsets_[19] = {
+  predictionArea_descriptor_ = file->message_type(3);
+  static const int predictionArea_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(predictionArea, area_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(predictionArea, tag_),
+  };
+  predictionArea_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      predictionArea_descriptor_,
+      predictionArea::default_instance_,
+      predictionArea_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(predictionArea, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(predictionArea, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(predictionArea));
+  RadarRectDef_descriptor_ = file->message_type(4);
+  static const int RadarRectDef_offsets_[20] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, rectnumber_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, topleftlatitude_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, topleftlongitude_),
@@ -126,6 +145,7 @@ void protobuf_AssignDesc_ZCHXRadarVideo_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, cog_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, pixelpnts_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, realdata_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, predictionareas_),
   };
   RadarRectDef_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -138,7 +158,7 @@ void protobuf_AssignDesc_ZCHXRadarVideo_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RadarRectDef));
-  RadarRect_descriptor_ = file->message_type(4);
+  RadarRect_descriptor_ = file->message_type(5);
   static const int RadarRect_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRect, currentrect_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRect, historyrects_),
@@ -156,7 +176,7 @@ void protobuf_AssignDesc_ZCHXRadarVideo_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RadarRect));
-  RadarRects_descriptor_ = file->message_type(5);
+  RadarRects_descriptor_ = file->message_type(6);
   static const int RadarRects_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRects, utc_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRects, length_),
@@ -173,7 +193,7 @@ void protobuf_AssignDesc_ZCHXRadarVideo_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RadarRects));
-  RadarVideo_descriptor_ = file->message_type(6);
+  RadarVideo_descriptor_ = file->message_type(7);
   static const int RadarVideo_offsets_[13] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarVideo, radarid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarVideo, radarname_),
@@ -200,7 +220,7 @@ void protobuf_AssignDesc_ZCHXRadarVideo_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RadarVideo));
-  RadarVideoPoint_descriptor_ = file->message_type(7);
+  RadarVideoPoint_descriptor_ = file->message_type(8);
   static const int RadarVideoPoint_offsets_[11] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarVideoPoint, radarname_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarVideoPoint, latitude_),
@@ -244,6 +264,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     fixRectPixelImg_descriptor_, &fixRectPixelImg::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    predictionArea_descriptor_, &predictionArea::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     RadarRectDef_descriptor_, &RadarRectDef::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     RadarRect_descriptor_, &RadarRect::default_instance());
@@ -264,6 +286,8 @@ void protobuf_ShutdownFile_ZCHXRadarVideo_2eproto() {
   delete pixelPoint_reflection_;
   delete fixRectPixelImg::default_instance_;
   delete fixRectPixelImg_reflection_;
+  delete predictionArea::default_instance_;
+  delete predictionArea_reflection_;
   delete RadarRectDef::default_instance_;
   delete RadarRectDef_reflection_;
   delete RadarRect::default_instance_;
@@ -289,42 +313,47 @@ void protobuf_AddDesc_ZCHXRadarVideo_2eproto() {
     "\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\"e\n\017fixRectPixelImg\022"
     "\r\n\005width\030\001 \002(\r\022\016\n\006height\030\002 \002(\r\0223\n\006points"
     "\030\003 \003(\0132#.com.zhichenhaixin.proto.pixelPo"
-    "int\"\356\003\n\014RadarRectDef\022\022\n\nrectNumber\030\001 \002(\r"
-    "\022\027\n\017topLeftlatitude\030\002 \002(\001\022\030\n\020topLeftlong"
-    "itude\030\003 \002(\001\022\033\n\023bottomRightlatitude\030\004 \002(\001"
-    "\022\034\n\024bottomRightlongitude\030\005 \002(\001\022\026\n\016center"
-    "latitude\030\006 \002(\001\022\027\n\017centerlongitude\030\007 \002(\001\022"
-    "\021\n\ttimeOfDay\030\010 \002(\002\022\020\n\010diameter\030\t \001(\005\0229\n\006"
-    "Blocks\030\n \003(\0132).com.zhichenhaixin.proto.s"
-    "ingleVideoBlock\022\025\n\rstartlatitude\030\013 \001(\001\022\026"
-    "\n\016startlongitude\030\014 \001(\001\022\023\n\013endlatitude\030\r "
-    "\001(\001\022\024\n\014endlongitude\030\016 \001(\001\022\r\n\005angle\030\017 \001(\001"
-    "\022\013\n\003sog\030\020 \002(\001\022\013\n\003cog\030\021 \002(\001\0226\n\tpixelPnts\030"
-    "\022 \003(\0132#.com.zhichenhaixin.proto.pixelPoi"
-    "nt\022\020\n\010realData\030\023 \002(\010\"\254\001\n\tRadarRect\022:\n\013cu"
-    "rrentRect\030\001 \002(\0132%.com.zhichenhaixin.prot"
-    "o.RadarRectDef\022;\n\014historyRects\030\002 \003(\0132%.c"
-    "om.zhichenhaixin.proto.RadarRectDef\022\024\n\014d"
-    "irConfirmed\030\003 \002(\010\022\020\n\010estcount\030\004 \002(\r\"\\\n\nR"
-    "adarRects\022\013\n\003UTC\030\001 \002(\004\022\016\n\006length\030\002 \002(\005\0221"
-    "\n\005rects\030\003 \003(\0132\".com.zhichenhaixin.proto."
-    "RadarRect\"\363\001\n\nRadarVideo\022\017\n\007radarId\030\001 \002("
-    "\004\022\021\n\tradarName\030\002 \002(\t\022\020\n\010latitude\030\003 \002(\001\022\021"
-    "\n\tlongitude\030\004 \002(\001\022\013\n\003UTC\030\005 \002(\004\022\021\n\timageD"
-    "ata\030\006 \002(\014\022\024\n\014curImageData\030\007 \002(\014\022\024\n\014preIm"
-    "ageData\030\010 \002(\014\022\r\n\005width\030\t \002(\r\022\016\n\006height\030\n"
-    " \002(\r\022\016\n\006radius\030\013 \002(\001\022\020\n\010curIndex\030\014 \002(\r\022\017"
-    "\n\007loopNum\030\r \002(\r\"\321\001\n\017RadarVideoPoint\022\021\n\tr"
+    "int\"V\n\016predictionArea\0227\n\004area\030\001 \003(\0132).co"
+    "m.zhichenhaixin.proto.singleVideoBlock\022\013"
+    "\n\003tag\030\002 \001(\t\"\260\004\n\014RadarRectDef\022\022\n\nrectNumb"
+    "er\030\001 \002(\r\022\027\n\017topLeftlatitude\030\002 \002(\001\022\030\n\020top"
+    "Leftlongitude\030\003 \002(\001\022\033\n\023bottomRightlatitu"
+    "de\030\004 \002(\001\022\034\n\024bottomRightlongitude\030\005 \002(\001\022\026"
+    "\n\016centerlatitude\030\006 \002(\001\022\027\n\017centerlongitud"
+    "e\030\007 \002(\001\022\021\n\ttimeOfDay\030\010 \002(\002\022\020\n\010diameter\030\t"
+    " \001(\005\0229\n\006Blocks\030\n \003(\0132).com.zhichenhaixin"
+    ".proto.singleVideoBlock\022\025\n\rstartlatitude"
+    "\030\013 \001(\001\022\026\n\016startlongitude\030\014 \001(\001\022\023\n\013endlat"
+    "itude\030\r \001(\001\022\024\n\014endlongitude\030\016 \001(\001\022\r\n\005ang"
+    "le\030\017 \001(\001\022\013\n\003sog\030\020 \002(\001\022\013\n\003cog\030\021 \002(\001\0226\n\tpi"
+    "xelPnts\030\022 \003(\0132#.com.zhichenhaixin.proto."
+    "pixelPoint\022\020\n\010realData\030\023 \002(\010\022@\n\017predicti"
+    "onAreas\030\024 \003(\0132\'.com.zhichenhaixin.proto."
+    "predictionArea\"\254\001\n\tRadarRect\022:\n\013currentR"
+    "ect\030\001 \002(\0132%.com.zhichenhaixin.proto.Rada"
+    "rRectDef\022;\n\014historyRects\030\002 \003(\0132%.com.zhi"
+    "chenhaixin.proto.RadarRectDef\022\024\n\014dirConf"
+    "irmed\030\003 \002(\010\022\020\n\010estcount\030\004 \002(\r\"\\\n\nRadarRe"
+    "cts\022\013\n\003UTC\030\001 \002(\004\022\016\n\006length\030\002 \002(\005\0221\n\005rect"
+    "s\030\003 \003(\0132\".com.zhichenhaixin.proto.RadarR"
+    "ect\"\363\001\n\nRadarVideo\022\017\n\007radarId\030\001 \002(\004\022\021\n\tr"
     "adarName\030\002 \002(\t\022\020\n\010latitude\030\003 \002(\001\022\021\n\tlong"
     "itude\030\004 \002(\001\022\013\n\003UTC\030\005 \002(\004\022\021\n\timageData\030\006 "
-    "\002(\014\022\024\n\014preImageData\030\007 \002(\014\022\r\n\005width\030\010 \002(\r"
-    "\022\016\n\006height\030\t \002(\r\022\016\n\006radius\030\n \002(\001\022\020\n\010curI"
-    "ndex\030\013 \002(\r\022\017\n\007loopNum\030\014 \002(\r", 1467);
+    "\002(\014\022\024\n\014curImageData\030\007 \002(\014\022\024\n\014preImageDat"
+    "a\030\010 \002(\014\022\r\n\005width\030\t \002(\r\022\016\n\006height\030\n \002(\r\022\016"
+    "\n\006radius\030\013 \002(\001\022\020\n\010curIndex\030\014 \002(\r\022\017\n\007loop"
+    "Num\030\r \002(\r\"\321\001\n\017RadarVideoPoint\022\021\n\tradarNa"
+    "me\030\002 \002(\t\022\020\n\010latitude\030\003 \002(\001\022\021\n\tlongitude\030"
+    "\004 \002(\001\022\013\n\003UTC\030\005 \002(\004\022\021\n\timageData\030\006 \002(\014\022\024\n"
+    "\014preImageData\030\007 \002(\014\022\r\n\005width\030\010 \002(\r\022\016\n\006he"
+    "ight\030\t \002(\r\022\016\n\006radius\030\n \002(\001\022\020\n\010curIndex\030\013"
+    " \002(\r\022\017\n\007loopNum\030\014 \002(\r", 1621);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ZCHXRadarVideo.proto", &protobuf_RegisterTypes);
   singleVideoBlock::default_instance_ = new singleVideoBlock();
   pixelPoint::default_instance_ = new pixelPoint();
   fixRectPixelImg::default_instance_ = new fixRectPixelImg();
+  predictionArea::default_instance_ = new predictionArea();
   RadarRectDef::default_instance_ = new RadarRectDef();
   RadarRect::default_instance_ = new RadarRect();
   RadarRects::default_instance_ = new RadarRects();
@@ -333,6 +362,7 @@ void protobuf_AddDesc_ZCHXRadarVideo_2eproto() {
   singleVideoBlock::default_instance_->InitAsDefaultInstance();
   pixelPoint::default_instance_->InitAsDefaultInstance();
   fixRectPixelImg::default_instance_->InitAsDefaultInstance();
+  predictionArea::default_instance_->InitAsDefaultInstance();
   RadarRectDef::default_instance_->InitAsDefaultInstance();
   RadarRect::default_instance_->InitAsDefaultInstance();
   RadarRects::default_instance_->InitAsDefaultInstance();
@@ -1212,6 +1242,290 @@ void fixRectPixelImg::Swap(fixRectPixelImg* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int predictionArea::kAreaFieldNumber;
+const int predictionArea::kTagFieldNumber;
+#endif  // !_MSC_VER
+
+predictionArea::predictionArea()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:com.zhichenhaixin.proto.predictionArea)
+}
+
+void predictionArea::InitAsDefaultInstance() {
+}
+
+predictionArea::predictionArea(const predictionArea& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:com.zhichenhaixin.proto.predictionArea)
+}
+
+void predictionArea::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
+  _cached_size_ = 0;
+  tag_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+predictionArea::~predictionArea() {
+  // @@protoc_insertion_point(destructor:com.zhichenhaixin.proto.predictionArea)
+  SharedDtor();
+}
+
+void predictionArea::SharedDtor() {
+  if (tag_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete tag_;
+  }
+  if (this != default_instance_) {
+  }
+}
+
+void predictionArea::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* predictionArea::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return predictionArea_descriptor_;
+}
+
+const predictionArea& predictionArea::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ZCHXRadarVideo_2eproto();
+  return *default_instance_;
+}
+
+predictionArea* predictionArea::default_instance_ = NULL;
+
+predictionArea* predictionArea::New() const {
+  return new predictionArea;
+}
+
+void predictionArea::Clear() {
+  if (has_tag()) {
+    if (tag_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+      tag_->clear();
+    }
+  }
+  area_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool predictionArea::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:com.zhichenhaixin.proto.predictionArea)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .com.zhichenhaixin.proto.singleVideoBlock area = 1;
+      case 1: {
+        if (tag == 10) {
+         parse_area:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_area()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(10)) goto parse_area;
+        if (input->ExpectTag(18)) goto parse_tag;
+        break;
+      }
+
+      // optional string tag = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_tag:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_tag()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->tag().data(), this->tag().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "tag");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:com.zhichenhaixin.proto.predictionArea)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:com.zhichenhaixin.proto.predictionArea)
+  return false;
+#undef DO_
+}
+
+void predictionArea::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:com.zhichenhaixin.proto.predictionArea)
+  // repeated .com.zhichenhaixin.proto.singleVideoBlock area = 1;
+  for (int i = 0; i < this->area_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->area(i), output);
+  }
+
+  // optional string tag = 2;
+  if (has_tag()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->tag().data(), this->tag().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "tag");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->tag(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:com.zhichenhaixin.proto.predictionArea)
+}
+
+::google::protobuf::uint8* predictionArea::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:com.zhichenhaixin.proto.predictionArea)
+  // repeated .com.zhichenhaixin.proto.singleVideoBlock area = 1;
+  for (int i = 0; i < this->area_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->area(i), target);
+  }
+
+  // optional string tag = 2;
+  if (has_tag()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->tag().data(), this->tag().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "tag");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        2, this->tag(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:com.zhichenhaixin.proto.predictionArea)
+  return target;
+}
+
+int predictionArea::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[1 / 32] & (0xffu << (1 % 32))) {
+    // optional string tag = 2;
+    if (has_tag()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->tag());
+    }
+
+  }
+  // repeated .com.zhichenhaixin.proto.singleVideoBlock area = 1;
+  total_size += 1 * this->area_size();
+  for (int i = 0; i < this->area_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->area(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void predictionArea::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const predictionArea* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const predictionArea*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void predictionArea::MergeFrom(const predictionArea& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  area_.MergeFrom(from.area_);
+  if (from._has_bits_[1 / 32] & (0xffu << (1 % 32))) {
+    if (from.has_tag()) {
+      set_tag(from.tag());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void predictionArea::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void predictionArea::CopyFrom(const predictionArea& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool predictionArea::IsInitialized() const {
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->area())) return false;
+  return true;
+}
+
+void predictionArea::Swap(predictionArea* other) {
+  if (other != this) {
+    area_.Swap(&other->area_);
+    std::swap(tag_, other->tag_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata predictionArea::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = predictionArea_descriptor_;
+  metadata.reflection = predictionArea_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int RadarRectDef::kRectNumberFieldNumber;
 const int RadarRectDef::kTopLeftlatitudeFieldNumber;
 const int RadarRectDef::kTopLeftlongitudeFieldNumber;
@@ -1231,6 +1545,7 @@ const int RadarRectDef::kSogFieldNumber;
 const int RadarRectDef::kCogFieldNumber;
 const int RadarRectDef::kPixelPntsFieldNumber;
 const int RadarRectDef::kRealDataFieldNumber;
+const int RadarRectDef::kPredictionAreasFieldNumber;
 #endif  // !_MSC_VER
 
 RadarRectDef::RadarRectDef()
@@ -1330,6 +1645,7 @@ void RadarRectDef::Clear() {
 
   blocks_.Clear();
   pixelpnts_.Clear();
+  predictionareas_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -1622,6 +1938,20 @@ bool RadarRectDef::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(162)) goto parse_predictionAreas;
+        break;
+      }
+
+      // repeated .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
+      case 20: {
+        if (tag == 162) {
+         parse_predictionAreas:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_predictionareas()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(162)) goto parse_predictionAreas;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -1748,6 +2078,12 @@ void RadarRectDef::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(19, this->realdata(), output);
   }
 
+  // repeated .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
+  for (int i = 0; i < this->predictionareas_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      20, this->predictionareas(i), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1855,6 +2191,13 @@ void RadarRectDef::SerializeWithCachedSizes(
   // required bool realData = 19;
   if (has_realdata()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(19, this->realdata(), target);
+  }
+
+  // repeated .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
+  for (int i = 0; i < this->predictionareas_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        20, this->predictionareas(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -1979,6 +2322,14 @@ int RadarRectDef::ByteSize() const {
         this->pixelpnts(i));
   }
 
+  // repeated .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
+  total_size += 2 * this->predictionareas_size();
+  for (int i = 0; i < this->predictionareas_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->predictionareas(i));
+  }
+
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -2006,6 +2357,7 @@ void RadarRectDef::MergeFrom(const RadarRectDef& from) {
   GOOGLE_CHECK_NE(&from, this);
   blocks_.MergeFrom(from.blocks_);
   pixelpnts_.MergeFrom(from.pixelpnts_);
+  predictionareas_.MergeFrom(from.predictionareas_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_rectnumber()) {
       set_rectnumber(from.rectnumber());
@@ -2083,6 +2435,7 @@ bool RadarRectDef::IsInitialized() const {
 
   if (!::google::protobuf::internal::AllAreInitialized(this->blocks())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->pixelpnts())) return false;
+  if (!::google::protobuf::internal::AllAreInitialized(this->predictionareas())) return false;
   return true;
 }
 
@@ -2107,6 +2460,7 @@ void RadarRectDef::Swap(RadarRectDef* other) {
     std::swap(cog_, other->cog_);
     pixelpnts_.Swap(&other->pixelpnts_);
     std::swap(realdata_, other->realdata_);
+    predictionareas_.Swap(&other->predictionareas_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

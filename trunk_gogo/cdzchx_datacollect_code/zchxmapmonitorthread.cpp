@@ -1,5 +1,5 @@
 #include "zchxmapmonitorthread.h"
-#include <QDebug>
+//#include <QDebug>
 #include <windows.h>
 #include <tlhelp32.h>// for CreateToolhelp32Snapshot
 #include <psapi.h>   // for GetModuleFileNameEx

@@ -6,7 +6,8 @@
 #include "qradarstatussettingwidget.h"
 #include <QFile>
 #include <QFileDialog>
-#define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"
+#include <QDebug>
+
 ZCHXRadarAisSetting::ZCHXRadarAisSetting(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ZCHXRadarAisSetting)
@@ -23,11 +24,6 @@ ZCHXRadarAisSetting::~ZCHXRadarAisSetting()
 
 void ZCHXRadarAisSetting::init()
 {
-
-
-
-
-
 
     ui->groupBox->setVisible(false);//隐藏AIS部分
     //开始动态生成雷达的tab页配置
@@ -48,7 +44,6 @@ void ZCHXRadarAisSetting::init()
     QString uYhSendPort =  Utils::Profiles::instance()->value(str_radar,"Yuhui_Send_Port").toString();
     QString sYhTopic = Utils::Profiles::instance()->value(str_radar,"Yuhui_Topic").toString();
 
-    cout<<"sTrackTopic"<<sTrackTopic;
     ui->trackSendPortSpinBox->setValue(uTrackSendPort);
     ui->trackSendTopicLineEdit->setText(sTrackTopic);
     ui->videoSendPortSpinBox->setValue(uVideoSendPort);
@@ -88,8 +83,8 @@ void ZCHXRadarAisSetting::init()
     int uTcpPort = Utils::Profiles::instance()->value(str_radar,"Tcp_Port").toInt();
 
     //开始设定参数
-    cout<<"dCentreLat"<<dCentreLat;
-    cout<<"dCentreLon"<<dCentreLon;
+    qDebug()<<"dCentreLat"<<dCentreLat;
+    qDebug()<<"dCentreLon"<<dCentreLon;
     set->setTcpPort(uTcpPort);
     set->setRadarType(sRadarType);
     set->setDistance(dDis);
@@ -149,7 +144,6 @@ void ZCHXRadarAisSetting::on_saveBtn_clicked()
     QRadarParamSetting *set = qobject_cast<QRadarParamSetting*>(ui->tabWidget->widget(0));
     if(!set)
     {
-        cout<<"!set"<<i;
         return;
     }
     QString str_radar = QString("Radar_%1").arg(i+1);
@@ -244,10 +238,7 @@ void ZCHXRadarAisSetting::on_saveBtn_clicked()
                                                 RadarStatus::getTypeString(TARGET_SEPARATION,STR_MODE_ENG),\
                                                 QStringList()<<"0"<<"3");
     }
-
-    cout<<"set_change_signal信号";
     int ret1 = QMessageBox::information(0,QStringLiteral("信息"),QStringLiteral("配置修改成功"));
-    cout<<"ret1"<<ret1;
     if(ret1 == 1024)
         emit set_change_signal();
 

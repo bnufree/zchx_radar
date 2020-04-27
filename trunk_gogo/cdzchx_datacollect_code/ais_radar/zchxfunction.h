@@ -5,7 +5,6 @@
 #include <QMap>
 #include <QPointF>
 #include <QTime>
-#include <QDebug>
 #include <QVector2D>
 #include "zchxradarcommon.h"
 
@@ -234,6 +233,12 @@ struct Mercator
         mY = y;
     }
 
+    Mercator(const QPointF& pnt)
+    {
+        mX = pnt.x();
+        mY = pnt.y();
+    }
+
     Mercator offset(double dx, double dy) const
     {
         return Mercator(mX +dx, mY + dy);
@@ -322,6 +327,7 @@ public:
     }
 
     bool    isPointIn(const Mercator& point, double width) const;
+    QList<Latlon>   makeArea(double width);
 
     double distanceToMe(const Mercator& point) const
     {
@@ -414,12 +420,7 @@ public:
         mTimer.start();
     }
 
-    void print()
-    {
-        qint64 counter = mTimer.elapsed();
-        mTotal += counter;
-        if(mDebug)  qDebug()<<mFunc<<" elapsed:"<<counter<< "and total msecs:"<<mTotal;
-    }
+    void print();
 
 private:
     QString mFunc;
@@ -430,6 +431,7 @@ private:
 
 
 double timeOfDay();
+QDateTime   timeStamps(double tod);
 
 void   exportRectDef2File(const zchxRadarRectDefList& list, const QString& fileName);
 

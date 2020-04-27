@@ -247,6 +247,21 @@ void ZCHXRadarRectThread::convertZMQ2ZCHX(QList<ZCHX::Data::ITF_RadarRect> &res,
         rect.current.angle = obj.currentrect().angle();
         rect.current.isRealData = obj.currentrect().realdata();
 
+        //添加预推区域
+        for(int k=0; k<obj.currentrect().predictionareas_size(); k++)
+        {
+            com::zhichenhaixin::proto::predictionArea area = obj.currentrect().predictionareas(k);
+            ZCHX::Data::ITF_SingleVideoBlockList list;
+            for(int m =0; m<area.area_size(); m++)
+            {
+                ZCHX::Data::ITF_SingleVideoBlock block;
+                block.latitude = area.area(m).latitude();
+                block.longitude = area.area(m).longitude();
+                list.append(block);
+            }
+            rect.current.predictionAreas.append(list);
+        }
+
         for (int j = 0; j < obj.currentrect().blocks_size(); j++)
         {
             PROTOBUF_SingleVideoBlock block = obj.currentrect().blocks(j);

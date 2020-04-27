@@ -18,7 +18,7 @@
 #include "radarccontroldefines.h"
 #include "updatevideoudpthread.h"
 #include <QCoreApplication>
-#include <QDebug>
+//#include <QDebug>
 #include <QDataStream>
 #include <QTcpServer>
 #include <QTcpSocket>

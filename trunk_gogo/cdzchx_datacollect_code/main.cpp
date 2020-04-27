@@ -3,7 +3,7 @@
 #include <QSharedMemory>
 #include <QSystemSemaphore>
 #include <QMessageBox>
-#include <QDebug>
+//#include <QDebug>
 #include <QTextCodec>
 #include "dbgcrash.h"
 #define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"

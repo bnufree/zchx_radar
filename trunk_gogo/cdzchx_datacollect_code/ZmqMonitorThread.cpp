@@ -1,5 +1,5 @@
 #include "ZmqMonitorThread.h"
-#include <QDebug>
+//#include <QDebug>
 #include <windows.h>
 #include <assert.h>
 #include <QHostInfo>

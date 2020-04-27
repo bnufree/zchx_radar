@@ -26,6 +26,8 @@ public:
     void appendSrcData(const zchxRadarVideoTask& task);
     bool getProcessData(ZCHXRadarVideoProcessorData& task);
     void setTracker(zchxRadarTargetTrack* track) {mTracker = track;}
+    void setRangeFactor(double factor);
+    void setAvgShipSpeed(double speed);
 
 protected:
     void run();
@@ -40,6 +42,7 @@ public slots:
 private:
     void    process(const ZCHXRadarVideoProcessorData& task);//绘制回波
     QColor  getColor(double dValue);//通过振幅值获取对应颜色值
+    void    updateCycleCount();
 private:
     double                          m_dCentreLon;
     double                          m_dCentreLat;
@@ -53,6 +56,8 @@ private:
     QMutex                          mMutex;
     int                             mVideoCycleCount;
     zchxRadarTargetTrack            *mTracker;
+    double                          mRangeFactor;
+    double                          mAvgShipSpeed;
 };
 
 #endif // ZCHXRADARVIDEOPROCESSOR_H

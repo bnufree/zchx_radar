@@ -4,7 +4,7 @@
 #include <QThread>
 #include <QDateTime>
 #include <QProcess>
-#include <QDebug>
+//#include <QDebug>
 #include "profiles.h"
 #include "Log.h"
 #include <QLabel>
@@ -14,8 +14,6 @@
 #include "zmq.hpp"
 #include "ais/zchxaisdataserver.h"
 #include "ais_radar/zchxradardataserver.h"
-#include "ais_radar/zchxradarechodatachange.h"
-#include "ais_radar/zxhcprocessechodata.h"
 #include "ais_radar/zchxanalysisandsendradar.h"
 #include "ais/zchxaisdataprocessor.h"
 #include "dialog_set.h"
@@ -32,7 +30,7 @@
 #include "ui_zchxMainWindow.h"
 #include <QThread>
 #include <QDateTime>
-#include <QDebug>
+//#include <QDebug>
 #include "profiles.h"
 #include <QLabel>
 #include <QFileDialog>

@@ -1,6 +1,4 @@
 ﻿#include "profiles.h"
-#include <QDebug>
-#define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"
 
 namespace Utils {
 
@@ -51,7 +49,6 @@ void Profiles::setDefault(const QString & prefix,const QString &key, const QVari
     QVariant oldValue = configSettings->value(key);
     if(oldValue.toString().isEmpty() && oldValue.toStringList().size() == 0)
     {
-        cout<<"设置默认值,配置文件为空"<<key;
         configSettings->setValue(key, value);
     }
     configSettings->endGroup();

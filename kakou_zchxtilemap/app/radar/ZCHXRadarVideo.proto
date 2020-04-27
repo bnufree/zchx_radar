@@ -49,6 +49,10 @@ package com.zhichenhaixin.proto;
 		required uint32	height = 2;
 		repeated pixelPoint points = 3;
 	}
+	message predictionArea
+	{
+		repeated singleVideoBlock area = 1;						//预推区域
+	}
 	//矩形回波块位置信息
 	message RadarRectDef
 	{ 
@@ -69,8 +73,9 @@ package com.zhichenhaixin.proto;
 		optional double angle = 15;			  	    			// 回波块内最长线段角度
 		required double sog = 16;								//矩形块速度
 		required double cog = 17;								//矩形块方向
-		repeated pixelPoint pixelPnts = 18;					//固定大小的矩形外框图形
-		required bool  realData = 19;						//当前目标的状态,是预推的(false) 还是实际的(true)
+		repeated pixelPoint pixelPnts = 18;						//固定大小的矩形外框图形
+		required bool  realData = 19;							//当前目标的状态,是预推的(false) 还是实际的(true)
+		repeated predictionArea predictionAreas = 20;			//目标下一个阶段的预推区域,暂定预推时间是10s
 	}
 	
 	//矩形回波块位置信息

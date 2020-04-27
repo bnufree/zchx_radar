@@ -1,5 +1,5 @@
 ﻿#include "comdataworker.h"
-#include <QDebug>
+//#include <QDebug>
 #include <QDateTime>
 #include "Log.h"
 

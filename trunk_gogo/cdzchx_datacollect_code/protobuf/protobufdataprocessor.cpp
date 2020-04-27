@@ -1,7 +1,7 @@
 ﻿#include "protobufdataprocessor.h"
 #include "profiles.h"
 #include "common.h"
-#include <QDebug>
+//#include <QDebug>
 #include <synchapi.h>
 #define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"
 

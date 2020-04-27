@@ -1,7 +1,7 @@
 #include "scrollarea.h"
 #include <QMouseEvent>
 #include <QScrollBar>
-#include <QDebug>
+//#include <QDebug>
 
 ScrollArea::ScrollArea(QWidget* parent)
     : QScrollArea(parent)

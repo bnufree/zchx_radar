@@ -1,5 +1,5 @@
 ﻿#include "zchxaisdataserver.h"
-#include <QDebug>
+//#include <QDebug>
 #include <QTime>
 
 zchxAisDataServer::zchxAisDataServer(int port, QObject *parent) :\

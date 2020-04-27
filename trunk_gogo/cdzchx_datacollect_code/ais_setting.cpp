@@ -8,7 +8,7 @@
 #include <QScrollBar>
 #include <drawaistrack.h>
 #include <QMessageBox>
-#include <QDebug>
+//#include <QDebug>
 #include "ais/zchxaisdataclient.h"
 #include "ais/zchxaisdataserver.h"
 #include "ais/zchxaisdataprocessor.h"

@@ -1,5 +1,5 @@
 ﻿#include "zchxradardataserver.h"
-#include <QDebug>
+//#include <QDebug>
 #include <QTime>
 #include <QDateTime>
 #include <QApplication>

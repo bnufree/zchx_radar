@@ -1,6 +1,6 @@
 ﻿#include "zchxanalysisandsendradar.h"
 #include "BR24.hpp"
-#include <QDebug>
+//#include <QDebug>
 #include <QtCore/qmath.h>
 #include <QDateTime>
 #include <QFile>
@@ -940,6 +940,8 @@ void ZCHXAnalysisAndSendRadar::analysisLowranceRadarSlot(const QByteArray &sRada
 #endif
         //cout<<"spoke:"<<spoke<<" angle:"<<angle_raw<<heading_raw;
         range_factor = range_meters/lineData.size();
+        if(m_VideoProcessor) m_VideoProcessor->setRangeFactor(range_factor);
+        if(m_targetTrack) m_targetTrack->setRangefactor(range_factor);
         //检查是否是经过了一次扫描周期,如果是,发出数据开始解析
         if(mStartAzimuth >= 0 && mStartAzimuth == angle_raw)
         {

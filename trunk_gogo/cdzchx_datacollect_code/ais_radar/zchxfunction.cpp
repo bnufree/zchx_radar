@@ -1,6 +1,6 @@
 ﻿#include "zchxfunction.h"
 #include <QPointF>
-#include <QDebug>
+#include "Log.h"
 #include <QLine>
 
 #define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"
@@ -399,6 +399,23 @@ bool MercatorLine::isValid() const
     return start.distanceToLine(end, end) > 1.0;
 }
 
+QList<Latlon> MercatorLine::makeArea(double width)
+{
+    //计算直线的角度
+    double angle = atan2(end.mY - start.mY, end.mX - start.mX);
+    QLineF line(start.mX, start.mY, end.mX, end.mY);
+    QLineF low = line.translated(width * 0.5 * sin(angle), -width *0.5 * cos(angle));
+    QLineF high = line.translated(-width * 0.5* sin(angle), width *0.5 * cos(angle));
+    //将墨卡托转换成经纬度
+    QList<Latlon> list;
+    list.append(mercatorToLatlon(Mercator(low.p1())));
+    list.append(mercatorToLatlon(Mercator(low.p2())));
+    list.append(mercatorToLatlon(Mercator(high.p2())));
+    list.append(mercatorToLatlon(Mercator(high.p1())));
+    list.append(mercatorToLatlon(Mercator(low.p1())));
+    return list;
+}
+
 bool MercatorLine::isPointIn(const Mercator &point, double width) const
 {
     //将直线按照设定的宽度往两边进行平移得到一个旋转的矩形,检查点是否在矩形区域内
@@ -522,6 +539,13 @@ double timeOfDay()
     return startDate.secsTo(QDateTime::currentDateTime());
 }
 
+QDateTime timeStamps(double tod)
+{
+    QDateTime startDate;
+    startDate.setDate(QDate::currentDate());
+    return startDate.addSecs(tod);
+}
+
 
 //将矩形回波点的坐标输出
 void  exportRectDef2File(const zchxRadarRectDefList& list, const QString& fileName)
@@ -541,4 +565,11 @@ void  exportRectDef2File(const zchxRadarRectDefList& list, const QString& fileNa
         file.write("\n");
     }
     file.close();
+}
+
+void zchxTimeElapsedCounter::print()
+{
+    qint64 counter = mTimer.elapsed();
+    mTotal += counter;
+    if(mDebug)  ZCHX_LOG_OUT("")<<mFunc<<" elapsed:"<<counter<< "and total msecs:"<<mTotal;
 }

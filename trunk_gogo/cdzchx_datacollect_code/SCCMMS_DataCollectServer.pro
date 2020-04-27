@@ -52,8 +52,6 @@ SOURCES += main.cpp\
     ais_radar/ZCHXRadar.pb.cc \
     ais_radar/ZCHXRadarVideo.pb.cc \
     ais_radar/zchxradaraissetting.cpp \
-    ais_radar/zchxradarechodatachange.cpp \
-    ais_radar/zmqradarechothread.cpp \
     ais_radar/zchxanalysisandsendradar.cpp \
     ais_radar/qradarparamsetting.cpp \
     ais_radar/qradarstatussettingwidget.cpp \    
@@ -149,8 +147,6 @@ HEADERS  += \
     ais_radar/ZCHXRadarVideo.pb.h \
     ais_radar/BR24.hpp \    
     ais_radar/zchxradaraissetting.h \
-    ais_radar/zchxradarechodatachange.h \
-    ais_radar/zmqradarechothread.h \
     ais_radar/zchxanalysisandsendradar.h \
     ais_radar/qradarparamsetting.h \
     ais_radar/radarccontroldefines.h \
