@@ -535,6 +535,8 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
         if(!line.isValid()) return result;
         //从最新的目标矩形框中寻找预估位置附件的点列,将与目标方位偏离最小的点作为最终的点
         Mercator est_pos = latlonToMercator(est_lat, est_lon);
+        //重新生成目标的可能区域
+        makePredictionArea(src, 200, delta_time * 2);
         double est_target_index = -1;
         double min_distance = INT64_MAX;
         for(int k = 0; k<list.size(); k++)
@@ -549,7 +551,7 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
 #endif
             //计算点到预估位置的距离
             double distance = now.distanceToPoint(est_pos);
-            if(min_distance < distance)
+            if(min_distance > distance)
             {
                 est_target_index = k;
                 min_distance = distance;
@@ -576,7 +578,9 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
 #else
             distance = getDisDeg(old_lat, old_lon, next.centerlatitude(), next.centerlongitude());
 #endif
-            if(distance <  delta_time * ship_max_speed)
+            //判断目标的距离的条件就是要么目标没有移动,要么目标的移动距离超出了一个距离单元
+  //          if(distance <  delta_time * ship_max_speed)
+            if(distance < 1.0 || (distance > mRangeFactor && distance < max_distance))
             {
                 qDebug()<<" child of root node found now. distance:"<<distance;
                 result.append(list.takeAt(k));
@@ -660,7 +664,7 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
     dest.set_cog(last_pos.azimuthTo(cur_pos));
     double cal_dis = last_pos.distanceTo(cur_pos);
     dest.set_sog( cal_dis / delta_time);
-    makePredictionArea(&dest, 200, 20.0);
+    makePredictionArea(&dest, 200, 30.0);
     last_update_node->children.append(QSharedPointer<TargetNode>(new TargetNode(dest)));
 }
 
@@ -676,82 +680,75 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
     //优先更新目标的分支,如果没有分支,再次更新根节点
     bool update_branch = false;
     //先更新目标的分支
-    if(topNode->children.size() > 0)
+    for(int i=0; i<topNode->children.size(); i++)
     {
-        for(int i=0; i<topNode->children.size(); i++)
+        TargetNode *child = topNode->children[i].data();
+        if(!child) continue;
+        //获取分支的最后节点
+        TargetNode *last_child = child->getLastChild(child);
+        if(!last_child) continue;
+        pre_rect = last_child->rect;
+        qDebug()<<"child number:"<<topNode->rect->rectnumber()<<" time:"<<pre_rect->timeofday()<<" sog:"<<pre_rect->sog()<<" cog:"<<pre_rect->cog()<<" route index:"<<i;
+
+        //根据分支节点的速度和角度取得待更新的矩形单元,这里的矩形单元数只有一个
+        zchxRadarRectDefList result = getDirDeterminTargets(left_list, pre_rect, true);
+        if(result.size() == 0)
         {
-            TargetNode *child = topNode->children[i].data();
-            if(!child) continue;
-            //获取分支的最后节点
-            TargetNode *last_child = child->getLastChild(child);
-            if(!last_child) continue;
-            pre_rect = last_child->rect;
-            qDebug()<<"child number:"<<topNode->rect->rectnumber()<<" time:"<<pre_rect->timeofday()<<" sog:"<<pre_rect->sog()<<" cog:"<<pre_rect->cog()<<" route index:"<<i;
-            if(topNode->rect->rectnumber() == 150011)
-            {
-                bool debug = true;
-            }
-            //根据分支节点的速度和角度取得待更新的矩形单元,这里的矩形单元数只有一个
-            zchxRadarRectDefList result = getDirDeterminTargets(left_list, pre_rect, true);
-            if(result.size() == 0)
-            {
-                qDebug()<<"found no target in specified area";
-                continue;
-            }
-            //更新对应的速度和方向
-            zchxRadarRectDef now_rect = result.first();
-            now_rect.set_realdata(true);
-            now_rect.set_rectnumber(pre_rect->rectnumber());
-            QGeoCoordinate last_pos(pre_rect->centerlatitude(), pre_rect->centerlongitude());
-            QGeoCoordinate cur_pos(now_rect.centerlatitude(), now_rect.centerlongitude());
-            double cog = last_pos.azimuthTo(cur_pos);
-            double delta_time = list_time - pre_rect->timeofday();
-            if(delta_time <= 0) delta_time += (3600 * 24);
-            double cal_dis = last_pos.distanceTo(cur_pos);
+            qDebug()<<"found no target in specified area";
+            continue;
+        }
+        //更新对应的速度和方向
+        zchxRadarRectDef now_rect = result.first();
+        now_rect.set_realdata(true);
+        now_rect.set_rectnumber(pre_rect->rectnumber());
+        QGeoCoordinate last_pos(pre_rect->centerlatitude(), pre_rect->centerlongitude());
+        QGeoCoordinate cur_pos(now_rect.centerlatitude(), now_rect.centerlongitude());
+        double cog = last_pos.azimuthTo(cur_pos);
+        double delta_time = list_time - pre_rect->timeofday();
+        if(delta_time <= 0) delta_time += (3600 * 24);
+        double cal_dis = last_pos.distanceTo(cur_pos);
+        double sog = cal_dis / delta_time;
+        now_rect.set_sog(sog);
+        now_rect.set_cog(cog);
+        makePredictionArea(&now_rect, 200, 30.0);
+        last_child->children.append(QSharedPointer<TargetNode>(new TargetNode(now_rect)));
+        if(!update_branch) update_branch = true;
+        topNode->time_of_day = list_time;
+        if(track_debug) qDebug()<<"update root node:"<<pre_rect->rectnumber()<<" with possible route index"<<i<<"  cog "<<cog<<" sog:"<<sog;
+    }
+    if(update_branch) return;
+    //更新根节点
+    zchxRadarRectDefList result = getDirDeterminTargets(left_list, topNode->rect, false);
+    pre_rect = topNode->rect;
+    bool root_update = false;
+    for(int i=0; i<result.size(); i++)
+    {
+        zchxRadarRectDef total = result[i];
+        total.set_realdata(true);
+        total.set_rectnumber(pre_rect->rectnumber());
+        QGeoCoordinate last_pos(pre_rect->centerlatitude(), pre_rect->centerlongitude());
+        QGeoCoordinate cur_pos(total.centerlatitude(), total.centerlongitude());
+        double cog = last_pos.azimuthTo(cur_pos);
+        double delta_time = list_time - topNode->rect->timeofday();
+        if(delta_time <= 0) delta_time += (3600 * 24);
+        double cal_dis = last_pos.distanceTo(cur_pos);
+        if(cal_dis >= mRangeFactor)
+        {
             double sog = cal_dis / delta_time;
-            now_rect.set_sog(sog);
-            now_rect.set_cog(cog);
-            makePredictionArea(&now_rect, 200, 20.0);
-            last_child->children.append(QSharedPointer<TargetNode>(new TargetNode(now_rect)));
-            if(!update_branch) update_branch = true;
-            topNode->time_of_day = list_time;
-            if(track_debug) qDebug()<<"update root node:"<<pre_rect->rectnumber()<<" with possible route index"<<i<<"  cog "<<cog<<" sog:"<<sog;
-        }
-    } else
-    {
-        //更新根节点
-        zchxRadarRectDefList result = getDirDeterminTargets(left_list, topNode->rect, false);
-        pre_rect = topNode->rect;
-        bool root_update = false;
-        for(int i=0; i<result.size(); i++)
-        {
-            zchxRadarRectDef total = result[i];
-            total.set_realdata(true);
-            total.set_rectnumber(pre_rect->rectnumber());
-            QGeoCoordinate last_pos(pre_rect->centerlatitude(), pre_rect->centerlongitude());
-            QGeoCoordinate cur_pos(total.centerlatitude(), total.centerlongitude());
-            double cog = last_pos.azimuthTo(cur_pos);
-            double delta_time = list_time - topNode->rect->timeofday();
-            if(delta_time <= 0) delta_time += (3600 * 24);
-            double cal_dis = last_pos.distanceTo(cur_pos);
-            if(cal_dis > /*1.0*/mRangeFactor)
-            {
-                double sog = cal_dis / delta_time;
-                total.set_sog(sog);
-                total.set_cog(cog);
-                makePredictionArea(&total, 200, 20.0);
-                topNode->children.append(QSharedPointer<TargetNode>(new TargetNode(total)));
-                if(track_debug) qDebug()<<"update root node:"<<pre_rect->rectnumber()<<" with possible child:(distance, cog, sog, time) "<<cal_dis<<cog<<sog<<total.timeofday();
-                root_update = true;
-            }
-        }
-        if(result.size() > 0 && !root_update)
-        {
-            //所有目标都距离太近,将根节点的时间更新
-            topNode->time_of_day = list_time;
-            topNode->rect->set_timeofday(list_time);
+            total.set_sog(sog);
+            total.set_cog(cog);
+            makePredictionArea(&total, 200, 30.0);
+            topNode->children.append(QSharedPointer<TargetNode>(new TargetNode(total)));
+            if(track_debug) qDebug()<<"update root node:"<<pre_rect->rectnumber()<<" with possible child:(distance, cog, sog, time) "<<cal_dis<<cog<<sog<<total.timeofday();
+            root_update = true;
         }
     }
+//    if(result.size() > 0 && !root_update)
+//    {
+//        //所有目标都距离太近,将根节点的时间更新
+//        topNode->time_of_day = list_time;
+//        topNode->rect->set_timeofday(list_time);
+//    }
 }
 
 //检查所有目标路径点的个数。若路径存在3个点，则目标航迹确定为对应路径。返回第一层节点对象
@@ -884,10 +881,10 @@ void zchxRadarTargetTrack::updateTrackPointWithNode(zchxRadarSurfaceTrack& list,
     zchxTrackPoint *trackObj = list.add_trackpoints();
     if(!trackObj) return;
     zchxRadarRectDef *target = child->rect;
-//     if(!node->cog_confirmed)
-//     {
-//         target = node->rect;
-//     }
+    if(!node->cog_confirmed)
+    {
+        target = node->rect;
+    }
 
     LatLong startLatLong(mCenter.lon, mCenter.lat);
     //编号
@@ -970,6 +967,7 @@ void zchxRadarTargetTrack::updateRectMapWithNode(zchxRadarRectMap &map, TargetNo
     {
         //不需要更新历史数据,只更新目标的最初数据
         rect.mutable_currentrect()->CopyFrom(*(node->rect));
+#if 0
         // 这里便于调试,将所有的节点的预推区域也加上
         for(int i=0; i<node->children.size(); i++)
         {
@@ -984,6 +982,7 @@ void zchxRadarTargetTrack::updateRectMapWithNode(zchxRadarRectMap &map, TargetNo
                 worknode = worknode->children[0].data();
             }
         }
+#endif
     }
     map[rect_num] = rect;
 }

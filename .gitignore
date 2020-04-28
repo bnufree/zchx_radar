@@ -6,3 +6,4 @@ test_bin
 build
 *.user
 out
+/trunk_gogo/bin/radar_data_collect_server.exe
