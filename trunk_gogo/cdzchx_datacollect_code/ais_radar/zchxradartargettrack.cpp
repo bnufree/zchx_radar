@@ -13,7 +13,7 @@ zchxRadarTargetTrack::zchxRadarTargetTrack(int id, const Latlon& ll, int clear_t
     , mCenter(ll)
     , mClearTrackTime(clear_time)
     , mProcessWithRoute(route)
-    , mMaxEstCount(20)
+    , mMaxEstCount(5)
     , mRangeFactor(10)
 {
     mDirectionInvertThresholdVal = 90.0;
@@ -814,7 +814,7 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
     {
         zchxRadarRectDef rect = temp_list[i];
         TargetNode *node = new TargetNode(rect);
-        appendNode(node);
+        appendNode(node, 0);
     }
 
     //删除很久没有更新的目标点
@@ -842,8 +842,17 @@ void zchxRadarTargetTrack::splitAllRoutesIntoTargets(TargetNode *node, TargetNod
         }
         //将节点移除
         QSharedPointer<TargetNode> topNode = node->children.takeAt(i);
-        //生成新的目标点迹数据
-        appendNode(topNode.data());
+        if(topNode)
+        {
+            topNode.data()->cog_confirmed = false;
+            int rect_num = getCurrentRectNum();
+            if(topNode.data()->rect)
+            {
+                topNode.data()->rect->set_rectnumber(rect_num);
+                qDebug()<<"make new now from ununsed route rect:"<<node<<node->rect<<node->rect->rectnumber();
+            }
+            mTargetNodeMap.insert(rect_num, topNode);
+        }
     }
 }
 
@@ -858,14 +867,13 @@ void zchxRadarTargetTrack::deleteExpiredNode()
         double node_time = node->time_of_day;
         double delta_time = time_of_day - node_time;
         if(delta_time <= 0) delta_time += (3600 * 24);
-        if(delta_time > mClearTrackTime)
+        bool reason1 = delta_time > mClearTrackTime;
+        bool reason2 = node->est_count >= mMaxEstCount;
+        if( reason1 || reason2)
         {
+            qDebug()<<"remove node:"<<node.data()->rect->rectnumber()<<" reason:"<<(reason1 == true ? "time expired": (reason2 == true ? "max estmation" : "" ));
             mTargetNodeMap.remove(key);
             continue;
-        }
-        if(node->est_count >= mMaxEstCount)
-        {
-            mTargetNodeMap.remove(key);
         }
     }
 }
@@ -1013,13 +1021,20 @@ void zchxRadarTargetTrack::outputTargets()
     if(rect_map.size()) emit signalSendRectData(rect_map);
 }
 
-void zchxRadarTargetTrack::appendNode(TargetNode *node)
+void zchxRadarTargetTrack::appendNode(TargetNode *node, int source)
 {
     if(!node) return;
     node->cog_confirmed = false;
     int rect_num = getCurrentRectNum();
     if(!node->rect) return;
     node->rect->set_rectnumber(rect_num);
+    if(source == 0)
+    {
+        qDebug()<<"make new now from orignal rect:"<<node<<node->rect<<node->rect->rectnumber();
+    } else
+    {
+        qDebug()<<"make new now from ununsed route rect:"<<node<<node->rect<<node->rect->rectnumber();
+    }
     mTargetNodeMap.insert(rect_num, QSharedPointer<TargetNode>(node));
     if(track_debug) qDebug()<<"new node maked now:"<<node->rect->rectnumber()<<node->rect->timeofday();
 }

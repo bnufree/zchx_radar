@@ -112,7 +112,7 @@ private:
     void        updateRectMapWithNode(zchxRadarRectMap& map, TargetNode* node);
 
     int         getCurrentRectNum();
-    void        appendNode(TargetNode* node);
+    void        appendNode(TargetNode* node, int source);
     bool        getTask(zchxRadarTrackTask& task);    
     void        mergeRectTargetInDistance(zchxRadarTrackTask &temp_list, int target_merge_distance);
     Latlon      getMergeTargetLL(const zchxRadarRectDefList &list);

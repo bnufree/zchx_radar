@@ -83,8 +83,12 @@ void ZCHXRadarVideoProcessor::updateCycleCount()
 {
     if(mAvgShipSpeed > 0 && mRangeFactor > 0)
     {
-        mVideoCycleCount = qCeil(mRangeFactor / mAvgShipSpeed);
-        qDebug()<<"video Cycle count:"<<mVideoCycleCount;
+        int count = qCeil(mRangeFactor / mAvgShipSpeed);
+        if(mVideoCycleCount != count)
+        {
+            mVideoCycleCount = count;
+            qDebug()<<"video Cycle count:"<<mVideoCycleCount;
+        }
     }
 
 }
