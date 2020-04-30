@@ -394,74 +394,72 @@ Mercator latlonToMercator(const Latlon& ll)
     return Mercator(mx, my);
 }
 
-bool MercatorLine::isValid() const
+bool zchxTargetPredictionLine::isValid() const
 {
-    return start.distanceToLine(end, end) > 1.0;
+    return mStart.distanceToLine(mEnd, mEnd) > 1.0;
 }
 
-QList<Latlon> MercatorLine::makeArea(double width)
+void zchxTargetPredictionLine::makePridictionArea()
 {
+    mPredictionArea.clear();
+    mPredictionAreaLL.clear();
+    if(!isValid()) return;
     //计算直线的角度
-    double angle = atan2(end.mY - start.mY, end.mX - start.mX);
-    QLineF line(start.mX, start.mY, end.mX, end.mY);
-    QLineF low = line.translated(width * 0.5 * sin(angle), -width *0.5 * cos(angle));
-    QLineF high = line.translated(-width * 0.5* sin(angle), width *0.5 * cos(angle));
-    //将墨卡托转换成经纬度
-    QList<Latlon> list;
-    list.append(mercatorToLatlon(Mercator(low.p1())));
-    list.append(mercatorToLatlon(Mercator(low.p2())));
-    list.append(mercatorToLatlon(Mercator(high.p2())));
-    list.append(mercatorToLatlon(Mercator(high.p1())));
-    list.append(mercatorToLatlon(Mercator(low.p1())));
-    return list;
+    double angle = atan2(mEnd.mY - mStart.mY, mEnd.mX - mStart.mX);
+    QLineF line(mStart.mX, mStart.mY, mEnd.mX, mEnd.mY);
+    QLineF low = line.translated(mWidth * 0.5 * sin(angle), -mWidth *0.5 * cos(angle));
+    QLineF high = line.translated(-mWidth * 0.5* sin(angle), mWidth *0.5 * cos(angle));
+    //将墨卡托转换成经纬度, 保存对应的经纬度点列
+    if(mType == Prediction_Area_Rectangle)
+    {
+        mPredictionArea.append(low.p1());
+        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
+        mPredictionArea.append(low.p2());
+        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
+        mPredictionArea.append(high.p2());
+        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
+        mPredictionArea.append(high.p1());
+        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
+        mPredictionArea.append(low.p1());
+        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
+
+    } else
+    {
+        mPredictionArea.append(line.p1());
+        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
+        mPredictionArea.append(low.p2());
+        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
+        mPredictionArea.append(high.p2());
+        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
+    }
 }
 
-bool MercatorLine::isPointIn(const Mercator &point, double width) const
+
+bool zchxTargetPredictionLine::isPointIn(const Mercator &point, double width, int type)
 {
-    //将直线按照设定的宽度往两边进行平移得到一个旋转的矩形,检查点是否在矩形区域内
-    //计算直线的角度
-    double angle = atan2(end.mY - start.mY, end.mX - start.mX);
-    QLineF line(start.mX, start.mY, end.mX, end.mY);
-//    qDebug()<<"base line:"<<line;
-    QLineF low = line.translated(width * 0.5 * sin(angle), -width *0.5 * cos(angle));
-//    qDebug()<<"low:"<<low;
-    QLineF high = line.translated(-width * 0.5* sin(angle), width *0.5 * cos(angle));
-//    qDebug()<<"high:"<<high;
-    Mercator target = point.offset(-center.mX, -center.mY);
-    //将平行线转换成多边形
-    QPolygonF poly;
-    poly.append(low.p1());
-    poly.append(low.p2());
-    poly.append(high.p2());
-    poly.append(high.p1());
-    poly.append(low.p1());
+    if(width != mWidth || mType != type)
+    {
+        mWidth = width;
+        mType = type;
+        makePridictionArea();
+    }
 
-    bool sts = poly.containsPoint(target.toPointF(), Qt::OddEvenFill);
-#if 0
-    //计算线之间的距离
-    Mercator p1(low.p2().x(), low.p2().y());
-    Mercator p2(high.p2().x(), high.p2().y());
-
-    Latlon ll1 = mercatorToLatlon(p1);
-    Latlon ll2 = mercatorToLatlon(p2);
-    double dis = getDisDeg(ll1.lat, ll1.lon, ll2.lat, ll2.lon);
-    qDebug()<<"poly:"<<poly<<" target:"<<target.toPointF()<<" contains:"<<sts<<dis;
-#endif
+    bool sts = mPredictionArea.containsPoint(point.toPointF(), Qt::OddEvenFill);
     return sts;
 }
 
-PNTPOSTION MercatorLine::pointPos(double& dist_to_line, double& dist_div_line, const Mercator &point)
+PNTPOSTION zchxTargetPredictionLine::pointPos(double& dist_to_line, double& dist_div_line, const Mercator &point)
 {
     //检查目标直线是不是一个点的情况
     if(!isValid()) return POS_UNDETERMINED;
 
     //检查目标点是否在线段的端点上
-    if(point == start)
+    if(point == mStart)
     {
         dist_to_line = 0.0;
         dist_div_line = 0.0;
         return POS_ON_VERTEX;
-    } else if(point == end)
+    } else if(point == mEnd)
     {
         dist_to_line = 0.0;
         dist_div_line = length();
@@ -483,8 +481,8 @@ PNTPOSTION MercatorLine::pointPos(double& dist_to_line, double& dist_div_line, c
     //当两个向量的乘积为0的时候，A，B，P三点共线
     //将点转换成平面的点
     Mercator p0 = point;
-    Mercator p1 = start;
-    Mercator p2 = end;
+    Mercator p1 = mStart;
+    Mercator p2 = mEnd;
     //检查目标点的坐标是否在线段外
     double max_x = p1.mX < p2.mX ? p2.mX : p1.mX;
     double min_x = p1.mX < p2.mX ? p1.mX : p2.mX;
@@ -505,7 +503,7 @@ PNTPOSTION MercatorLine::pointPos(double& dist_to_line, double& dist_div_line, c
     if(fabs(cross_product) <= DOUBLE_EPS)
     {
         dist_to_line = 0.0;
-        dist_div_line = point.distanceToLine(start, start);
+        dist_div_line = point.distanceToLine(mStart, mStart);
         if(dist_div_line < 1 || fabs(dist_div_line - length()) < 1)
         {
             return POS_ON_VERTEX;
@@ -515,7 +513,7 @@ PNTPOSTION MercatorLine::pointPos(double& dist_to_line, double& dist_div_line, c
     {
         //点在线的两边
         //1)计算点到起点的距离
-        double start_dis = point.distanceToLine(start, start);
+        double start_dis = point.distanceToLine(mStart, mStart);
         //2)计算到直线的距离
         dist_to_line = distanceToMe(point);
         //3)勾股定理计算分割距离
@@ -527,7 +525,7 @@ PNTPOSTION MercatorLine::pointPos(double& dist_to_line, double& dist_div_line, c
 }
 
 
-PNTPOSTION MercatorLine::pointPos(double& dist_to_line, double& dist_div_line, double lat, double lon)
+PNTPOSTION zchxTargetPredictionLine::pointPos(double& dist_to_line, double& dist_div_line, double lat, double lon)
 {
     return pointPos(dist_to_line, dist_div_line, latlonToMercator(Latlon(lat, lon)));
 }

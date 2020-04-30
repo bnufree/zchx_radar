@@ -1145,6 +1145,7 @@ void ZCHXAnalysisAndSendRadar::slotSendComTracks(const zchxRadarSurfaceTrack& tr
 {
    if(mRadarOutMgr)
    {
+       qDebug()<<"data outto mgr send time:"<<QDateTime::currentDateTime();
        zchxRadarSurfaceTrack* track = new zchxRadarSurfaceTrack(tracks);
        mRadarOutMgr->appendData(zchxRadarUtils::protoBufMsg2ByteArray(track), mRadarTrackTopic, mRadarTrackPort);
        delete track;

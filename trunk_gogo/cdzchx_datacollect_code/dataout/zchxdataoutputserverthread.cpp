@@ -86,6 +86,7 @@ void zchxDataOutputServerThread::run()
         }
         if(sendList.size() > 0 && isOK())
         {
+            qDebug()<<"data send time:"<<QDateTime::currentDateTime();
             foreach (zchxSendTask task, sendList)
             {
                 //数据分成3帧进行发送(时间+topic+内容)  

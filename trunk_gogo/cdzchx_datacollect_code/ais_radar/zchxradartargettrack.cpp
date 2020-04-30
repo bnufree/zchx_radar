@@ -325,134 +325,6 @@ bool zchxRadarTargetTrack::isTargetJumping(const zchxRadarRect& rect, double mer
 
 #define         ANGLE_IN_180
 
-void zchxRadarTargetTrack::updateConfirmedTarget(const zchxRadarTrackTask &task, zchxRadarRectDefList &left_list)
-{
-    left_list.clear();
-    if(task.size() == 0) return;
-    zchxTimeElapsedCounter counter(__FUNCTION__);
-    left_list.append(task);
-    if(mRadarRectMap.size() == 0) return;
-
-    double list_time = left_list.first().timeofday();
-    //开始更新已经存在且确认的目标轨迹
-    zchxRadarRectMap::iterator it = mRadarRectMap.begin();
-    for(; it != mRadarRectMap.end(); it++)
-    {
-        //方向还没有确认的情况,不处理
-        if(!it->dirconfirmed()) continue;
-        //根据已知的方向和速度预测目标的当前位置
-        int    rect_num = it->currentrect().rectnumber();
-        double old_time = it->currentrect().timeofday();
-        double old_sog = it->currentrect().sog();
-        double old_lat = it->currentrect().centerlatitude();
-        double old_lon = it->currentrect().centerlongitude();
-        double old_cog = it->currentrect().cog();
-        //计算当前的时间间隔, 根据时间间隔算预估位置点
-        float delta_time = list_time - old_time;
-
-        zchxRadarRectDefList merge_list;
-        int cur_est_cnt = it->estcount();
-        //这里开始进行位置的预估判断,
-        if(track_debug) qDebug()<<"current target dir is confirmed."<<rect_num<<" cog:"<<old_cog;
-        //计算当前目标可能的预估位置
-        double est_lat = 0.0, est_lon = 0.0;
-        if(delta_time < 0) delta_time += (3600* 24);
-        float est_distance = old_sog * delta_time;
-        distbearTolatlon1(old_lat, old_lon, est_distance, old_cog, &est_lat, &est_lon);
-        //预估点和前一位置连线，若当前点在连线附近，则认为是下一个点。点存在多个，则取预估位置距离最近的点。
-        MercatorLine line(old_lat, old_lon, est_lat, est_lon);
-        if(!line.isValid()) continue;
-        //从最新的目标矩形框中寻找预估位置附件的点列,将与目标方位偏离最小的点作为最终的点
-        Mercator est_pos = latlonToMercator(est_lat, est_lon);
-        double est_target_index = -1;
-        double min_distance = INT64_MAX;
-        for(int k = 0; k<left_list.size(); k++)
-        {
-            zchxRadarRectDef next = left_list[k];
-            Mercator now = latlonToMercator(next.centerlatitude(), next.centerlongitude());
-            //检查是否在连线的范围内
-            if(!line.isPointIn(now, point_near_line)) continue;
-            //计算点到预估位置的距离
-            double distance = now.distanceToPoint(est_pos);
-            if(min_distance < distance)
-            {
-                est_target_index = k;
-                min_distance = distance;
-            }
-        }
-        zchxRadarRectDef dest;
-        //检查目标是否已经找到
-        if(est_target_index > 0)
-        {
-            //目标已经找到,将目标从原来的矩形队列删除
-            dest = left_list.takeAt(est_target_index);
-            cur_est_cnt = 0;
-            if(track_debug) qDebug()<<"next target found, distance to estmation:"<<min_distance<<rect_num;
-            //计算新目标和就目标之间的距离
-            double distance = getDisDeg(old_lat, old_lon, dest.centerlatitude(), dest.centerlongitude());
-            if(distance < 1.0)
-            {
-                //目标的距离太近,认为目标没有移动, 不进行处理
-                if(track_debug) qDebug()<<"new destination too closed. not update. continue..."<<distance;
-                //仅仅更新目标的当前时间,防止目标被删除
-                it->mutable_currentrect()->set_timeofday(list_time);
-                continue;
-            }
-
-        } else
-        {
-            if(track_debug) qDebug()<<"next target not found, now fake one...."<<rect_num;
-            dest.CopyFrom(it->currentrect());
-            dest.set_realdata(false);
-            dest.set_timeofday(list_time);
-            //将目标移动到现在的预推位置
-            changeTargetLL(Latlon(est_lat, est_lon), dest);
-            cur_est_cnt++;
-        }
-
-        //确定新目标
-        zchxRadarRect total;
-        total.set_dirconfirmed(it->dirconfirmed());  //初始化目标是否确认方向
-        total.set_estcount(cur_est_cnt);
-        total.mutable_currentrect()->CopyFrom(dest);
-        //旧目标添加历史轨迹点的0号位置
-        zchxRadarRectDef *single_Rect = total.add_historyrects();
-        single_Rect->CopyFrom(it->currentrect());
-        //移动就目标的历史轨迹点到新目表的历史轨迹点.历史轨迹点最大数目为20
-        int update_his_size = 20 - total.historyrects_size();
-        int k = 0;
-        for(int i= 0; i<it->historyrects_size(); i++)
-        {
-            if(k >= update_his_size) break;
-            zchxRadarRectDef *history = total.add_historyrects();
-            history->CopyFrom(it->historyrects(i));
-            k++;
-        }
-        //更新速度角度
-        if(total.historyrects_size() > 0)
-        {
-            zchxRadarRectDef* last = total.mutable_historyrects(0);
-            QGeoCoordinate last_pos(last->centerlatitude(), last->centerlongitude());
-            QGeoCoordinate cur_pos(total.currentrect().centerlatitude(), total.currentrect().centerlongitude());
-            total.mutable_currentrect()->set_cog(last_pos.azimuthTo(cur_pos));
-            double delta_time = total.currentrect().timeofday() - last->timeofday();
-            if(delta_time <= 0) delta_time += (3600 * 24);
-            double cal_dis = last_pos.distanceTo(cur_pos);
-            total.mutable_currentrect()->set_sog( cal_dis / delta_time);
-            if(total.historyrects_size() == 1)
-            {
-                //添加第一个历史轨迹点
-                //第一个点的方向还未确定,默认赋值为第二个点的角度
-                last->set_cog(total.currentrect().cog());
-            }
-        }
-        //将就目标的历史轨迹清除,只有新目标保存历史轨迹
-        it->clear_historyrects();
-        //将新目标更新到队列中
-        it->CopyFrom(total);
-    }
-}
-
 bool zchxRadarTargetTrack::isPointInPredictionArea(zchxRadarRectDef *src, double lat, double lon)
 {
     return isPointInPredictionArea(src, Latlon(lat, lon));
@@ -495,9 +367,9 @@ void zchxRadarTargetTrack::makePredictionArea(zchxRadarRectDef *rect,  double wi
     float est_distance = rect->sog() * delta_time;
     QGeoCoordinate dest = cur.atDistanceAndAzimuth(est_distance, rect->cog());
     //构造预估区域
-    MercatorLine line(rect->centerlatitude(), rect->centerlongitude(),  dest.latitude(), dest.longitude());
+    zchxTargetPredictionLine line(rect->centerlatitude(), rect->centerlongitude(),  dest.latitude(), dest.longitude(), width, Prediction_Area_Rectangle);
     if(!line.isValid()) return;
-    QList<Latlon> list = line.makeArea(width);
+    QList<Latlon> list = line.getPredictionArea();
     if(list.size() == 0) return;
     com::zhichenhaixin::proto::predictionArea* area = rect->add_predictionareas();
     for(int i=0; i<list.size(); i++)
@@ -526,17 +398,16 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
     {        
         //计算当前目标可能的预估位置
         double est_lat = 0.0, est_lon = 0.0;
+        //计算目标的最合理位置
         float est_distance = old_sog * delta_time;
-        qDebug()<<" time:"<<src->timeofday()<<" sog:"<<old_sog<<" cog:"<<old_cog<<" delta_time:"<<delta_time<<" distance:"<<est_distance;
-
         distbearTolatlon1(old_lat, old_lon, est_distance, old_cog, &est_lat, &est_lon);
+        Mercator est_pos = latlonToMercator(est_lat, est_lon);
+        //将目标的预估范围扩大到预估位置的2被倍
+        distbearTolatlon1(old_lat, old_lon, est_distance * 2, old_cog, &est_lat, &est_lon);
         //预估点和前一位置连线，若当前点在连线附近，则认为是下一个点。点存在多个，则取预估位置距离最近的点。
-        MercatorLine line(old_lat, old_lon, est_lat, est_lon);
+        zchxTargetPredictionLine line(old_lat, old_lon, est_lat, est_lon, 200, Prediction_Area_Rectangle);
         if(!line.isValid()) return result;
         //从最新的目标矩形框中寻找预估位置附件的点列,将与目标方位偏离最小的点作为最终的点
-        Mercator est_pos = latlonToMercator(est_lat, est_lon);
-        //重新生成目标的可能区域
-        makePredictionArea(src, 200, delta_time * 2);
         double est_target_index = -1;
         double min_distance = INT64_MAX;
         for(int k = 0; k<list.size(); k++)
@@ -544,8 +415,8 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
             zchxRadarRectDef next = list[k];
             Mercator now = latlonToMercator(next.centerlatitude(), next.centerlongitude());
             //检查是否在连线的范围内
-#if 0
-            if(!line.isPointIn(now, point_near_line)) continue;
+#if 1
+            if(!line.isPointIn(now, 200, Prediction_Area_Rectangle)) continue;
 #else
             if(!isPointInPredictionArea(src, &next)) continue;
 #endif
@@ -866,11 +737,12 @@ void zchxRadarTargetTrack::deleteExpiredNode()
         if(!node) continue;
         double node_time = node->time_of_day;
         double delta_time = time_of_day - node_time;
-        if(delta_time <= 0) delta_time += (3600 * 24);
-        bool reason1 = delta_time > mClearTrackTime;
-        bool reason2 = node->est_count >= mMaxEstCount;
+        if(delta_time < 0) delta_time += (3600 * 24);
+        bool reason1 = (delta_time > mClearTrackTime);
+        bool reason2 = (node->est_count >= mMaxEstCount);
         if( reason1 || reason2)
         {
+            qDebug()<<"now:"<<time_of_day<<" node time:"<<node_time<<" delta_time:"<<delta_time<<" clear time:"<<mClearTrackTime;
             qDebug()<<"remove node:"<<node.data()->rect->rectnumber()<<" reason:"<<(reason1 == true ? "time expired": (reason2 == true ? "max estmation" : "" ));
             mTargetNodeMap.remove(key);
             continue;
@@ -1017,7 +889,12 @@ void zchxRadarTargetTrack::outputTargets()
         updateRectMapWithNode(rect_map, node);
     }
     track_list.set_length(track_list.trackpoints_size());
-    if(track_list.trackpoints_size()) emit signalSendTracks(track_list);
+    if(track_list.trackpoints_size())
+    {
+        qDebug()<<"data to be send time:"<<QDateTime::currentDateTime();
+        emit signalSendTracks(track_list);
+    }
+
     if(rect_map.size()) emit signalSendRectData(rect_map);
 }
 

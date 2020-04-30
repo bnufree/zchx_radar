@@ -306,32 +306,51 @@ enum PNTPOSTION{
 
 };
 
+enum PredictionAreaType{
+    Prediction_Area_Rectangle = 0,
+    Prediction_Area_Triangle,
+};
 
-struct      MercatorLine
+
+class      zchxTargetPredictionLine
 {
+private:
+    Mercator    mStart;
+    Mercator    mEnd;
+    QPolygonF   mPredictionArea;
+    QList<Latlon>   mPredictionAreaLL;
+    double      mWidth;
+    int         mType;
+private:
+    void makePridictionArea();
 public:
-    Mercator    center;
-    Mercator    start;
-    Mercator    end;
-    MercatorLine(double start_lat, double start_lon, double end_lat, double end_lon)
+    zchxTargetPredictionLine() {
+        mWidth = 0;
+        mType = Prediction_Area_Rectangle;
+    }
+    zchxTargetPredictionLine(Latlon start, Latlon end, double width, int type)
     {
-        start = latlonToMercator(Latlon(start_lat, start_lon));
-        end = latlonToMercator(Latlon(end_lat, end_lon));
+        mStart = latlonToMercator(start);
+        mEnd = latlonToMercator(end);
+        mWidth = width;
+        mType = type;
+        makePridictionArea();
     }
 
-    void  setCenter(double lat, double lon)
+    zchxTargetPredictionLine(double start_lat, double start_lon, double end_lat, double end_lon, double width, int type)
     {
-        center = latlonToMercator(lat, lon);
-        start = start.offset(-center.mX, -center.mY);
-        end = end.offset(-center.mX, -center.mY);
+        zchxTargetPredictionLine(Latlon(start_lat, start_lon), Latlon(end_lat, end_lon), width, type);
     }
 
-    bool    isPointIn(const Mercator& point, double width) const;
-    QList<Latlon>   makeArea(double width);
+    bool    isPointIn(const Mercator& point, double width, int type);
+    bool    isPointIn(double lat, double lon, double width, int type) {return isPointIn(latlonToMercator(lat, lon), width, type);}
+    bool    isPointIn(Latlon ll, double width, int type) {return(isPointIn(latlonToMercator(ll), width, type));}
+
+    QList<Latlon>   getPredictionArea() const {return mPredictionAreaLL;}
 
     double distanceToMe(const Mercator& point) const
     {
-        return point.distanceToLine(start, end);
+        return point.distanceToLine(mStart, mEnd);
     }
 
     double distanceToMe(double lat, double lon) const
@@ -341,7 +360,7 @@ public:
 
     double length() const
     {
-        return start.distanceToLine(end, end);
+        return mStart.distanceToLine(mStart, mEnd);
     }
 
     bool isValid() const;

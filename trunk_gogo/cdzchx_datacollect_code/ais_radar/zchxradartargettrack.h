@@ -98,7 +98,6 @@ public slots:
     void        process(const zchxRadarTrackTask& task);
     void        processWithPossibleRoute(const zchxRadarTrackTask& task);
     void        processWithoutRoute(const zchxRadarTrackTask& task);
-    void        updateConfirmedTarget(const zchxRadarTrackTask& task, zchxRadarRectDefList& left_list);
 protected:
     void     run();
 private:
