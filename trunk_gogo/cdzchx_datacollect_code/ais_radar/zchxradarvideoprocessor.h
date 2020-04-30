@@ -28,6 +28,7 @@ public:
     void setTracker(zchxRadarTargetTrack* track) {mTracker = track;}
     void setRangeFactor(double factor);
     void setAvgShipSpeed(double speed);
+    void setRadarSpr(double spr) {mRadarSpr = spr;}
 
 protected:
     void run();
@@ -58,6 +59,7 @@ private:
     zchxRadarTargetTrack            *mTracker;
     double                          mRangeFactor;
     double                          mAvgShipSpeed;
+    double                          mRadarSpr;
 };
 
 #endif // ZCHXRADARVIDEOPROCESSOR_H

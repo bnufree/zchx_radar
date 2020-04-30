@@ -23,6 +23,7 @@ void ZCHXRadarPointThread::parseRecvData(const QByteArrayList& list)
     zchxFuntionTimer t(mRadarCommonSettings.m_sTopicList.join(","));
     if(!objRadarSurfaceTrack.ParseFromArray(list.last().data(), list.last().size())) return;
     parseRadarList(objRadarSurfaceTrack, radarPointList);
+    qDebug()<<"radar point send time:"<<QDateTime::currentDateTime();
     emit sendMsg(mRadarCommonSettings.m_sSiteID, radarPointList);
 }
 

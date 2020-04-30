@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
         qDebug()<<"appName:"<<appName;
     }
 #ifdef FILE_LOG
-    qInstallMessageHandler(logMessageOutputQt5);
+//    qInstallMessageHandler(logMessageOutputQt5);
 #endif
     TestMainWindow w;
     w.showMaximized();

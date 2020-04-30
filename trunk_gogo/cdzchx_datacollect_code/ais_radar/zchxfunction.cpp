@@ -403,7 +403,7 @@ void zchxTargetPredictionLine::makePridictionArea()
 {
     mPredictionArea.clear();
     mPredictionAreaLL.clear();
-    if(!isValid()) return;
+//    if(!isValid()) return;
     //计算直线的角度
     double angle = atan2(mEnd.mY - mStart.mY, mEnd.mX - mStart.mX);
     QLineF line(mStart.mX, mStart.mY, mEnd.mX, mEnd.mY);

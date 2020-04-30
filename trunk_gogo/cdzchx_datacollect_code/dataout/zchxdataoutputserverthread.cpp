@@ -86,12 +86,12 @@ void zchxDataOutputServerThread::run()
         }
         if(sendList.size() > 0 && isOK())
         {
-            qDebug()<<"data send time:"<<QDateTime::currentDateTime();
+//            qDebug()<<"data send time:"<<QDateTime::currentDateTime();
             foreach (zchxSendTask task, sendList)
             {
                 //数据分成3帧进行发送(时间+topic+内容)  
                 QByteArray sTimeArray = QString::number(QDateTime::currentMSecsSinceEpoch()).toUtf8();
-//                qDebug()<<sTimeArray<<task[0]<<task[1].size();
+//                qDebug()<<"send data time:"<<QDateTime::fromMSecsSinceEpoch(sTimeArray.toLongLong())<<task[0]<<task[1].size();
                 zmq_send(mSocket, task[0].data(), task[0].size(), ZMQ_SNDMORE);
                 zmq_send(mSocket, sTimeArray.data(), sTimeArray.size(), ZMQ_SNDMORE);
                 zmq_send(mSocket, task[1].data(), task[1].size(), 0);

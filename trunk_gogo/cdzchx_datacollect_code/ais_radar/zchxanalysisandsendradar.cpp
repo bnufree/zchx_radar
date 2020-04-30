@@ -945,7 +945,8 @@ void ZCHXAnalysisAndSendRadar::analysisLowranceRadarSlot(const QByteArray &sRada
         //检查是否是经过了一次扫描周期,如果是,发出数据开始解析
         if(mStartAzimuth >= 0 && mStartAzimuth == angle_raw)
         {
-            qDebug()<<"video data elapsed:"<<time_stas.elapsed();
+            int msec = time_stas.elapsed();
+            if(m_VideoProcessor) m_VideoProcessor->setRadarSpr(msec / 1000.0);
             //一个扫描周期完成
 //            cout<<"一个扫描周期完成angle_raw"<<angle_raw<<" data size:"<<m_radarVideoMap.size();
 //            qDebug()<<"cycle data end:"<<QDateTime::currentDateTime().toString("hh:mm:ss zzz");
@@ -1145,7 +1146,7 @@ void ZCHXAnalysisAndSendRadar::slotSendComTracks(const zchxRadarSurfaceTrack& tr
 {
    if(mRadarOutMgr)
    {
-       qDebug()<<"data outto mgr send time:"<<QDateTime::currentDateTime();
+//       qDebug()<<"data outto mgr send time:"<<QDateTime::currentDateTime();
        zchxRadarSurfaceTrack* track = new zchxRadarSurfaceTrack(tracks);
        mRadarOutMgr->appendData(zchxRadarUtils::protoBufMsg2ByteArray(track), mRadarTrackTopic, mRadarTrackPort);
        delete track;

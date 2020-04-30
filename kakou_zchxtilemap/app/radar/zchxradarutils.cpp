@@ -96,6 +96,7 @@ void ZCHXReceiverThread::run()
                     emit signalConnectedStatus(true, QString());
                 }
             }
+            qDebug()<<"start recv data:"<<mRadarCommonSettings.m_sTopicList<<QDateTime::currentDateTime();
             //开始接收数据,数据有可能多帧发送
             QByteArrayList recvlist;
             int length = 0;
@@ -121,6 +122,7 @@ void ZCHXReceiverThread::run()
             }
             if(recvlist.length() == 0)
             {
+                qDebug()<<"no data received:"<<mRadarCommonSettings.m_sTopicList<<QDateTime::currentDateTime();
                 //没有接收到数据
                 no_recv_num++;
                 if(no_recv_num >= 10)
@@ -134,6 +136,7 @@ void ZCHXReceiverThread::run()
                 no_recv_num = 0;
             }
             emit signalRecvDataNow(mType, length);
+            qDebug()<<"recv data tag:"<<recvlist[0]<<QDateTime::fromMSecsSinceEpoch(recvlist[1].toLongLong())<<QDateTime::currentDateTime();
             parseRecvData(recvlist);
         }
     }

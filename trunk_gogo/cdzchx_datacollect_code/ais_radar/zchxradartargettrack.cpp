@@ -406,8 +406,9 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
         distbearTolatlon1(old_lat, old_lon, est_distance * 2, old_cog, &est_lat, &est_lon);
         //预估点和前一位置连线，若当前点在连线附近，则认为是下一个点。点存在多个，则取预估位置距离最近的点。
         zchxTargetPredictionLine line(old_lat, old_lon, est_lat, est_lon, 200, Prediction_Area_Rectangle);
-        if(!line.isValid()) return result;
+//        if(!line.isValid()) return result;
         //从最新的目标矩形框中寻找预估位置附件的点列,将与目标方位偏离最小的点作为最终的点
+        makePredictionArea(src, 200, delta_time * 2);
         double est_target_index = -1;
         double min_distance = INT64_MAX;
         for(int k = 0; k<list.size(); k++)
@@ -415,9 +416,10 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
             zchxRadarRectDef next = list[k];
             Mercator now = latlonToMercator(next.centerlatitude(), next.centerlongitude());
             //检查是否在连线的范围内
-#if 1
+#if 0
             if(!line.isPointIn(now, 200, Prediction_Area_Rectangle)) continue;
 #else
+            
             if(!isPointInPredictionArea(src, &next)) continue;
 #endif
             //计算点到预估位置的距离
@@ -535,7 +537,7 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
     dest.set_cog(last_pos.azimuthTo(cur_pos));
     double cal_dis = last_pos.distanceTo(cur_pos);
     dest.set_sog( cal_dis / delta_time);
-    makePredictionArea(&dest, 200, 30.0);
+//    makePredictionArea(&dest, 200, 30.0);
     last_update_node->children.append(QSharedPointer<TargetNode>(new TargetNode(dest)));
 }
 
@@ -581,7 +583,7 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
         double sog = cal_dis / delta_time;
         now_rect.set_sog(sog);
         now_rect.set_cog(cog);
-        makePredictionArea(&now_rect, 200, 30.0);
+//        makePredictionArea(&now_rect, 200, 30.0);
         last_child->children.append(QSharedPointer<TargetNode>(new TargetNode(now_rect)));
         if(!update_branch) update_branch = true;
         topNode->time_of_day = list_time;
@@ -608,7 +610,7 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
             double sog = cal_dis / delta_time;
             total.set_sog(sog);
             total.set_cog(cog);
-            makePredictionArea(&total, 200, 30.0);
+//            makePredictionArea(&total, 200, 30.0);
             topNode->children.append(QSharedPointer<TargetNode>(new TargetNode(total)));
             if(track_debug) qDebug()<<"update root node:"<<pre_rect->rectnumber()<<" with possible child:(distance, cog, sog, time) "<<cal_dis<<cog<<sog<<total.timeofday();
             root_update = true;
@@ -891,7 +893,7 @@ void zchxRadarTargetTrack::outputTargets()
     track_list.set_length(track_list.trackpoints_size());
     if(track_list.trackpoints_size())
     {
-        qDebug()<<"data to be send time:"<<QDateTime::currentDateTime();
+//        qDebug()<<"data to be send time:"<<QDateTime::currentDateTime();
         emit signalSendTracks(track_list);
     }
 

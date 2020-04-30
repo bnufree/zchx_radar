@@ -22,6 +22,7 @@ static QMap<int, int> mRangeMap;
 ZCHXRadarVideoProcessor::ZCHXRadarVideoProcessor(int radar_id, QObject *parent)
     : QThread(parent)
     , mTracker(0)
+    , mRadarSpr(60.0/24)
 {
     mRadarID = radar_id;
     qRegisterMetaType<zchxRadarRectDefList>("const zchxRadarRectDefList&");
@@ -83,7 +84,8 @@ void ZCHXRadarVideoProcessor::updateCycleCount()
 {
     if(mAvgShipSpeed > 0 && mRangeFactor > 0)
     {
-        int count = qCeil(mRangeFactor / mAvgShipSpeed);
+        double count_sec = mRangeFactor / mAvgShipSpeed;
+        int count = qCeil(count_sec / mRadarSpr);
         if(mVideoCycleCount != count)
         {
             mVideoCycleCount = count;
