@@ -87,8 +87,6 @@ void up_video_pthread::readAllFile(QString path)
 
 
         }
-
-
     }
 
 }

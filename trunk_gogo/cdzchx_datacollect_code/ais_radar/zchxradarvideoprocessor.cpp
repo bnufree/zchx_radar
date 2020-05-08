@@ -82,17 +82,17 @@ void ZCHXRadarVideoProcessor::setAvgShipSpeed(double speed)
 
 void ZCHXRadarVideoProcessor::updateCycleCount()
 {
-    if(mAvgShipSpeed > 0 && mRangeFactor > 0)
-    {
-        double count_sec = mRangeFactor / mAvgShipSpeed;
-        int count = qCeil(count_sec / mRadarSpr);
-        if(mVideoCycleCount != count)
-        {
-            mVideoCycleCount = count;
-            qDebug()<<"video Cycle count:"<<mVideoCycleCount;
-        }
-    }
-
+//    if(mAvgShipSpeed > 0 && mRangeFactor > 0)
+//    {
+//        double count_sec = mRangeFactor / mAvgShipSpeed;
+//        int count = qCeil(count_sec / mRadarSpr);
+//        if(mVideoCycleCount != count)
+//        {
+//            mVideoCycleCount = count;
+////            qDebug()<<"video Cycle count:"<<mVideoCycleCount;
+//        }
+//    }
+    mVideoCycleCount = 1;
 }
 
 void ZCHXRadarVideoProcessor::appendSrcData(const zchxRadarVideoTask &task)
@@ -106,6 +106,7 @@ void ZCHXRadarVideoProcessor::appendSrcData(const zchxRadarVideoTask &task)
     } else
     {
         ZCHXRadarVideoProcessorData &data = mTaskList.last();
+        qDebug()<<"last size:"<<data.size()<<mVideoCycleCount;
         if(data.size() == mVideoCycleCount)
         {
             //数据已经满足多个周期回波叠加, 构建新的回波数据,新的回波数据以以前的回波数据作为基础
@@ -118,6 +119,7 @@ void ZCHXRadarVideoProcessor::appendSrcData(const zchxRadarVideoTask &task)
 #endif
             newData.append(task);
             mTaskList.append(newData);
+            qDebug()<<"task list size:"<<mTaskList.size();
         } else
         {
             data.append(task);
@@ -218,7 +220,7 @@ void ZCHXRadarVideoProcessor::process(const ZCHXRadarVideoProcessorData& task)
     if(task.size() == 0) return;
     //首先将所有任务的回波都合成一个回波图形
     QMap<int,RADAR_VIDEO_DATA> RadarVideo = task[0].m_RadarVideo;
-#if 0
+#if 1
     for(int i=0; i<task.size(); i++)
     {
         qDebug()<<"task time:"<<task[i].m_TimeStamp;

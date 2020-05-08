@@ -135,6 +135,33 @@ zchxMainWindow::zchxMainWindow(QWidget *parent) :
     {
         mTestMapMonitorThread = 0;
     }
+
+
+//    {
+//        double start_lat = 30.123456, start_lon = 113.123456;
+//        double end_lat = 30.123456, end_lon = 113.123556;
+//        zchxTargetPredictionLine line(start_lat, start_lon, end_lat, end_lon, 200, Prediction_Area_Rectangle);
+//        double gis_dis = getDisDeg(start_lat, start_lon, end_lat, end_lon);
+//        double mercator_length = line.length();
+//        qDebug()<<"gis_dis:"<<gis_dis<<" mercator length:"<<mercator_length;
+//        if(!line.isValid())
+//        {
+//            qDebug()<<"mercator line is invalid";
+//        }
+//        Mercator now = latlonToMercator(30.123856, 113.123456);
+//        //计算点到预估位置的距离
+//        double distance_pt = now.distanceToPoint(start_lat, start_lon);
+//        double distance_line = line.distanceToMe(now);
+//        qDebug()<<"point with distance(pt, pl)"<<distance_pt<<distance_line;
+//        //检查是否在连线的范围内
+//        if(!line.isPointIn(now, 200, Prediction_Area_Rectangle))
+//        {
+//            qDebug()<<"point is not in check area";
+//        } else
+//        {
+//            qDebug()<<"point is in check area";
+//        }
+//    }
 }
 
 void zchxMainWindow::initUI()

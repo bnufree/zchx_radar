@@ -396,7 +396,7 @@ Mercator latlonToMercator(const Latlon& ll)
 
 bool zchxTargetPredictionLine::isValid() const
 {
-    return mStart.distanceToLine(mEnd, mEnd) > 1.0;
+    return length() >= 1.0;
 }
 
 void zchxTargetPredictionLine::makePridictionArea()
@@ -434,16 +434,27 @@ void zchxTargetPredictionLine::makePridictionArea()
     }
 }
 
-
-bool zchxTargetPredictionLine::isPointIn(const Mercator &point, double width, int type)
+void zchxTargetPredictionLine::setPridictionType(int type)
 {
-    if(width != mWidth || mType != type)
+    if(mType != type)
     {
-        mWidth = width;
         mType = type;
         makePridictionArea();
     }
+}
 
+void zchxTargetPredictionLine::setPridictionWidth(int width)
+{
+    if(width != mWidth)
+    {
+        mWidth = width;
+        makePridictionArea();
+    }
+}
+
+
+bool zchxTargetPredictionLine::isPointIn(const Mercator &point)
+{
     bool sts = mPredictionArea.containsPoint(point.toPointF(), Qt::OddEvenFill);
     return sts;
 }
@@ -569,5 +580,5 @@ void zchxTimeElapsedCounter::print()
 {
     qint64 counter = mTimer.elapsed();
     mTotal += counter;
-    if(mDebug)  ZCHX_LOG_OUT("")<<mFunc<<" elapsed:"<<counter<< "and total msecs:"<<mTotal;
+    ZCHX_LOG_OUT("")<<mFunc<<" elapsed:"<<counter<< "and total msecs:"<<mTotal;
 }

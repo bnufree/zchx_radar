@@ -6,6 +6,7 @@
 #include <QPointF>
 #include <QTime>
 #include <QVector2D>
+#include <QGeoCoordinate>
 #include "zchxradarcommon.h"
 
 const double PI = 3.1415926;
@@ -216,6 +217,12 @@ double getDisDeg(double lat1, double lon1, double lat2, double lon2);
 #define         DOUBLE_EPS                              0.000001
 #define         EARTH_HALF_CIRCUL_LENGTH                20037508.3427892
 
+struct Mercator;
+struct Latlon;
+
+Latlon mercatorToLatlon(const Mercator& mct);
+Mercator latlonToMercator(const Latlon& ll);
+Mercator latlonToMercator(double lat, double lon);
 
 struct Mercator
 {
@@ -249,10 +256,10 @@ struct Mercator
         return distanceToLine(other, other) < 1.0;
     }
 
-//    double distanceToPoint(double lat, double lon) const
-//    {
-//        return distanceToPoint(latlonToMercator(lat, lon));
-//    }
+    double distanceToPoint(double lat, double lon) const
+    {
+        return distanceToPoint(latlonToMercator(lat, lon));
+    }
 
     double distanceToPoint(const Mercator& other) const
     {
@@ -271,6 +278,22 @@ struct Mercator
     QPointF toPointF() const
     {
         return QPointF(mX, mY);
+    }
+
+    static double distance(const Mercator& m1, const Mercator& m2)
+    {
+        return m1.distanceToPoint(m2);
+    }
+
+    static double distance(double lat1, double lon1, double lat2, double lon2)
+    {
+        return distance(latlonToMercator(lat1, lon1), latlonToMercator(lat2, lon2));
+    }
+
+    static double angle(double lat1, double lon1, double lat2, double lon2)
+    {
+        QGeoCoordinate p1(lat1, lon1);
+        return p1.azimuthTo(QGeoCoordinate(lat2, lon2));
     }
 };
 
@@ -291,9 +314,7 @@ struct Latlon{
     }
 };
 
-Latlon mercatorToLatlon(const Mercator& mct);
-Mercator latlonToMercator(const Latlon& ll);
-Mercator latlonToMercator(double lat, double lon);
+
 
 enum PNTPOSTION{
     POS_UNDETERMINED = -1,
@@ -339,12 +360,19 @@ public:
 
     zchxTargetPredictionLine(double start_lat, double start_lon, double end_lat, double end_lon, double width, int type)
     {
-        zchxTargetPredictionLine(Latlon(start_lat, start_lon), Latlon(end_lat, end_lon), width, type);
+//        zchxTargetPredictionLine(Latlon(start_lat, start_lon), Latlon(end_lat, end_lon), width, type);
+        mStart = latlonToMercator(start_lat, start_lon);
+        mEnd = latlonToMercator(end_lat, end_lon);
+        mWidth = width;
+        mType = type;
+        makePridictionArea();
     }
+    void     setPridictionWidth(int width);
+    void     setPridictionType(int type);
 
-    bool    isPointIn(const Mercator& point, double width, int type);
-    bool    isPointIn(double lat, double lon, double width, int type) {return isPointIn(latlonToMercator(lat, lon), width, type);}
-    bool    isPointIn(Latlon ll, double width, int type) {return(isPointIn(latlonToMercator(ll), width, type));}
+    bool    isPointIn(const Mercator& point);
+    bool    isPointIn(double lat, double lon) {return isPointIn(latlonToMercator(lat, lon));}
+    bool    isPointIn(Latlon ll) {return(isPointIn(latlonToMercator(ll)));}
 
     QList<Latlon>   getPredictionArea() const {return mPredictionAreaLL;}
 
@@ -360,7 +388,7 @@ public:
 
     double length() const
     {
-        return mStart.distanceToLine(mStart, mEnd);
+        return mStart.distanceToLine(mEnd, mEnd);
     }
 
     bool isValid() const;

@@ -23,6 +23,7 @@ struct TargetNode
 {
 public:
     bool                                        cog_confirmed;
+    int                                         not_move_cnt;
     int                                         est_count;
     double                                      time_of_day;
     zchxRadarRectDef                            *rect;
@@ -35,6 +36,7 @@ public:
         children.clear();
         est_count = 0;
         time_of_day = 0;
+        not_move_cnt = 0;
     }
     TargetNode(const zchxRadarRectDef& other)
     {
@@ -44,7 +46,9 @@ public:
         children.clear();
         est_count = 0;
         time_of_day = rect->timeofday();
+        not_move_cnt = 0;
     }
+
     ~TargetNode()
     {
         children.clear();
@@ -78,6 +82,27 @@ public:
         if(children.size() == 0) return this;
         TargetNode *child = children.first().data();
         return child->getLastChild();
+    }
+
+    bool hasChildren() const
+    {
+        return children.size() != 0;
+    }
+
+    bool isMotionlessObj() const
+    {
+        return (not_move_cnt >= 3) && (!hasChildren());
+    }
+
+    void motionlessMore()
+    {
+        not_move_cnt++;
+        if(not_move_cnt >= 100) not_move_cnt = 100;
+    }
+
+    void clearMotionless()
+    {
+        not_move_cnt = 0;
     }
 };
 
@@ -123,10 +148,12 @@ private:
     void        dumpTargetDistance(const QString &tag, double merge_dis);
     void        checkTargetRectAfterUpdate(double merge_dis);
     zchxRadarRectDefList   getDirDeterminTargets(zchxRadarRectDefList &list, zchxRadarRectDef* src, bool cog_usefull);
+#if 0
     void        makePredictionArea(zchxRadarRectDef* rect, double width, double delta_time = 10.0);
     bool        isPointInPredictionArea(zchxRadarRectDef* src, double lat, double lon);
     bool        isPointInPredictionArea(zchxRadarRectDef* src, Latlon ll);
     bool        isPointInPredictionArea(zchxRadarRectDef* src, zchxRadarRectDef* dest);
+#endif
 
 signals:
     void        signalSendTracks(const zchxRadarSurfaceTrack& track);

@@ -44,11 +44,13 @@ zchxAisDataProcessor::~zchxAisDataProcessor()
 
 void zchxAisDataProcessor::initChartWorker()
 {
+#if 0
     if(mParam.mIsCenterInit && mChartWorker == 0)
     {
         mChartWorker = new zchxAisChartWorker(mParam.mCenterLat, mParam.mCenterLon, mParam.mAisFixRadius, mParam.mRadius);
         connect(mChartWorker, SIGNAL(signalSendPixmap(QByteArray, int, int, double, QString)), this, SLOT(slotSendPixMap(QByteArray, int, int, double, QString)));
     }
+#endif
 }
 
 void zchxAisDataProcessor::slotProcessAisData(const QByteArray &data)
@@ -600,6 +602,7 @@ bool zchxAisDataProcessor::analysisCellAIS(const QString sCellAisData, int uPad,
     default:
         objObject.insert("IS_OK", false);
     }
+
  //   ITF_AISList objAisList;
     if(objObject.value("IS_OK").toBool()) {
 //        objAisList.Clear();
@@ -1399,14 +1402,27 @@ QJsonObject zchxAisDataProcessor::ais1_2_3_to_json(const QString &sAisBody, cons
 
     }
 
+    //这里进行时间的校对检查,如果数据存在utc时间,则将时间赋值为消息时间,否则就是系统时间
+    bool utc_valid = false;
+    if(objObject.contains("utc_hour"))
+    {
+        if(msg.timestamp <= 59)
+        {
+            utc_valid = true;
+            QDateTime now = QDateTime::fromMSecsSinceEpoch(recivetime);
+            QTime time(msg.utc_hour, msg.utc_min, msg.timestamp);
+            now.setTime(time);
+            objObject.insert("UTC", now.toMSecsSinceEpoch());
+        }
+    }
+
     // ITDMA
     if (msg.slot_increment_valid) {
         objObject.insert("slot_increment", msg.slot_increment);
         objObject.insert("slots_to_allocate", msg.slots_to_allocate);
         objObject.insert("keep_flag", msg.keep_flag);
     }
-
-    objObject.insert("UTC", recivetime);
+    if(!utc_valid) objObject.insert("UTC", recivetime);
     objObject.insert("IS_OK", true);
 
     return objObject;
