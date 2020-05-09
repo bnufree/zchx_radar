@@ -54,6 +54,10 @@ public:
     zchxNaviMarkDataMgr* getNaviMarkDataMgr();
     zchxAisChartDataMgr* getAisChartMgr();
 
+    zchxPointDataMgr* getPointMgr();
+    zchxLineDataMgr* getLineMgr();
+    zchxPolygonDataMgr* getPolygonMgr();
+
 private:
     static zchxDataMgrFactory     *minstance;
 

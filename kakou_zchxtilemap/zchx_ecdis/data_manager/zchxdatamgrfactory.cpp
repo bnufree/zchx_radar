@@ -118,6 +118,18 @@ void zchxDataMgrFactory::createManager(int type)
     case ZCHX::DATA_MGR_AIS_CHART:
         mMgrList[type] = std::shared_ptr<zchxAisChartDataMgr>(new zchxAisChartDataMgr(mWidget));
         break;
+
+    case ZCHX::DATA_MGR_POINT:
+        mMgrList[type] = std::shared_ptr<zchxPointDataMgr>(new zchxPointDataMgr(mWidget));
+        break;
+
+    case ZCHX::DATA_MGR_LINE:
+        mMgrList[type] = std::shared_ptr<zchxLineDataMgr>(new zchxLineDataMgr(mWidget));
+        break;
+
+    case ZCHX::DATA_MGR_POLYGON:
+        mMgrList[type] = std::shared_ptr<zchxPolygonDataMgr>(new zchxPolygonDataMgr(mWidget));
+        break;
     default:
         break;
     }
@@ -296,6 +308,21 @@ zchxNaviMarkDataMgr *zchxDataMgrFactory::getNaviMarkDataMgr()
 zchxAisChartDataMgr *zchxDataMgrFactory::getAisChartMgr()
 {
     return static_cast<zchxAisChartDataMgr*>(getManager(ZCHX::DATA_MGR_AIS_CHART).get());
+}
+
+zchxPointDataMgr *zchxDataMgrFactory::getPointMgr()
+{
+    return static_cast<zchxPointDataMgr*>(getManager(ZCHX::DATA_MGR_POINT).get());
+}
+
+zchxLineDataMgr *zchxDataMgrFactory::getLineMgr()
+{
+    return static_cast<zchxLineDataMgr*>(getManager(ZCHX::DATA_MGR_LINE).get());
+}
+
+zchxPolygonDataMgr *zchxDataMgrFactory::getPolygonMgr()
+{
+    return static_cast<zchxPolygonDataMgr*>(getManager(ZCHX::DATA_MGR_POLYGON).get());
 }
 
 

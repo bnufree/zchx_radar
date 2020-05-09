@@ -517,6 +517,50 @@ void LocalMarkElement::drawElement(QPainter *painter)
     painter->drawText(getViewPos(), data().getName());
 }
 
+void LineElement::drawElement(QPainter *painter)
+{
+    if(!isDrawAvailable(painter)) return;
+    PainterPair chk(painter);
+    Element::drawElement(painter);
+
+    painter->setBrush(m_data.brush);
+    painter->setPen(m_data.pen);
+    QPointF start = mView->framework()->LatLon2Pixel(m_data.ll1).toPointF();
+    QPointF end = mView->framework()->LatLon2Pixel(m_data.ll2).toPointF();
+    painter->drawLine(start, end);
+    painter->drawText(start, data().getName());
+}
+
+void PointElement::drawElement(QPainter *painter)
+{
+    if(!isDrawAvailable(painter)) return;
+    PainterPair chk(painter);
+    Element::drawElement(painter);
+
+    painter->setBrush(m_data.brush);
+    painter->setPen(m_data.pen);
+    QPointF point = mView->framework()->LatLon2Pixel(m_data.ll).toPointF();
+    painter->drawEllipse(point, m_data.radius, m_data.radius);
+    painter->drawText(point, data().getName());
+}
+
+void PolygonElement::drawElement(QPainter *painter)
+{
+    if(!isDrawAvailable(painter)) return;
+    PainterPair chk(painter);
+    Element::drawElement(painter);
+
+    painter->setBrush(m_data.fillColor);
+    painter->setPen(m_data.lineColor);
+    QPolygonF poly;
+    for(int i=0; i<m_data.path.size(); i++)
+    {
+        QPointF point = mView->framework()->LatLon2Pixel(m_data.path[i]).toPointF();
+        poly.append(point);
+    }
+    painter->drawPolygon(poly);
+}
+
 
 
 

@@ -674,6 +674,9 @@ public slots: //定义Recive数据接口
     void itfPickUpPTZ();
     //添加ais盲区图
     void itfAppendAisChart(const ZCHX::Data::ITF_AIS_Chart& data);
+    void itfAppendPoint(const ZCHX::Data::ITF_ElePos& data);
+    void itfAppendLine(const ZCHX::Data::ITF_EleLine& data);
+    void itfAppendPolygon(const ZCHX::Data::ITF_ElePolygon& data);
 protected Q_SLOTS:
     void OnMeasureAreaAction();
     void OnDirAngleAction();

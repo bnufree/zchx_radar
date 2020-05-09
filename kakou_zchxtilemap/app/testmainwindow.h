@@ -70,6 +70,7 @@ public slots:
     void slotSetMapSource();
     void slotSetDataSource(bool sts);
     void slotTestDistance();
+    void slotTestPrediction();
 private:
     void getLonlatListFromFile(const QString& file, QList<PointData>& list);
     bool getLayerDisplay(const QString& layer);

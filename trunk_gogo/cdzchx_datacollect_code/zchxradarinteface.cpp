@@ -185,6 +185,10 @@ zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     bool native_radius = Utils::Profiles::instance()->value(str_radar, "native_radius", false).toBool();
     ui->useNativeRadiusCHK->setChecked(native_radius);
 
+    Utils::Profiles::instance()->setDefault(str_radar, "prediction_width", 20);
+    int prediction_width = Utils::Profiles::instance()->value(str_radar, "prediction_width", 20).toInt();
+    ui->predictionWidth->setValue(prediction_width);
+
 
     ui->send_dj_checkBox->setChecked(mSend);
     ui->restart_checkBox->setChecked(mf);
@@ -1199,7 +1203,8 @@ void zchxradarinteface::on_update_setting_btn_clicked()
     Utils::Profiles::instance()->setValue(str_radar, "Direction_Invert", ui->direction_change_edit->text());
     Utils::Profiles::instance()->setValue(str_radar, "azimuth_adjustment", ui->cog_adjust_chk->isChecked());
     Utils::Profiles::instance()->setValue(str_radar, "video_cycle_or", ui->video_or_count->value());
-    Utils::Profiles::instance()->setValue(str_radar, "native_radius", ui->useNativeRadiusCHK->isChecked());
+    Utils::Profiles::instance()->setValue(str_radar, "native_radius", ui->useNativeRadiusCHK->isChecked());    
+    Utils::Profiles::instance()->setValue(str_radar, "prediction_width", ui->predictionWidth->value());
 
 
 

@@ -140,6 +140,28 @@ public:
 
 };
 
+class zchxPointDataMgr : public zchxTemplateDataMgr<PointElement, ZCHX::Data::ITF_ElePos>
+{
+public:
+    explicit zchxPointDataMgr(zchxMapWidget* w, QObject *parent = 0):
+        zchxTemplateDataMgr<PointElement, ZCHX::Data::ITF_ElePos>(w, ZCHX::DATA_MGR_POINT, ZCHX::LAYER_POINT, parent){}
+
+};
+class zchxLineDataMgr : public zchxTemplateDataMgr<LineElement, ZCHX::Data::ITF_EleLine>
+{
+public:
+    explicit zchxLineDataMgr(zchxMapWidget* w, QObject *parent = 0):
+        zchxTemplateDataMgr<LineElement, ZCHX::Data::ITF_EleLine>(w, ZCHX::DATA_MGR_LINE, ZCHX::LAYER_LINE, parent){}
+
+};
+class zchxPolygonDataMgr : public zchxTemplateDataMgr<PolygonElement, ZCHX::Data::ITF_ElePolygon>
+{
+public:
+    explicit zchxPolygonDataMgr(zchxMapWidget* w, QObject *parent = 0):
+        zchxTemplateDataMgr<PolygonElement, ZCHX::Data::ITF_ElePolygon>(w, ZCHX::DATA_MGR_POLYGON, ZCHX::LAYER_POLYGON, parent){}
+
+};
+
 
 }
 

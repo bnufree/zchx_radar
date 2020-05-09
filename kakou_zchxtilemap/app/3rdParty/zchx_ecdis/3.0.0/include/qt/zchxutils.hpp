@@ -96,6 +96,9 @@ namespace ZCHX {
       DATA_MGR_USER_DEFINE =        0x80000000,
       DATA_MGR_NAVIMARK =           0x90000000,
       DATA_MGR_AIS_CHART =           0x90000001,
+      DATA_MGR_POINT =           0x90000002,
+      DATA_MGR_LINE =           0x90000003,
+      DATA_MGR_POLYGON =           0x90000004,
 
   };
 
@@ -256,6 +259,7 @@ enum ELETYPE{
     ELE_AIDTO_NAVIGATION,
     ELE_NAVIMARK,
     ELE_AIS_CHART,
+    ELE_POLYGON
 
 };
 
@@ -1684,7 +1688,7 @@ typedef struct tagITF_ElePos
     QString getName() const {return name;}
 
     LatLon ll;
-    double radius;
+    int radius;
     QPen pen;
     QBrush brush;
     QString name;
@@ -1762,6 +1766,18 @@ typedef struct tagITF_EleRect
     QPen pen;
     QBrush brush;
 }ITF_EleRect;
+
+typedef struct tagITF_ElePolygon
+{
+    double getLat() const {return path.first().lat;}
+    double getLon() const {return path.first().lon;}
+    QString getName() const {return name;}
+
+    QList<LatLon>   path;
+    QColor          lineColor;
+    QColor          fillColor;
+    QString         name;
+}ITF_ElePolygon;
 
 
 
@@ -2398,6 +2414,10 @@ const char LAYER_ELLIPSE[]            = "lay_ellipse";             //圆形
 const char LAYER_LINE[]               = "lay_line";                   //线
 const char LAYER_TRIANGLE[]           = "lay_triangle";           //三角形
 const char LAYER_RECT[]               = "lay_rect";                   //矩形
+
+const char LAYER_POINT[]               = "lay_point";                   //线
+const char LAYER_POLYGON[]           = "lay_polygon";           //三角形
+
 const char LAYER_AIS_STATION[]        ="lay_ais_station";         //ais基站
 const char LAYER_AIS_FUSION[]         ="lay_ais_fusion";         //ais融合
 const char LAYER_TEN_GRID[]           = "lay_ten_gird";
@@ -2475,6 +2495,10 @@ const char TR_LAYER_ELLIPSE[]             =  QT_TRANSLATE_NOOP("TranslationManag
 const char TR_LAYER_LINE[]             =  QT_TRANSLATE_NOOP("TranslationManager", "layer line");                   //线
 const char TR_LAYER_TRIANGLE[]             = QT_TRANSLATE_NOOP("TranslationManager", "layer triangle");           //三角形
 const char TR_LAYER_RECT[]             = QT_TRANSLATE_NOOP("TranslationManager", "layer rect");                   //矩形
+
+const char TR_LAYER_POINT[]             =  QT_TRANSLATE_NOOP("TranslationManager", "layer point");                   //线
+const char TR_LAYER_POLYGON[]             = QT_TRANSLATE_NOOP("TranslationManager", "layer polygon");           //三角形
+
 const char TR_LAYER_AIS_STATION[]          = QT_TRANSLATE_NOOP("TranslationManager", "layer ais station");         //ais基站
 const char TR_LAYER_AIS_FUSION[]          = QT_TRANSLATE_NOOP("TranslationManager", "layer ais fusion");         //ais融合
 const char TR_LAYER_TEN_GRID[]             = QT_TRANSLATE_NOOP("TranslationManager", "layer ten gird");

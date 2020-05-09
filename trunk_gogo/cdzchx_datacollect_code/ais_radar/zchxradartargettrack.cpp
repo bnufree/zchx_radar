@@ -18,13 +18,14 @@ double getDeltaTime(float now, float old)
     return delta;
 }
 
-zchxRadarTargetTrack::zchxRadarTargetTrack(int id, const Latlon& ll, int clear_time,  bool route, QObject *parent)
+zchxRadarTargetTrack::zchxRadarTargetTrack(int id, const Latlon& ll, int clear_time, double predictionWidth, bool route, QObject *parent)
     : QThread(parent)
     , mCenter(ll)
     , mClearTrackTime(clear_time)
     , mProcessWithRoute(route)
     , mMaxEstCount(5)
     , mRangeFactor(10)
+    , mPredictionWidth(predictionWidth)
 {
     mDirectionInvertThresholdVal = 90.0;
     mTargetMergeDis = 100.0;
@@ -423,7 +424,7 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
         est_distance = cur_max_speed * delta_time;
         distbearTolatlon1(old_lat, old_lon, est_distance, old_cog, &est_lat, &est_lon);
         //预估点和前一位置连线，若当前点在连线附近，则认为是下一个点。点存在多个，则取预估位置距离最近的点。
-        zchxTargetPredictionLine line(old_lat, old_lon, est_lat, est_lon, 200, Prediction_Area_Rectangle);
+        zchxTargetPredictionLine line(old_lat, old_lon, est_lat, est_lon, mPredictionWidth, Prediction_Area_Rectangle);
         if(!line.isValid()) return result;
         //从最新的目标矩形框中寻找预估位置附件的点列,将与目标方位偏离最小的点作为最终的点
         double est_target_index = -1;

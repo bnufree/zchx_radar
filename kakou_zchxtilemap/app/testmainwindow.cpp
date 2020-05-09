@@ -6,6 +6,8 @@
 #include "radar/zchxradardatachange.h"
 #include "testmapwatchdogthread.h"
 
+#include "zchxfunction.h"
+
 #define     SERVER          "host"
 #define     PORT            "port"
 #define     TOPIC           "topic"
@@ -149,10 +151,6 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
     std::shared_ptr<qt::MapLayer> pHistoryAis(new qt::MapLayer(ZCHX::LAYER_HISTORY_AIS,ZCHX::TR_LAYER_HISTORY_AIS,true));
     m_pEcdisWin->itfAddLayer(pHistoryAis);
 
-    std::shared_ptr<qt::MapLayer> pHistoryRadar(new qt::MapLayer(ZCHX::LAYER_HISTORY_RADAR,ZCHX::TR_LAYER_HISTORY_RADAR,true));
-    m_pEcdisWin->itfAddLayer(pHistoryRadar);
-
-
 
     //本地标注
     std::shared_ptr<qt::MapLayer> localMarkLayer(new qt::MapLayer(ZCHX::LAYER_LOCALMARK, ZCHX::TR_LAYER_LOCALMARK, true));
@@ -161,6 +159,14 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
 
     std::shared_ptr<qt::MapLayer> radar_rect_layer(new qt::MapLayer(ZCHX::LAYER_RADARRECT, ZCHX::TR_LAYER_RADARRECT, true));
     m_pEcdisWin->itfAddLayer(radar_rect_layer);
+
+
+    std::shared_ptr<qt::MapLayer> pointLayer(new qt::MapLayer(ZCHX::LAYER_POINT,ZCHX::TR_LAYER_POINT, true));
+    m_pEcdisWin->itfAddLayer(pointLayer);
+    std::shared_ptr<qt::MapLayer> lineLayer(new qt::MapLayer(ZCHX::LAYER_LINE,ZCHX::TR_LAYER_LINE,true));
+    m_pEcdisWin->itfAddLayer(lineLayer);
+    std::shared_ptr<qt::MapLayer> polygonLayer(new qt::MapLayer(ZCHX::LAYER_POLYGON,ZCHX::TR_LAYER_POLYGON,true));
+    m_pEcdisWin->itfAddLayer(polygonLayer);
 
     m_pEcdisWin->setCtrlFrameVisible(false);
     m_pEcdisWin->itfSetRadarLabelVisible(true);
@@ -326,13 +332,16 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
 
     QAction *btn = new QAction(QStringLiteral("测距"), this);
     ui->menuBar->addAction(QStringLiteral("测距"),this, SLOT(slotTestDistance()));
-
 }
 
 void TestMainWindow::slotTestDistance()
 {
+#if 0
     qDebug()<<"now start distance measure";
     m_pEcdisWin->itfToolBarMeasureDistance();
+#else
+    slotTestPrediction();
+#endif
 }
 
 TestMainWindow::~TestMainWindow()
@@ -641,4 +650,57 @@ void TestMainWindow::slotSetDataSource(bool sts)
         mDataChange->appendLimit(param);
         slotRadarLimitAreaDisplay(sts);
     }
+}
+
+void TestMainWindow::slotTestPrediction()
+{
+    static double angle = 0;
+    //测试目标的预测区域
+    Latlon start(21.551678, 111.795171);
+
+    double est_lat = 0, est_lon = 0;
+    QGeoCoordinate test(start.lat, start.lon);
+    QGeoCoordinate result = test.atDistanceAndAzimuth(200, angle);
+    Latlon end(result.latitude(),  result.longitude());
+    zchxTargetPredictionLine prediction(start, end, 200, Prediction_Area_Triangle);
+
+    ZCHX::Data::ITF_ElePos p1;
+    p1.ll.lat = start.lat;
+    p1.ll.lon = start.lon;
+    p1.brush = Qt::red;
+    p1.pen.setColor(Qt::black);
+    p1.radius = 3;
+    p1.name = "P1";
+
+    ZCHX::Data::ITF_ElePos p2;
+    p2.ll.lat = end.lat;
+    p2.ll.lon = end.lon;
+    p2.brush = Qt::red;
+    p2.pen.setColor(Qt::black);
+    p2.radius = 3;
+    p2.name = "P2";
+
+    m_pEcdisWin->itfAppendPoint(p1);
+    m_pEcdisWin->itfAppendPoint(p2);
+
+    ZCHX::Data::ITF_EleLine line;
+    line.brush = Qt::transparent;
+    line.pen.setColor(Qt::red);
+    line.ll1 = p1.ll;
+    line.ll2 = p2.ll;
+    line.name = "P1--P2";
+    m_pEcdisWin->itfAppendLine(line);
+
+    ZCHX::Data::ITF_ElePolygon poly;
+    poly.fillColor = Qt::transparent;
+    poly.lineColor = Qt::green;
+    QList<Latlon> list =  prediction.getPredictionArea();
+    for(int i=0; i<list.size(); i++)
+    {
+        poly.path.append(ZCHX::Data::LatLon(list[i].lat, list[i].lon));
+    }
+    poly.name = "PolyArea";
+    m_pEcdisWin->itfAppendPolygon(poly);
+
+    angle += 30;
 }

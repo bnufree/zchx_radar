@@ -23,10 +23,27 @@ class TriangleElement : public FixElement<ZCHX::Data::ITF_EleTriangle>
 //直线
 class LineElement : public FixElement<ZCHX::Data::ITF_EleLine>
 {
+public:
     explicit  LineElement(const ZCHX::Data::ITF_EleLine &ele, zchxMapWidget* w)
         :FixElement<ZCHX::Data::ITF_EleLine>(ele, ZCHX::Data::ELE_LINE,ZCHX::LAYER_LINE, w) {}
+    void drawElement(QPainter *painter);
 };
 
+class PointElement : public FixElement<ZCHX::Data::ITF_ElePos>
+{
+public:
+    explicit  PointElement(const ZCHX::Data::ITF_ElePos &ele, zchxMapWidget* w)
+        :FixElement<ZCHX::Data::ITF_ElePos>(ele, ZCHX::Data::ELE_POINT,ZCHX::LAYER_POINT, w) {}
+    void drawElement(QPainter *painter);
+};
+
+class PolygonElement : public FixElement<ZCHX::Data::ITF_ElePolygon>
+{
+public:
+    explicit  PolygonElement(const ZCHX::Data::ITF_ElePolygon &ele, zchxMapWidget* w)
+        :FixElement<ZCHX::Data::ITF_ElePolygon>(ele, ZCHX::Data::ELE_POLYGON,ZCHX::LAYER_POLYGON, w) {}
+    void drawElement(QPainter *painter);
+};
 
 
 //矩形

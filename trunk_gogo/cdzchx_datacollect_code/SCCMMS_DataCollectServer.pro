@@ -131,7 +131,8 @@ SOURCES += main.cpp\
     ais/zchxaischartworker.cpp \
     ais/zchxaisdatacollector.cpp \
     ais/zchxaisdataclient.cpp \
-    zchxsimulatethread.cpp
+    zchxsimulatethread.cpp \
+    ais_radar/zchxlowranceradardataserver.cpp
 
 HEADERS  += \
     Log.h \
@@ -241,7 +242,8 @@ HEADERS  += \
     ais/zchxaischartworker.h \
     ais/zchxaisdatacollector.h \
     ais/zchxaisdataclient.h \
-    zchxsimulatethread.h
+    zchxsimulatethread.h \
+    ais_radar/zchxlowranceradardataserver.h
 
 
 

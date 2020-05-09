@@ -43,7 +43,8 @@ SOURCES += main.cpp \
     radar/zchxradarutils.cpp \
     radar/zchxfuntiontimer.cpp \
     testmapwatchdogthread.cpp \
-    radar/zchxradarlimitareathread.cpp
+    radar/zchxradarlimitareathread.cpp \
+    zchxfunction.cpp
 
 FORMS += \
     testmainwindow.ui \
@@ -63,7 +64,8 @@ HEADERS += \
     radar/ZCHXAISVessel.pb.h \
     radar/zchxfuntiontimer.h \
     testmapwatchdogthread.h \
-    radar/zchxradarlimitareathread.h
+    radar/zchxradarlimitareathread.h \
+    zchxfunction.h
 
 DISTFILES += \
     radar/ZCHXRadar.proto \

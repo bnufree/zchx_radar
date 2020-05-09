@@ -113,7 +113,7 @@ class zchxRadarTargetTrack : public QThread
 {
     Q_OBJECT
 public:
-    explicit    zchxRadarTargetTrack(int id, const Latlon& ll, int clear_time, bool route, QObject *parent = 0);
+    explicit    zchxRadarTargetTrack(int id, const Latlon& ll, int clear_time, double predictionWidth, bool route, QObject *parent = 0);
     void        setDirectionInvertVal(double val) {mDirectionInvertThresholdVal = val;}
     void        setTargetMergeDis(double val){mTargetMergeDis = val;}
     void        setAdjustCogEnabled(bool sts) {mAdjustCogEnabled = sts;}
@@ -176,6 +176,7 @@ private:
     bool                        mProcessWithRoute;
     int                         mMaxEstCount;                       //目标的最大预推次数
     double                      mRangeFactor;
+    double                      mPredictionWidth;                   //预推区域的宽度
 };
 
 #endif // ZCHXRADARTARGETTRACK_H

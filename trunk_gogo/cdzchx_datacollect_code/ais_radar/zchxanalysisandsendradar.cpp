@@ -161,7 +161,9 @@ ZCHXAnalysisAndSendRadar::ZCHXAnalysisAndSendRadar(int id, QObject *parent)
     //回波块解析
     bool process_sync = true;
     m_VideoProcessor =  new ZCHXRadarVideoProcessor(m_uSourceID, this);
-    m_targetTrack = new zchxRadarTargetTrack(radar_num, Latlon(m_dCentreLat, m_dCentreLon), clear_track_time, true, this);
+    double prediction_width = Utils::Profiles::instance()->value(str_radar, "prediction_width", 20).toDouble();
+
+    m_targetTrack = new zchxRadarTargetTrack(radar_num, Latlon(m_dCentreLat, m_dCentreLon), clear_track_time, prediction_width, true, this);
     m_targetTrack->setAdjustCogEnabled(cog_adjust);
     m_targetTrack->setTargetMergeDis(merge_dis);
     m_targetTrack->setDirectionInvertVal(dir_invert);

@@ -60,7 +60,7 @@ zchxMainWindow::zchxMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
-    this->setWindowTitle(QStringLiteral("采集器7.1.0 目标路径搜索"));
+    this->setWindowTitle(QStringLiteral("采集器7.1.1 目标路径搜索"));
 
     //this->resize(800, 600);
     //this->resize(1367, 784);
