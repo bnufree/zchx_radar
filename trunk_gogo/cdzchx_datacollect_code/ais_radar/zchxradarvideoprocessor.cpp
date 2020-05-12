@@ -92,7 +92,7 @@ void ZCHXRadarVideoProcessor::updateCycleCount()
 ////            qDebug()<<"video Cycle count:"<<mVideoCycleCount;
 //        }
 //    }
-    mVideoCycleCount = 1;
+//    mVideoCycleCount = 1;
 }
 
 void ZCHXRadarVideoProcessor::appendSrcData(const zchxRadarVideoTask &task)
@@ -111,7 +111,7 @@ void ZCHXRadarVideoProcessor::appendSrcData(const zchxRadarVideoTask &task)
         {
             //数据已经满足多个周期回波叠加, 构建新的回波数据,新的回波数据以以前的回波数据作为基础
             ZCHXRadarVideoProcessorData newData;
-#if 0
+#if 1
             for(int i=1; i<mVideoCycleCount; i++)
             {
                 newData.append(data[i]);
@@ -119,11 +119,12 @@ void ZCHXRadarVideoProcessor::appendSrcData(const zchxRadarVideoTask &task)
 #endif
             newData.append(task);
             mTaskList.append(newData);
-            qDebug()<<"task list size:"<<mTaskList.size();
         } else
         {
             data.append(task);
         }
+
+        qDebug()<<"task list size:"<<mTaskList.size();
     }
 }
 
@@ -135,7 +136,7 @@ bool ZCHXRadarVideoProcessor::getProcessData(ZCHXRadarVideoProcessorData& task)
     if(temp.size() == mVideoCycleCount)
     {
         task = temp;
-#if 0
+#if 1
         //移除以前的任务,保留最近的一个任务,便于下一个回波过来的时候合成新的任务
         while (mTaskList.size() > 1) {
             mTaskList.takeFirst();

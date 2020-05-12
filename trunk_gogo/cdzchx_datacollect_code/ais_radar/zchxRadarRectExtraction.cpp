@@ -255,6 +255,8 @@ void zchxRadarRectExtraction::parseVideoPieceFromImage(QImage& result, zchxRadar
         grave_pnt.setY(cy);
 
         parseTarget target;
+        target.mLength = target_length;
+        target.mAngle = rect.angle;
         target.mTime = timestamp;
         target.mID = -1;
         target.mCenter = grave_pnt;

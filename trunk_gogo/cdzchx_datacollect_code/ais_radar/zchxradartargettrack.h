@@ -148,6 +148,7 @@ private:
     void        dumpTargetDistance(const QString &tag, double merge_dis);
     void        checkTargetRectAfterUpdate(double merge_dis);
     zchxRadarRectDefList   getDirDeterminTargets(zchxRadarRectDefList &list, zchxRadarRectDef* src, bool cog_usefull);
+    bool        isRectAreaContainsPoint(const zchxRadarRectDef& rect, double lat, double lon);
 #if 0
     void        makePredictionArea(zchxRadarRectDef* rect, double width, double delta_time = 10.0);
     bool        isPointInPredictionArea(zchxRadarRectDef* src, double lat, double lon);

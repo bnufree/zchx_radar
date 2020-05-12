@@ -27,7 +27,7 @@ zchxRadarTargetTrack::zchxRadarTargetTrack(int id, const Latlon& ll, int clear_t
     , mRangeFactor(10)
     , mPredictionWidth(predictionWidth)
 {
-    mDirectionInvertThresholdVal = 90.0;
+    mDirectionInvertThresholdVal = 60.0;
     mTargetMergeDis = 100.0;
     mAdjustCogEnabled = true;
     mMinNum = 1+id*10000;
@@ -476,8 +476,77 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
         }
         qDebug()<<"update root"<<src->rectnumber()<<"end with result size:"<<result.size();
     }
+    if(result.size() == 0)
+    {
+        //目标没有找到更新目标,检查目标是否在其他目标的回波图形的范围内
+        //将这个包含他的回波图形作为它的新的目标
+        for(int i=0; i<list.size();i++)
+        {
+            zchxRadarRectDef next = list[i];
+            if(isRectAreaContainsPoint(next, old_lat, old_lon))
+            {
+                //目标的经纬度落在了回波的范围内
+                //检查以回波的重心为目标的新位置,检查是否是与目标的本身的
+                //方向相反,如果是,目标的位置就不更新,否则就更新.无论更新
+                //与否,当前的回波都会从队列中删除,防止一个回波出现两个目
+                //标的情况
+
+                //先将回波从队列删除
+                list.takeAt(i);
+                i--;
+                double dir = Mercator::angle(old_lat, old_lon, next.centerlatitude(), next.centerlongitude());
+                //目标的方向已经有了,也就是目标也不是初次出现,需要检查方向.
+                if(cog_usefull && isDirectionChange(old_cog, dir))
+                {
+                    //构造目标的可能位置点
+                    double est_distance = old_sog * delta_time;
+                    QGeoCoordinate est_pos = QGeoCoordinate(old_lat, old_lon).atDistanceAndAzimuth(est_distance, old_cog);
+                    while (!isRectAreaContainsPoint(next, est_pos.latitude(), est_pos.longitude())) {
+                        est_distance /= 2.0;
+                        est_pos = QGeoCoordinate(old_lat, old_lon).atDistanceAndAzimuth(est_distance, old_cog);
+                    }
+                    dir = old_cog;
+                    next.set_centerlatitude(est_pos.latitude());
+                    next.set_centerlongitude(est_pos.longitude());
+                }
+                //再次检查速度,速度不能超过目标的最大速度,如果超过了,就将位置更新到最大速度的位置
+                Mercator now = latlonToMercator(next.centerlatitude(), next.centerlongitude());
+                //计算点到预估位置的距离
+                double distance = now.distanceToPoint(old_lat, old_lon);
+                if(distance / delta_time > ship_max_speed)
+                {
+                    //更新next的经纬度
+                    distance = delta_time * ship_max_speed;
+                    QGeoCoordinate est_pos = QGeoCoordinate(old_lat, old_lon).atDistanceAndAzimuth(distance, dir);
+                    next.set_centerlatitude(est_pos.latitude());
+                    next.set_centerlongitude(est_pos.longitude());
+                }
+
+                //添加到队列中
+                result.append(next);
+            }
+        }
+    }
 
     return result;
+}
+
+bool zchxRadarTargetTrack::isRectAreaContainsPoint(const zchxRadarRectDef &rect, double lat, double lon)
+{
+    bool sts = false;
+    QPolygonF poly;
+    for(int i=0; i<rect.blocks_size();i++)
+    {
+        zchxSingleVideoBlock block = rect.blocks(i);
+        //将经纬度转换成墨卡托点列
+        Mercator m = latlonToMercator(block.latitude(), block.longitude());
+        poly.append(m.toPointF());
+    }
+    if(poly.size() > 0)
+    {
+        sts = poly.containsPoint(latlonToMercator(lat, lon).toPointF(), Qt::OddEvenFill);
+    }
+    return sts;
 }
 
 void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRectDefList& left_list)
