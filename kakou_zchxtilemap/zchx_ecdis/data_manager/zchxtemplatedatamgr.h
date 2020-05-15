@@ -87,7 +87,10 @@ public:
         }
         updateData(list);
         //删除已经过时的图元
-        for(std::shared_ptr<K> ele : mData){
+        for(int i=0; i<mData.size();)
+        {
+            std::shared_ptr<K> ele = mData[i];
+            if(!ele) continue;
             if(!ele->getIsUpdate())
             {
                 if(ele.get() == mDisplayWidget->getCurrentSelectedElement())
@@ -95,7 +98,9 @@ public:
                     mDisplayWidget->setCurrentSelectedItem(0);
                 }
                 mData.removeOne(ele);
+                continue;
             }
+            i++;
         }
     }
 

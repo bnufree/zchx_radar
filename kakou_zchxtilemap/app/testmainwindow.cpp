@@ -332,16 +332,43 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
 
     QAction *btn = new QAction(QStringLiteral("测距"), this);
     ui->menuBar->addAction(QStringLiteral("测距"),this, SLOT(slotTestDistance()));
+
+    QAction *btn2 = new QAction(QStringLiteral("预推区域"), this);
+    ui->menuBar->addAction(QStringLiteral("预推区域"),this, SLOT(slotTestPrediction()));
+
+
+//    ZCHX::Data::ITF_ElePos p1;
+//    p1.ll.lat = 21.600171;
+//    p1.ll.lon = 111.806594;
+//    p1.brush = Qt::red;
+//    p1.pen.setColor(Qt::black);
+//    p1.radius = 1;
+//    p1.name = "P1";
+
+//    ZCHX::Data::ITF_ElePos p2;
+//    p2.ll.lat = 21.600676;
+//    p2.ll.lon = 111.806412;
+//    p2.brush = Qt::red;
+//    p2.pen.setColor(Qt::black);
+//    p2.radius = 1;
+//    p2.name = "P2";
+
+//    ZCHX::Data::ITF_ElePos p3;
+//    p3.ll.lat = 21.600342;
+//    p3.ll.lon = 111.806775;
+//    p3.brush = Qt::red;
+//    p3.pen.setColor(Qt::black);
+//    p3.radius = 1;
+//    p3.name = "P3";
+
+//    m_pEcdisWin->itfAppendPoint(p1);
+//    m_pEcdisWin->itfAppendPoint(p2);
+//    m_pEcdisWin->itfAppendPoint(p3);
 }
 
 void TestMainWindow::slotTestDistance()
-{
-#if 0
-    qDebug()<<"now start distance measure";
+{;
     m_pEcdisWin->itfToolBarMeasureDistance();
-#else
-    slotTestPrediction();
-#endif
 }
 
 TestMainWindow::~TestMainWindow()
@@ -656,13 +683,25 @@ void TestMainWindow::slotTestPrediction()
 {
     static double angle = 0;
     //测试目标的预测区域
-    Latlon start(21.551678, 111.795171);
+    Latlon start(21.600171, 111.806594);
+    Latlon end(21.600271, 111.805647);
+    double cog = Mercator::angle(start.lat, start.lon, end.lat, end.lon);
 
+    //计算目标的运动位置
+#if 1
+    double cur_max_speed = 5.0;
+    double est_distance = cur_max_speed * 4;
+    double est_lat = 0.0, est_lon = 0.0;
+    ZCHX::Utils::distbear_to_latlon(end.lat, end.lon, est_distance, cog, est_lat, est_lon);
+    Latlon next(est_lat, est_lon);
+
+#else
     double est_lat = 0, est_lon = 0;
     QGeoCoordinate test(start.lat, start.lon);
     QGeoCoordinate result = test.atDistanceAndAzimuth(200, angle);
     Latlon end(result.latitude(),  result.longitude());
-    zchxTargetPredictionLine prediction(start, end, 200, Prediction_Area_Triangle);
+#endif
+    zchxTargetPredictionLine prediction(end, next, 40, Prediction_Area_Rectangle);
 
     ZCHX::Data::ITF_ElePos p1;
     p1.ll.lat = start.lat;
@@ -680,8 +719,24 @@ void TestMainWindow::slotTestPrediction()
     p2.radius = 3;
     p2.name = "P2";
 
-    m_pEcdisWin->itfAppendPoint(p1);
-    m_pEcdisWin->itfAppendPoint(p2);
+    ZCHX::Data::ITF_ElePos p3;
+    p3.ll.lat = next.lat;
+    p3.ll.lon = next.lon;
+    p3.brush = Qt::red;
+    p3.pen.setColor(Qt::black);
+    p3.radius = 3;
+    p3.name = "P3";
+
+    QList<ZCHX::Data::ITF_ElePos> poslist;
+    poslist<<p1<<p2<<p3;
+    m_pEcdisWin->itfAppendPoint(poslist);
+
+    double len1 = ZCHX::Utils::getDistanceDeg(start.lat, start.lon, end.lat, end.lon);
+    double len2 = ZCHX::Utils::getDistanceDeg(end.lat, end.lon, next.lat, next.lon);
+
+    qDebug()<<"len:"<<len1<<len2;
+
+    QList<ZCHX::Data::ITF_EleLine> linelist;
 
     ZCHX::Data::ITF_EleLine line;
     line.brush = Qt::transparent;
@@ -689,7 +744,19 @@ void TestMainWindow::slotTestPrediction()
     line.ll1 = p1.ll;
     line.ll2 = p2.ll;
     line.name = "P1--P2";
-    m_pEcdisWin->itfAppendLine(line);
+    linelist.append(line);
+    //m_pEcdisWin->itfAppendLine(line);
+
+    ZCHX::Data::ITF_EleLine line2;
+    line2.brush = Qt::transparent;
+    line2.pen.setColor(Qt::red);
+    line2.ll1 = p2.ll;
+    line2.ll2 = p3.ll;
+    line2.name = "P2--P3";
+    linelist.append(line2);
+    m_pEcdisWin->itfAppendLine(linelist);
+
+    QList<ZCHX::Data::ITF_ElePolygon> polylist;
 
     ZCHX::Data::ITF_ElePolygon poly;
     poly.fillColor = Qt::transparent;
@@ -700,7 +767,8 @@ void TestMainWindow::slotTestPrediction()
         poly.path.append(ZCHX::Data::LatLon(list[i].lat, list[i].lon));
     }
     poly.name = "PolyArea";
-    m_pEcdisWin->itfAppendPolygon(poly);
+    polylist.append(poly);
+    m_pEcdisWin->itfAppendPolygon(polylist);
 
     angle += 30;
 }

@@ -1969,17 +1969,17 @@ void MainWindow::itfAppendAisChart(const ZCHX::Data::ITF_AIS_Chart& data)
     m_dataMgrFactory->getAisChartMgr()->setData(data);
 }
 
-void MainWindow::itfAppendPoint(const ZCHX::Data::ITF_ElePos& data)
+void MainWindow::itfAppendPoint(const QList<ZCHX::Data::ITF_ElePos>& data)
 {
     m_dataMgrFactory->getPointMgr()->setData(data);
 }
 
-void MainWindow::itfAppendLine(const ZCHX::Data::ITF_EleLine& data)
+void MainWindow::itfAppendLine(const QList<ZCHX::Data::ITF_EleLine>& data)
 {
     m_dataMgrFactory->getLineMgr()->setData(data);
 }
 
-void MainWindow::itfAppendPolygon(const ZCHX::Data::ITF_ElePolygon& data)
+void MainWindow::itfAppendPolygon(const QList<ZCHX::Data::ITF_ElePolygon>& data)
 {
     m_dataMgrFactory->getPolygonMgr()->setData(data);
 }

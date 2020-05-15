@@ -532,6 +532,29 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
             drawPolygon(painter, Qt::transparent, rectColor, his.pixPoints, his.centerlatitude, his.centerlongitude);
         }
 #endif
+#if 0
+        //画出目标的预推区域
+        if(his.predictionAreas.size() > 0)
+        {
+            for(int i=0; i<his.predictionAreas.size(); i++)
+            {
+                ITF_SingleVideoBlockList src = his.predictionAreas[i];
+                QPolygonF shapePnts;
+                for(int k=0; k<src.size(); k++)
+                {
+                    ITF_SingleVideoBlock block = src[k];
+                    shapePnts.append(mView->framework()->LatLon2Pixel(block.latitude, block.longitude).toPointF());
+                }
+
+                painter->save();
+                painter->setPen(Qt::darkMagenta);
+                painter->setBrush(Qt::transparent);
+                painter->drawPolygon(shapePnts);
+                painter->drawText(shapePnts.boundingRect().center(), QString::number(mRect.rectNumber));
+                painter->restore();
+            }
+        }
+#endif
         path.append(mView->framework()->LatLon2Pixel(his.centerlatitude, his.centerlongitude).toPointF());
 
     }
@@ -541,7 +564,7 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
         QColor rectColor = mRect.blockColor;
         if(!mRect.current.isRealData) rectColor = Qt::green;
         drawPolygon(painter, Qt::transparent, rectColor, mRect.current.pixPoints, mRect.current.centerlatitude, mRect.current.centerlongitude);
-#if 0
+#if 1
         //画出目标的预推区域
         if(mRect.current.predictionAreas.size() > 0)
         {
@@ -559,10 +582,25 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
                 painter->setPen(Qt::darkMagenta);
                 painter->setBrush(Qt::transparent);
                 painter->drawPolygon(shapePnts);
-                painter->drawText(shapePnts.boundingRect().center(), QString::number(mRect.rectNumber));
+                QString text ;
+                text.sprintf("%d, %.0f", mRect.rectNumber, mRect.current.angle);
+                painter->drawText(shapePnts.boundingRect().center(),text);
                 painter->restore();
             }
         }
+
+//        //画出预推区域的起点和中点
+//        painter->save();
+//        QPoint start = mView->framework()->LatLon2Pixel(mRect.current.startlatitude, mRect.current.startlongitude).toPoint();
+//        QPoint end = mView->framework()->LatLon2Pixel(mRect.current.endlatitude, mRect.current.endlongitude).toPoint();
+
+//        painter->setPen(Qt::red);
+//        painter->setBrush(Qt::magenta);
+//        painter->drawEllipse(start, 4, 4);
+//        painter->drawEllipse(end, 4, 4);
+//        painter->restore();
+
+
 #endif
 
     } else
@@ -595,10 +633,11 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
     painter->save();
     painter->setPen(QPen(Qt::white, 1));
     painter->drawPolyline(path);
+    int index = 0;
     foreach (QPointF pnt, path) {
         painter->setBrush(Qt::green);
         painter->drawEllipse(pnt, 2, 2);
-//        painter->drawText(pnt, QString::number(mRect.rectNumber));
+        painter->drawText(pnt, QString::number(++index));
     }
     painter->restore();
 

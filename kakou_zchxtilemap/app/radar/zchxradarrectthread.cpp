@@ -244,7 +244,7 @@ void ZCHXRadarRectThread::convertZMQ2ZCHX(QList<ZCHX::Data::ITF_RadarRect> &res,
         rect.current.startlongitude = obj.currentrect().startlongitude();
         rect.current.endlatitude = obj.currentrect().endlatitude();
         rect.current.endlongitude = obj.currentrect().endlongitude();
-        rect.current.angle = obj.currentrect().angle();
+        rect.current.angle = obj.currentrect().cog();
         rect.current.isRealData = obj.currentrect().realdata();
 
         //添加预推区域
@@ -310,6 +310,20 @@ void ZCHXRadarRectThread::convertZMQ2ZCHX(QList<ZCHX::Data::ITF_RadarRect> &res,
             {
                 com::zhichenhaixin::proto::pixelPoint pnt = historyObj.pixelpnts(i);
                 hisRect.pixPoints.append(QPoint(pnt.x(), pnt.y()));
+            }
+
+            for(int k=0; k<historyObj.predictionareas_size(); k++)
+            {
+                com::zhichenhaixin::proto::predictionArea area = historyObj.predictionareas(k);
+                ZCHX::Data::ITF_SingleVideoBlockList list;
+                for(int m =0; m<area.area_size(); m++)
+                {
+                    ZCHX::Data::ITF_SingleVideoBlock block;
+                    block.latitude = area.area(m).latitude();
+                    block.longitude = area.area(m).longitude();
+                    list.append(block);
+                }
+                hisRect.predictionAreas.append(list);
             }
 
             rect.rects.append(hisRect);

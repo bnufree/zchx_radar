@@ -17,7 +17,7 @@ else:win32{
 #    contains(QMAKE_HOST.arch, x86_64):ZMQ_Version = 4.2.3_x64
     contains(QMAKE_HOST.arch, x86_64):ZMQ_Version = mingw
     INCLUDEPATH += $$PWD/$$ZMQ_Version/include
-    LIBS += -L$$PWD/$$ZMQ_Version/$$BuildType -llibzmq
+    LIBS += -L$$PWD/$$ZMQ_Version/Release -llibzmq
     #zmqlibrary.target = $$IDE_APP_PATH/libzmq.dll
     #zmqlibrary.depends = $$PWD/$$ZMQ_Version/bin/libzmq.dll
     #zmqlibrary.commands = $(COPY_FILE) \"$$replace(zmqlibrary.depends, /, $$QMAKE_DIR_SEP)\" \"$$replace(zmqlibrary.target, /, $$QMAKE_DIR_SEP)\"

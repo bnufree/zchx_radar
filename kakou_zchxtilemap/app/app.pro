@@ -7,14 +7,16 @@
 CONFIG(release, debug|release){
     OutDir=Release
     DEFINES += FILE_LOG
+    IDE_APP_PATH = $$dirname(PWD)/bin/
 }
 CONFIG(debug, debug|release){
     OutDir=Debug
     DEFINES += STD_LOG
+    IDE_APP_PATH = $$dirname(PWD)/Debug/
 }
 
 PSFW_3RDPARTYPATH = $${PWD}/3rdParty
-IDE_APP_PATH = $$dirname(PWD)/bin/
+#IDE_APP_PATH = $$dirname(PWD)/bin/
 
 include($$PSFW_3RDPARTYPATH/zchx_ecdis/zchx_ecdis.pri)
 include($$PSFW_3RDPARTYPATH/protobuf/protobuf.pri)
