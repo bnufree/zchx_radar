@@ -421,7 +421,11 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(bool& isTargetI
         QGeoCoordinate est_geo = QGeoCoordinate(old_lat, old_lon).atDistanceAndAzimuth(est_distance, old_cog);
         est_lat = est_geo.latitude();
         est_lon = est_geo.longitude();
-//        distbearTolatlon1(old_lat, old_lon, est_distance, old_cog, &est_lat, &est_lon);
+#if 0
+        //看看这两个计算的经纬度的差别,使用这个计算的经纬度导致数据有偏差
+        double temp_lat = 0.0, temp_lon = 0.0;
+        distbearTolatlon1(old_lat, old_lon, est_distance, old_cog, &temp_lat, &temp_lon);
+#endif
         Mercator est_pos = latlonToMercator(est_lat, est_lon);
         //将目标的预估范围扩大最大允许的船舶速度,防止目标速度突然变大了的情况
         double cur_max_speed = old_sog * 2;
@@ -432,7 +436,7 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(bool& isTargetI
                 est_lon = est_geo.longitude();
 //        distbearTolatlon1(old_lat, old_lon, est_distance, old_cog, &est_lat, &est_lon);
         //预估点和前一位置连线，若当前点在连线附近，则认为是下一个点。点存在多个，则取预估位置距离最近的点。
-        zchxTargetPredictionLine line(old_lat, old_lon, est_lat, est_lon, mPredictionWidth, Prediction_Area_Rectangle);
+        zchxTargetPredictionLine line(old_lat, old_lon, est_lat, est_lon, mPredictionWidth, 0.2);
         if(!line.isValid()) return result;
         //将目标的预估范围更新到地图上显示,检查预估范围的计算是否有错误
         if(1)
@@ -482,62 +486,46 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(bool& isTargetI
         {
             zchxRadarRectDef next = list[k];
             Mercator now = latlonToMercator(next.centerlatitude(), next.centerlongitude());
-            //计算待确定点到目标旧的位置点的距离
+            //计算待确定点到目标旧的位置点的距离.
+            //1)如果超出来最大运行距离,则跳过不处理
             double distance = now.distanceToPoint(latlonToMercator(old_lat, old_lon));
-            if(distance / delta_time > ship_max_speed)
+            if(distance > max_distance)
             {
                 k++;
                 continue;
             }
-            //判断目标的距离的条件就是要么目标没有移动,要么目标的移动距离超出了一个距离单元且不超出客户端设定的最大速度
-            if(distance < 1.0 || (distance >= mRangeFactor && (distance <= max_distance)))
+            //2)目标要么没有移动,要么超出一个距离单元
+            if(distance < 1.0 || distance >= mRangeFactor)
             {
+                //符合要求,当前回波矩形块从原始队列删除,继续寻找下一个可能的块
                 qDebug()<<" child of root found now. distance to root is:"<<distance;
                 result.append(list.takeAt(k));
                 continue;
             }
             k++;
-        }
+        }        
         qDebug()<<"update root"<<src->rectnumber()<<"end with result size:"<<result.size();
     }
     if(result.size() == 0)
     {
-        //目标没有找到更新目标,检查目标是否在其他目标的回波图形的范围内
-        //将这个包含他的回波图形作为它的新的目标
+        //如果当前目标的块没有找到,看看目标是否处在一个回波块的区域内.
+        //出现这种情况的原因是因为回波块的形状等发生变化,导致回波块的
+        //质心位置变化不规则,导致出现了以下的情况:
+        //1)目标距离新回波质心的距离超出了最大的可能运动距离
+        //2)质心位置没有在目标的预推区域内
+        //这样就暂且认为目标的位置没有发生变化,把这个新的回波块从原始队列中删除
+        //以此来避免回波显示中一个回波出现两个目标的情况
         for(int i=0; i<list.size();i++)
         {
             zchxRadarRectDef next = list[i];
             if(isRectAreaContainsPoint(next, old_lat, old_lon))
             {
                 isTargetInVideo = true;
-                //目标的经纬度落在了回波的范围内
-                //检查以回波的重心为目标的新位置,检查是否是与目标的本身的
-                //方向相反,如果是,目标的位置就不更新,否则就更新.无论更新
-                //与否,当前的回波都会从队列中删除,防止一个回波出现两个目
-                //标的情况
-
-                //先将回波从队列删除
                 list.takeAt(i);
-                i--;
+#if 1
                 double dir = Mercator::angle(old_lat, old_lon, next.centerlatitude(), next.centerlongitude());
                 //目标的方向已经有了,也就是目标也不是初次出现,需要检查方向.
-                if(cog_usefull && isDirectionChange(old_cog, dir))
-                {
-#if 0
-                    //构造目标的可能位置点
-                    double est_distance = old_sog * delta_time;
-                    QGeoCoordinate est_pos = QGeoCoordinate(old_lat, old_lon).atDistanceAndAzimuth(est_distance, old_cog);
-                    while (!isRectAreaContainsPoint(next, est_pos.latitude(), est_pos.longitude())) {
-                        est_distance /= 2.0;
-                        est_pos = QGeoCoordinate(old_lat, old_lon).atDistanceAndAzimuth(est_distance, old_cog);
-                    }
-                    dir = old_cog;
-                    next.set_centerlatitude(est_pos.latitude());
-                    next.set_centerlongitude(est_pos.longitude());
-#else
-                    break;
-#endif
-                }
+                if(cog_usefull && isDirectionChange(old_cog, dir)) break;
                 //再次检查速度,速度不能超过目标的最大速度,如果超过了,就将位置更新到最大速度的位置
                 Mercator now = latlonToMercator(next.centerlatitude(), next.centerlongitude());
                 //计算点到预估位置的距离
@@ -553,6 +541,7 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(bool& isTargetI
 
                 //添加到队列中
                 result.append(next);
+#endif
                 break;
             }
         }
@@ -622,25 +611,22 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
         if(track_debug) qDebug()<<"next target found, distance to estmation:"<<rect_num;
 
     } else
-    {
-        if(track_debug)
-        {
-            qDebug()<<"next target not found, now check whether  to fake one or not...."<<rect_num;
-        }
+    {        
         if(isTargetInVideo)
         {
-            qDebug()<<"now target is a video area. not fake one. only update its update_time";
+            qDebug()<<"now target is in a video area. not fake one. only update its update_time";
             pre_rect->set_timeofday(list_time);
             topNode->time_of_day = list_time;
             topNode->est_count = 0;
-            pre_rect->set_sog(0);
+            pre_rect->set_sog(0);  //认为目标在当前位置静止
             return;
         }
+        if(track_debug) qDebug()<<"next target not found, fake one"<<rect_num;
         //估计目标的可能位置
         double est_distance = delta_time * old_sog;
         if(est_distance < mRangeFactor)
         {
-            //时间太短了,目标不用预估,不用更新
+            //距离太短了,目标不用预估,认为目标没有移动
             pre_rect->set_timeofday(list_time);
             topNode->time_of_day = list_time;
             return;
@@ -658,6 +644,7 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
     //目标的方向已经有了,也就是目标也不是初次出现,需要检查方向.
     if(isDirectionChange(old_cog, dir))
     {
+        qDebug()<<"taregt direction should be same as old one, but now found a oppsite one. abnormal...";
         pre_rect->set_timeofday(list_time);
         topNode->time_of_day = list_time;
         return;
@@ -717,18 +704,29 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
                 {
                     pre_rect->set_timeofday(list_time);
                     topNode->time_of_day = list_time;
-                }
+                    qDebug()<<"found old target in video area, keep silent"<<node_number<<" route id:"<<i;
+                } else
+                {
                 qDebug()<<"found no target in specified area"<<node_number<<" route id:"<<i;
+                }
                 continue;
             }
             //更新对应的速度和方向
             zchxRadarRectDef now_rect = result.first();
             now_rect.set_realdata(true);
             now_rect.set_rectnumber(node_number);
+
             double cog = Mercator::angle(pre_rect->centerlatitude(), pre_rect->centerlongitude(), now_rect.centerlatitude(), now_rect.centerlongitude());
             double delta_time = getDeltaTime(list_time, pre_rect->timeofday());
             double cal_dis = Mercator::distance(pre_rect->centerlatitude(), pre_rect->centerlongitude(), now_rect.centerlatitude(), now_rect.centerlongitude());
-
+            //检查目标的距离和方向
+            if(cal_dis < mRangeFactor)
+            {
+                //目标没有移动处理
+                pre_rect->set_timeofday(list_time);
+                topNode->time_of_day = list_time;
+                continue;
+            }
             if(delta_time < 0.000001)
             {
                 qDebug()<<"abnormal delta time found now"<<node_number<<" route id:"<<i<<" deleta time:"<<delta_time;

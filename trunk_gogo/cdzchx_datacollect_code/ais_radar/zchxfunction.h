@@ -328,10 +328,10 @@ enum PNTPOSTION{
 
 };
 
-enum PredictionAreaType{
-    Prediction_Area_Rectangle = 0,
-    Prediction_Area_Triangle,
-};
+//enum PredictionAreaType{
+//    Prediction_Area_Rectangle = 0,
+//    Prediction_Area_Triangle,
+//};
 
 
 class      zchxTargetPredictionLine
@@ -342,34 +342,34 @@ private:
     QPolygonF   mPredictionArea;
     QList<Latlon>   mPredictionAreaLL;
     double      mWidth;
-    int         mType;
+    double      mStartOffsetCoeff;       //构造多边形时偏离起点的距离.如果设定为0,就是不偏离,设定为1就是三角形..中间数值就是多边形
 private:
     void makePridictionArea();
 public:
     zchxTargetPredictionLine() {
         mWidth = 0;
-        mType = Prediction_Area_Rectangle;
+        mStartOffsetCoeff = 0.0;
     }
-    zchxTargetPredictionLine(Latlon start, Latlon end, double width, int type)
+    zchxTargetPredictionLine(Latlon start, Latlon end, double width, double offset)
     {
         mStart = latlonToMercator(start);
         mEnd = latlonToMercator(end);
         mWidth = width;
-        mType = type;
+        mStartOffsetCoeff = offset;
         makePridictionArea();
     }
 
-    zchxTargetPredictionLine(double start_lat, double start_lon, double end_lat, double end_lon, double width, int type)
+    zchxTargetPredictionLine(double start_lat, double start_lon, double end_lat, double end_lon, double width, double offset)
     {
 //        zchxTargetPredictionLine(Latlon(start_lat, start_lon), Latlon(end_lat, end_lon), width, type);
         mStart = latlonToMercator(start_lat, start_lon);
         mEnd = latlonToMercator(end_lat, end_lon);
         mWidth = width;
-        mType = type;
+        mStartOffsetCoeff = offset;
         makePridictionArea();
     }
     void     setPridictionWidth(int width);
-    void     setPridictionType(int type);
+    void     setStartOffset(double offset);
 
     bool    isPointIn(const Mercator& point);
     bool    isPointIn(double lat, double lon) {return isPointIn(latlonToMercator(lat, lon));}

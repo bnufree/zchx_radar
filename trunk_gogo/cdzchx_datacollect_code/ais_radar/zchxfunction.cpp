@@ -404,42 +404,50 @@ void zchxTargetPredictionLine::makePridictionArea()
 {
     mPredictionArea.clear();
     mPredictionAreaLL.clear();
-//    if(!isValid()) return;
+    if(!isValid()) return;
+    if(mStartOffsetCoeff > 1.0) mStartOffsetCoeff = 1.0;
+    else if(mStartOffsetCoeff < 0.0) mStartOffsetCoeff = 0.0;
+
     //计算直线的角度
     double angle = atan2(mEnd.mY - mStart.mY, mEnd.mX - mStart.mX);
     QLineF line(mStart.mX, mStart.mY, mEnd.mX, mEnd.mY);
     QLineF low = line.translated(mWidth * 0.5 * sin(angle), -mWidth *0.5 * cos(angle));
     QLineF high = line.translated(-mWidth * 0.5* sin(angle), mWidth *0.5 * cos(angle));
-    //将墨卡托转换成经纬度, 保存对应的经纬度点列
-    if(mType == Prediction_Area_Rectangle)
-    {
-        mPredictionArea.append(low.p1());
-        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
-        mPredictionArea.append(low.p2());
-        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
-        mPredictionArea.append(high.p2());
-        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
-        mPredictionArea.append(high.p1());
-        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
-        mPredictionArea.append(low.p1());
-        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
 
-    } else
+    double offset_len = mStartOffsetCoeff * length();
+    double offset_X = offset_len * cos(angle);
+    double offset_y = offset_len * sin(angle);
+    QPointF offset(offset_X, offset_y);
+
+    //添加起点
+    mPredictionArea.append(line.p1());
+    mPredictionArea.append(low.p1() + offset);
+    mPredictionArea.append(low.p2());
+    mPredictionArea.append(high.p2());
+    mPredictionArea.append(high.p1() + offset);
+    mPredictionArea.append(line.p1());
+
+    //转换成经纬度
+    for(QPointF pnt : mPredictionArea)
     {
-        mPredictionArea.append(line.p1());
-        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
-        mPredictionArea.append(low.p2());
-        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
-        mPredictionArea.append(high.p2());
-        mPredictionAreaLL.append(mercatorToLatlon(Mercator(mPredictionArea.last())));
+        mPredictionAreaLL.append(mercatorToLatlon(Mercator(pnt)));
     }
 }
 
-void zchxTargetPredictionLine::setPridictionType(int type)
+//void zchxTargetPredictionLine::setPridictionType(int type)
+//{
+//    if(mType != type)
+//    {
+//        mType = type;
+//        makePridictionArea();
+//    }
+//}
+
+void zchxTargetPredictionLine::setStartOffset(double offset)
 {
-    if(mType != type)
+    if(mStartOffsetCoeff != offset)
     {
-        mType = type;
+        mStartOffsetCoeff = offset;
         makePridictionArea();
     }
 }
