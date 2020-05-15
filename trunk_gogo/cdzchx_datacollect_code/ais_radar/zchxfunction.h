@@ -223,6 +223,7 @@ struct Latlon;
 Latlon mercatorToLatlon(const Mercator& mct);
 Mercator latlonToMercator(const Latlon& ll);
 Mercator latlonToMercator(double lat, double lon);
+QStringList     getAllIpv4List();
 
 struct Mercator
 {

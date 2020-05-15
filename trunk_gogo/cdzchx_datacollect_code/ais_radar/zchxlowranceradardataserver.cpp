@@ -52,6 +52,8 @@ ZCHXLowranceRadarDataServer::ZCHXLowranceRadarDataServer(int source, QObject *pa
 {
     qRegisterMetaType<RadarStatus>("const RadarStatus&");
     qRegisterMetaType<QList<RadarStatus>>("const QList<RadarStatus>&");
+    if(mIPV4List.isEmpty()) mIPV4List = getAllIpv4List();
+
     prt = false;//初始化打印标志
     tcp_flag = false;
     //从配置文件读取

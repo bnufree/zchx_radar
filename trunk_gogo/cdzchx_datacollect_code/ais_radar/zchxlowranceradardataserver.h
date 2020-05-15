@@ -34,6 +34,7 @@ struct LowranceRadarSocket{
     UDPSocketParam      mReportSocket;          //雷达状态信息报告
     UDPSocketParam      mVideoSocket;           //回波数据获取
     UDPSocketParam      mHeartSocket;           //雷达操作控制
+    int                 mPriority;              //优先级
 };
 
 
@@ -104,6 +105,8 @@ private:
     void parseRadarControlSetting(INFOTYPE infotype);
 
 private:
+    QList<LowranceRadarSocket>  mRadarParamsList;
+    QStringList                 mIPV4List;
     bool prt;//控制打印回波数据标志
     int m_uSourceID;
     QUdpSocket *m_pUdpTrackSocket;

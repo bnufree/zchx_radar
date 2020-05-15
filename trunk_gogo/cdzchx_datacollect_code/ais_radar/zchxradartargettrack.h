@@ -147,7 +147,7 @@ private:
     bool        isTargetJumping(const zchxRadarRect& rect, double merge_dis, int jump_target_num);
     void        dumpTargetDistance(const QString &tag, double merge_dis);
     void        checkTargetRectAfterUpdate(double merge_dis);
-    zchxRadarRectDefList   getDirDeterminTargets(zchxRadarRectDefList &list, zchxRadarRectDef* src, bool cog_usefull);
+    zchxRadarRectDefList   getDirDeterminTargets(bool &isTargetInVideo, zchxRadarRectDefList &list, zchxRadarRectDef* src, bool cog_usefull);
     bool        isRectAreaContainsPoint(const zchxRadarRectDef& rect, double lat, double lon);
 #if 0
     void        makePredictionArea(zchxRadarRectDef* rect, double width, double delta_time = 10.0);

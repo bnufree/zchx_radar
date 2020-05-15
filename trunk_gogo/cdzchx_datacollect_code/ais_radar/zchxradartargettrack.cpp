@@ -393,8 +393,9 @@ void zchxRadarTargetTrack::makePredictionArea(zchxRadarRectDef *rect,  double wi
 }
 #endif
 
-zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDefList &list, zchxRadarRectDef* src, bool cog_usefull)
+zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(bool& isTargetInVideo, zchxRadarRectDefList &list, zchxRadarRectDef* src, bool cog_usefull)
 {
+    isTargetInVideo = false;
     zchxRadarRectDefList result;
     if(list.size() == 0 || !src) return result;
     double list_time = list.first().timeofday();
@@ -411,21 +412,44 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
         return result;
     }
     if(cog_usefull)
-    {        
+    {
         //计算当前目标可能的预估位置
         double est_lat = 0.0, est_lon = 0.0;
         //计算目标的最合理位置
+        if(old_sog < 0.001) old_sog = 0.5 * ship_max_speed;
         float est_distance = old_sog * delta_time;
-        distbearTolatlon1(old_lat, old_lon, est_distance, old_cog, &est_lat, &est_lon);
+        QGeoCoordinate est_geo = QGeoCoordinate(old_lat, old_lon).atDistanceAndAzimuth(est_distance, old_cog);
+        est_lat = est_geo.latitude();
+        est_lon = est_geo.longitude();
+//        distbearTolatlon1(old_lat, old_lon, est_distance, old_cog, &est_lat, &est_lon);
         Mercator est_pos = latlonToMercator(est_lat, est_lon);
         //将目标的预估范围扩大最大允许的船舶速度,防止目标速度突然变大了的情况
         double cur_max_speed = old_sog * 2;
         if(cur_max_speed > ship_max_speed) cur_max_speed = ship_max_speed;
         est_distance = cur_max_speed * delta_time;
-        distbearTolatlon1(old_lat, old_lon, est_distance, old_cog, &est_lat, &est_lon);
+        est_geo = QGeoCoordinate(old_lat, old_lon).atDistanceAndAzimuth(est_distance, old_cog);
+                est_lat = est_geo.latitude();
+                est_lon = est_geo.longitude();
+//        distbearTolatlon1(old_lat, old_lon, est_distance, old_cog, &est_lat, &est_lon);
         //预估点和前一位置连线，若当前点在连线附近，则认为是下一个点。点存在多个，则取预估位置距离最近的点。
         zchxTargetPredictionLine line(old_lat, old_lon, est_lat, est_lon, mPredictionWidth, Prediction_Area_Rectangle);
         if(!line.isValid()) return result;
+        //将目标的预估范围更新到地图上显示,检查预估范围的计算是否有错误
+        if(1)
+        {
+//            src->set_startlatitude(old_lat);
+//            src->set_startlongitude(old_lon);
+//            src->set_endlatitude(est_lat);
+//            src->set_endlongitude(est_lon);
+            src->clear_predictionareas();
+            com::zhichenhaixin::proto::predictionArea *dest = src->add_predictionareas();
+            QList<Latlon> area = line.getPredictionArea();
+            foreach (Latlon ll, area) {
+                com::zhichenhaixin::proto::singleVideoBlock* block = dest->add_area();
+                block->set_latitude(ll.lat);
+                block->set_longitude(ll.lon);
+            }
+        }
         //从最新的目标矩形框中寻找预估位置附件的点列,将与目标方位偏离最小的点作为最终的点
         double est_target_index = -1;
         double min_distance = INT64_MAX;
@@ -434,7 +458,7 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
             zchxRadarRectDef next = list[k];
             Mercator now = latlonToMercator(next.centerlatitude(), next.centerlongitude());
             //检查是否在连线的范围内
-            if(!line.isPointIn(now)) continue;
+            if(!line.isPointIn(now)) continue;            
             //计算点到预估位置的距离
             double distance = now.distanceToPoint(est_pos);
             if(distance / delta_time > ship_max_speed) continue;
@@ -485,6 +509,7 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
             zchxRadarRectDef next = list[i];
             if(isRectAreaContainsPoint(next, old_lat, old_lon))
             {
+                isTargetInVideo = true;
                 //目标的经纬度落在了回波的范围内
                 //检查以回波的重心为目标的新位置,检查是否是与目标的本身的
                 //方向相反,如果是,目标的位置就不更新,否则就更新.无论更新
@@ -498,6 +523,7 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
                 //目标的方向已经有了,也就是目标也不是初次出现,需要检查方向.
                 if(cog_usefull && isDirectionChange(old_cog, dir))
                 {
+#if 0
                     //构造目标的可能位置点
                     double est_distance = old_sog * delta_time;
                     QGeoCoordinate est_pos = QGeoCoordinate(old_lat, old_lon).atDistanceAndAzimuth(est_distance, old_cog);
@@ -508,6 +534,9 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
                     dir = old_cog;
                     next.set_centerlatitude(est_pos.latitude());
                     next.set_centerlongitude(est_pos.longitude());
+#else
+                    break;
+#endif
                 }
                 //再次检查速度,速度不能超过目标的最大速度,如果超过了,就将位置更新到最大速度的位置
                 Mercator now = latlonToMercator(next.centerlatitude(), next.centerlongitude());
@@ -524,9 +553,12 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(zchxRadarRectDe
 
                 //添加到队列中
                 result.append(next);
+                break;
             }
         }
     }
+
+    qDebug()<<__FUNCTION__<<"target size:"<<result.size()<<" in video:"<<isTargetInVideo;
 
     return result;
 }
@@ -577,8 +609,9 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
 
     int cur_est_cnt = topNode->est_count;
     //这里开始进行位置的预估判断,
-    if(track_debug) qDebug()<<"current target dir is confirmed."<<rect_num<<" cog:"<<old_cog;    
-    zchxRadarRectDefList list = getDirDeterminTargets(left_list, pre_rect, true);
+    if(track_debug) qDebug()<<"current target dir is confirmed."<<rect_num<<" cog:"<<old_cog;
+    bool isTargetInVideo = false;
+    zchxRadarRectDefList list = getDirDeterminTargets(isTargetInVideo, left_list, pre_rect, true);
     zchxRadarRectDef dest;
     //检查目标是否已经找到
     if(list.size() > 0)
@@ -590,12 +623,26 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
 
     } else
     {
-        if(track_debug) qDebug()<<"next target not found, now fake one...."<<rect_num;
+        if(track_debug)
+        {
+            qDebug()<<"next target not found, now check whether  to fake one or not...."<<rect_num;
+        }
+        if(isTargetInVideo)
+        {
+            qDebug()<<"now target is a video area. not fake one. only update its update_time";
+            pre_rect->set_timeofday(list_time);
+            topNode->time_of_day = list_time;
+            topNode->est_count = 0;
+            pre_rect->set_sog(0);
+            return;
+        }
         //估计目标的可能位置
         double est_distance = delta_time * old_sog;
-        if(est_distance >= mRangeFactor)
+        if(est_distance < mRangeFactor)
         {
             //时间太短了,目标不用预估,不用更新
+            pre_rect->set_timeofday(list_time);
+            topNode->time_of_day = list_time;
             return;
         }
         QGeoCoordinate est_pos = QGeoCoordinate(old_lat, old_lon).atDistanceAndAzimuth(est_distance, old_cog);
@@ -605,6 +652,15 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
         //将目标移动到现在的预推位置
         changeTargetLL(Latlon(est_pos.latitude(), est_pos.longitude()), dest);
         cur_est_cnt++;
+    }
+
+    double dir = Mercator::angle(old_lat, old_lon, dest.centerlatitude(), dest.centerlongitude());
+    //目标的方向已经有了,也就是目标也不是初次出现,需要检查方向.
+    if(isDirectionChange(old_cog, dir))
+    {
+        pre_rect->set_timeofday(list_time);
+        topNode->time_of_day = list_time;
+        return;
     }
 
     //更新目标开始
@@ -653,9 +709,15 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
             qDebug()<<"child number:"<<node_number<<" time:"<<pre_rect->timeofday()<<" sog:"<<pre_rect->sog()<<" cog:"<<pre_rect->cog()<<" route id:"<<i;
 
             //根据分支节点的速度和角度取得待更新的矩形单元,这里的矩形单元数只有一个
-            zchxRadarRectDefList result = getDirDeterminTargets(left_list, pre_rect, true);
+            bool isTargetInVideo = false;
+            zchxRadarRectDefList result = getDirDeterminTargets(isTargetInVideo, left_list, pre_rect, true);
             if(result.size() == 0)
             {
+                if(isTargetInVideo)
+                {
+                    pre_rect->set_timeofday(list_time);
+                    topNode->time_of_day = list_time;
+                }
                 qDebug()<<"found no target in specified area"<<node_number<<" route id:"<<i;
                 continue;
             }
@@ -681,8 +743,8 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
             //检查目标是不是发生了以前有速度现在没速度的情况,如果是,还是使用以前的速度
             if(pre_rect->sog() > 0 && sog < 0.001)
             {
-                sog = pre_rect->sog();
-                cog = pre_rect->cog();
+//                sog = pre_rect->sog();
+//                cog = pre_rect->cog();
             }
             now_rect.set_sog(sog);
             now_rect.set_cog(cog);
@@ -693,7 +755,8 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
     } else
     {
         //分支目标不存在,再次更新根节点
-        zchxRadarRectDefList result = getDirDeterminTargets(left_list, topNode->rect, false);
+         bool isTargetInvideo = false;
+        zchxRadarRectDefList result = getDirDeterminTargets(isTargetInvideo, left_list, topNode->rect, false);
         pre_rect = topNode->rect;
         bool root_update = false;
         for(int i=0; i<result.size(); i++)
@@ -718,8 +781,8 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
             }
         }
         //将目标对象的更新时间更新到列表时间
-        if(result.size() > 0)   topNode->time_of_day = list_time;
-        if(result.size() > 0 && !root_update)
+        if(result.size() > 0 || isTargetInvideo)   topNode->time_of_day = list_time;
+        if((result.size() > 0 && !root_update) || isTargetInvideo)
         {
             //所有目标都距离太近, 证明目标此时没有移动,作为静止目标处理
             topNode->rect->set_timeofday(list_time);
@@ -744,6 +807,10 @@ TargetNode* zchxRadarTargetTrack::checkNodeConfirmed(TargetNode *node)
         //第二个节点存在
         TargetNode *child_lvl2 = child_lvl1->children[0].data();
         if(!child_lvl2) continue;
+        //第3个节点存在
+        if(child_lvl2->children.size() == 0) continue;
+        TargetNode *child_lvl3 = child_lvl2->children[0].data();
+        if(!child_lvl3) continue;
         //将目标确认信息添加
         node->cog_confirmed = true;
         node->est_count = 0;
@@ -949,6 +1016,7 @@ void zchxRadarTargetTrack::updateRectMapWithNode(zchxRadarRectMap &map, TargetNo
         {
             zchxRadarRectDef *his_rect = rect.add_historyrects();
             his_rect->CopyFrom(*(route_list[i]->rect));
+            if(rect.historyrects_size() == 20) break;
         }
     } else
     {

@@ -323,25 +323,7 @@ zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     connect(color1,SIGNAL(triggered()),this,SLOT(on_color1Button_clicked()));
     connect(color2,SIGNAL(triggered()),this,SLOT(on_color2Button_clicked()));
     //获取所有网络接口的列表
-    foreach (QNetworkInterface netInterface, QNetworkInterface::allInterfaces())
-    {
-        //设备名
-        //qDebug() << "设备名:" << netInterface.name()<<"是否激活:"<<netInterface.flags();
-
-        //MAC地址
-        //qDebug() << "MAC地址:" << netInterface.hardwareAddress();
-
-        QList<QNetworkAddressEntry> entryList = netInterface.addressEntries();
-
-        //遍历每一个IP地址(每个包含一个IP地址，一个子网掩码和一个广播地址)
-        foreach(QNetworkAddressEntry entry, entryList)
-        {
-            //IP地址
-            //qDebug() << "IP地址:" << entry.ip().toString();
-            ui->mac_comboBox->addItem(entry.ip().toString());
-
-       }
-    }
+    ui->mac_comboBox->addItems(getAllIpv4List());
     QString ip_str = Utils::Profiles::instance()->value("Radar_Control","Mac_IP").toString();
     cout<<"ip_str"<<ip_str;
     ui->mac_comboBox->setCurrentText(ip_str);

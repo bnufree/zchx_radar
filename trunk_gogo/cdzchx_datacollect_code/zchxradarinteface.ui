@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1129</width>
-    <height>720</height>
+    <height>745</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -138,6 +138,21 @@
         <string>雷达</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_12">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="verticalSpacing">
+         <number>3</number>
+        </property>
         <item row="0" column="1">
          <widget class="ScrollArea" name="scrollArea">
           <property name="minimumSize">
@@ -157,8 +172,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>603</width>
-             <height>639</height>
+             <width>621</width>
+             <height>682</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_5">
@@ -208,7 +223,7 @@
             <height>16777215</height>
            </size>
           </property>
-          <layout class="QGridLayout" name="gridLayout_6">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
            <property name="leftMargin">
             <number>0</number>
            </property>
@@ -221,9 +236,47 @@
            <property name="bottomMargin">
             <number>0</number>
            </property>
-           <item row="0" column="0">
-            <layout class="QGridLayout" name="gridLayout_4">
-             <item row="4" column="0" colspan="2">
+           <item>
+            <layout class="QGridLayout" name="gridLayout_15">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_35">
+               <property name="styleSheet">
+                <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+               </property>
+               <property name="text">
+                <string>目标长度区间(米)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="minTradius_lineEdit"/>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLineEdit" name="tradius_lineEdit"/>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_4">
+               <property name="styleSheet">
+                <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+               </property>
+               <property name="text">
+                <string>目标面积区间(米)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="minAreaEdit"/>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLineEdit" name="maxAreaEdit"/>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QGridLayout" name="gridLayout_16">
+             <item row="0" column="0">
               <widget class="QLabel" name="label_3">
                <property name="styleSheet">
                 <string notr="true">color: rgb(0, 0, 0);
@@ -234,154 +287,27 @@ font: 9pt &quot;Agency FB&quot;;</string>
                </property>
               </widget>
              </item>
-             <item row="6" column="0" colspan="2">
-              <widget class="QLabel" name="label_27">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>定时清理</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0" colspan="4">
-              <layout class="QHBoxLayout" name="horizontalLayout_5">
-               <item>
-                <widget class="QLabel" name="label_4">
-                 <property name="styleSheet">
-                  <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-                 </property>
-                 <property name="text">
-                  <string>目标面积区间(米)</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="minAreaEdit"/>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="maxAreaEdit"/>
-               </item>
-              </layout>
-             </item>
-             <item row="10" column="0" colspan="2">
-              <widget class="QLabel" name="label_2">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>半径系数 </string>
-               </property>
-              </widget>
-             </item>
-             <item row="9" column="0" colspan="2">
-              <widget class="QLabel" name="label_13">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>距离判断</string>
-               </property>
-              </widget>
-             </item>
-             <item row="10" column="3">
-              <widget class="QCheckBox" name="send_dj_checkBox">
-               <property name="text">
-                <string>点迹目标</string>
-               </property>
-              </widget>
-             </item>
-             <item row="7" column="0" colspan="2">
-              <widget class="QLabel" name="label_33">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>雷达编号</string>
-               </property>
-              </widget>
-             </item>
-             <item row="9" column="2" colspan="2">
-              <widget class="QLineEdit" name="radius_lineEdit"/>
-             </item>
-             <item row="15" column="0" colspan="5">
-              <widget class="QPushButton" name="update_setting_btn">
-               <property name="text">
-                <string>设置</string>
-               </property>
-              </widget>
-             </item>
-             <item row="8" column="0" colspan="2">
-              <widget class="QLabel" name="label_29">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>缓存点迹</string>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="2" colspan="2">
-              <widget class="QLineEdit" name="jump_lineEdit"/>
-             </item>
-             <item row="0" column="0" colspan="4">
-              <layout class="QHBoxLayout" name="horizontalLayout_3">
-               <item>
-                <widget class="QLabel" name="label_35">
-                 <property name="styleSheet">
-                  <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-                 </property>
-                 <property name="text">
-                  <string>目标长度区间(米)</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="minTradius_lineEdit"/>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="tradius_lineEdit"/>
-               </item>
-              </layout>
-             </item>
-             <item row="11" column="0">
-              <widget class="QLabel" name="label_10">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>方向反向</string>
-               </property>
-              </widget>
-             </item>
-             <item row="11" column="2">
-              <widget class="QLineEdit" name="direction_change_edit"/>
-             </item>
-             <item row="11" column="3">
-              <widget class="QCheckBox" name="cog_adjust_chk">
-               <property name="text">
-                <string>方位角调整</string>
-               </property>
-              </widget>
-             </item>
-             <item row="7" column="2" colspan="2">
-              <widget class="QLineEdit" name="bh_lineEdit"/>
-             </item>
-             <item row="4" column="3">
-              <widget class="QLineEdit" name="maxzf_lineEdit"/>
-             </item>
-             <item row="4" column="2">
+             <item row="0" column="1">
               <widget class="QLineEdit" name="minzf_lineEdit"/>
              </item>
-             <item row="5" column="0" colspan="2">
+             <item row="0" column="2">
+              <widget class="QLabel" name="label_16">
+               <property name="styleSheet">
+                <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+               </property>
+               <property name="text">
+                <string>---</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLineEdit" name="maxzf_lineEdit"/>
+             </item>
+             <item row="1" column="0">
               <widget class="QLabel" name="label_32">
                <property name="styleSheet">
                 <string notr="true">color: rgb(0, 0, 0);
@@ -392,13 +318,99 @@ font: 9pt &quot;Agency FB&quot;;</string>
                </property>
               </widget>
              </item>
-             <item row="8" column="2" colspan="2">
-              <widget class="QLineEdit" name="angle_lineEdit"/>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="jump_lineEdit"/>
              </item>
-             <item row="6" column="2" colspan="2">
+             <item row="1" column="2">
+              <widget class="QLabel" name="label_27">
+               <property name="styleSheet">
+                <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+               </property>
+               <property name="text">
+                <string>定时清理</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
               <widget class="QLineEdit" name="lineEdit_2"/>
              </item>
-             <item row="10" column="2">
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_33">
+               <property name="styleSheet">
+                <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+               </property>
+               <property name="text">
+                <string>雷达编号</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="bh_lineEdit"/>
+             </item>
+             <item row="2" column="2">
+              <widget class="QLabel" name="label_29">
+               <property name="styleSheet">
+                <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+               </property>
+               <property name="text">
+                <string>缓存点迹</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="QLineEdit" name="angle_lineEdit"/>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_13">
+               <property name="styleSheet">
+                <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+               </property>
+               <property name="text">
+                <string>距离判断</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="styleSheet">
+                <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+               </property>
+               <property name="text">
+                <string>半径系数 </string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_10">
+               <property name="styleSheet">
+                <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+               </property>
+               <property name="text">
+                <string>方向反向</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1" colspan="2">
+              <widget class="QLineEdit" name="direction_change_edit"/>
+             </item>
+             <item row="2" column="3" colspan="2">
+              <widget class="QCheckBox" name="cog_adjust_chk">
+               <property name="text">
+                <string>方位角调整</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1" colspan="2">
               <widget class="QLineEdit" name="k_lineEdit">
                <property name="styleSheet">
                 <string notr="true">color: rgb(0, 0, 0);
@@ -406,7 +418,28 @@ font: 9pt &quot;Agency FB&quot;;</string>
                </property>
               </widget>
              </item>
-             <item row="12" column="0">
+             <item row="1" column="3" colspan="2">
+              <widget class="QCheckBox" name="send_dj_checkBox">
+               <property name="text">
+                <string>点迹目标</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3" colspan="2">
+              <widget class="QCheckBox" name="useNativeRadiusCHK">
+               <property name="text">
+                <string>原始回波半径</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1" colspan="2">
+              <widget class="QLineEdit" name="radius_lineEdit"/>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QGridLayout" name="gridLayout_14">
+             <item row="0" column="0">
               <widget class="QLabel" name="label_11">
                <property name="styleSheet">
                 <string notr="true">color: rgb(0, 0, 0);
@@ -417,7 +450,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
                </property>
               </widget>
              </item>
-             <item row="12" column="2">
+             <item row="0" column="1">
               <widget class="QSpinBox" name="video_or_count">
                <property name="minimum">
                 <number>1</number>
@@ -427,7 +460,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
                </property>
               </widget>
              </item>
-             <item row="12" column="3">
+             <item row="0" column="2">
               <widget class="QLabel" name="label_14">
                <property name="styleSheet">
                 <string notr="true">color: rgb(0, 0, 0);
@@ -438,14 +471,11 @@ font: 9pt &quot;Agency FB&quot;;</string>
                </property>
               </widget>
              </item>
-             <item row="13" column="0" colspan="4">
-              <widget class="QCheckBox" name="useNativeRadiusCHK">
-               <property name="text">
-                <string>使用回波数据半径</string>
-               </property>
-              </widget>
-             </item>
-             <item row="14" column="0" colspan="3">
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_9">
+             <item>
               <widget class="QLabel" name="label_15">
                <property name="styleSheet">
                 <string notr="true">color: rgb(0, 0, 0);
@@ -456,7 +486,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
                </property>
               </widget>
              </item>
-             <item row="14" column="3">
+             <item>
               <widget class="QSpinBox" name="predictionWidth">
                <property name="minimum">
                 <number>1</number>
@@ -471,7 +501,20 @@ font: 9pt &quot;Agency FB&quot;;</string>
              </item>
             </layout>
            </item>
-           <item row="2" column="0">
+           <item>
+            <widget class="QPushButton" name="update_setting_btn">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>设置</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QLabel" name="k_label">
              <property name="styleSheet">
               <string notr="true">color: rgb(0, 0, 0); </string>
@@ -481,7 +524,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item>
             <widget class="QLabel" name="label">
              <property name="minimumSize">
               <size>
@@ -497,7 +540,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
+           <item>
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -510,7 +553,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
              </property>
             </spacer>
            </item>
-           <item row="5" column="0">
+           <item>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
               <widget class="QPushButton" name="pushButton_5">
@@ -534,7 +577,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
              </item>
             </layout>
            </item>
-           <item row="6" column="0">
+           <item>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
               <widget class="QPushButton" name="closeRadarBtn">
@@ -564,7 +607,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
              </item>
             </layout>
            </item>
-           <item row="7" column="0">
+           <item>
             <layout class="QGridLayout" name="gridLayout_2">
              <property name="leftMargin">
               <number>2</number>
@@ -1309,9 +1352,6 @@ font: 9pt &quot;Agency FB&quot;;</string>
               </item>
               <item row="1" column="1">
                <widget class="QPushButton" name="uploadRadarBtn">
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
                 <property name="text">
                  <string>上传参数</string>
                 </property>
