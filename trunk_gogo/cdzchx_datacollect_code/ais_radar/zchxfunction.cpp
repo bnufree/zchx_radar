@@ -557,6 +557,14 @@ double timeOfDay()
     return startDate.secsTo(QDateTime::currentDateTime());
 }
 
+double timeOfDay(quint32 secs)
+{
+    QDateTime curTime = QDateTime::fromTime_t(secs);
+    QDateTime startDate;
+    startDate.setDate(curTime.date());
+    return startDate.secsTo(curTime);
+}
+
 QDateTime timeStamps(double tod)
 {
     QDateTime startDate;

@@ -479,6 +479,7 @@ private:
 
 
 double timeOfDay();
+double timeOfDay(quint32 secs);
 QDateTime   timeStamps(double tod);
 
 void   exportRectDef2File(const zchxRadarRectDefList& list, const QString& fileName);

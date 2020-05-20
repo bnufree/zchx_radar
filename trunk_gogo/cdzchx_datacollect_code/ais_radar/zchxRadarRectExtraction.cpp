@@ -159,7 +159,7 @@ void zchxRadarRectExtraction::setRadarLL(double lat, double lon)
 //debug模式下输出opencv的图像处理过程
 void zchxRadarRectExtraction::parseVideoPieceFromImage(QImage& result, zchxRadarRectDefList& list, const QImage &img, double range_factor, bool output)
 {
-    double time_of_day = timeOfDay();
+    quint32 time_of_day = QDateTime::currentDateTime().toTime_t();
     double timestamp = QDateTime::currentMSecsSinceEpoch();
     int scaled_width = 255;
     int scaled_height = 255;
@@ -283,14 +283,14 @@ void zchxRadarRectExtraction::parseVideoPieceFromImage(QImage& result, zchxRadar
         painter.setCompositionMode(old);
     }
     //添加目标图形外框
-    painter.setPen(Qt::red);
+    painter.setPen(QPen(Qt::red, 1.0, Qt::DashDotDotLine));
     for(int i=0; i<parseTargetList.size(); i++)
     {
         parseTarget &target = parseTargetList[i];
-#ifndef QT_NO_DEBUG
-//        painter.setBrush(Qt::transparent);
-//        painter.drawPolygon(target.mPolygons);
-//        //添加目标中心点
+#if 1
+        painter.setBrush(Qt::transparent);
+        painter.drawPolygon(target.mPolygons);
+        //添加目标中心点
 //        painter.setBrush(Qt::yellow);
 //        painter.drawEllipse(target.mCenter, 2, 2);
 #endif
@@ -349,7 +349,7 @@ void zchxRadarRectExtraction::parseVideoPieceFromImage(QImage& result, zchxRadar
             }
         }
         rectDef.set_rectnumber(i);
-        rectDef.set_timeofday(time_of_day);
+        rectDef.set_updatetime(time_of_day);
         Latlon ll = posConverter.pixel2Latlon(bound.topLeft());
         rectDef.set_topleftlatitude(ll.lat);
         rectDef.set_topleftlongitude(ll.lon);

@@ -557,7 +557,7 @@ void TestMainWindow::slotTimerout()
         his.centerlongitude = (his.startlongitude + his.endlongitude) / 2;
         his.isRealData= true;
         his.angle = ZCHX::Utils::calcAzimuth(his.startlongitude, his.startlatitude, his.endlongitude, his.endlatitude);
-        his.timeOfDay = QDateTime::currentDateTime().toTime_t();
+        his.updateTime = QDateTime::currentDateTime().toTime_t();
         rect.rects.prepend(his);
 //        if(i >= index) break;
     }

@@ -8,15 +8,15 @@ const double point_near_line = 200;
 const double ship_max_speed = 5;            //5m/s ~~ 10节  10m/s 就是20节
 
 
-double getDeltaTime(float now, float old)
-{
-    double delta = now - old;
-    if(delta < 0)
-    {
-        delta += 3600 * 24;
-    }
-    return delta;
-}
+//double getDeltaTime(float now, float old)
+//{
+//    double delta = now - old;
+//    if(delta < 0)
+//    {
+//        delta += 3600 * 24;
+//    }
+//    return delta;
+//}
 
 zchxRadarTargetTrack::zchxRadarTargetTrack(int id, const Latlon& ll, int clear_time, double predictionWidth, bool route, QObject *parent)
     : QThread(parent)
@@ -398,15 +398,15 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(bool& isTargetI
     isTargetInVideo = false;
     zchxRadarRectDefList result;
     if(list.size() == 0 || !src) return result;
-    double list_time = list.first().timeofday();
-    double old_time = src->timeofday();
+    quint32 list_time = list.first().updatetime();
+    quint32 old_time = src->updatetime();
     double old_sog = src->sog();
     double old_lat = src->centerlatitude();
     double old_lon = src->centerlongitude();
     double old_cog = src->cog();
     //计算当前的时间间隔, 根据时间间隔算预估可能移动距离
-    float delta_time = getDeltaTime(list_time, old_time);
-    if(delta_time < 0.000001)
+    quint32 delta_time = list_time - old_time;
+    if(delta_time < 1)
     {
         qDebug()<<"abnormal delta time found now."<<src->rectnumber();
         return result;
@@ -441,10 +441,6 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(bool& isTargetI
         //将目标的预估范围更新到地图上显示,检查预估范围的计算是否有错误
         if(1)
         {
-//            src->set_startlatitude(old_lat);
-//            src->set_startlongitude(old_lon);
-//            src->set_endlatitude(est_lat);
-//            src->set_endlongitude(est_lon);
             src->clear_predictionareas();
             com::zhichenhaixin::proto::predictionArea *dest = src->add_predictionareas();
             QList<Latlon> area = line.getPredictionArea();
@@ -576,7 +572,7 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
     if(!topNode || !topNode->cog_confirmed) return;
     //当前的时间确认
     if(left_list.size() == 0) return;
-    double list_time = left_list.first().timeofday();
+    quint32 list_time = left_list.first().updatetime();
     //获取最后一次更新的节点
     TargetNode *last_update_node = topNode->getLastChild();
     //没有路径节点的情况
@@ -588,13 +584,13 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
     if(!pre_rect) return;
 
     int    rect_num = pre_rect->rectnumber();
-    double old_time = pre_rect->timeofday();
+    quint32 old_time = pre_rect->updatetime();
     double old_sog = pre_rect->sog();
     double old_lat = pre_rect->centerlatitude();
     double old_lon = pre_rect->centerlongitude();
     double old_cog = pre_rect->cog();
     //计算当前的时间间隔, 根据时间间隔算预估位置点
-    float delta_time = getDeltaTime(list_time, old_time);
+    quint32 delta_time = list_time - old_time;
 
     int cur_est_cnt = topNode->est_count;
     //这里开始进行位置的预估判断,
@@ -614,9 +610,9 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
     {        
         if(isTargetInVideo)
         {
-            qDebug()<<"now target is in a video area. not fake one. only update its update_time";
-            pre_rect->set_timeofday(list_time);
-            topNode->time_of_day = list_time;
+            qDebug()<<"now target is in a video area with center at a opposite direction. make is as not move. only update its update_time";
+            pre_rect->set_updatetime(list_time);
+            topNode->update_time = list_time;
             topNode->est_count = 0;
             pre_rect->set_sog(0);  //认为目标在当前位置静止
             return;
@@ -624,17 +620,19 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
         if(track_debug) qDebug()<<"next target not found, fake one"<<rect_num;
         //估计目标的可能位置
         double est_distance = delta_time * old_sog;
+#if 0
         if(est_distance < mRangeFactor)
         {
             //距离太短了,目标不用预估,认为目标没有移动
-            pre_rect->set_timeofday(list_time);
-            topNode->time_of_day = list_time;
+            pre_rect->set_updatetime(list_time);
+            topNode->update_time = list_time;
             return;
         }
+#endif
         QGeoCoordinate est_pos = QGeoCoordinate(old_lat, old_lon).atDistanceAndAzimuth(est_distance, old_cog);
         dest.CopyFrom(*pre_rect);
         dest.set_realdata(false);
-        dest.set_timeofday(list_time);
+        dest.set_updatetime(list_time);
         //将目标移动到现在的预推位置
         changeTargetLL(Latlon(est_pos.latitude(), est_pos.longitude()), dest);
         cur_est_cnt++;
@@ -645,14 +643,14 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
     if(isDirectionChange(old_cog, dir))
     {
         qDebug()<<"taregt direction should be same as old one, but now found a oppsite one. abnormal...";
-        pre_rect->set_timeofday(list_time);
-        topNode->time_of_day = list_time;
+        pre_rect->set_updatetime(list_time);
+        topNode->update_time = list_time;
         return;
     }
 
     //更新目标开始
     topNode->est_count = cur_est_cnt;
-    topNode->time_of_day = list_time;
+    topNode->update_time = list_time;
     //计算新目标和就目标之间的距离
     double distance = getDisDeg(old_lat, old_lon, dest.centerlatitude(), dest.centerlongitude());
     if(distance < 1.0)
@@ -660,7 +658,7 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
         //目标的距离太近,认为目标没有移动, 不进行处理
         if(track_debug) qDebug()<<"new destination too closed. not update. continue..."<<distance;
         //仅仅更新目标的当前时间,防止目标被删除
-        pre_rect->set_timeofday(list_time);
+        pre_rect->set_updatetime(list_time);
         return;
     }
 
@@ -678,7 +676,7 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
     if(!topNode || topNode->cog_confirmed) return;
     //当前的时间确认
     if(left_list.size() == 0) return;
-    double list_time = left_list.first().timeofday();
+    quint32 list_time = left_list.first().updatetime();
 
     zchxRadarRectDef *pre_rect = 0;
     int node_number = topNode->rect->rectnumber();
@@ -693,7 +691,7 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
             TargetNode *last_child = child->getLastChild(child);
             if(!last_child) continue;
             pre_rect = last_child->rect;
-            qDebug()<<"child number:"<<node_number<<" time:"<<pre_rect->timeofday()<<" sog:"<<pre_rect->sog()<<" cog:"<<pre_rect->cog()<<" route id:"<<i;
+            qDebug()<<"child number:"<<node_number<<" time:"<<pre_rect->updatetime()<<" sog:"<<pre_rect->sog()<<" cog:"<<pre_rect->cog()<<" route id:"<<i;
 
             //根据分支节点的速度和角度取得待更新的矩形单元,这里的矩形单元数只有一个
             bool isTargetInVideo = false;
@@ -702,12 +700,12 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
             {
                 if(isTargetInVideo)
                 {
-                    pre_rect->set_timeofday(list_time);
-                    topNode->time_of_day = list_time;
+                    pre_rect->set_updatetime(list_time);
+                    topNode->update_time = list_time;
                     qDebug()<<"found old target in video area, keep silent"<<node_number<<" route id:"<<i;
                 } else
                 {
-                qDebug()<<"found no target in specified area"<<node_number<<" route id:"<<i;
+                    qDebug()<<"found no target in specified area"<<node_number<<" route id:"<<i;
                 }
                 continue;
             }
@@ -717,14 +715,14 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
             now_rect.set_rectnumber(node_number);
 
             double cog = Mercator::angle(pre_rect->centerlatitude(), pre_rect->centerlongitude(), now_rect.centerlatitude(), now_rect.centerlongitude());
-            double delta_time = getDeltaTime(list_time, pre_rect->timeofday());
+            quint32 delta_time = list_time - pre_rect->updatetime();
             double cal_dis = Mercator::distance(pre_rect->centerlatitude(), pre_rect->centerlongitude(), now_rect.centerlatitude(), now_rect.centerlongitude());
             //检查目标的距离和方向
             if(cal_dis < mRangeFactor)
             {
                 //目标没有移动处理
-                pre_rect->set_timeofday(list_time);
-                topNode->time_of_day = list_time;
+                pre_rect->set_updatetime(list_time);
+                topNode->update_time = list_time;
                 continue;
             }
             if(delta_time < 0.000001)
@@ -747,7 +745,7 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
             now_rect.set_sog(sog);
             now_rect.set_cog(cog);
             last_child->children.append(QSharedPointer<TargetNode>(new TargetNode(now_rect)));
-            topNode->time_of_day = list_time;
+            topNode->update_time = list_time;
             if(track_debug) qDebug()<<"update root node:"<<pre_rect->rectnumber()<<" with possible route index"<<i<<"  cog "<<cog<<" sog:"<<sog;
         }
     } else
@@ -763,7 +761,7 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
             total.set_realdata(true);
             total.set_rectnumber(node_number);
             double cog = Mercator::angle(pre_rect->centerlatitude(), pre_rect->centerlongitude(), total.centerlatitude(), total.centerlongitude());
-            double delta_time = getDeltaTime(list_time, pre_rect->timeofday());
+            quint32 delta_time = list_time - pre_rect->updatetime();
             double cal_dis = Mercator::distance(pre_rect->centerlatitude(), pre_rect->centerlongitude(), total.centerlatitude(), total.centerlongitude());
             qDebug()<<"cal distance:"<<cal_dis<<mRangeFactor;
             if(cal_dis >= mRangeFactor)
@@ -774,16 +772,16 @@ void zchxRadarTargetTrack::updateDetermineRoute(TargetNode *topNode, zchxRadarRe
                 total.set_cog(cog);
                 topNode->children.append(QSharedPointer<TargetNode>(new TargetNode(total)));
                 topNode->clearMotionless();
-                if(track_debug) qDebug()<<"update root node:"<<pre_rect->rectnumber()<<" with possible child:(distance, cog, sog, time) "<<cal_dis<<cog<<sog<<total.timeofday();
+                if(track_debug) qDebug()<<"update root node:"<<pre_rect->rectnumber()<<" with possible child:(distance, cog, sog, time) "<<cal_dis<<cog<<sog<<total.updatetime();
                 root_update = true;
             }
         }
         //将目标对象的更新时间更新到列表时间
-        if(result.size() > 0 || isTargetInvideo)   topNode->time_of_day = list_time;
+        if(result.size() > 0 || isTargetInvideo)   topNode->update_time = list_time;
         if((result.size() > 0 && !root_update) || isTargetInvideo)
         {
             //所有目标都距离太近, 证明目标此时没有移动,作为静止目标处理
-            topNode->rect->set_timeofday(list_time);
+            topNode->rect->set_updatetime(list_time);
             topNode->motionlessMore();
             qDebug()<<"root is not move update its time only."<<topNode->rect->rectnumber();
         }
@@ -825,7 +823,7 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
     if(task.size() == 0) return;
 //    zchxTimeElapsedCounter counter(__FUNCTION__);
     zchxRadarRectDefList temp_list(task);             //保存的未经处理的所有矩形单元
-    qDebug()<<"now process list time:"<<timeStamps(task.first().timeofday()).toString("yyyy-MM-dd hh:mm:ss");
+    qDebug()<<"now process list time:"<<QDateTime::fromTime_t(task.first().updatetime()).toString("yyyy-MM-dd hh:mm:ss");
 
     if(mTargetNodeMap.size() != 0)
     {
@@ -902,14 +900,13 @@ void zchxRadarTargetTrack::splitAllRoutesIntoTargets(TargetNode *node, TargetNod
 void zchxRadarTargetTrack::deleteExpiredNode()
 {
     //清理目标,删除超时未更新的目标或者预推次数太多的目标
-    double time_of_day = timeOfDay();
+    quint32 time_of_day = QDateTime::currentDateTime().toTime_t();
     QList<int> allKeys = mTargetNodeMap.keys();
     foreach (int key, allKeys) {
         QSharedPointer<TargetNode> node = mTargetNodeMap[key];
         if(!node) continue;
-        double node_time = node->time_of_day;
-        double delta_time = time_of_day - node_time;
-        if(delta_time < 0) delta_time += (3600 * 24);
+        quint32 node_time = node->update_time;
+        quint32 delta_time = time_of_day - node_time;
         bool reason1 = (delta_time > mClearTrackTime);
         bool reason2 = (node->est_count >= mMaxEstCount);
         if( reason1 || reason2)
@@ -966,7 +963,7 @@ void zchxRadarTargetTrack::updateTrackPointWithNode(zchxRadarSurfaceTrack& list,
     trackObj->set_cartesianposx(x);
     trackObj->set_cartesianposy(y);
     //other
-    trackObj->set_timeofday(target->timeofday());
+    trackObj->set_timeofday(timeOfDay(target->updatetime()));
     trackObj->set_systemareacode(0);
     trackObj->set_systemidentificationcode(1);
     trackObj->set_messagetype(static_cast<com::zhichenhaixin::proto::MSGTYP>(1));
@@ -1090,7 +1087,7 @@ void zchxRadarTargetTrack::appendNode(TargetNode *node, int source)
         qDebug()<<"make new now from ununsed route rect:"<<node<<node->rect<<node->rect->rectnumber();
     }
     mTargetNodeMap.insert(rect_num, QSharedPointer<TargetNode>(node));
-    if(track_debug) qDebug()<<"new node maked now:"<<node->rect->rectnumber()<<node->rect->timeofday();
+    if(track_debug) qDebug()<<"new node maked now:"<<node->rect->rectnumber()<<node->rect->updatetime();
 }
 
 int zchxRadarTargetTrack::getCurrentRectNum()
@@ -1132,7 +1129,7 @@ void zchxRadarTargetTrack::processWithoutRoute(const zchxRadarTrackTask &task)
     zchxTrackPointMap   tracks;
 
     zchxRadarRectDefList temp_list(task);
-    double list_time = task.first().timeofday();
+    quint32 list_time = task.first().updatetime();
 
     double target_merge_distance = mTargetMergeDis;
     double target_min_speed = 3.0;
@@ -1157,7 +1154,7 @@ void zchxRadarTargetTrack::processWithoutRoute(const zchxRadarTrackTask &task)
         for(; it != mRadarRectMap.end(); it++)
         {
             int    rect_num = it->currentrect().rectnumber();
-            double old_time = it.value().currentrect().timeofday();
+            quint32 old_time = it.value().currentrect().updatetime();
             double old_sog = it.value().currentrect().sog();
             double old_lat = it.value().currentrect().centerlatitude();
             double old_lon = it.value().currentrect().centerlongitude();
@@ -1167,7 +1164,7 @@ void zchxRadarTargetTrack::processWithoutRoute(const zchxRadarTrackTask &task)
             //否则就是目标的实际方向角
             double est_cog = it->currentrect().cog();
             //计算当前的时间间隔, 根据时间间隔算预估位置点
-            float delta_time = list_time - old_time;
+            quint32 delta_time = list_time - old_time;
 
             zchxRadarRectDefList merge_list;
             int cur_est_cnt = it->estcount();
@@ -1179,7 +1176,7 @@ void zchxRadarTargetTrack::processWithoutRoute(const zchxRadarTrackTask &task)
                 if(track_debug) qDebug()<<"current target dir is confirmed."<<rect_num<<" cog:"<<est_cog;
                 //计算当前目标可能的预估位置
                 double est_lat = 0.0, est_lon = 0.0;
-                if(delta_time < 0) delta_time += (3600* 24);
+                if(delta_time < 0) continue;
                 float est_distance = old_sog * delta_time;
                 distbearTolatlon1(old_lat, old_lon, est_distance, est_cog, &est_lat, &est_lon);
                 QGeoCoordinate last_pos(old_lat, old_lon);
@@ -1216,7 +1213,7 @@ void zchxRadarTargetTrack::processWithoutRoute(const zchxRadarTrackTask &task)
                     zchxRadarRectDef fakeData;
                     fakeData.set_realdata(false);
                     fakeData.CopyFrom(it->currentrect());
-                    fakeData.set_timeofday(list_time);
+                    fakeData.set_updatetime(list_time);
                     //将目标移动到现在的预推位置
                     changeTargetLL(Latlon(est_lat, est_lon), fakeData);
                     merge_list.append(fakeData);
@@ -1292,7 +1289,7 @@ void zchxRadarTargetTrack::processWithoutRoute(const zchxRadarTrackTask &task)
                 //目标的距离太近,认为目标没有移动, 不进行处理
                 if(track_debug) qDebug()<<"merge target too closed. not update. continue..."<<distance;
                 //仅仅更新目标的当前时间,防止目标被删除
-                it->mutable_currentrect()->set_timeofday(list_time);
+                it->mutable_currentrect()->set_updatetime(list_time);
                 continue;
             }
             //新目标对应的矩形单元确定
@@ -1343,8 +1340,8 @@ void zchxRadarTargetTrack::processWithoutRoute(const zchxRadarTrackTask &task)
                         continue;
                     }
                 }
-                double delta_time = total.currentrect().timeofday() - last->timeofday();
-                if(delta_time <= 0) delta_time += (3600 * 24);
+                quint32 delta_time = total.currentrect().updatetime() - last->updatetime();
+                if(delta_time <= 0) continue;
                 double cal_dis = last_pos.distanceTo(cur_pos);
                 total.mutable_currentrect()->set_sog( cal_dis / delta_time);
                 if(total.historyrects_size() == 1)
@@ -1379,7 +1376,7 @@ void zchxRadarTargetTrack::processWithoutRoute(const zchxRadarTrackTask &task)
                 {
 
                     //现在进行最后的确认.检查目标是否是来回地跳来跳去,如果是,删除跳来跳去的轨迹点,保留最初的点
-                    if(track_debug) qDebug()<<"now start check new target is jumping or not"<<"  time:"<<total.currentrect().timeofday()<< " size:"<<total.historyrects_size();
+                    if(track_debug) qDebug()<<"now start check new target is jumping or not"<<"  time:"<<total.currentrect().updatetime()<< " size:"<<total.historyrects_size();
                     int jump_num = target_check_num + 1;
                     if(isTargetJumping(total, target_merge_distance, jump_num))
                     {
@@ -1393,7 +1390,7 @@ void zchxRadarTargetTrack::processWithoutRoute(const zchxRadarTrackTask &task)
                         zchxRadarRectDef now = total.historyrects(restore_history_index);
                         total.mutable_currentrect()->CopyFrom(now);
                         total.mutable_historyrects()->DeleteSubrange(0, restore_history_index + 1);
-                        if(track_debug) qDebug()<<"target is jumping... move to old one:"<<total.currentrect().timeofday()<<" size:"<<total.historyrects_size();
+                        if(track_debug) qDebug()<<"target is jumping... move to old one:"<<total.currentrect().updatetime()<<" size:"<<total.historyrects_size();
 
                     }
                 } else
@@ -1461,7 +1458,7 @@ void zchxRadarTargetTrack::processWithoutRoute(const zchxRadarTrackTask &task)
         }
         rect.mutable_currentrect()->set_rectnumber(mRectNum++);
         mRadarRectMap[rect.currentrect().rectnumber()] = rect;
-        if(track_debug) qDebug()<<"new rect maked now:"<<rect.currentrect().rectnumber()<<rect.currentrect().timeofday();
+        if(track_debug) qDebug()<<"new rect maked now:"<<rect.currentrect().rectnumber()<<rect.currentrect().updatetime();
     }
 
 //    counter.reset("make new target");
@@ -1479,11 +1476,11 @@ void zchxRadarTargetTrack::processWithoutRoute(const zchxRadarTrackTask &task)
     //   }
 
     //清理目标,删除超时未更新的目标
-    double time_of_day = timeOfDay();
+    quint32 time_of_day = QDateTime::currentDateTime().toTime_t();
     QList<int> allKeys = mRadarRectMap.keys();
     foreach (int key, allKeys) {
         zchxRadarRect obj = mRadarRectMap[key];
-        if((time_of_day - obj.currentrect().timeofday()) > mClearTrackTime)
+        if((time_of_day - obj.currentrect().updatetime()) > mClearTrackTime)
         {
             mRadarRectMap.remove(key);
             continue;
@@ -1541,7 +1538,7 @@ void zchxRadarTargetTrack::processWithoutRoute(const zchxRadarTrackTask &task)
         trackObj->set_cartesianposx(x);
         trackObj->set_cartesianposy(y);
         //other
-        trackObj->set_timeofday(target.timeofday());
+        trackObj->set_timeofday(timeOfDay(target.updatetime()));
         trackObj->set_systemareacode(0);
         trackObj->set_systemidentificationcode(1);
         trackObj->set_messagetype(static_cast<com::zhichenhaixin::proto::MSGTYP>(1));
@@ -1575,7 +1572,7 @@ void zchxRadarTargetTrack::dumpTargetDistance(const QString &tag, double merge_d
             double distance = getDisDeg(cur_lat, cur_lon, next_lat, next_lon);
             if(distance < merge_dis)
             {
-                if(track_debug) qDebug()<<"found abormal targets:"<<keys[i]<<keys[k]<<"  distance:"<<distance<<" time:"<<cur.currentrect().timeofday()<<next.currentrect().timeofday();
+                if(track_debug) qDebug()<<"found abormal targets:"<<keys[i]<<keys[k]<<"  distance:"<<distance<<" time:"<<cur.currentrect().updatetime()<<next.currentrect().updatetime();
             }
         }
     }
@@ -1615,9 +1612,9 @@ void zchxRadarTargetTrack::checkTargetRectAfterUpdate(double merge_dis)
                     }
                 } else
                 {
-                    if(track_debug) qDebug()<<"found abormal targets:"<<keys[i]<<keys[k]<<"  distance:"<<distance<<" time:"<<cur.currentrect().timeofday()<<next.currentrect().timeofday()<<" remove old one.";
+                    if(track_debug) qDebug()<<"found abormal targets:"<<keys[i]<<keys[k]<<"  distance:"<<distance<<" time:"<<cur.currentrect().updatetime()<<next.currentrect().updatetime()<<" remove old one.";
 
-                    if(next.currentrect().timeofday() <= cur.currentrect().timeofday())
+                    if(next.currentrect().updatetime() <= cur.currentrect().updatetime())
                     {
                         mRadarRectMap.remove(keys[k]);
                     } else

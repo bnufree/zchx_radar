@@ -210,7 +210,7 @@ void RadarRectGlowElement::calculateSkipRect(ITF_RadarRectDefList& list, const I
     double unit_angle = (cur_angle - pre_angle) /num;
     double unit_lenth = (cur_length - pre_length) /num;
     double unit_cog = (cur.angle - pre.angle)/num;
-    double unit_time = (cur.timeOfDay - pre.timeOfDay) / num;
+    double unit_time = (cur.updateTime - pre.updateTime) / num;
     num --;  //实际的点的个数
     if(num == 0) return;
 
@@ -222,7 +222,7 @@ void RadarRectGlowElement::calculateSkipRect(ITF_RadarRectDefList& list, const I
     double angle = pre_angle;
     double length = pre_length;
     double cog = pre.angle + unit_cog;
-    double time_of_day = pre.timeOfDay + unit_time;
+    double time_of_day = pre.updateTime + unit_time;
     for(int i=0; i<num; i++)
     {
         ZCHX::Data::LatLon ll = ZCHX::Utils::distbear_to_latlon(src_lat, src_lon, unit_dis, azimuth);
@@ -242,7 +242,7 @@ void RadarRectGlowElement::calculateSkipRect(ITF_RadarRectDefList& list, const I
         rect.diameter = cur.diameter;
         rect.rectNumber = cur.rectNumber;
         rect.isRealData = false;
-        rect.timeOfDay = time_of_day;
+        rect.updateTime = time_of_day;
         angle += unit_angle;
         length += unit_lenth;
         cog += unit_cog;
@@ -514,10 +514,7 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
         ITF_RadarRectDef his = mRect.rects[i];
         int index = size - 1 - i;
         //检查轨迹点的时间是否和实时轨迹点一样, TIMEOFDAY的时间为秒
-        if(his.timeOfDay == mRect.current.timeOfDay) continue;
-        int sub = mRect.current.timeOfDay - his.timeOfDay;
-        if(sub < 0) sub += (3600 * 24);
-//        if(sub > glow_secs) break;
+        if(his.updateTime == mRect.current.updateTime) continue;
         //根据目标的长度进行图形缩放透明处理
         int alpha = qRound( index * delta);
         QColor rectColor = mRect.blockColor;
@@ -583,7 +580,7 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
                 painter->setBrush(Qt::transparent);
                 painter->drawPolygon(shapePnts);
                 QString text ;
-                text.sprintf("%d, %.0f", mRect.rectNumber, mRect.current.angle);
+                text.sprintf("%d, %s", mRect.rectNumber, QDateTime::fromTime_t(mRect.current.updateTime).toString("yyyy-MM-dd hh:mm:ss").toStdString().data());
                 painter->drawText(shapePnts.boundingRect().center(),text);
                 painter->restore();
             }
@@ -1309,8 +1306,8 @@ bool RadarRectGlowElement::isRadarDisplayByContinueTime(const ZCHX::Data::ITF_Ra
         return true;
     }
 
-    int continueTime = data.rects.at(0).timeOfDay -
-            data.rects.at(data.rects.size() - 1).timeOfDay;
+    int continueTime = data.rects.at(0).updateTime -
+            data.rects.at(data.rects.size() - 1).updateTime;
 
     if (continueTime >= 5 && continueTime <= 30)
     {

@@ -234,7 +234,7 @@ void ZCHXRadarRectThread::convertZMQ2ZCHX(QList<ZCHX::Data::ITF_RadarRect> &res,
         rect.current.bottomRightlongitude = obj.currentrect().bottomrightlongitude();
         rect.current.centerlatitude = obj.currentrect().centerlatitude();
         rect.current.centerlongitude = obj.currentrect().centerlongitude();
-        rect.current.timeOfDay = obj.currentrect().timeofday();
+        rect.current.updateTime = obj.currentrect().updatetime();
         rect.current.diameter = obj.currentrect().diameter();
         rect.blockColor.setNamedColor(mRectParam.m_sCurColor);
         rect.blockEdgeColor.setNamedColor(mRectParam.m_sCurColor);
@@ -290,7 +290,7 @@ void ZCHXRadarRectThread::convertZMQ2ZCHX(QList<ZCHX::Data::ITF_RadarRect> &res,
             hisRect.bottomRightlongitude = historyObj.bottomrightlongitude();
             hisRect.centerlatitude = historyObj.centerlatitude();
             hisRect.centerlongitude = historyObj.centerlongitude();
-            hisRect.timeOfDay = historyObj.timeofday();
+            hisRect.updateTime = historyObj.updatetime();
             hisRect.startlatitude = historyObj.startlatitude();
             hisRect.startlongitude = historyObj.startlongitude();
             hisRect.endlatitude = historyObj.endlatitude();

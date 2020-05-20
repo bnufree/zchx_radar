@@ -25,7 +25,7 @@ public:
     bool                                        cog_confirmed;
     int                                         not_move_cnt;
     int                                         est_count;
-    double                                      time_of_day;
+    quint32                                      update_time;
     zchxRadarRectDef                            *rect;
     QList<QSharedPointer<TargetNode>>           children;
 
@@ -35,7 +35,7 @@ public:
         rect = 0;
         children.clear();
         est_count = 0;
-        time_of_day = 0;
+        update_time = QDateTime::currentDateTime().toTime_t();
         not_move_cnt = 0;
     }
     TargetNode(const zchxRadarRectDef& other)
@@ -45,7 +45,7 @@ public:
         rect->CopyFrom(other);
         children.clear();
         est_count = 0;
-        time_of_day = rect->timeofday();
+        update_time = rect->updatetime();
         not_move_cnt = 0;
     }
 

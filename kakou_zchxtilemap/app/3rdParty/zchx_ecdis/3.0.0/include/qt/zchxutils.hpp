@@ -1958,7 +1958,7 @@ public:
     double bottomRightlongitude;			// 回波宽右下点经度
     double centerlatitude;			    	// 回波宽中心点纬度
     double centerlongitude;			  	    // 回波宽中心点经度
-    float timeOfDay;						// 当日时间
+    quint64 updateTime;						// 当日时间(单位秒)
     ITF_SingleVideoBlockList blocks;        // 回波块点集
     double startlatitude;			  	    	// 回波块内最长线段起点纬度
     double startlongitude;			  	    // 回波块内最长线段起点经度

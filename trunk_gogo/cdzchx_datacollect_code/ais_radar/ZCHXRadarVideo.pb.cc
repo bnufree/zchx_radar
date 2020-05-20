@@ -132,7 +132,7 @@ void protobuf_AssignDesc_ZCHXRadarVideo_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, bottomrightlongitude_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, centerlatitude_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, centerlongitude_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, timeofday_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, updatetime_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, diameter_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, blocks_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, startlatitude_),
@@ -313,40 +313,40 @@ void protobuf_AddDesc_ZCHXRadarVideo_2eproto() {
     "\r\n\005width\030\001 \002(\r\022\016\n\006height\030\002 \002(\r\0223\n\006points"
     "\030\003 \003(\0132#.com.zhichenhaixin.proto.pixelPo"
     "int\"I\n\016predictionArea\0227\n\004area\030\001 \003(\0132).co"
-    "m.zhichenhaixin.proto.singleVideoBlock\"\260"
+    "m.zhichenhaixin.proto.singleVideoBlock\"\261"
     "\004\n\014RadarRectDef\022\022\n\nrectNumber\030\001 \002(\r\022\027\n\017t"
     "opLeftlatitude\030\002 \002(\001\022\030\n\020topLeftlongitude"
     "\030\003 \002(\001\022\033\n\023bottomRightlatitude\030\004 \002(\001\022\034\n\024b"
     "ottomRightlongitude\030\005 \002(\001\022\026\n\016centerlatit"
-    "ude\030\006 \002(\001\022\027\n\017centerlongitude\030\007 \002(\001\022\021\n\tti"
-    "meOfDay\030\010 \002(\002\022\020\n\010diameter\030\t \001(\005\0229\n\006Block"
-    "s\030\n \003(\0132).com.zhichenhaixin.proto.single"
-    "VideoBlock\022\025\n\rstartlatitude\030\013 \001(\001\022\026\n\016sta"
-    "rtlongitude\030\014 \001(\001\022\023\n\013endlatitude\030\r \001(\001\022\024"
-    "\n\014endlongitude\030\016 \001(\001\022\r\n\005angle\030\017 \001(\001\022\013\n\003s"
-    "og\030\020 \002(\001\022\013\n\003cog\030\021 \002(\001\0226\n\tpixelPnts\030\022 \003(\013"
-    "2#.com.zhichenhaixin.proto.pixelPoint\022\020\n"
-    "\010realData\030\023 \002(\010\022@\n\017predictionAreas\030\024 \003(\013"
-    "2\'.com.zhichenhaixin.proto.predictionAre"
-    "a\"\254\001\n\tRadarRect\022:\n\013currentRect\030\001 \002(\0132%.c"
-    "om.zhichenhaixin.proto.RadarRectDef\022;\n\014h"
-    "istoryRects\030\002 \003(\0132%.com.zhichenhaixin.pr"
-    "oto.RadarRectDef\022\024\n\014dirConfirmed\030\003 \002(\010\022\020"
-    "\n\010estcount\030\004 \002(\r\"\\\n\nRadarRects\022\013\n\003UTC\030\001 "
-    "\002(\004\022\016\n\006length\030\002 \002(\005\0221\n\005rects\030\003 \003(\0132\".com"
-    ".zhichenhaixin.proto.RadarRect\"\363\001\n\nRadar"
-    "Video\022\017\n\007radarId\030\001 \002(\004\022\021\n\tradarName\030\002 \002("
-    "\t\022\020\n\010latitude\030\003 \002(\001\022\021\n\tlongitude\030\004 \002(\001\022\013"
-    "\n\003UTC\030\005 \002(\004\022\021\n\timageData\030\006 \002(\014\022\024\n\014curIma"
-    "geData\030\007 \002(\014\022\024\n\014preImageData\030\010 \002(\014\022\r\n\005wi"
-    "dth\030\t \002(\r\022\016\n\006height\030\n \002(\r\022\016\n\006radius\030\013 \002("
-    "\001\022\020\n\010curIndex\030\014 \002(\r\022\017\n\007loopNum\030\r \002(\r\"\321\001\n"
-    "\017RadarVideoPoint\022\021\n\tradarName\030\002 \002(\t\022\020\n\010l"
-    "atitude\030\003 \002(\001\022\021\n\tlongitude\030\004 \002(\001\022\013\n\003UTC\030"
-    "\005 \002(\004\022\021\n\timageData\030\006 \002(\014\022\024\n\014preImageData"
-    "\030\007 \002(\014\022\r\n\005width\030\010 \002(\r\022\016\n\006height\030\t \002(\r\022\016\n"
-    "\006radius\030\n \002(\001\022\020\n\010curIndex\030\013 \002(\r\022\017\n\007loopN"
-    "um\030\014 \002(\r", 1608);
+    "ude\030\006 \002(\001\022\027\n\017centerlongitude\030\007 \002(\001\022\022\n\nup"
+    "dateTime\030\010 \002(\r\022\020\n\010diameter\030\t \001(\005\0229\n\006Bloc"
+    "ks\030\n \003(\0132).com.zhichenhaixin.proto.singl"
+    "eVideoBlock\022\025\n\rstartlatitude\030\013 \001(\001\022\026\n\016st"
+    "artlongitude\030\014 \001(\001\022\023\n\013endlatitude\030\r \001(\001\022"
+    "\024\n\014endlongitude\030\016 \001(\001\022\r\n\005angle\030\017 \001(\001\022\013\n\003"
+    "sog\030\020 \002(\001\022\013\n\003cog\030\021 \002(\001\0226\n\tpixelPnts\030\022 \003("
+    "\0132#.com.zhichenhaixin.proto.pixelPoint\022\020"
+    "\n\010realData\030\023 \002(\010\022@\n\017predictionAreas\030\024 \003("
+    "\0132\'.com.zhichenhaixin.proto.predictionAr"
+    "ea\"\254\001\n\tRadarRect\022:\n\013currentRect\030\001 \002(\0132%."
+    "com.zhichenhaixin.proto.RadarRectDef\022;\n\014"
+    "historyRects\030\002 \003(\0132%.com.zhichenhaixin.p"
+    "roto.RadarRectDef\022\024\n\014dirConfirmed\030\003 \002(\010\022"
+    "\020\n\010estcount\030\004 \002(\r\"\\\n\nRadarRects\022\013\n\003UTC\030\001"
+    " \002(\004\022\016\n\006length\030\002 \002(\005\0221\n\005rects\030\003 \003(\0132\".co"
+    "m.zhichenhaixin.proto.RadarRect\"\363\001\n\nRada"
+    "rVideo\022\017\n\007radarId\030\001 \002(\004\022\021\n\tradarName\030\002 \002"
+    "(\t\022\020\n\010latitude\030\003 \002(\001\022\021\n\tlongitude\030\004 \002(\001\022"
+    "\013\n\003UTC\030\005 \002(\004\022\021\n\timageData\030\006 \002(\014\022\024\n\014curIm"
+    "ageData\030\007 \002(\014\022\024\n\014preImageData\030\010 \002(\014\022\r\n\005w"
+    "idth\030\t \002(\r\022\016\n\006height\030\n \002(\r\022\016\n\006radius\030\013 \002"
+    "(\001\022\020\n\010curIndex\030\014 \002(\r\022\017\n\007loopNum\030\r \002(\r\"\321\001"
+    "\n\017RadarVideoPoint\022\021\n\tradarName\030\002 \002(\t\022\020\n\010"
+    "latitude\030\003 \002(\001\022\021\n\tlongitude\030\004 \002(\001\022\013\n\003UTC"
+    "\030\005 \002(\004\022\021\n\timageData\030\006 \002(\014\022\024\n\014preImageDat"
+    "a\030\007 \002(\014\022\r\n\005width\030\010 \002(\r\022\016\n\006height\030\t \002(\r\022\016"
+    "\n\006radius\030\n \002(\001\022\020\n\010curIndex\030\013 \002(\r\022\017\n\007loop"
+    "Num\030\014 \002(\r", 1609);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ZCHXRadarVideo.proto", &protobuf_RegisterTypes);
   singleVideoBlock::default_instance_ = new singleVideoBlock();
@@ -1468,7 +1468,7 @@ const int RadarRectDef::kBottomRightlatitudeFieldNumber;
 const int RadarRectDef::kBottomRightlongitudeFieldNumber;
 const int RadarRectDef::kCenterlatitudeFieldNumber;
 const int RadarRectDef::kCenterlongitudeFieldNumber;
-const int RadarRectDef::kTimeOfDayFieldNumber;
+const int RadarRectDef::kUpdateTimeFieldNumber;
 const int RadarRectDef::kDiameterFieldNumber;
 const int RadarRectDef::kBlocksFieldNumber;
 const int RadarRectDef::kStartlatitudeFieldNumber;
@@ -1508,7 +1508,7 @@ void RadarRectDef::SharedCtor() {
   bottomrightlongitude_ = 0;
   centerlatitude_ = 0;
   centerlongitude_ = 0;
-  timeofday_ = 0;
+  updatetime_ = 0u;
   diameter_ = 0;
   startlatitude_ = 0;
   startlongitude_ = 0;
@@ -1695,18 +1695,18 @@ bool RadarRectDef::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(69)) goto parse_timeOfDay;
+        if (input->ExpectTag(64)) goto parse_updateTime;
         break;
       }
 
-      // required float timeOfDay = 8;
+      // required uint32 updateTime = 8;
       case 8: {
-        if (tag == 69) {
-         parse_timeOfDay:
+        if (tag == 64) {
+         parse_updateTime:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
-                 input, &timeofday_)));
-          set_has_timeofday();
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &updatetime_)));
+          set_has_updatetime();
         } else {
           goto handle_unusual;
         }
@@ -1951,9 +1951,9 @@ void RadarRectDef::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteDouble(7, this->centerlongitude(), output);
   }
 
-  // required float timeOfDay = 8;
-  if (has_timeofday()) {
-    ::google::protobuf::internal::WireFormatLite::WriteFloat(8, this->timeofday(), output);
+  // required uint32 updateTime = 8;
+  if (has_updatetime()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(8, this->updatetime(), output);
   }
 
   // optional int32 diameter = 9;
@@ -2064,9 +2064,9 @@ void RadarRectDef::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(7, this->centerlongitude(), target);
   }
 
-  // required float timeOfDay = 8;
-  if (has_timeofday()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(8, this->timeofday(), target);
+  // required uint32 updateTime = 8;
+  if (has_updatetime()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(8, this->updatetime(), target);
   }
 
   // optional int32 diameter = 9;
@@ -2184,9 +2184,11 @@ int RadarRectDef::ByteSize() const {
       total_size += 1 + 8;
     }
 
-    // required float timeOfDay = 8;
-    if (has_timeofday()) {
-      total_size += 1 + 4;
+    // required uint32 updateTime = 8;
+    if (has_updatetime()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->updatetime());
     }
 
   }
@@ -2315,8 +2317,8 @@ void RadarRectDef::MergeFrom(const RadarRectDef& from) {
     if (from.has_centerlongitude()) {
       set_centerlongitude(from.centerlongitude());
     }
-    if (from.has_timeofday()) {
-      set_timeofday(from.timeofday());
+    if (from.has_updatetime()) {
+      set_updatetime(from.updatetime());
     }
   }
   if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
@@ -2383,7 +2385,7 @@ void RadarRectDef::Swap(RadarRectDef* other) {
     std::swap(bottomrightlongitude_, other->bottomrightlongitude_);
     std::swap(centerlatitude_, other->centerlatitude_);
     std::swap(centerlongitude_, other->centerlongitude_);
-    std::swap(timeofday_, other->timeofday_);
+    std::swap(updatetime_, other->updatetime_);
     std::swap(diameter_, other->diameter_);
     blocks_.Swap(&other->blocks_);
     std::swap(startlatitude_, other->startlatitude_);

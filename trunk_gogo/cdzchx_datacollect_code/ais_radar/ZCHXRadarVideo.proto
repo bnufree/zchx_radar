@@ -63,7 +63,7 @@ package com.zhichenhaixin.proto;
     	required double bottomRightlongitude = 5;			    // 回波块右下点经度
 		required double centerlatitude = 6;			    		// 回波块中心点纬度
     	required double centerlongitude = 7;			  	    // 回波块中心点经度
-		required float timeOfDay = 8;						    // 当日时间
+		required uint32 updateTime = 8;						    // 当日时间
 		optional int32 diameter = 9;     						// 雷达目标大小（矩形块的对角线的距离） 单位：米
 		repeated singleVideoBlock Blocks = 10;					// 回波块点集
 		optional double startlatitude = 11;			  	    	// 回波块内最长线段起点纬度

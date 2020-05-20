@@ -511,12 +511,12 @@ class RadarRectDef : public ::google::protobuf::Message {
   inline double centerlongitude() const;
   inline void set_centerlongitude(double value);
 
-  // required float timeOfDay = 8;
-  inline bool has_timeofday() const;
-  inline void clear_timeofday();
-  static const int kTimeOfDayFieldNumber = 8;
-  inline float timeofday() const;
-  inline void set_timeofday(float value);
+  // required uint32 updateTime = 8;
+  inline bool has_updatetime() const;
+  inline void clear_updatetime();
+  static const int kUpdateTimeFieldNumber = 8;
+  inline ::google::protobuf::uint32 updatetime() const;
+  inline void set_updatetime(::google::protobuf::uint32 value);
 
   // optional int32 diameter = 9;
   inline bool has_diameter() const;
@@ -633,8 +633,8 @@ class RadarRectDef : public ::google::protobuf::Message {
   inline void clear_has_centerlatitude();
   inline void set_has_centerlongitude();
   inline void clear_has_centerlongitude();
-  inline void set_has_timeofday();
-  inline void clear_has_timeofday();
+  inline void set_has_updatetime();
+  inline void clear_has_updatetime();
   inline void set_has_diameter();
   inline void clear_has_diameter();
   inline void set_has_startlatitude();
@@ -662,7 +662,7 @@ class RadarRectDef : public ::google::protobuf::Message {
   double topleftlongitude_;
   double bottomrightlatitude_;
   ::google::protobuf::uint32 rectnumber_;
-  float timeofday_;
+  ::google::protobuf::uint32 updatetime_;
   double bottomrightlongitude_;
   double centerlatitude_;
   double centerlongitude_;
@@ -1709,28 +1709,28 @@ inline void RadarRectDef::set_centerlongitude(double value) {
   // @@protoc_insertion_point(field_set:com.zhichenhaixin.proto.RadarRectDef.centerlongitude)
 }
 
-// required float timeOfDay = 8;
-inline bool RadarRectDef::has_timeofday() const {
+// required uint32 updateTime = 8;
+inline bool RadarRectDef::has_updatetime() const {
   return (_has_bits_[0] & 0x00000080u) != 0;
 }
-inline void RadarRectDef::set_has_timeofday() {
+inline void RadarRectDef::set_has_updatetime() {
   _has_bits_[0] |= 0x00000080u;
 }
-inline void RadarRectDef::clear_has_timeofday() {
+inline void RadarRectDef::clear_has_updatetime() {
   _has_bits_[0] &= ~0x00000080u;
 }
-inline void RadarRectDef::clear_timeofday() {
-  timeofday_ = 0;
-  clear_has_timeofday();
+inline void RadarRectDef::clear_updatetime() {
+  updatetime_ = 0u;
+  clear_has_updatetime();
 }
-inline float RadarRectDef::timeofday() const {
-  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.RadarRectDef.timeOfDay)
-  return timeofday_;
+inline ::google::protobuf::uint32 RadarRectDef::updatetime() const {
+  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.RadarRectDef.updateTime)
+  return updatetime_;
 }
-inline void RadarRectDef::set_timeofday(float value) {
-  set_has_timeofday();
-  timeofday_ = value;
-  // @@protoc_insertion_point(field_set:com.zhichenhaixin.proto.RadarRectDef.timeOfDay)
+inline void RadarRectDef::set_updatetime(::google::protobuf::uint32 value) {
+  set_has_updatetime();
+  updatetime_ = value;
+  // @@protoc_insertion_point(field_set:com.zhichenhaixin.proto.RadarRectDef.updateTime)
 }
 
 // optional int32 diameter = 9;
