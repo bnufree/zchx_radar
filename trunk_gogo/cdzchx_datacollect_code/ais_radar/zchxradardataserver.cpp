@@ -4,8 +4,6 @@
 #include <QDateTime>
 #include <QApplication>
 #include "../profiles.h"
-#include "DataBlock.h"
-#include "AsterixData.h"
 #include <math.h>
 #include <zlib.h>
 #include <QBuffer>

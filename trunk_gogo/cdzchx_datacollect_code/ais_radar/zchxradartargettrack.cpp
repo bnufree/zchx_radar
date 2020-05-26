@@ -638,27 +638,26 @@ void zchxRadarTargetTrack::updateConfirmedRoute(TargetNode* topNode, zchxRadarRe
         cur_est_cnt++;
     }
 
+    //更新目标开始
+    topNode->est_count = cur_est_cnt;
+    topNode->update_time = list_time;
+    pre_rect->set_updatetime(list_time);
+
     double dir = Mercator::angle(old_lat, old_lon, dest.centerlatitude(), dest.centerlongitude());
     //目标的方向已经有了,也就是目标也不是初次出现,需要检查方向.
     if(isDirectionChange(old_cog, dir))
     {
         qDebug()<<"taregt direction should be same as old one, but now found a oppsite one. abnormal...";
-        pre_rect->set_updatetime(list_time);
-        topNode->update_time = list_time;
         return;
     }
 
-    //更新目标开始
-    topNode->est_count = cur_est_cnt;
-    topNode->update_time = list_time;
+
     //计算新目标和就目标之间的距离
     double distance = getDisDeg(old_lat, old_lon, dest.centerlatitude(), dest.centerlongitude());
     if(distance < 1.0)
     {
         //目标的距离太近,认为目标没有移动, 不进行处理
         if(track_debug) qDebug()<<"new destination too closed. not update. continue..."<<distance;
-        //仅仅更新目标的当前时间,防止目标被删除
-        pre_rect->set_updatetime(list_time);
         return;
     }
 

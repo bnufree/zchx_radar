@@ -202,15 +202,6 @@ ZCHXAnalysisAndSendRadar::ZCHXAnalysisAndSendRadar(int id, QObject *parent)
     //发送雷达目标的zmq
     mRadarOutMgr = new zchxRadarDataOutputMgr(this);
 
-    //初始新科雷达解析库的调用
-    QString sAppPath = QApplication::applicationDirPath();
-    m_sPath = sAppPath+"/AsterixSpecification/asterix.ini";
-    std::string str = m_sPath.toStdString();
-    const char* asterixDefinitionsFile = str.data();
-    //qDebug()<<"path"<<asterixDefinitionsFile;
-    m_pCAsterixFormat = new CAsterixFormat(asterixDefinitionsFile);
-    m_pCAsterixFormatDescriptor = dynamic_cast<CAsterixFormatDescriptor*>(m_pCAsterixFormat->CreateFormatDescriptor(0, ""));
-
 
     connect(this, SIGNAL(analysisLowranceRadarSignal(QByteArray,int,int,int)),
             this, SLOT(analysisLowranceRadarSlot(QByteArray,int,int,int)));
@@ -280,16 +271,6 @@ ZCHXAnalysisAndSendRadar::~ZCHXAnalysisAndSendRadar()
       {
           delete m_targetTrack;
           m_targetTrack = 0;
-      }
-      if(m_pCAsterixFormat)
-      {
-          delete m_pCAsterixFormat;
-          m_pCAsterixFormat = NULL;
-      }
-      if(m_pCAsterixFormatDescriptor)
-      {
-          delete m_pCAsterixFormatDescriptor;
-          m_pCAsterixFormatDescriptor = NULL;
       }
 
       if(mRadarOutMgr) delete mRadarOutMgr;
@@ -993,52 +974,6 @@ void ZCHXAnalysisAndSendRadar::analysisLowranceRadarSlot(const QByteArray &sRada
 //    processVideoData(true);
 
 //    finishiProcess = 1;
-}
-
-void ZCHXAnalysisAndSendRadar::analysisCatRadarSlot(const QByteArray &sRadarData, int uLineNum, int uCellNum, int uHeading,const QString &sRadarType)
-{
-    cout<<"m_uSourceID"<<m_uSourceID<<sRadarType.size();
-    //使用解析库进行解析cat010,cat240协议雷达
-    //cout<<"原始数据大小"<<sRadarData.size()<<"原始数据"<<sRadarData;
-    //cout<<"sRadarType"<<sRadarType;
-
-    if(m_pCAsterixFormatDescriptor == NULL) {
-        qDebug()<<"m_pCAsterixFormatDescriptor is NULL";
-        return;
-    }
-
-    if(m_pCAsterixFormatDescriptor->m_pAsterixData) {
-        delete m_pCAsterixFormatDescriptor->m_pAsterixData;
-        m_pCAsterixFormatDescriptor->m_pAsterixData = NULL;
-    }
-
-    m_pCAsterixFormatDescriptor->m_pAsterixData = m_pCAsterixFormatDescriptor->m_InputParser.parsePacket((const unsigned char*)(sRadarData.constData()), sRadarData.size());
-    DataBlock* pDB = m_pCAsterixFormatDescriptor->m_pAsterixData->m_lDataBlocks.front();
-    qint64 utc = QDateTime::currentMSecsSinceEpoch();
-
-    if (sRadarType == "cat010")
-    {
-        QString sContent = tr("process cat010 radar ");
-        emit signalSendRecvedContent(utc,"CAT010",sContent);
-//        analysisCat010Radar(pDB);
-    }
-    else if (sRadarType == "cat240") {
-        QString sContent = tr("process cat240 radar ");
-        emit signalSendRecvedContent(utc,"CAT240",sContent);
-//        analysisCat240Radar(pDB,uLineNum,uCellNum,uHeading);
-    }
-    else if(sRadarType == "cat020")
-    {
-        QString sContent = tr("process cat020 radar ");
-        emit signalSendRecvedContent(utc,"CAT020",sContent);
-//        analysisCat020Radar(sRadarData);
-    }
-    else if(sRadarType == "cat253")
-    {
-        QString sContent = tr("process cat253 radar ");
-        emit signalSendRecvedContent(utc,"CAT253",sContent);
-//        analysisCat253Radar(sRadarData);
-    }
 }
 
 //发送雷达回波余辉图片

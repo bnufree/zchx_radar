@@ -17,9 +17,7 @@
 #include <vector>
 #include "ais.h"
 #include "beidoudata.h"
-//#include <boost/regex.hpp>
 
-#include "osmacros.h"
 using std::bitset;
 using std::ostream;
 using std::string;

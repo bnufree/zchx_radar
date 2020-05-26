@@ -18,7 +18,7 @@
 #include <QTimer>
 #include <drawaistrack.h>
 #include "./ais_radar/zchxfunction.h"
-#include "ais.h"
+#include "ais/ais.h"
 #include "beidoudata.h"
 #include "ais/ZCHXAISVessel.pb.h"
 

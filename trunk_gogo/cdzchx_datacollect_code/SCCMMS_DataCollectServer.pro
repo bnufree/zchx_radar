@@ -18,9 +18,9 @@ IDE_APP_PATH= $$DESTDIR
 
 include($$ZCHX_3RD_PATH/ZeroMQ/zmq.pri)
 include($$ZCHX_3RD_PATH/ProtoBuf/protobuf.pri)
-include($$ZCHX_3RD_PATH/zchx_ais/zchx_ais.pri)
-include($$ZCHX_3RD_PATH/zchx_radar/zchx_radar.pri)
-include($$ZCHX_3RD_PATH/zlib/zlib.pri)
+#include($$ZCHX_3RD_PATH/zchx_ais/zchx_ais.pri)
+#include($$ZCHX_3RD_PATH/zchx_radar/zchx_radar.pri)
+#include($$ZCHX_3RD_PATH/zlib/zlib.pri)
 #include($$ZCHX_3RD_PATH/videoToTrack/videoToTrack.pri)
 #include($$ZCHX_3RD_PATH/GeoStars/geo_stars.pri)
 #include($$ZCHX_3RD_PATH/RadarUtils/radar_utils.pri)
@@ -33,7 +33,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 INCLUDEPATH *= $$ZCHX_3RD_PATH/ $$SIDE_CAR_PARSE_DIR
 
-LIBS += -lws2_32 -llibboost_system-mt
+LIBS += -lws2_32 -llibboost_system-mt -llibboost_regex-mt
 LIBS += -lpsapi
 
 
@@ -133,7 +133,34 @@ SOURCES += main.cpp\
     ais/zchxaisdataclient.cpp \
     zchxsimulatethread.cpp \
     ais_radar/zchxlowranceradardataserver.cpp \
-    zchxhostsetting.cpp
+    zchxhostsetting.cpp \
+    ais/ais.cpp \
+    ais/ais1_2_3.cpp \
+    ais/ais4_11.cpp \
+    ais/ais5.cpp \
+    ais/ais6.cpp \
+    ais/ais7_13.cpp \
+    ais/ais8.cpp \
+    ais/ais8_001_22.cpp \
+    ais/ais8_001_26.cpp \
+    ais/ais8_366_22.cpp \
+    ais/ais9.cpp \
+    ais/ais10.cpp \
+    ais/ais12.cpp \
+    ais/ais14.cpp \
+    ais/ais15.cpp \
+    ais/ais16.cpp \
+    ais/ais17.cpp \
+    ais/ais18.cpp \
+    ais/ais19.cpp \
+    ais/ais20.cpp \
+    ais/ais21.cpp \
+    ais/ais22.cpp \
+    ais/ais23.cpp \
+    ais/ais24.cpp \
+    ais/ais25.cpp \
+    ais/ais26.cpp \
+    ais/ais27.cpp
 
 HEADERS  += \
     Log.h \
@@ -245,7 +272,9 @@ HEADERS  += \
     ais/zchxaisdataclient.h \
     zchxsimulatethread.h \
     ais_radar/zchxlowranceradardataserver.h \
-    zchxhostsetting.h
+    zchxhostsetting.h \
+    ais/ais.h \
+    ais/ais8_001_22.h
 
 
 

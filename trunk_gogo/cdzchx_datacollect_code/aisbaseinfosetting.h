@@ -15,13 +15,12 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
-#include "ais.h"
+#include "ais/ais.h"
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QTimer>
 //#include <boost/regex.hpp>
 
-#include "osmacros.h"
 using std::bitset;
 using std::ostream;
 using std::string;

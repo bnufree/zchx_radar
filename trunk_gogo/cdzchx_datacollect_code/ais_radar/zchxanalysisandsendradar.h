@@ -10,8 +10,6 @@
 #include <QPolygonF>
 #include <QList>
 #include <QPixmap>
-#include "asterixformat.hxx"
-#include "asterixformatdescriptor.hxx"
 #include "ZmqMonitorThread.h"
 #include <QFile>
 #include "../serialport.h"
@@ -110,8 +108,6 @@ public slots:
     void handleTimeout_1();  //1_超时处理函数
     void analysisLowranceRadarSlot(const QByteArray &sRadarData,
                                int uLineNum,int uCellNum,int uHeading);//小雷达
-    void analysisCatRadarSlot(const QByteArray &sRadarData,
-                               int uLineNum, int uCellNum, int uHeading, const QString &sRadarType);//新科雷达
     void slotRecvVideoImg(const QPixmap& img) {setRadarAfterglowPixmap(1, img);}
     void setRadarAfterglowPixmap(const int uIndex,
                                  const QPixmap &videoPixmap,
@@ -157,13 +153,6 @@ private:
     int                         mRadarVideoPort;
     QString                     mRadarTrackTopic;
     int                         mRadarTrackPort;
-
-
-
-    //新科雷达解析
-    CAsterixFormatDescriptor *m_pCAsterixFormatDescriptor;
-    CAsterixFormat           *m_pCAsterixFormat;
-    QString m_sPath;
 
 
     ZCHXRadarVideoProcessor     *m_VideoProcessor;                  //回波处理成矩形目标点
