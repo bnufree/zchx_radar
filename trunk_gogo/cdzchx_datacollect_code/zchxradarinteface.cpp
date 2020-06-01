@@ -24,8 +24,8 @@
 #include <QPainter>
 #include <QPointF>
 #include "myLabel.h"
-#include <Windows.h>
-#include <DbgHelp.h>
+//#include <Windows.h>
+//#include <DbgHelp.h>
 #include <QThread>
 #include <QDateTime>
 #include <QDebug>

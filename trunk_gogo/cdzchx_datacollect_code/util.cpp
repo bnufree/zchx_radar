@@ -1,4 +1,5 @@
 #include "util.h"
+#include <QtMath>
 #include <QPointF>
 
 Util::Util(QObject *parent) : QObject(parent)

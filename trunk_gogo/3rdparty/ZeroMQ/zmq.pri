@@ -22,10 +22,17 @@
 #PRE_TARGETDEPS += $${zmqlibrary.target}
 #}
 
-ZMQ_Version = 4.0.4_x64
-INCLUDEPATH += $$PWD/$$ZMQ_Version/include
-LIBS += -L$$PWD/$$ZMQ_Version/lib -llibzmq-v120-mt-4_0_4
+mingw{
+    ZMQ_Version = 4.0.4_x64
+    INCLUDEPATH += $$PWD/$$ZMQ_Version/include
+    LIBS += -L$$PWD/$$ZMQ_Version/lib -llibzmq-v120-mt-4_0_4
 
-Zmq_install.files += $$PWD/$$ZMQ_Version/bin/libzmq-v120-mt-4_0_4.dll
-Zmq_install.path = $$IDE_APP_PATH
-INSTALLS += Zmq_install
+    Zmq_install.files += $$PWD/$$ZMQ_Version/bin/libzmq-v120-mt-4_0_4.dll
+    Zmq_install.path = $$IDE_APP_PATH
+    INSTALLS += Zmq_install
+}
+
+unix{
+    INCLUDEPATH += /usr/local/include/zmq
+    LIBS += -L/usr/local/lib -lzmq
+}

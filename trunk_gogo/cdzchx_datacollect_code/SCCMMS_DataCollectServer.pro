@@ -28,19 +28,22 @@ include($$ZCHX_3RD_PATH/ProtoBuf/protobuf.pri)
 include($$ZCHX_3RD_PATH/opencv/opencv.pri)
 
 DEFINES += WIN32_LEAN_AND_MEAN
-QT += core gui network websockets positioning xml serialport axcontainer svg
+QT += core gui network websockets positioning xml serialport svg
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 INCLUDEPATH *= $$ZCHX_3RD_PATH/ $$SIDE_CAR_PARSE_DIR
 
-LIBS += -lws2_32 -llibboost_system-mt -llibboost_regex-mt
-LIBS += -lpsapi
+mingw{
+    LIBS += -lws2_32 -llibboost_system-mt -llibboost_regex-mt
+    LIBS += -lpsapi
+}
 
 
 
 
 SOURCES += main.cpp\
     Log.cpp \
+    aislabel.cpp \
     profiles.cpp \
     dataserverutils.cpp \
     ZmqMonitorThread.cpp \
@@ -75,45 +78,13 @@ SOURCES += main.cpp\
     comdata/comparser.cpp \
     ais_setting.cpp \
     drawaistrack.cpp \
-    aisLabel.cpp \
     radar_control.cpp \
     dialog_help.cpp \
-#    side_car_parse/Algorithms/ABTrack.cc \
-#    side_car_parse/Algorithms/ABTracker.cc \
-#    side_car_parse/Algorithms/Centroid.cc \
-#    side_car_parse/Algorithms/CFAR.cc \
-#    side_car_parse/Algorithms/ExtractWithCentroiding.cc \
-#    side_car_parse/Algorithms/ImageSegmentation.cc \
-#    side_car_parse/Algorithms/OSCFAR.cc \
-#    side_car_parse/Algorithms/PastBuffer.cc \
-#    side_car_parse/Algorithms/Row.cc \
-#    side_car_parse/Algorithms/ScanCorrelator.cc \
-#    side_car_parse/Algorithms/SegmentedTargetImage.cc \
-#    side_car_parse/Algorithms/TargetSize.cc \
-#    side_car_parse/Algorithms/Threshold.cc \
-#    side_car_parse/Algorithms/TrackInitiator.cc \
-#    side_car_parse/Algorithms/TrackMaintainer.cc \
-#    side_car_parse/Algorithms/UnitVector.cc \
-#    side_car_parse/Algorithms/Vector.cc \
-#    side_car_parse/Messages/BinaryVideo.cpp \
-#    side_car_parse/Messages/Extraction.cpp \
-#    side_car_parse/Messages/Header.cpp \
-#    side_car_parse/Messages/MetaTypeInfo.cpp \
-#    side_car_parse/Messages/PRIMessage.cpp \
-#    side_car_parse/Messages/RadarConfig.cpp \
-#    side_car_parse/Messages/Track.cc \
-#    side_car_parse/Messages/TSPI.cpp \
-#    side_car_parse/Messages/TSPIConfig.cpp \
-#    side_car_parse/Messages/Video.cpp \
-#    side_car_parse/Messages/VideoConfig.cpp \
-#    side_car_parse/Messages/GGUID.cpp \
     ais_radar/zchxMulticastDataSocket.cpp \
     ais_radar/zchxRadarVideoRecvThread.cpp \
-#    ais_radar/zchxradarextractthread.cpp \
     float_setting.cpp \
     zchxmainwindow.cpp \
     aisbaseinfosetting.cpp \
-#    ais_radar/zchxvideorects.cpp \
     zchxradarinteface.cpp \
     ais_radar/ZCHXBd.pb.cc \
     beidoudata.cpp \
@@ -122,7 +93,6 @@ SOURCES += main.cpp\
     ais_radar/zchxRadarRectExtraction.cpp \
     zchxradaroptwidget.cpp \
     zchxradarctrlbtn.cpp \
-    zchxmapmonitorthread.cpp \
     ais_radar/zchxradarvideoprocessor.cpp \
     ais_radar/zchxradartargettrack.cpp \
     ais_radar/zchxradarcommon.cpp \
@@ -164,6 +134,7 @@ SOURCES += main.cpp\
 
 HEADERS  += \
     Log.h \
+    aislabel.h \
     profiles.h \
     dataserverutils.h \
     ZmqMonitorThread.h \
@@ -202,57 +173,13 @@ HEADERS  += \
     comdata/comparser.h \
     ais_setting.h \
     drawaistrack.h \
-    aisLabel.h \
     radar_control.h \
     dialog_help.h \
-#    side_car_parse/Algorithms/ABTrack.h \
-#    side_car_parse/Algorithms/ABTracker.h \
-#    side_car_parse/Algorithms/ABTracker_defaults.h \
-#    side_car_parse/Algorithms/Centroid.h \
-#    side_car_parse/Algorithms/CFAR.h \
-#    side_car_parse/Algorithms/CFAR_defaults.h \
-#    side_car_parse/Algorithms/ExtractWithCentroiding.h \
-#    side_car_parse/Algorithms/ExtractWithCentroiding_defaults.h \
-#    side_car_parse/Algorithms/ImageDataTypes.h \
-#    side_car_parse/Algorithms/ImageSegmentation.h \
-#    side_car_parse/Algorithms/OSCFAR.h \
-#    side_car_parse/Algorithms/OSCFAR_defaults.h \
-#    side_car_parse/Algorithms/PastBuffer.h \
-#    side_car_parse/Algorithms/Row.h \
-#    side_car_parse/Algorithms/ScanCorrelator.h \
-#    side_car_parse/Algorithms/ScanCorrelator_defaults.h \
-#    side_car_parse/Algorithms/ScanLine.h \
-#    side_car_parse/Algorithms/SegmentedTargetImage.h \
-#    side_car_parse/Algorithms/TargetImage.h \
-#    side_car_parse/Algorithms/TargetSize.h \
-#    side_car_parse/Algorithms/Threshold.h \
-#    side_car_parse/Algorithms/Threshold_defaults.h \
-#    side_car_parse/Algorithms/TrackInitiator.h \
-#    side_car_parse/Algorithms/TrackInitiator_defaults.h \
-#    side_car_parse/Algorithms/TrackMaintainer.h \
-#    side_car_parse/Algorithms/UnitVector.h \
-#    side_car_parse/Algorithms/Vector.h \
-#    side_car_parse/Algorithms/VideoStorage.h \
-#    side_car_parse/Messages/BinaryVideo.h \
-#    side_car_parse/Messages/Extraction.h \
-#    side_car_parse/Messages/Header.h \
-#    side_car_parse/Messages/MessagesGlobal.h \
-#    side_car_parse/Messages/MetaTypeInfo.h \
-#    side_car_parse/Messages/PRIMessage.h \
-#    side_car_parse/Messages/RadarConfig.h \
-#    side_car_parse/Messages/Track.h \
-#    side_car_parse/Messages/TSPI.h \
-#    side_car_parse/Messages/TSPIConfig.h \
-#    side_car_parse/Messages/Video.h \
-#    side_car_parse/Messages/VideoConfig.h \
-#    side_car_parse/Messages/GGUID.h \
     ais_radar/zchxMulticastDataSocket.h \
     ais_radar/zchxRadarVideoRecvThread.h \
-#    ais_radar/zchxradarextractthread.h \
     float_setting.h \
     zchxmainwindow.h \
     aisbaseinfosetting.h \
-#    ais_radar/zchxvideorects.h \
     zchxradarinteface.h \
     ais_radar/ZCHXBd.pb.h \
     beidoudata.h \
@@ -262,7 +189,6 @@ HEADERS  += \
     ais_radar/zchxRadarRectExtraction.h \
     zchxradaroptwidget.h \
     zchxradarctrlbtn.h \
-    zchxmapmonitorthread.h \
     ais_radar/zchxradarvideoprocessor.h \
     ais_radar/zchxradartargettrack.h \
     dataout/zchxdataoutputservermgr.h \
@@ -278,7 +204,10 @@ HEADERS  += \
 
 
 
-
+mingw{
+    SOURCES += zchxmapmonitorthread.cpp
+    HEADERS += zchxmapmonitorthread.h
+}
 
 FORMS    += \
     ais_radar/zchxradaraissetting.ui \
@@ -308,17 +237,6 @@ DISTFILES += \
     ais/ZCHXAISVessel.proto \
     zmq/SCCMMSComData.proto \
     increase.png \
-#    side_car_parse/Algorithms/ABTracker.axml \
-#    side_car_parse/Algorithms/CFAR.axml \
-#    side_car_parse/Algorithms/ExtractWithCentroiding.axml \
-#    side_car_parse/Algorithms/OSCFAR.axml \
-#    side_car_parse/Algorithms/ScanCorrelator.axml \
-#    side_car_parse/Algorithms/Threshold.axml \
-#    side_car_parse/Algorithms/TrackInitiator.axml \
-#    side_car_parse/Algorithms/TrackMaintainer.axml \
-#    side_car_parse/Messages/Messages.pri \
-#    side_car_parse/Messages/MessagesSrc.pri \
-#    side_car_parse/Messages/ZCHXRadar2.proto \
     ais_radar/ZCHXBd.proto
 RC_FILE  =  app.rc
 

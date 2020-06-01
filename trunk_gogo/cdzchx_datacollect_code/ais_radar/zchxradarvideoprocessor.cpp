@@ -1,4 +1,4 @@
-#include "ZCHXRadarVideoProcessor.h"
+#include "zchxradarvideoprocessor.h"
 //#include <QDebug>
 #include <math.h>
 #include <QMutex>

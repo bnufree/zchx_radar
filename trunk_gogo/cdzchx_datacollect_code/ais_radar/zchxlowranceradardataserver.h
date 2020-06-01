@@ -139,7 +139,7 @@ private:
     //updatevideoudpthread *u_workThread;//接收雷达数据线程类
     //updatevideoudpthread *u2_workThread;//接收雷达数据线程类
     QMap<INFOTYPE, RadarStatus>   mRadarStatusMap; //雷达状态容器
-    UINT8       mRadarPowerStatus;//雷达状态
+    uint8_t       mRadarPowerStatus;//雷达状态
     QString mac_ip;
     QTcpServer *mServer;
     QTcpSocket *mSocket;

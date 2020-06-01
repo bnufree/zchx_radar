@@ -1,7 +1,7 @@
 // Since Apr 2010
 
 #include <cmath>
-#include<windows.h>
+//#include<windows.h>
 #include "ais.h"
 
 using std::abs;

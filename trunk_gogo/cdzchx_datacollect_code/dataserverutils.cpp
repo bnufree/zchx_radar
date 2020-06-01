@@ -6,13 +6,14 @@
 #include <QDateTime>
 #include <QNetworkInterface>
 
-#include <winsock2.h>
+
 //#pragma comment(lib, "ws2_32.lib")
 
 DataServerUtils::DataServerUtils(QObject *parent) : QObject(parent)
 {
 
 }
+#ifdef Q_OS_WIN
 bool DataServerUtils::isVirtualIpExist(const QString &pVirtualIp)
 {
     QStringList iplist;
@@ -86,6 +87,7 @@ void DataServerUtils::delVirtualIp(const QString& netName, const QString &pVirtu
     QProcess process(0);
     process.execute(strValue);
 }
+#endif
 
 QStringList DataServerUtils::getMyIps()
 {

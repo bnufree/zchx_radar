@@ -1,4 +1,4 @@
-#include "aisLabel.h"
+#include "aislabel.h"
 #include <qdebug.h>
 #include <QPainter>
 #define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"

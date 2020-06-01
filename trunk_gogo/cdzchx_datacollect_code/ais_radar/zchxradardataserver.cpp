@@ -5,7 +5,7 @@
 #include <QApplication>
 #include "../profiles.h"
 #include <math.h>
-#include <zlib.h>
+//#include <zlib.h>
 #include <QBuffer>
 #include <QPushButton>
 #include <QMetaProperty>
@@ -25,6 +25,10 @@
 #include <QList>
 #include <QNetworkAddressEntry>
 #define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"
+
+#ifdef Q_OS_UNIX
+    typedef uint8_t     UINT8;
+#endif
 
 //extern "C"
 
@@ -1140,7 +1144,7 @@ void ZCHXRadarDataServer::read_client_data()
         return;
     }
     QByteArray aisArray = mSocket->readAll();
-    Sleep(200);
+    QThread::sleep(200);
     QString data = aisArray;
     if(data == "get")
     {

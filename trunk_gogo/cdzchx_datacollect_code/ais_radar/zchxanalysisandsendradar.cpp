@@ -8,7 +8,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QApplication>
-#include <zlib.h>
+//#include <zlib.h>
 #include <QDir>
 #include <QBuffer>
 #include "../profiles.h"

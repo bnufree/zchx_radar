@@ -1,4 +1,4 @@
-﻿#include "zchxMainWindow.h"
+﻿#include "zchxmainwindow.h"
 #include "ui_zchxmainwindow.h"
 #include "dataserverutils.h"
 #include <QThread>
@@ -24,10 +24,10 @@
 #include <QPainter>
 #include <QPointF>
 #include "myLabel.h"
-#include <Windows.h>
-#include <DbgHelp.h>
-#include "zchxMainWindow.h"
-#include "ui_zchxMainWindow.h"
+//#include <Windows.h>
+//#include <DbgHelp.h>
+#include "zchxmainwindow.h"
+#include "ui_zchxmainwindow.h"
 #include <QThread>
 #include <QDateTime>
 //#include <QDebug>
@@ -46,7 +46,9 @@
 #include <QColorDialog>
 #include "fusedatautil.h"
 
+#ifdef Q_OS_WIN
 #include "zchxmapmonitorthread.h"
+#endif
 
 #define         LOG_LINE_COUNT          50
 
@@ -56,6 +58,7 @@
 
 zchxMainWindow::zchxMainWindow(QWidget *parent) :
     QMainWindow(parent),
+    mTestMapMonitorThread(0),
     ui(new Ui::zchxMainWindow)
 {
     ui->setupUi(this);
@@ -123,6 +126,7 @@ zchxMainWindow::zchxMainWindow(QWidget *parent) :
     mLog = new Dialog_log;
     connect(this, SIGNAL(receiveLogSignal(qint64,QString,QString)),mLog,SLOT(receiveLogSlot(qint64,QString,QString)));
 
+#ifdef Q_OS_WIN
     //启动客户端
     Utils::Profiles::instance()->setDefault("Ecdis","Enable", 0);
     bool ecdis = Utils::Profiles::instance()->value("Ecdis","Enable", 0).toBool();
@@ -135,6 +139,7 @@ zchxMainWindow::zchxMainWindow(QWidget *parent) :
     {
         mTestMapMonitorThread = 0;
     }
+#endif
 
 
 //    {

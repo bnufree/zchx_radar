@@ -5,7 +5,7 @@
 #include <QApplication>
 #include "../profiles.h"
 #include <math.h>
-#include <zlib.h>
+//#include <zlib.h>
 #include <QBuffer>
 #include <QPushButton>
 #include <QMetaProperty>
@@ -26,17 +26,7 @@
 #include <QNetworkAddressEntry>
 #define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"
 
-//extern "C"
-
-//{
-
-//#include "ctrl.h"
-
-//}
-//////////////////////////////////////////////////////////////////////////////////
-
-//typedef int(*FUN3)(struct SAzmData* psScan, int* pSit);
-//extern  FUN3 Tracking_Fun3 = NULL;
+typedef uint8_t UINT8;
 
 //////////////////////////////////////////////////////////////////////////////////////
 //static uint8_t BR24MARK[] = {0x00, 0x44, 0x0d, 0x0e};
@@ -1142,7 +1132,7 @@ void ZCHXLowranceRadarDataServer::read_client_data()
         return;
     }
     QByteArray aisArray = mSocket->readAll();
-    Sleep(200);
+    QThread::sleep(200);
     QString data = aisArray;
     if(data == "get")
     {

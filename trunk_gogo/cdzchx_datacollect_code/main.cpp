@@ -5,7 +5,9 @@
 #include <QMessageBox>
 //#include <QDebug>
 #include <QTextCodec>
+#ifdef Q_OS_WIN
 #include "dbgcrash.h"
+#endif
 #define cout qDebug()<< "在文件"<<__FILE__ << "第"<< __LINE__<< "行"
 
 

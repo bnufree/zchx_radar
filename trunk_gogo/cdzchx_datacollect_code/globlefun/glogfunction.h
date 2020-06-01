@@ -7,7 +7,8 @@
 #include <QColor>
 #include <vector>
 #include <QVector2D>
-#include "windef.h"
+//#include "windef.h"
+#include <QtMath>
 
 #ifndef GLOB_PI
 #define GLOB_PI  (3.14159265358979323846)

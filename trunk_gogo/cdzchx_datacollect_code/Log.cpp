@@ -18,8 +18,8 @@ int g_nLogFileSize = MAX_LOG_FILE_SIZE;
 
 
 
-char g_szFileName[LOG_FILE_PATH] = { 0 };
-char g_szDataFileName[LOG_FILE_PATH] = { 0 };
+QString g_szFileName;
+QString g_szDataFileName;
 QMutex g_cs;
 QMutex g_avcs;
 bool g_bInit=false;
@@ -27,12 +27,10 @@ QMap<QString, QString>      mLastOptFileName;
 
 void InitLog()
 {
-
-    QString path;
     QDir dir;
-    path = dir.currentPath();
+    QString path = dir.currentPath();
 
-    sprintf_s(g_szFileName,"%s//datacollect.log",path.toLocal8Bit().data());
+    g_szFileName = QString("%1/datacollect.log").arg(path);
 
     g_nLogLevel = LOG_RTM;
     g_nLogFileSize = MAX_LOG_FILE_SIZE;
@@ -78,14 +76,14 @@ void LOG(const QString& topic, char* format, ...)
         fileName = getNewFile(topic);
     }
 
-    sprintf_s(g_szDataFileName,"%s",fileName.toLocal8Bit().data());
+    g_szDataFileName = fileName;
 
     FILE *pFile = NULL;
     int dwFileSize = 0;
     va_list arg;
     //获取当前时间
     QString strTime = DataServerUtils::currentTimeString(false);
-    fopen_s(&pFile, g_szDataFileName, "a+");
+    pFile = fopen(g_szDataFileName.toLocal8Bit().data(), "a+");
     if (pFile == NULL) return;
 
     //限制大小
@@ -97,8 +95,8 @@ void LOG(const QString& topic, char* format, ...)
         fclose(pFile);
         pFile = NULL;
         fileName = getNewFile(topic);
-        sprintf_s(g_szDataFileName,"%s",fileName.toLocal8Bit().data());
-        fopen_s(&pFile, g_szDataFileName, "w");
+        g_szDataFileName = fileName;
+        pFile = fopen(g_szDataFileName.toLocal8Bit().data(), "w");
         dwFileSize = 0;
         if (pFile == NULL) return;
     }
@@ -136,7 +134,7 @@ void LOG(LOG_TYPE t, char* format, ...)
     /* 文件处理 */
     //sprintf_s(szFileName, LOG_FILE_PATH,"RTSPLOG.log");
 
-    fopen_s(&pFile, g_szFileName, "a+");
+    pFile = fopen(g_szFileName.toLocal8Bit().data(), "a+");
     if (pFile == NULL)
     {
         goto END_LOG;
@@ -148,8 +146,7 @@ void LOG(LOG_TYPE t, char* format, ...)
     if (dwFileSize > g_nLogFileSize)
     {
         fclose(pFile);
-        pFile = NULL;
-        fopen_s(&pFile, g_szFileName, "w");
+        pFile = fopen(g_szFileName.toLocal8Bit().data(), "w");
         dwFileSize = 0;
         if (pFile == NULL)
         {

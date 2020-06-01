@@ -1,7 +1,7 @@
 ﻿#include "comparser.h"
 #include "profiles.h"
 #include "Log.h"
-#include <windows.h>
+//#include <windows.h>
 #include "globlefun/glogfunction.h"
 #include "protobuf/protobufdataprocessor.h"
 #include "common.h"

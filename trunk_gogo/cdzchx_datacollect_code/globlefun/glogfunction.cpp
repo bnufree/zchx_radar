@@ -65,7 +65,7 @@ static const uchar aucCRCLo[] = {
     0x41, 0x81, 0x80, 0x40
 };
 
-ushort GlogFunction::CRCModbus16( uchar* pucFrame, USHORT usLen )
+ushort GlogFunction::CRCModbus16( uchar* pucFrame, ushort usLen )
 {
     uchar ucCRCHi = 0xFF;
     uchar ucCRCLo = 0xFF;

@@ -1,9 +1,11 @@
 #include "ZmqMonitorThread.h"
 //#include <QDebug>
-#include <windows.h>
 #include <assert.h>
 #include <QHostInfo>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
 ZmqMonitorThread::ZmqMonitorThread(void* context, const QString& url, QObject *parent) : QThread(parent)
 {
     mContext = context;
@@ -18,6 +20,7 @@ void ZmqMonitorThread::run()
 
 bool ZmqMonitorThread::GetPeerIPAndPort(int fd, QString& ip, int& port, QString& name)
 {
+#ifdef Q_OS_WIN
     int client_fd = fd;
 
     // discovery client information
@@ -47,6 +50,9 @@ bool ZmqMonitorThread::GetPeerIPAndPort(int fd, QString& ip, int& port, QString&
     QHostInfo info = QHostInfo::fromName(ip);
     name = info.hostName();
     return  true;
+#else
+    return false;
+#endif
 }
 
 int ZmqMonitorThread::ReadMsg(void* s, zmq_event_t* event, char* ep)

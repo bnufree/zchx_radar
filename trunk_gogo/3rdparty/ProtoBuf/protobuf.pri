@@ -14,5 +14,5 @@ INSTALLS += ProtoBuf_install
 
 unix{
     INCLUDEPATH += /usr/lcoal/include
-    LIBS += -L/usr/lib/ -lprotobuf
+    LIBS += -L/usr/local/lib/ -lprotobuf
 }
