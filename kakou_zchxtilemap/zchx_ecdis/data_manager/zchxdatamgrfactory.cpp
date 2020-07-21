@@ -1,4 +1,4 @@
-#include "zchxdatamgrfactory.h"
+﻿#include "zchxdatamgrfactory.h"
 
 namespace qt {
 zchxDataMgrFactory* zchxDataMgrFactory::minstance = 0;
@@ -130,6 +130,9 @@ void zchxDataMgrFactory::createManager(int type)
     case ZCHX::DATA_MGR_POLYGON:
         mMgrList[type] = std::shared_ptr<zchxPolygonDataMgr>(new zchxPolygonDataMgr(mWidget));
         break;
+    case ZCHX::DATA_MGR_RADAR_ROUTE_PATH:
+        mMgrList[type] = std::shared_ptr<zchxRadarNodePathDataMgr>(new zchxRadarNodePathDataMgr(mWidget));
+        break;
     default:
         break;
     }
@@ -148,7 +151,17 @@ std::shared_ptr<zchxEcdisDataMgr> zchxDataMgrFactory::getManager(int type)
 
 QList<std::shared_ptr<zchxEcdisDataMgr>> zchxDataMgrFactory::getManagers() const
 {
+#if 0
+    QList<std::shared_ptr<zchxEcdisDataMgr>> list;
+    QMap<int, std::shared_ptr<zchxEcdisDataMgr>>::const_iterator it = mMgrList.begin();
+    for(; it != mMgrList.end(); it++)
+    {
+        list.append(it.value());
+    }
+    return list;
+#else
     return mMgrList.values();
+#endif
 }
 
 bool zchxDataMgrFactory::removeDataMgr(std::shared_ptr<zchxEcdisDataMgr> mgr)
@@ -325,7 +338,10 @@ zchxPolygonDataMgr *zchxDataMgrFactory::getPolygonMgr()
     return static_cast<zchxPolygonDataMgr*>(getManager(ZCHX::DATA_MGR_POLYGON).get());
 }
 
-
+zchxRadarNodePathDataMgr *zchxDataMgrFactory::getRadarRoutePathMgr()
+{
+    return static_cast<zchxRadarNodePathDataMgr*>(getManager(ZCHX::DATA_MGR_RADAR_ROUTE_PATH).get());
+}
 }
 
 

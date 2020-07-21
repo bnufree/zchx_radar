@@ -168,6 +168,9 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
     std::shared_ptr<qt::MapLayer> polygonLayer(new qt::MapLayer(ZCHX::LAYER_POLYGON,ZCHX::TR_LAYER_POLYGON,true));
     m_pEcdisWin->itfAddLayer(polygonLayer);
 
+    std::shared_ptr<qt::MapLayer> routepathlayer(new qt::MapLayer(ZCHX::LAYER_RADARPATH, ZCHX::TR_LAYER_RADARPATH, true));
+    m_pEcdisWin->itfAddLayer(routepathlayer);
+
     m_pEcdisWin->setCtrlFrameVisible(false);
     m_pEcdisWin->itfSetRadarLabelVisible(true);
 #endif
@@ -199,6 +202,8 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
             m_pEcdisWin, SLOT(itfSetIslandLineData(QList<ZCHX::Data::ITF_IslandLine>)));
     connect(mDataChange, SIGNAL(sendAisChart(ZCHX::Data::ITF_AIS_Chart)),
             m_pEcdisWin, SLOT(itfAppendAisChart(ZCHX::Data::ITF_AIS_Chart)));
+    connect(mDataChange, SIGNAL(sendRadarRoute(QList<ZCHX::Data::ITF_RadarRouteNode>)),
+            m_pEcdisWin, SLOT(itfAppendRadarRoutePathNodeList(QList<ZCHX::Data::ITF_RadarRouteNode>)));
 
 
 #if 0
@@ -636,7 +641,8 @@ void TestMainWindow::slotSetDataSource(bool sts)
         ZCHX_RADAR_RECEIVER::ZCHX_Radar_Setting_Param param;
         param.m_sIP = mSetting->getUserValue(SEC_RADAR_TRACK, SERVER).toString();
         param.m_sPort = mSetting->getUserValue(SEC_RADAR_TRACK, PORT).toString();
-        param.m_sTopicList.append(mSetting->getUserValue(SEC_RADAR_TRACK, TOPIC).toString());
+        param.m_sTopicList.append(mSetting->getUserValue(SEC_RADAR_TRACK, TOPIC).toStringList());
+        qDebug()<<"topic list:"<<param.m_sTopicList;
         param.m_sSiteID = 1;
         mDataChange->appendRadarPoint(param);
         slotRadarPointLayerDisplay(sts);

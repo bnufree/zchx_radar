@@ -61,44 +61,46 @@ namespace ZCHX {
   template <class T> T sqr(T t) { return (t*t); }
 
   enum    ZCHX_DATA_MGR_TYPE{     //这里值的安排和图元绘制时有关系  值越小 就在最底层
-      DATA_MGR_UNKNOWN =            0x00000000,
-      DATA_MGR_RADAR_RECT =         0x00000003,
-      DATA_MGR_RADAR_VIDEO =        0x00000001,
-      DATA_MGR_AIS =                0x00000002,
-      DATA_MGR_RADAR =              0x00000004,
-      DATA_MGR_AIS_SITE =           0x00000005,
-      DATA_MGR_RADAR_SITE =         0x00000006,
-      DATA_MGR_AIDTO_NAVIGATION =   0x00000007,
-      DATA_MGR_CAMERA =             0x00000008,
-      DATA_MGR_CAMERA_VIEW =        0x00000010,
-      DATA_MGR_ROD =                0x00000020,
-      DATA_MGR_WARNING_ZONE =       0x00000040,
-      DATA_MGR_COAST =              0x00000080,
-      DATA_MGR_SEABEDIPLINE =       0x00000100,
-      DATA_MGR_CHANNEL =            0x00000200,
-      DATA_MGR_NET_GRID =           0x00000400,
-      DATA_MGR_STRUCTURE =          0x00000800,
-      DATA_MGR_AREANET =            0x00001000,
-      DATA_MGR_MOOR =               0x00002000,
-      DATA_MGR_CARDMOUTH =          0x00004000,
-      DATA_MGR_LOCAL_MARK =         0x00008000,
-      DATA_MGR_DANGEROUS =          0x00010000,
-      DATA_MGR_PASTROLSTATION =     0x00020000,
-      DATA_MGR_ISLANDLINE =         0x00040000,
-      DATA_MGR_SHIPALARM_ASCEND =   0x00080000,
-      DATA_MGR_VIDEO_TARGET =       0x00100000,
-      DATA_MGR_RADAR_FEATURE_ZONE = 0x00200000,
-      DATA_MGR_RADAR_AREA =         0x00400000,
-      DATA_MGR_ROUTE =              0x00800000,
-      DATA_MGR_SHIP_PLAN =          0x01000000,
-      DATA_MGR_AIS_STATION =        0x02000000,
-      DATA_MGR_STATISTCLINE =       0x04000000,
-      DATA_MGR_USER_DEFINE =        0x80000000,
-      DATA_MGR_NAVIMARK =           0x90000000,
-      DATA_MGR_AIS_CHART =           0x90000001,
-      DATA_MGR_POINT =           0x90000002,
-      DATA_MGR_LINE =           0x90000003,
-      DATA_MGR_POLYGON =           0x90000004,
+      DATA_MGR_UNKNOWN =            0x00000000,      
+      DATA_MGR_RADAR_RECT = 0x00000001,
+      DATA_MGR_RADAR_VIDEO ,
+      DATA_MGR_RADAR_ROUTE_PATH ,
+      DATA_MGR_AIS ,
+      DATA_MGR_RADAR ,
+      DATA_MGR_AIS_SITE ,
+      DATA_MGR_RADAR_SITE ,
+      DATA_MGR_AIDTO_NAVIGATION ,
+      DATA_MGR_CAMERA ,
+      DATA_MGR_CAMERA_VIEW,
+      DATA_MGR_ROD ,
+      DATA_MGR_WARNING_ZONE ,
+      DATA_MGR_COAST,
+      DATA_MGR_SEABEDIPLINE,
+      DATA_MGR_CHANNEL,
+      DATA_MGR_NET_GRID ,
+      DATA_MGR_STRUCTURE,
+      DATA_MGR_AREANET ,
+      DATA_MGR_MOOR ,
+      DATA_MGR_CARDMOUTH ,
+      DATA_MGR_LOCAL_MARK,
+      DATA_MGR_DANGEROUS,
+      DATA_MGR_PASTROLSTATION ,
+      DATA_MGR_ISLANDLINE,
+      DATA_MGR_SHIPALARM_ASCEND,
+      DATA_MGR_VIDEO_TARGET,
+      DATA_MGR_RADAR_FEATURE_ZONE ,
+      DATA_MGR_RADAR_AREA ,
+      DATA_MGR_ROUTE,
+      DATA_MGR_SHIP_PLAN ,
+      DATA_MGR_AIS_STATION,
+      DATA_MGR_STATISTCLINE ,
+      DATA_MGR_NAVIMARK,
+      DATA_MGR_AIS_CHART ,
+      DATA_MGR_POINT,
+      DATA_MGR_LINE,
+      DATA_MGR_POLYGON ,
+      DATA_MGR_USER_DEFINE,
+
 
   };
 
@@ -229,6 +231,7 @@ enum ELETYPE{
     ELE_DANGREOUS,
     ELE_GRID,
     ELE_RADAR_RECTGLOW,
+    ELE_RADAR_RADARPATH,
     ELE_RADAR_VIDEOGLOW,
     ELE_RADAR_FEATURE_ZONE,
     ELE_SPECIAL_ROUTE_POINT,
@@ -1971,7 +1974,7 @@ public:
     int   referHeight;
     bool  isRealSize;                           //1:实际的最大长度来确定大小 0:参考实时目标来推断矩形框的大小
     QPolygon        pixPoints;                   //矩形块回波块对应的图片点列和图片大小.这个只在某些层级显示,且大小固定不变
-    QList<ITF_SingleVideoBlockList>    predictionAreas;         //目标的预推区域
+    ITF_SingleVideoBlockList    predictionArea;         //目标的预推区域
 //    int             pixWidth;
 //    int             pixHeight;
 
@@ -1983,6 +1986,15 @@ public:
 typedef QList<ITF_RadarRectDef> ITF_RadarRectDefList;
 
 
+class ZCHX_ECDIS_EXPORT ITF_RadarRouteNode
+{
+public:
+    ITF_RadarRectDef  mTopNode;
+    QList<ITF_RadarRectDefList>     mPathList;
+    QString getName() const {return QString::number(mTopNode.rectNumber);}
+};
+
+typedef QList<ITF_RadarRouteNode> ITF_RadarRouteNodeList;
 
 class ZCHX_ECDIS_EXPORT ITF_RadarRect
 {
@@ -2376,6 +2388,7 @@ const char LAYER_ROUTE_CROSS[]        = "lay_route_cross";           //交越路
 const char LAYER_MULTIBEAM[]          = "lay_multibeam";           //多波束
 const char LAYER_RADARRECT[]          = "lay_radarrect";           //雷达回波
 const char LAYER_RADARVIDEO[]         = "lay_radarvideo";           //雷达回波
+const char LAYER_RADARPATH[]         = "lay_radarpath";           //雷达回波
 const char LAYER_DANGEROUS_CIRLE[]    = "lay_dangerous_cirle";      //危险圈
 const char LAYER_CAMERA_VIEW[]        = "lay_camera_view";          //相机视场
 const char LAYER_RADAR_FRETURE_AREA[] = "lay_radar_feature_area";   //雷达特征区域
@@ -2516,5 +2529,6 @@ const char TR_LAYER_BIGDIPPER_TRACK[]    = QT_TRANSLATE_NOOP("TranslationManager
 const char TR_LAYER_AIS_LAW[]            = QT_TRANSLATE_NOOP("TranslationManager", "layer law enforcement vessel"); //执法船
 const char TR_LAYER_NAVIMARK[]           = QT_TRANSLATE_NOOP("TranslationManager", "Navimark");
 const char TR_LAYER_AIS_CHART[]           = QT_TRANSLATE_NOOP("TranslationManager", "Ais Chart");
+const char TR_LAYER_RADARPATH[]           = QT_TRANSLATE_NOOP("TranslationManager", "Radar Path");
 
 }

@@ -677,6 +677,7 @@ public slots: //定义Recive数据接口
     void itfAppendPoint(const QList<ZCHX::Data::ITF_ElePos>& data);
     void itfAppendLine(const QList<ZCHX::Data::ITF_EleLine>& data);
     void itfAppendPolygon(const QList<ZCHX::Data::ITF_ElePolygon>& data);
+    void itfAppendRadarRoutePathNodeList(const QList<ZCHX::Data::ITF_RadarRouteNode>& list);
 protected Q_SLOTS:
     void OnMeasureAreaAction();
     void OnDirAngleAction();

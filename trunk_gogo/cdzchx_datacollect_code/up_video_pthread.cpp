@@ -1,4 +1,4 @@
-#include "up_video_pthread.h"
+﻿#include "up_video_pthread.h"
 #include <QThread>
 #include <QFile>
 #include <QString>
@@ -69,9 +69,10 @@ void up_video_pthread::readAllFile(QString path)
                        a = video_array.size();
                        if(a != 0)
                        {
-                           msleep(50);
-//                           cout<<"发送回波数据  size:"<<a;
+//                           qDebug()<<"发送回波数据  size:"<<a;
                            emit send_video_signal(video_array,"zchx240",4096,512,0);
+
+                           msleep(50);
                        }
                        if(video_file.atEnd())
                        {

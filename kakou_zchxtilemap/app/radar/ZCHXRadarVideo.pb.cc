@@ -37,6 +37,15 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* RadarRectDef_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   RadarRectDef_reflection_ = NULL;
+const ::google::protobuf::Descriptor* RoutePath_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  RoutePath_reflection_ = NULL;
+const ::google::protobuf::Descriptor* RouteNode_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  RouteNode_reflection_ = NULL;
+const ::google::protobuf::Descriptor* RouteNodes_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  RouteNodes_reflection_ = NULL;
 const ::google::protobuf::Descriptor* RadarRect_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   RadarRect_reflection_ = NULL;
@@ -157,7 +166,53 @@ void protobuf_AssignDesc_ZCHXRadarVideo_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RadarRectDef));
-  RadarRect_descriptor_ = file->message_type(5);
+  RoutePath_descriptor_ = file->message_type(5);
+  static const int RoutePath_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RoutePath, path_),
+  };
+  RoutePath_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      RoutePath_descriptor_,
+      RoutePath::default_instance_,
+      RoutePath_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RoutePath, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RoutePath, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(RoutePath));
+  RouteNode_descriptor_ = file->message_type(6);
+  static const int RouteNode_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RouteNode, topnode_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RouteNode, pathlist_),
+  };
+  RouteNode_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      RouteNode_descriptor_,
+      RouteNode::default_instance_,
+      RouteNode_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RouteNode, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RouteNode, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(RouteNode));
+  RouteNodes_descriptor_ = file->message_type(7);
+  static const int RouteNodes_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RouteNodes, nodes_),
+  };
+  RouteNodes_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      RouteNodes_descriptor_,
+      RouteNodes::default_instance_,
+      RouteNodes_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RouteNodes, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RouteNodes, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(RouteNodes));
+  RadarRect_descriptor_ = file->message_type(8);
   static const int RadarRect_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRect, currentrect_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRect, historyrects_),
@@ -175,7 +230,7 @@ void protobuf_AssignDesc_ZCHXRadarVideo_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RadarRect));
-  RadarRects_descriptor_ = file->message_type(6);
+  RadarRects_descriptor_ = file->message_type(9);
   static const int RadarRects_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRects, utc_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRects, length_),
@@ -192,7 +247,7 @@ void protobuf_AssignDesc_ZCHXRadarVideo_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RadarRects));
-  RadarVideo_descriptor_ = file->message_type(7);
+  RadarVideo_descriptor_ = file->message_type(10);
   static const int RadarVideo_offsets_[13] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarVideo, radarid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarVideo, radarname_),
@@ -219,7 +274,7 @@ void protobuf_AssignDesc_ZCHXRadarVideo_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RadarVideo));
-  RadarVideoPoint_descriptor_ = file->message_type(8);
+  RadarVideoPoint_descriptor_ = file->message_type(11);
   static const int RadarVideoPoint_offsets_[11] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarVideoPoint, radarname_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarVideoPoint, latitude_),
@@ -267,6 +322,12 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     RadarRectDef_descriptor_, &RadarRectDef::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    RoutePath_descriptor_, &RoutePath::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    RouteNode_descriptor_, &RouteNode::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    RouteNodes_descriptor_, &RouteNodes::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     RadarRect_descriptor_, &RadarRect::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     RadarRects_descriptor_, &RadarRects::default_instance());
@@ -289,6 +350,12 @@ void protobuf_ShutdownFile_ZCHXRadarVideo_2eproto() {
   delete predictionArea_reflection_;
   delete RadarRectDef::default_instance_;
   delete RadarRectDef_reflection_;
+  delete RoutePath::default_instance_;
+  delete RoutePath_reflection_;
+  delete RouteNode::default_instance_;
+  delete RouteNode_reflection_;
+  delete RouteNodes::default_instance_;
+  delete RouteNodes_reflection_;
   delete RadarRect::default_instance_;
   delete RadarRect_reflection_;
   delete RadarRects::default_instance_;
@@ -326,27 +393,33 @@ void protobuf_AddDesc_ZCHXRadarVideo_2eproto() {
     "\024\n\014endlongitude\030\016 \001(\001\022\r\n\005angle\030\017 \001(\001\022\013\n\003"
     "sog\030\020 \002(\001\022\013\n\003cog\030\021 \002(\001\0226\n\tpixelPnts\030\022 \003("
     "\0132#.com.zhichenhaixin.proto.pixelPoint\022\020"
-    "\n\010realData\030\023 \002(\010\022@\n\017predictionAreas\030\024 \003("
+    "\n\010realData\030\023 \002(\010\022@\n\017predictionAreas\030\024 \001("
     "\0132\'.com.zhichenhaixin.proto.predictionAr"
-    "ea\"\254\001\n\tRadarRect\022:\n\013currentRect\030\001 \002(\0132%."
-    "com.zhichenhaixin.proto.RadarRectDef\022;\n\014"
-    "historyRects\030\002 \003(\0132%.com.zhichenhaixin.p"
-    "roto.RadarRectDef\022\024\n\014dirConfirmed\030\003 \002(\010\022"
-    "\020\n\010estcount\030\004 \002(\r\"\\\n\nRadarRects\022\013\n\003UTC\030\001"
-    " \002(\004\022\016\n\006length\030\002 \002(\005\0221\n\005rects\030\003 \003(\0132\".co"
-    "m.zhichenhaixin.proto.RadarRect\"\363\001\n\nRada"
-    "rVideo\022\017\n\007radarId\030\001 \002(\004\022\021\n\tradarName\030\002 \002"
-    "(\t\022\020\n\010latitude\030\003 \002(\001\022\021\n\tlongitude\030\004 \002(\001\022"
-    "\013\n\003UTC\030\005 \002(\004\022\021\n\timageData\030\006 \002(\014\022\024\n\014curIm"
-    "ageData\030\007 \002(\014\022\024\n\014preImageData\030\010 \002(\014\022\r\n\005w"
-    "idth\030\t \002(\r\022\016\n\006height\030\n \002(\r\022\016\n\006radius\030\013 \002"
-    "(\001\022\020\n\010curIndex\030\014 \002(\r\022\017\n\007loopNum\030\r \002(\r\"\321\001"
-    "\n\017RadarVideoPoint\022\021\n\tradarName\030\002 \002(\t\022\020\n\010"
-    "latitude\030\003 \002(\001\022\021\n\tlongitude\030\004 \002(\001\022\013\n\003UTC"
-    "\030\005 \002(\004\022\021\n\timageData\030\006 \002(\014\022\024\n\014preImageDat"
-    "a\030\007 \002(\014\022\r\n\005width\030\010 \002(\r\022\016\n\006height\030\t \002(\r\022\016"
-    "\n\006radius\030\n \002(\001\022\020\n\010curIndex\030\013 \002(\r\022\017\n\007loop"
-    "Num\030\014 \002(\r", 1609);
+    "ea\"@\n\tRoutePath\0223\n\004path\030\001 \003(\0132%.com.zhic"
+    "henhaixin.proto.RadarRectDef\"y\n\tRouteNod"
+    "e\0226\n\007topNode\030\001 \002(\0132%.com.zhichenhaixin.p"
+    "roto.RadarRectDef\0224\n\010pathlist\030\002 \003(\0132\".co"
+    "m.zhichenhaixin.proto.RoutePath\"\?\n\nRoute"
+    "Nodes\0221\n\005nodes\030\001 \003(\0132\".com.zhichenhaixin"
+    ".proto.RouteNode\"\254\001\n\tRadarRect\022:\n\013curren"
+    "tRect\030\001 \002(\0132%.com.zhichenhaixin.proto.Ra"
+    "darRectDef\022;\n\014historyRects\030\002 \003(\0132%.com.z"
+    "hichenhaixin.proto.RadarRectDef\022\024\n\014dirCo"
+    "nfirmed\030\003 \002(\010\022\020\n\010estcount\030\004 \002(\r\"\\\n\nRadar"
+    "Rects\022\013\n\003UTC\030\001 \002(\004\022\016\n\006length\030\002 \002(\005\0221\n\005re"
+    "cts\030\003 \003(\0132\".com.zhichenhaixin.proto.Rada"
+    "rRect\"\363\001\n\nRadarVideo\022\017\n\007radarId\030\001 \002(\004\022\021\n"
+    "\tradarName\030\002 \002(\t\022\020\n\010latitude\030\003 \002(\001\022\021\n\tlo"
+    "ngitude\030\004 \002(\001\022\013\n\003UTC\030\005 \002(\004\022\021\n\timageData\030"
+    "\006 \002(\014\022\024\n\014curImageData\030\007 \002(\014\022\024\n\014preImageD"
+    "ata\030\010 \002(\014\022\r\n\005width\030\t \002(\r\022\016\n\006height\030\n \002(\r"
+    "\022\016\n\006radius\030\013 \002(\001\022\020\n\010curIndex\030\014 \002(\r\022\017\n\007lo"
+    "opNum\030\r \002(\r\"\321\001\n\017RadarVideoPoint\022\021\n\tradar"
+    "Name\030\002 \002(\t\022\020\n\010latitude\030\003 \002(\001\022\021\n\tlongitud"
+    "e\030\004 \002(\001\022\013\n\003UTC\030\005 \002(\004\022\021\n\timageData\030\006 \002(\014\022"
+    "\024\n\014preImageData\030\007 \002(\014\022\r\n\005width\030\010 \002(\r\022\016\n\006"
+    "height\030\t \002(\r\022\016\n\006radius\030\n \002(\001\022\020\n\010curIndex"
+    "\030\013 \002(\r\022\017\n\007loopNum\030\014 \002(\r", 1863);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ZCHXRadarVideo.proto", &protobuf_RegisterTypes);
   singleVideoBlock::default_instance_ = new singleVideoBlock();
@@ -354,6 +427,9 @@ void protobuf_AddDesc_ZCHXRadarVideo_2eproto() {
   fixRectPixelImg::default_instance_ = new fixRectPixelImg();
   predictionArea::default_instance_ = new predictionArea();
   RadarRectDef::default_instance_ = new RadarRectDef();
+  RoutePath::default_instance_ = new RoutePath();
+  RouteNode::default_instance_ = new RouteNode();
+  RouteNodes::default_instance_ = new RouteNodes();
   RadarRect::default_instance_ = new RadarRect();
   RadarRects::default_instance_ = new RadarRects();
   RadarVideo::default_instance_ = new RadarVideo();
@@ -363,6 +439,9 @@ void protobuf_AddDesc_ZCHXRadarVideo_2eproto() {
   fixRectPixelImg::default_instance_->InitAsDefaultInstance();
   predictionArea::default_instance_->InitAsDefaultInstance();
   RadarRectDef::default_instance_->InitAsDefaultInstance();
+  RoutePath::default_instance_->InitAsDefaultInstance();
+  RouteNode::default_instance_->InitAsDefaultInstance();
+  RouteNodes::default_instance_->InitAsDefaultInstance();
   RadarRect::default_instance_->InitAsDefaultInstance();
   RadarRects::default_instance_->InitAsDefaultInstance();
   RadarVideo::default_instance_->InitAsDefaultInstance();
@@ -1490,6 +1569,7 @@ RadarRectDef::RadarRectDef()
 }
 
 void RadarRectDef::InitAsDefaultInstance() {
+  predictionareas_ = const_cast< ::com::zhichenhaixin::proto::predictionArea*>(&::com::zhichenhaixin::proto::predictionArea::default_instance());
 }
 
 RadarRectDef::RadarRectDef(const RadarRectDef& from)
@@ -1518,6 +1598,7 @@ void RadarRectDef::SharedCtor() {
   sog_ = 0;
   cog_ = 0;
   realdata_ = false;
+  predictionareas_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1528,6 +1609,7 @@ RadarRectDef::~RadarRectDef() {
 
 void RadarRectDef::SharedDtor() {
   if (this != default_instance_) {
+    delete predictionareas_;
   }
 }
 
@@ -1570,9 +1652,12 @@ void RadarRectDef::Clear() {
     ZR_(startlatitude_, diameter_);
     ZR_(angle_, sog_);
   }
-  if (_has_bits_[16 / 32] & 327680) {
+  if (_has_bits_[16 / 32] & 851968) {
     cog_ = 0;
     realdata_ = false;
+    if (has_predictionareas()) {
+      if (predictionareas_ != NULL) predictionareas_->::com::zhichenhaixin::proto::predictionArea::Clear();
+    }
   }
 
 #undef OFFSET_OF_FIELD_
@@ -1580,7 +1665,6 @@ void RadarRectDef::Clear() {
 
   blocks_.Clear();
   pixelpnts_.Clear();
-  predictionareas_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -1877,16 +1961,15 @@ bool RadarRectDef::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
+      // optional .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
       case 20: {
         if (tag == 162) {
          parse_predictionAreas:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-                input, add_predictionareas()));
+               input, mutable_predictionareas()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(162)) goto parse_predictionAreas;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -2013,10 +2096,10 @@ void RadarRectDef::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(19, this->realdata(), output);
   }
 
-  // repeated .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
-  for (int i = 0; i < this->predictionareas_size(); i++) {
+  // optional .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
+  if (has_predictionareas()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      20, this->predictionareas(i), output);
+      20, this->predictionareas(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -2128,11 +2211,11 @@ void RadarRectDef::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(19, this->realdata(), target);
   }
 
-  // repeated .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
-  for (int i = 0; i < this->predictionareas_size(); i++) {
+  // optional .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
+  if (has_predictionareas()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        20, this->predictionareas(i), target);
+        20, this->predictionareas(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -2242,6 +2325,13 @@ int RadarRectDef::ByteSize() const {
       total_size += 2 + 1;
     }
 
+    // optional .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
+    if (has_predictionareas()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->predictionareas());
+    }
+
   }
   // repeated .com.zhichenhaixin.proto.singleVideoBlock Blocks = 10;
   total_size += 1 * this->blocks_size();
@@ -2257,14 +2347,6 @@ int RadarRectDef::ByteSize() const {
     total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         this->pixelpnts(i));
-  }
-
-  // repeated .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
-  total_size += 2 * this->predictionareas_size();
-  for (int i = 0; i < this->predictionareas_size(); i++) {
-    total_size +=
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->predictionareas(i));
   }
 
   if (!unknown_fields().empty()) {
@@ -2294,7 +2376,6 @@ void RadarRectDef::MergeFrom(const RadarRectDef& from) {
   GOOGLE_CHECK_NE(&from, this);
   blocks_.MergeFrom(from.blocks_);
   pixelpnts_.MergeFrom(from.pixelpnts_);
-  predictionareas_.MergeFrom(from.predictionareas_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_rectnumber()) {
       set_rectnumber(from.rectnumber());
@@ -2351,6 +2432,9 @@ void RadarRectDef::MergeFrom(const RadarRectDef& from) {
     if (from.has_realdata()) {
       set_realdata(from.realdata());
     }
+    if (from.has_predictionareas()) {
+      mutable_predictionareas()->::com::zhichenhaixin::proto::predictionArea::MergeFrom(from.predictionareas());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -2372,7 +2456,9 @@ bool RadarRectDef::IsInitialized() const {
 
   if (!::google::protobuf::internal::AllAreInitialized(this->blocks())) return false;
   if (!::google::protobuf::internal::AllAreInitialized(this->pixelpnts())) return false;
-  if (!::google::protobuf::internal::AllAreInitialized(this->predictionareas())) return false;
+  if (has_predictionareas()) {
+    if (!this->predictionareas().IsInitialized()) return false;
+  }
   return true;
 }
 
@@ -2397,7 +2483,7 @@ void RadarRectDef::Swap(RadarRectDef* other) {
     std::swap(cog_, other->cog_);
     pixelpnts_.Swap(&other->pixelpnts_);
     std::swap(realdata_, other->realdata_);
-    predictionareas_.Swap(&other->predictionareas_);
+    std::swap(predictionareas_, other->predictionareas_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -2409,6 +2495,717 @@ void RadarRectDef::Swap(RadarRectDef* other) {
   ::google::protobuf::Metadata metadata;
   metadata.descriptor = RadarRectDef_descriptor_;
   metadata.reflection = RadarRectDef_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int RoutePath::kPathFieldNumber;
+#endif  // !_MSC_VER
+
+RoutePath::RoutePath()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:com.zhichenhaixin.proto.RoutePath)
+}
+
+void RoutePath::InitAsDefaultInstance() {
+}
+
+RoutePath::RoutePath(const RoutePath& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:com.zhichenhaixin.proto.RoutePath)
+}
+
+void RoutePath::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+RoutePath::~RoutePath() {
+  // @@protoc_insertion_point(destructor:com.zhichenhaixin.proto.RoutePath)
+  SharedDtor();
+}
+
+void RoutePath::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void RoutePath::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* RoutePath::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return RoutePath_descriptor_;
+}
+
+const RoutePath& RoutePath::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ZCHXRadarVideo_2eproto();
+  return *default_instance_;
+}
+
+RoutePath* RoutePath::default_instance_ = NULL;
+
+RoutePath* RoutePath::New() const {
+  return new RoutePath;
+}
+
+void RoutePath::Clear() {
+  path_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool RoutePath::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:com.zhichenhaixin.proto.RoutePath)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .com.zhichenhaixin.proto.RadarRectDef path = 1;
+      case 1: {
+        if (tag == 10) {
+         parse_path:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_path()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(10)) goto parse_path;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:com.zhichenhaixin.proto.RoutePath)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:com.zhichenhaixin.proto.RoutePath)
+  return false;
+#undef DO_
+}
+
+void RoutePath::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:com.zhichenhaixin.proto.RoutePath)
+  // repeated .com.zhichenhaixin.proto.RadarRectDef path = 1;
+  for (int i = 0; i < this->path_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->path(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:com.zhichenhaixin.proto.RoutePath)
+}
+
+::google::protobuf::uint8* RoutePath::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:com.zhichenhaixin.proto.RoutePath)
+  // repeated .com.zhichenhaixin.proto.RadarRectDef path = 1;
+  for (int i = 0; i < this->path_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->path(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:com.zhichenhaixin.proto.RoutePath)
+  return target;
+}
+
+int RoutePath::ByteSize() const {
+  int total_size = 0;
+
+  // repeated .com.zhichenhaixin.proto.RadarRectDef path = 1;
+  total_size += 1 * this->path_size();
+  for (int i = 0; i < this->path_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->path(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RoutePath::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const RoutePath* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const RoutePath*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void RoutePath::MergeFrom(const RoutePath& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  path_.MergeFrom(from.path_);
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void RoutePath::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void RoutePath::CopyFrom(const RoutePath& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RoutePath::IsInitialized() const {
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->path())) return false;
+  return true;
+}
+
+void RoutePath::Swap(RoutePath* other) {
+  if (other != this) {
+    path_.Swap(&other->path_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata RoutePath::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = RoutePath_descriptor_;
+  metadata.reflection = RoutePath_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int RouteNode::kTopNodeFieldNumber;
+const int RouteNode::kPathlistFieldNumber;
+#endif  // !_MSC_VER
+
+RouteNode::RouteNode()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:com.zhichenhaixin.proto.RouteNode)
+}
+
+void RouteNode::InitAsDefaultInstance() {
+  topnode_ = const_cast< ::com::zhichenhaixin::proto::RadarRectDef*>(&::com::zhichenhaixin::proto::RadarRectDef::default_instance());
+}
+
+RouteNode::RouteNode(const RouteNode& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:com.zhichenhaixin.proto.RouteNode)
+}
+
+void RouteNode::SharedCtor() {
+  _cached_size_ = 0;
+  topnode_ = NULL;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+RouteNode::~RouteNode() {
+  // @@protoc_insertion_point(destructor:com.zhichenhaixin.proto.RouteNode)
+  SharedDtor();
+}
+
+void RouteNode::SharedDtor() {
+  if (this != default_instance_) {
+    delete topnode_;
+  }
+}
+
+void RouteNode::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* RouteNode::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return RouteNode_descriptor_;
+}
+
+const RouteNode& RouteNode::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ZCHXRadarVideo_2eproto();
+  return *default_instance_;
+}
+
+RouteNode* RouteNode::default_instance_ = NULL;
+
+RouteNode* RouteNode::New() const {
+  return new RouteNode;
+}
+
+void RouteNode::Clear() {
+  if (has_topnode()) {
+    if (topnode_ != NULL) topnode_->::com::zhichenhaixin::proto::RadarRectDef::Clear();
+  }
+  pathlist_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool RouteNode::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:com.zhichenhaixin.proto.RouteNode)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required .com.zhichenhaixin.proto.RadarRectDef topNode = 1;
+      case 1: {
+        if (tag == 10) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_topnode()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_pathlist;
+        break;
+      }
+
+      // repeated .com.zhichenhaixin.proto.RoutePath pathlist = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_pathlist:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_pathlist()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_pathlist;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:com.zhichenhaixin.proto.RouteNode)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:com.zhichenhaixin.proto.RouteNode)
+  return false;
+#undef DO_
+}
+
+void RouteNode::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:com.zhichenhaixin.proto.RouteNode)
+  // required .com.zhichenhaixin.proto.RadarRectDef topNode = 1;
+  if (has_topnode()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->topnode(), output);
+  }
+
+  // repeated .com.zhichenhaixin.proto.RoutePath pathlist = 2;
+  for (int i = 0; i < this->pathlist_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, this->pathlist(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:com.zhichenhaixin.proto.RouteNode)
+}
+
+::google::protobuf::uint8* RouteNode::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:com.zhichenhaixin.proto.RouteNode)
+  // required .com.zhichenhaixin.proto.RadarRectDef topNode = 1;
+  if (has_topnode()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->topnode(), target);
+  }
+
+  // repeated .com.zhichenhaixin.proto.RoutePath pathlist = 2;
+  for (int i = 0; i < this->pathlist_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        2, this->pathlist(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:com.zhichenhaixin.proto.RouteNode)
+  return target;
+}
+
+int RouteNode::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required .com.zhichenhaixin.proto.RadarRectDef topNode = 1;
+    if (has_topnode()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->topnode());
+    }
+
+  }
+  // repeated .com.zhichenhaixin.proto.RoutePath pathlist = 2;
+  total_size += 1 * this->pathlist_size();
+  for (int i = 0; i < this->pathlist_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->pathlist(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RouteNode::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const RouteNode* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const RouteNode*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void RouteNode::MergeFrom(const RouteNode& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  pathlist_.MergeFrom(from.pathlist_);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_topnode()) {
+      mutable_topnode()->::com::zhichenhaixin::proto::RadarRectDef::MergeFrom(from.topnode());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void RouteNode::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void RouteNode::CopyFrom(const RouteNode& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RouteNode::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+
+  if (has_topnode()) {
+    if (!this->topnode().IsInitialized()) return false;
+  }
+  if (!::google::protobuf::internal::AllAreInitialized(this->pathlist())) return false;
+  return true;
+}
+
+void RouteNode::Swap(RouteNode* other) {
+  if (other != this) {
+    std::swap(topnode_, other->topnode_);
+    pathlist_.Swap(&other->pathlist_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata RouteNode::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = RouteNode_descriptor_;
+  metadata.reflection = RouteNode_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int RouteNodes::kNodesFieldNumber;
+#endif  // !_MSC_VER
+
+RouteNodes::RouteNodes()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:com.zhichenhaixin.proto.RouteNodes)
+}
+
+void RouteNodes::InitAsDefaultInstance() {
+}
+
+RouteNodes::RouteNodes(const RouteNodes& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:com.zhichenhaixin.proto.RouteNodes)
+}
+
+void RouteNodes::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+RouteNodes::~RouteNodes() {
+  // @@protoc_insertion_point(destructor:com.zhichenhaixin.proto.RouteNodes)
+  SharedDtor();
+}
+
+void RouteNodes::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void RouteNodes::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* RouteNodes::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return RouteNodes_descriptor_;
+}
+
+const RouteNodes& RouteNodes::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ZCHXRadarVideo_2eproto();
+  return *default_instance_;
+}
+
+RouteNodes* RouteNodes::default_instance_ = NULL;
+
+RouteNodes* RouteNodes::New() const {
+  return new RouteNodes;
+}
+
+void RouteNodes::Clear() {
+  nodes_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool RouteNodes::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:com.zhichenhaixin.proto.RouteNodes)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .com.zhichenhaixin.proto.RouteNode nodes = 1;
+      case 1: {
+        if (tag == 10) {
+         parse_nodes:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_nodes()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(10)) goto parse_nodes;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:com.zhichenhaixin.proto.RouteNodes)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:com.zhichenhaixin.proto.RouteNodes)
+  return false;
+#undef DO_
+}
+
+void RouteNodes::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:com.zhichenhaixin.proto.RouteNodes)
+  // repeated .com.zhichenhaixin.proto.RouteNode nodes = 1;
+  for (int i = 0; i < this->nodes_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->nodes(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:com.zhichenhaixin.proto.RouteNodes)
+}
+
+::google::protobuf::uint8* RouteNodes::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:com.zhichenhaixin.proto.RouteNodes)
+  // repeated .com.zhichenhaixin.proto.RouteNode nodes = 1;
+  for (int i = 0; i < this->nodes_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->nodes(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:com.zhichenhaixin.proto.RouteNodes)
+  return target;
+}
+
+int RouteNodes::ByteSize() const {
+  int total_size = 0;
+
+  // repeated .com.zhichenhaixin.proto.RouteNode nodes = 1;
+  total_size += 1 * this->nodes_size();
+  for (int i = 0; i < this->nodes_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->nodes(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RouteNodes::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const RouteNodes* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const RouteNodes*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void RouteNodes::MergeFrom(const RouteNodes& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  nodes_.MergeFrom(from.nodes_);
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void RouteNodes::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void RouteNodes::CopyFrom(const RouteNodes& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RouteNodes::IsInitialized() const {
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->nodes())) return false;
+  return true;
+}
+
+void RouteNodes::Swap(RouteNodes* other) {
+  if (other != this) {
+    nodes_.Swap(&other->nodes_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata RouteNodes::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = RouteNodes_descriptor_;
+  metadata.reflection = RouteNodes_reflection_;
   return metadata;
 }
 

@@ -129,7 +129,8 @@ SOURCES += mainwindow.cpp \
     data_manager/zchxnavimarkdatamgr.cpp \
     element/navimarkelement.cpp \
     mapposprofile.cpp \
-    zchxmapscaleslider.cpp
+    zchxmapscaleslider.cpp \
+    element/radarpathelement.cpp
 
 HEADERS  += mainwindow.h \
     zchxmapthread.h \
@@ -216,7 +217,8 @@ HEADERS  += mainwindow.h \
     data_manager/zchxnavimarkdatamgr.h \
     element/navimarkelement.h \
     mapposprofile.h \
-    zchxmapscaleslider.h
+    zchxmapscaleslider.h \
+    element/radarpathelement.h
 
 FORMS    += mainwindow.ui \
     coastdatainfodialog.ui \

@@ -1,4 +1,4 @@
-#ifndef ZCHXFIXELEMENTS_H
+﻿#ifndef ZCHXFIXELEMENTS_H
 #define ZCHXFIXELEMENTS_H
 
 #include "fixelement.h"

@@ -334,52 +334,89 @@ enum PNTPOSTION{
 //};
 
 
-class      zchxTargetPredictionLine
+class      zchxTargetPrediction
 {
-private:
-    Mercator    mStart;
-    Mercator    mEnd;
-    QPolygonF   mPredictionArea;
-    QList<Latlon>   mPredictionAreaLL;
-    double      mWidth;
-    double      mStartOffsetCoeff;       //构造多边形时偏离起点的距离.如果设定为0,就是不偏离,设定为1就是三角形..中间数值就是多边形
-private:
-    void makePridictionArea();
 public:
-    zchxTargetPredictionLine() {
-        mWidth = 0;
-        mStartOffsetCoeff = 0.0;
+    enum PredictionMode{
+        Prediction_Rect = 0,
+        Prediction_Circle,
+    };
+    enum PredictionAreaRelationship{
+        Prediction_None = 0,
+        Prediction_Overlap,
+        Prediction_Parallel,
+        Prediction_Metting,
+    };
+
+private:
+    Mercator        mStart;
+    Mercator        mEnd;
+    QPolygonF       mPredictionAreaMC;      //对应摩卡拖坐标的预推区域
+    QList<Latlon>   mPredictionAreaLL;      //经纬度对应的预推区域
+    double          mRectWidth;
+    double          mRectStartOffsetCoeff;       //构造多边形时偏离起点的距离.如果设定为0,就是不偏离,设定为1就是三角形..中间数值就是多边形
+    int             mMode;
+    double          mRadius;
+private:
+    void makePridiction();
+    zchxTargetPrediction() {
+        mMode = Prediction_Rect;
+        mRectWidth = 0;
+        mRectStartOffsetCoeff = 0.0;
     }
-    zchxTargetPredictionLine(Latlon start, Latlon end, double width, double offset)
+public:
+    zchxTargetPrediction(Latlon center, double radius)
     {
-        mStart = latlonToMercator(start);
-        mEnd = latlonToMercator(end);
-        mWidth = width;
-        mStartOffsetCoeff = offset;
-        makePridictionArea();
+        mMode = Prediction_Circle;
+        mStart = latlonToMercator(center);
+        mRadius = radius;
+        makePridiction();
     }
 
-    zchxTargetPredictionLine(double start_lat, double start_lon, double end_lat, double end_lon, double width, double offset)
+    zchxTargetPrediction(double lat, double lon, double radius)
     {
-//        zchxTargetPredictionLine(Latlon(start_lat, start_lon), Latlon(end_lat, end_lon), width, type);
+        mMode = Prediction_Circle;
+        mStart = latlonToMercator(lat, lon);
+        mRadius = radius;
+        makePridiction();
+    }
+
+    zchxTargetPrediction(Latlon start, Latlon end, double width, double offset)
+    {
+        mMode = Prediction_Rect;
+        mStart = latlonToMercator(start);
+        mEnd = latlonToMercator(end);
+        mRectWidth = width;
+        mRectStartOffsetCoeff = offset;
+        makePridiction();
+    }
+
+    zchxTargetPrediction(double start_lat, double start_lon, double end_lat, double end_lon, double width, double offset)
+    {
+        mMode = Prediction_Rect;
         mStart = latlonToMercator(start_lat, start_lon);
         mEnd = latlonToMercator(end_lat, end_lon);
-        mWidth = width;
-        mStartOffsetCoeff = offset;
-        makePridictionArea();
+        mRectWidth = width;
+        mRectStartOffsetCoeff = offset;
+        makePridiction();
     }
-    void     setPridictionWidth(int width);
-    void     setStartOffset(double offset);
+    void     setRectPridictionWidth(int width);
+    void     setRectStartOffset(double offset);
 
     bool    isPointIn(const Mercator& point);
     bool    isPointIn(double lat, double lon) {return isPointIn(latlonToMercator(lat, lon));}
     bool    isPointIn(Latlon ll) {return(isPointIn(latlonToMercator(ll)));}
 
-    QList<Latlon>   getPredictionArea() const {return mPredictionAreaLL;}
+    QList<Latlon>   getPredictionAreaLL() const {return mPredictionAreaLL;}
+    QPolygonF       getPredictionAreaMC() const {return mPredictionAreaMC;}
 
     double distanceToMe(const Mercator& point) const
     {
-        return point.distanceToLine(mStart, mEnd);
+        if(mMode == Prediction_Rect)
+        {
+            return point.distanceToLine(mStart, mEnd);
+        }
+        return point.distanceToLine(mStart, mStart);
     }
 
     double distanceToMe(double lat, double lon) const
@@ -389,7 +426,11 @@ public:
 
     double length() const
     {
-        return mStart.distanceToLine(mEnd, mEnd);
+        if(mMode == Prediction_Rect)
+        {
+            return mStart.distanceToLine(mEnd, mEnd);
+        }
+        return 0.0;
     }
 
     bool isValid() const;

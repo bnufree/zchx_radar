@@ -299,6 +299,19 @@ void zchxRadarRectExtraction::parseVideoPieceFromImage(QImage& result, zchxRadar
         transform.translate(-target.mCenter.x(), -target.mCenter.y());
         target.mScaledPolygons = transform.map(target.mPolygons);
     }
+    //添加屏蔽区域
+    if(/*mIsLimitAvailable*/0)
+    {
+
+        if(mSeaPolygon.size() > 0)
+        {
+            painter.setPen(QPen(Qt::blue, 3.0, Qt::DashDotDotLine));
+            foreach (QPolygonF poly, mSeaPolygon) {
+                painter.drawPolygon(poly);
+            }
+
+        }
+    }
 
     painter.end();
     if(output)
@@ -408,12 +421,17 @@ void zchxRadarRectExtraction::setLimitFile(const QString& file)
 //从区域文件读取限制区域
 void zchxRadarRectExtraction::parseLimitFile(const QString& sFileName)
 {
+    qDebug()<<"now start parse file:"<<sFileName;
     mLandLatlonList.clear();
     mSeaLatlonList.clear();
     if(sFileName.isEmpty()) return;
 
     QFile objFile(sFileName);
-    if(!objFile.open(QIODevice::ReadOnly)) return;
+    if(!objFile.open(QIODevice::ReadOnly))
+    {
+        qDebug()<<"open file failed:"<<sFileName;
+        return;
+    }
     QJsonParseError err;
     QJsonDocument docRcv = QJsonDocument::fromJson(objFile.readAll(), &err);
     objFile.close();
@@ -430,6 +448,7 @@ void zchxRadarRectExtraction::parseLimitFile(const QString& sFileName)
     }
     QJsonObject obj = docRcv.object();
     QStringList keys =obj.keys();
+    qDebug()<<"keys:"<<keys;
     foreach (QString key, keys) {
         QJsonArray array = obj.value(key).toArray();
         if(key.contains("water") || keys.contains("sea"))
@@ -454,10 +473,13 @@ void zchxRadarRectExtraction::parseLimitFile(const QString& sFileName)
                     mLandLatlonList.append(list);
                 }
             }
+        } else
+        {
+            qDebug()<<"invalid key found:"<<key;
         }
     }
-//    cout<<"sea area size()"<<mSeaLatlonList.size();
-//    cout<<"land area size()"<<mSeaLatlonList.size();
+    qDebug()<<"sea area size()"<<mSeaLatlonList.size();
+    qDebug()<<"land area size()"<<mLandLatlonList.size();
 }
 
 void zchxRadarRectExtraction::transferLatlonArea2PixelArea()
@@ -484,6 +506,8 @@ void zchxRadarRectExtraction::transferLatlonArea2PixelArea()
         }
         if(poly.size() > 0) mLandPolygon.append(poly);
     }
+
+    qDebug()<<"pixel land sea size:"<<mLandPolygon.size()<<mSeaPolygon.size();
 }
 
 //区域限制功能
@@ -493,7 +517,7 @@ bool zchxRadarRectExtraction::isVideoPolygonNotAvailable(const QPolygonF& poly)
     bool in_sea = false, in_land = false;
     if(mSeaPolygon.size() == 0) in_sea = true;
     foreach (QPolygonF src, mSeaPolygon) {
-        if(src.intersected(poly).size() > 0)
+        if(src.intersected(poly).size() > 0 && poly.subtracted(src).size() == 0)
         {
             in_sea = true;
             break;

@@ -1,4 +1,4 @@
-#include "zchxradarutils.h"
+﻿#include "zchxradarutils.h"
 #include "zmq.h"
 
 using namespace ZCHX_RADAR_RECEIVER;
@@ -96,7 +96,7 @@ void ZCHXReceiverThread::run()
                     emit signalConnectedStatus(true, QString());
                 }
             }
-            qDebug()<<"start recv data:"<<mRadarCommonSettings.m_sTopicList<<QDateTime::currentDateTime();
+//            qDebug()<<"start recv data:"<<mRadarCommonSettings.m_sTopicList<<QDateTime::currentDateTime();
             //开始接收数据,数据有可能多帧发送
             QByteArrayList recvlist;
             int length = 0;
@@ -136,7 +136,7 @@ void ZCHXReceiverThread::run()
                 no_recv_num = 0;
             }
             emit signalRecvDataNow(mType, length);
-            qDebug()<<"recv data tag:"<<recvlist[0]<<QDateTime::fromMSecsSinceEpoch(recvlist[1].toLongLong())<<QDateTime::currentDateTime();
+//            qDebug()<<"recv data tag:"<<recvlist[0]<<QDateTime::fromMSecsSinceEpoch(recvlist[1].toLongLong())<<QDateTime::currentDateTime();
             parseRecvData(recvlist);
         }
     }

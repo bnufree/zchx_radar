@@ -1,4 +1,4 @@
-#include "zchxradartargettrack.h"
+﻿#include "zchxradartargettrack.h"
 #include <QDebug>
 #include <QGeoCoordinate>
 
@@ -7,6 +7,7 @@ const bool track_debug = true;
 const double point_near_line = 200;
 const double ship_max_speed = 5;            //5m/s ~~ 10节  10m/s 就是20节
 
+#define     PATH_CONFIRM_NODE_COUNT         5
 
 //double getDeltaTime(float now, float old)
 //{
@@ -436,16 +437,15 @@ zchxRadarRectDefList zchxRadarTargetTrack::getDirDeterminTargets(bool& isTargetI
                 est_lon = est_geo.longitude();
 //        distbearTolatlon1(old_lat, old_lon, est_distance, old_cog, &est_lat, &est_lon);
         //预估点和前一位置连线，若当前点在连线附近，则认为是下一个点。点存在多个，则取预估位置距离最近的点。
-        zchxTargetPredictionLine line(old_lat, old_lon, est_lat, est_lon, mPredictionWidth, 0.2);
+        zchxTargetPrediction line(old_lat, old_lon, est_lat, est_lon, mPredictionWidth, 0.2);
         if(!line.isValid()) return result;
         //将目标的预估范围更新到地图上显示,检查预估范围的计算是否有错误
         if(1)
         {
             src->clear_predictionareas();
-            com::zhichenhaixin::proto::predictionArea *dest = src->add_predictionareas();
-            QList<Latlon> area = line.getPredictionArea();
+            QList<Latlon> area = line.getPredictionAreaLL();
             foreach (Latlon ll, area) {
-                com::zhichenhaixin::proto::singleVideoBlock* block = dest->add_area();
+                com::zhichenhaixin::proto::singleVideoBlock* block = src->mutable_predictionareas()->add_area();
                 block->set_latitude(ll.lat);
                 block->set_longitude(ll.lon);
             }
@@ -819,6 +819,7 @@ TargetNode* zchxRadarTargetTrack::checkNodeConfirmed(TargetNode *node)
 
 void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &task)
 {
+#if 0
     if(task.size() == 0) return;
 //    zchxTimeElapsedCounter counter(__FUNCTION__);
     zchxRadarRectDefList temp_list(task);             //保存的未经处理的所有矩形单元
@@ -861,6 +862,413 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
     deleteExpiredNode();
     //现在将目标进行输出
     outputTargets();
+
+#else
+    if(task.size() == 0) return;
+//    zchxTimeElapsedCounter counter(__FUNCTION__);
+    zchxRadarRectDefList temp_list(task);             //保存的未经处理的所有矩形单元
+    quint32 now_time = task.first().updatetime();
+    qDebug()<<"now process list time:"<<QDateTime::fromTime_t(task.first().updatetime()).toString("yyyy-MM-dd hh:mm:ss");
+
+    QList<AreaNodeTable> areaTableList = calculateTargetTrackMode(10.0, task.first().updatetime(), 3.2);
+    QList<int>  used_index_list;
+    qDebug()<<"exist prediction area size:"<<areaTableList.size();
+    if(areaTableList.size() > 0)
+    {
+        //先检查每一个区域内落入了哪些目标
+        for(int i=0; i<areaTableList.size(); i++)
+        {
+            AreaNodeTable &table = areaTableList[i];
+            for(int k=0; k<temp_list.size(); k++)
+            {
+                zchxRadarRectDef def = temp_list[k];
+                Mercator pos = latlonToMercator(def.centerlatitude(), def.centerlongitude());
+                if(table.mArea.containsPoint(pos.toPointF(), Qt::OddEvenFill))
+                {
+                    table.mRectList.append(def);
+                }
+            }
+
+        }
+        //开始统计整理，每一个节点现在有多少个待选节点
+        QMap<TargetNode*, zchxRadarRectDefList> counter_map;
+        foreach (AreaNodeTable table, areaTableList) {
+            foreach (TargetNode* node, table.mNodeList) {
+                counter_map[node].append(table.mRectList);
+            }
+        }
+        //开始将新的目标更新到旧目标对应的路径
+        QMap<TargetNode*, zchxRadarRectDefList>::iterator it = counter_map.begin();
+        for(; it != counter_map.end(); it++)
+        {
+            TargetNode* node = it.key();
+            if(!node) continue;
+            zchxRadarRectDefList targetList = it.value();
+            if(targetList.size() > 0)
+            {
+                //从候选目标中移除距离值介于（0~距离因子）的目标点。剩余点就是符合要求的点
+                //如果存在多个目标点，选择距离预推运动点最近的目标
+                int    index = -1;
+                double delta_time = now_time - node->rect->updatetime();
+                QGeoCoordinate source(node->rect->centerlatitude(), node->rect->centerlongitude());
+                //计算目标的预推位置
+                double delta_dis = node->rect->sog() * delta_time;
+                QGeoCoordinate dest = source.atDistanceAndAzimuth(delta_dis, node->rect->cog());
+                int    min_dis = INT32_MAX;
+                for(int i=0; i<targetList.size();i++)
+                {
+                    zchxRadarRectDef def = targetList[i];
+                    double dis = dest.distanceTo(QGeoCoordinate(def.centerlatitude(), def.centerlongitude()));
+                    if(dis > 1.0 && dis < mRangeFactor)
+                    {
+                        qDebug()<<"abnoraml target found. all target distance is smaller than range factor, but not zero"<<dis<<mRangeFactor;
+                        continue;
+                    }
+                    if(dis < min_dis)
+                    {
+                        min_dis = dis;
+                        index = i;
+                    }
+                }
+                if(index == -1)
+                {
+                    //所有目标的都不符合要求
+
+                    targetList.clear();
+                } else
+                {
+                    zchxRadarRectDef def =  targetList.takeAt(index);
+                    targetList.clear();
+                    targetList.append(def);
+                }
+            }
+
+            if(targetList.size() == 0)
+            {
+                //检查当前目标是否落在了某一个回波图形上
+                for(int i=0; i<temp_list.size(); i++)
+                {
+                    zchxRadarRectDef rect = temp_list[i];
+                    if(isRectAreaContainsPoint(rect, node->rect->centerlatitude(), node->rect->centerlongitude()))
+                    {
+                        targetList.append(rect);
+                        break;
+                    }
+                }
+                if(targetList.size() > 0)
+                {
+                    //将节点自动移动到当前的回波图形重心。
+                    zchxRadarRectDef target;
+                    target.CopyFrom(targetList[0]);
+                    if(!used_index_list.contains(target.rectnumber())) used_index_list.append(target.rectnumber());
+
+                    target.set_realdata(true);
+                    target.set_rectnumber(node->rect->rectnumber());
+
+                    if(node->parent)
+                    {
+                        //取得节点对应的父节点
+                        QGeoCoordinate source(node->parent->rect->centerlatitude(), node->parent->rect->centerlongitude());
+                        QGeoCoordinate dest(target.centerlatitude(),target.centerlongitude());
+                        double cog = source.azimuthTo(dest);
+                        double distance = source.distanceTo(dest);
+                        int delta_time = target.updatetime() - node->parent->rect->updatetime();
+                        double sog = 0.0;
+                        if(delta_time > 0) sog = distance / delta_time;
+                        //开始平均速度和角度
+                        double refer_sog = node->getReferenceSog();
+                        if(refer_sog > 0.1)
+                        {
+                            sog = (sog + refer_sog) / 2.0;
+                        }
+//                        double refer_cog = node->getReferenceCog();
+//                        if(refer_cog > 0.1)
+//                        {
+//                            cog = (cog + refer_cog) / 2.0;
+//                        }
+
+                        //
+                        target.set_cog(cog);
+                        target.set_sog(sog);
+                    } else
+                    {
+                        //节点本身就是根节点，不用计算速度角度
+                        target.set_sog(0.0);
+                        target.set_cog(0.0);
+                    }
+
+                    node->rect->CopyFrom(target);
+                }
+
+                continue;
+            }
+
+            //获取选择的目标，更新速度等
+            zchxRadarRectDef target;
+            target.CopyFrom(targetList.first());
+            if(!used_index_list.contains(target.rectnumber())) used_index_list.append(target.rectnumber());
+
+            target.set_realdata(true);
+            target.set_rectnumber(node->rect->rectnumber());
+            QGeoCoordinate source(node->rect->centerlatitude(), node->rect->centerlongitude());
+            QGeoCoordinate dest(target.centerlatitude(), target.centerlongitude());
+            double delta_time = now_time - node->rect->updatetime();
+            double cog = source.azimuthTo(dest);
+            double distance = source.distanceTo(dest);
+            double sog = 0.0;
+            if(delta_time > 0) sog = distance / delta_time;
+            //开始平均速度和角度
+            double refer_sog = node->getReferenceSog();
+            if(refer_sog > 0.1)
+            {
+                sog = (sog + refer_sog) / 2.0;
+            }
+//            double refer_cog = node->getReferenceCog();
+//            if(refer_cog > 0.1)
+//            {
+//                cog = (cog + refer_cog) / 2.0;
+//            }
+
+            //
+            target.set_cog(cog);
+            target.set_sog(sog);
+            node->children.append(QSharedPointer<TargetNode>(new TargetNode(target, node)));
+        }
+    }
+
+
+    //将未更新的矩形作为新目标添加
+    for(int i=0; i<temp_list.size(); i++)
+    {
+        zchxRadarRectDef rect = temp_list[i];
+        if(used_index_list.contains(rect.rectnumber())) continue;
+        TargetNode *node = new TargetNode(rect);
+        appendNode(node, 0);
+    }
+    //开始检查已经存在的目标的更新情况，如果路径节点数大于N，则目标确认输出。目标位置变化不大，就是静止，否则就是运动
+    QList<int> exist_numbers = mTargetNodeMap.keys();
+    foreach (int key, exist_numbers)
+    {
+        QSharedPointer<TargetNode> node = mTargetNodeMap[key];
+        if(!node || node->children.size() == 0) continue;
+        //检查目标信息,查看目标的可能路径是否已经满足确定条件，
+        if(node->status  != TargetNode::TARGET_POINT) continue;  //目标的路径信息已经确定，不处理
+        int size = node->children.size();
+        int path_index = -1;
+        for(int i=0; i<size; i++)
+        {
+            //从这个子节点开始遍历，开始构造路径
+            QList<TargetNode*> list;
+            list.append(node.data());
+            TargetNode* current = node->children[i].data();
+            if(!current) continue;
+            while (current) {
+                list.append(current);
+                if(current->children.size() > 0)
+                {
+                    current = current->children.first().data();
+
+                } else
+                {
+                    break;
+                }
+            }
+            TargetNode::TargetStatus sts = checkRoutePathSts(list);
+            if(sts == TargetNode::TARGET_MOVING)
+            {
+                path_index = i;
+                node->status = sts;
+                list.last()->status = sts;
+                if(sts == TargetNode::TARGET_MOVING)
+                {
+                    node->cog_confirmed = true;
+                } else
+                {
+                    node->not_move_cnt = 5;
+                }
+            }
+            if(path_index >= 0) break;
+        }
+        if(path_index < 0) continue;
+        //开始将确认的没有确认的路径进行重新分离编号
+        splitAllRoutesIntoTargets(node.data(), node->children[path_index].data());
+        node->updateRouteNodePathStatus(TargetNode::TARGET_MOVING);
+    }
+    //路径节点的时间重新更新
+    foreach (QSharedPointer<TargetNode> node, mTargetNodeMap)
+    {
+        if(!node) continue;
+        node->setAllNodeRectNum(node->rect->rectnumber());
+        QList<TargetNode*> children = node->getAllBranchLastChild();
+        foreach (TargetNode* child, children) {
+            if(node->update_time < child->update_time)
+            {
+                node->update_time = child->update_time;
+            }
+        }
+    }
+
+
+    //删除很久没有更新的目标点
+    deleteExpiredNode();
+    //现在将目标进行输出
+    outputTargets();
+//    outputRoutePath();
+    qDebug()<<"process end now";
+#endif
+}
+
+TargetNode::TargetStatus zchxRadarTargetTrack::checkRoutePathSts(QList<TargetNode *> path)
+{
+    if(path.size() < PATH_CONFIRM_NODE_COUNT) return TargetNode::TARGET_POINT;
+    quint32 start_time = path.first()->rect->updatetime();
+    quint32 end_time = path.last()->rect->updatetime();
+    quint32 delta_time = end_time - start_time;
+    if(delta_time == 0) return TargetNode::TARGET_POINT;
+    QGeoCoordinate start_pos(path.first()->rect->centerlatitude(), path.first()->rect->centerlongitude());
+    QGeoCoordinate end_pos(path.last()->rect->centerlatitude(), path.last()->rect->centerlongitude());
+    double distance = start_pos.distanceTo(end_pos);
+    double sog = distance / delta_time;
+    if(sog < 1.0) return TargetNode::TARGET_POINT;
+    return TargetNode::TARGET_MOVING;
+}
+
+QList<AreaNodeTable> zchxRadarTargetTrack::calculateTargetTrackMode(double max_speed, quint32 now, double scan_time)
+{
+    QList<AreaNodeTable> areaNodeTableList;
+    if(mTargetNodeMap.size() == 0) return areaNodeTableList;
+    //通过计算目标的预推区域来计算区域是否存在相交，追越， 平行相遇等模型
+    QList<PredictionNode> result_list;
+    //1)先计算预推区域
+    foreach (QSharedPointer<TargetNode> node, mTargetNodeMap)
+    {
+        if(!node) continue;
+
+        //检查目标是否已经存在子类末端节点
+        QList<TargetNode*> node_list = node->getAllBranchLastChild();
+        if(node_list.size() == 0) node_list.append(node.data());
+        foreach (TargetNode* tail, node_list)
+        {
+            double old_speed = tail->rect->sog();
+            double old_lat = tail->rect->centerlatitude();
+            double old_lon = tail->rect->centerlongitude();
+            double old_cog = tail->rect->cog();
+            double distance = old_speed * (now - node->update_time);
+            if(tail->rect->sog() < 0.1)
+            {
+                distance = max_speed * scan_time;
+            }
+
+            zchxTargetPrediction *prediction = 0;
+            if(tail->rect->sog() < 0.1)
+            {
+                //目标静止,目标的预推区域就是周围的圆形区域
+                prediction = new zchxTargetPrediction(old_lat, old_lon, distance);
+            } else
+            {
+                //目标运动，就在他的运动方向上构造区域
+                QGeoCoordinate est_geo = QGeoCoordinate(old_lat, old_lon).atDistanceAndAzimuth(distance, old_cog);
+                double est_lat = est_geo.latitude();
+                double est_lon = est_geo.longitude();
+                prediction = new zchxTargetPrediction(old_lat, old_lon, est_lat, est_lon, mPredictionWidth, 0.2);
+            }
+            if(prediction && prediction->isValid())
+            {
+                tail->rect->clear_predictionareas();
+                QList<Latlon> area = prediction->getPredictionAreaLL();
+                foreach (Latlon ll, area) {
+                    com::zhichenhaixin::proto::singleVideoBlock* block = tail->rect->mutable_predictionareas()->add_area();
+                    block->set_latitude(ll.lat);
+                    block->set_longitude(ll.lon);
+                }
+                PredictionNode res;
+                res.mNode = tail;
+                res.mPrediction = prediction;
+                result_list.append(res);
+            }
+        }
+    }
+    //开始计算目标预推区域和节点的对应关系
+    //对应相交追越相遇模型计算他们的共同区域，并且抽出来，区域被重新分割，然后进行重新赋值
+    for(int i=0; i<result_list.size(); i++)
+    {
+        PredictionNode cur = result_list[i];
+        //分别计算相交 追越  相遇的预推区域
+        bool found = false;
+        QGeoCoordinate cur_geo(cur.mNode->rect->centerlatitude(), cur.mNode->rect->centerlongitude());
+        for(int k=i+1; k<result_list.size(); k++)
+        {
+            if(i==k) continue;
+            PredictionNode next = result_list[k];
+            //先计算两者之间的实际距离值，距离太远(100m)，就不考虑二者的位置关系
+            QGeoCoordinate next_geo(next.mNode->rect->centerlatitude(), next.mNode->rect->centerlongitude());
+            if(cur_geo.distanceTo(next_geo) >= 100) continue;
+            //相交
+            QPolygonF andPoly = cur.mPrediction->getPredictionAreaMC().intersected(next.mPrediction->getPredictionAreaMC());
+            if(andPoly.size() > 0)
+            {
+                found = true;
+                AreaNodeTable table;
+                table.mArea = andPoly;
+                table.mNodeList.append(cur.mNode);
+                table.mNodeList.append(next.mNode);
+                areaNodeTableList.append(table);
+                QPolygonF subPoly = cur.mPrediction->getPredictionAreaMC().subtracted(next.mPrediction->getPredictionAreaMC());
+                if(subPoly.size() > 0)
+                {
+                    table.mArea = subPoly;
+                    table.mNodeList.append(cur.mNode);
+                    areaNodeTableList.append(table);
+                }
+                continue;
+            }
+            //追越或者相遇。计算二者运动方向的夹角，如果是小于5度，将预推区域旋转到同一方向，如果很近或者相交，则满足条件
+            double sub_angle = cur.mNode->rect->cog() - next.mNode->rect->cog();
+            //同向的判断 二者的角度差不多大小，就是相差5度  如果一个在0度左边，一个在0度右边 就是相差355
+            if(fabs(sub_angle) <= 5.0 || fabs(sub_angle) >= 355.0)
+            {
+                AreaNodeTable table;
+                table.mArea = andPoly;
+                table.mNodeList.append(cur.mNode);
+                table.mNodeList.append(next.mNode);
+                areaNodeTableList.append(table);
+                found = true;
+
+            } else
+            {
+                //检查是否是反向
+                if(sub_angle < 0) sub_angle += 360.0;
+                sub_angle -= 180.0;
+                if(fabs(sub_angle) <= 5.0)
+                {
+                    AreaNodeTable table;
+                    table.mArea = andPoly;
+                    table.mNodeList.append(cur.mNode);
+                    table.mNodeList.append(next.mNode);
+                    areaNodeTableList.append(table);
+                    found = true;
+                }
+            }
+
+
+        }
+
+        if(!found)
+        {
+            AreaNodeTable table;
+            table.mArea = cur.mPrediction->getPredictionAreaMC();
+            table.mNodeList.append(cur.mNode);
+            areaNodeTableList.append(table);
+        }
+
+        if(cur.mPrediction)
+        {
+            delete cur.mPrediction;
+            cur.mPrediction = 0;
+        }
+    }
+
+    return areaNodeTableList;
 }
 
 void zchxRadarTargetTrack::splitAllRoutesIntoTargets(TargetNode *node, TargetNode *routeNode)
@@ -906,7 +1314,7 @@ void zchxRadarTargetTrack::deleteExpiredNode()
         if(!node) continue;
         quint32 node_time = node->update_time;
         quint32 delta_time = time_of_day - node_time;
-        bool reason1 = (delta_time > mClearTrackTime);
+        bool reason1 = (delta_time > /*mClearTrackTime*/120);
         bool reason2 = (node->est_count >= mMaxEstCount);
         if( reason1 || reason2)
         {
@@ -938,7 +1346,7 @@ void zchxRadarTargetTrack::updateTrackPointWithNode(zchxRadarSurfaceTrack& list,
     //编号
     trackObj->set_tracknumber(rect_num);
     //速度
-    trackObj->set_sog(target->sog());
+    trackObj->set_sog(target->sog() * 3.6 / 1.852);
     //方向
     trackObj->set_cog(target->cog());
     if(!node->cog_confirmed)
@@ -1023,9 +1431,9 @@ void zchxRadarTargetTrack::updateRectMapWithNode(zchxRadarRectMap &map, TargetNo
             TargetNode *worknode = node->children[i].data();
             while (worknode)
             {
-                if(worknode->rect->predictionareas_size() > 0)
+                if(worknode->rect->has_predictionareas())
                 {
-                    rect.mutable_currentrect()->add_predictionareas()->CopyFrom(worknode->rect->predictionareas(0));
+                    rect.mutable_currentrect()->mutable_predictionareas()->CopyFrom(worknode->rect->predictionareas());
                 }
                 if(worknode->children.size() == 0) break;
                 worknode = worknode->children[0].data();
@@ -1034,6 +1442,36 @@ void zchxRadarTargetTrack::updateRectMapWithNode(zchxRadarRectMap &map, TargetNo
 #endif
     }
     map[rect_num] = rect;
+}
+
+void zchxRadarTargetTrack::outputRoutePath()
+{
+    static qint64 count = 0;
+    zchxRadarRouteNodes nodeList;
+    //遍历目标进行数据组装
+    for(TargetNodeMap::iterator it = mTargetNodeMap.begin(); it != mTargetNodeMap.end(); it++)
+    {
+        TargetNode *node = it->data();
+        if(!node) continue;
+        com::zhichenhaixin::proto::RouteNode* route = nodeList.add_nodes();
+        route->mutable_topnode()->CopyFrom(*(node->rect));
+        for(int i=0; i<node->children.size();i++)
+        {
+            TargetNode* child = node->children.at(i).data();
+            com::zhichenhaixin::proto::RoutePath *path = route->add_pathlist();
+            path->add_path()->CopyFrom(*(child->rect));
+            while (child->children.size() > 0) {
+                child = child->children[0].data();
+                path->add_path()->CopyFrom(*(child->rect));
+            }
+        }
+    }
+    if(nodeList.nodes_size() > 0 && count <= 10)
+    {
+        emit signalSendRoutePath(nodeList);
+    }
+    count++;
+    if(count >= 10000) count = 10000;
 }
 
 void zchxRadarTargetTrack::outputTargets()

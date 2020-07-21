@@ -27,6 +27,10 @@ include($$ZCHX_3RD_PATH/ProtoBuf/protobuf.pri)
 #include($$ZCHX_3RD_PATH/QtXlsx/QtXlsx.pri)
 include($$ZCHX_3RD_PATH/opencv/opencv.pri)
 
+CONFIG(release, debug|release) {
+    DEFINES *= NDEBUG
+}
+
 DEFINES += WIN32_LEAN_AND_MEAN
 QT += core gui network websockets positioning xml serialport svg
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets

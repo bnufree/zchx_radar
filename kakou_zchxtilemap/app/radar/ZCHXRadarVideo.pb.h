@@ -40,6 +40,9 @@ class pixelPoint;
 class fixRectPixelImg;
 class predictionArea;
 class RadarRectDef;
+class RoutePath;
+class RouteNode;
+class RouteNodes;
 class RadarRect;
 class RadarRects;
 class RadarVideo;
@@ -605,17 +608,14 @@ class RadarRectDef : public ::google::protobuf::Message {
   inline bool realdata() const;
   inline void set_realdata(bool value);
 
-  // repeated .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
-  inline int predictionareas_size() const;
+  // optional .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
+  inline bool has_predictionareas() const;
   inline void clear_predictionareas();
   static const int kPredictionAreasFieldNumber = 20;
-  inline const ::com::zhichenhaixin::proto::predictionArea& predictionareas(int index) const;
-  inline ::com::zhichenhaixin::proto::predictionArea* mutable_predictionareas(int index);
-  inline ::com::zhichenhaixin::proto::predictionArea* add_predictionareas();
-  inline const ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::predictionArea >&
-      predictionareas() const;
-  inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::predictionArea >*
-      mutable_predictionareas();
+  inline const ::com::zhichenhaixin::proto::predictionArea& predictionareas() const;
+  inline ::com::zhichenhaixin::proto::predictionArea* mutable_predictionareas();
+  inline ::com::zhichenhaixin::proto::predictionArea* release_predictionareas();
+  inline void set_allocated_predictionareas(::com::zhichenhaixin::proto::predictionArea* predictionareas);
 
   // @@protoc_insertion_point(class_scope:com.zhichenhaixin.proto.RadarRectDef)
  private:
@@ -653,6 +653,8 @@ class RadarRectDef : public ::google::protobuf::Message {
   inline void clear_has_cog();
   inline void set_has_realdata();
   inline void clear_has_realdata();
+  inline void set_has_predictionareas();
+  inline void clear_has_predictionareas();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -677,13 +679,271 @@ class RadarRectDef : public ::google::protobuf::Message {
   double sog_;
   double cog_;
   ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::pixelPoint > pixelpnts_;
-  ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::predictionArea > predictionareas_;
+  ::com::zhichenhaixin::proto::predictionArea* predictionareas_;
   friend void  protobuf_AddDesc_ZCHXRadarVideo_2eproto();
   friend void protobuf_AssignDesc_ZCHXRadarVideo_2eproto();
   friend void protobuf_ShutdownFile_ZCHXRadarVideo_2eproto();
 
   void InitAsDefaultInstance();
   static RadarRectDef* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class RoutePath : public ::google::protobuf::Message {
+ public:
+  RoutePath();
+  virtual ~RoutePath();
+
+  RoutePath(const RoutePath& from);
+
+  inline RoutePath& operator=(const RoutePath& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RoutePath& default_instance();
+
+  void Swap(RoutePath* other);
+
+  // implements Message ----------------------------------------------
+
+  RoutePath* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const RoutePath& from);
+  void MergeFrom(const RoutePath& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .com.zhichenhaixin.proto.RadarRectDef path = 1;
+  inline int path_size() const;
+  inline void clear_path();
+  static const int kPathFieldNumber = 1;
+  inline const ::com::zhichenhaixin::proto::RadarRectDef& path(int index) const;
+  inline ::com::zhichenhaixin::proto::RadarRectDef* mutable_path(int index);
+  inline ::com::zhichenhaixin::proto::RadarRectDef* add_path();
+  inline const ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RadarRectDef >&
+      path() const;
+  inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RadarRectDef >*
+      mutable_path();
+
+  // @@protoc_insertion_point(class_scope:com.zhichenhaixin.proto.RoutePath)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RadarRectDef > path_;
+  friend void  protobuf_AddDesc_ZCHXRadarVideo_2eproto();
+  friend void protobuf_AssignDesc_ZCHXRadarVideo_2eproto();
+  friend void protobuf_ShutdownFile_ZCHXRadarVideo_2eproto();
+
+  void InitAsDefaultInstance();
+  static RoutePath* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class RouteNode : public ::google::protobuf::Message {
+ public:
+  RouteNode();
+  virtual ~RouteNode();
+
+  RouteNode(const RouteNode& from);
+
+  inline RouteNode& operator=(const RouteNode& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RouteNode& default_instance();
+
+  void Swap(RouteNode* other);
+
+  // implements Message ----------------------------------------------
+
+  RouteNode* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const RouteNode& from);
+  void MergeFrom(const RouteNode& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .com.zhichenhaixin.proto.RadarRectDef topNode = 1;
+  inline bool has_topnode() const;
+  inline void clear_topnode();
+  static const int kTopNodeFieldNumber = 1;
+  inline const ::com::zhichenhaixin::proto::RadarRectDef& topnode() const;
+  inline ::com::zhichenhaixin::proto::RadarRectDef* mutable_topnode();
+  inline ::com::zhichenhaixin::proto::RadarRectDef* release_topnode();
+  inline void set_allocated_topnode(::com::zhichenhaixin::proto::RadarRectDef* topnode);
+
+  // repeated .com.zhichenhaixin.proto.RoutePath pathlist = 2;
+  inline int pathlist_size() const;
+  inline void clear_pathlist();
+  static const int kPathlistFieldNumber = 2;
+  inline const ::com::zhichenhaixin::proto::RoutePath& pathlist(int index) const;
+  inline ::com::zhichenhaixin::proto::RoutePath* mutable_pathlist(int index);
+  inline ::com::zhichenhaixin::proto::RoutePath* add_pathlist();
+  inline const ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RoutePath >&
+      pathlist() const;
+  inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RoutePath >*
+      mutable_pathlist();
+
+  // @@protoc_insertion_point(class_scope:com.zhichenhaixin.proto.RouteNode)
+ private:
+  inline void set_has_topnode();
+  inline void clear_has_topnode();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::com::zhichenhaixin::proto::RadarRectDef* topnode_;
+  ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RoutePath > pathlist_;
+  friend void  protobuf_AddDesc_ZCHXRadarVideo_2eproto();
+  friend void protobuf_AssignDesc_ZCHXRadarVideo_2eproto();
+  friend void protobuf_ShutdownFile_ZCHXRadarVideo_2eproto();
+
+  void InitAsDefaultInstance();
+  static RouteNode* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class RouteNodes : public ::google::protobuf::Message {
+ public:
+  RouteNodes();
+  virtual ~RouteNodes();
+
+  RouteNodes(const RouteNodes& from);
+
+  inline RouteNodes& operator=(const RouteNodes& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RouteNodes& default_instance();
+
+  void Swap(RouteNodes* other);
+
+  // implements Message ----------------------------------------------
+
+  RouteNodes* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const RouteNodes& from);
+  void MergeFrom(const RouteNodes& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .com.zhichenhaixin.proto.RouteNode nodes = 1;
+  inline int nodes_size() const;
+  inline void clear_nodes();
+  static const int kNodesFieldNumber = 1;
+  inline const ::com::zhichenhaixin::proto::RouteNode& nodes(int index) const;
+  inline ::com::zhichenhaixin::proto::RouteNode* mutable_nodes(int index);
+  inline ::com::zhichenhaixin::proto::RouteNode* add_nodes();
+  inline const ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RouteNode >&
+      nodes() const;
+  inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RouteNode >*
+      mutable_nodes();
+
+  // @@protoc_insertion_point(class_scope:com.zhichenhaixin.proto.RouteNodes)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RouteNode > nodes_;
+  friend void  protobuf_AddDesc_ZCHXRadarVideo_2eproto();
+  friend void protobuf_AssignDesc_ZCHXRadarVideo_2eproto();
+  friend void protobuf_ShutdownFile_ZCHXRadarVideo_2eproto();
+
+  void InitAsDefaultInstance();
+  static RouteNodes* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -2009,34 +2269,188 @@ inline void RadarRectDef::set_realdata(bool value) {
   // @@protoc_insertion_point(field_set:com.zhichenhaixin.proto.RadarRectDef.realData)
 }
 
-// repeated .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
-inline int RadarRectDef::predictionareas_size() const {
-  return predictionareas_.size();
+// optional .com.zhichenhaixin.proto.predictionArea predictionAreas = 20;
+inline bool RadarRectDef::has_predictionareas() const {
+  return (_has_bits_[0] & 0x00080000u) != 0;
+}
+inline void RadarRectDef::set_has_predictionareas() {
+  _has_bits_[0] |= 0x00080000u;
+}
+inline void RadarRectDef::clear_has_predictionareas() {
+  _has_bits_[0] &= ~0x00080000u;
 }
 inline void RadarRectDef::clear_predictionareas() {
-  predictionareas_.Clear();
+  if (predictionareas_ != NULL) predictionareas_->::com::zhichenhaixin::proto::predictionArea::Clear();
+  clear_has_predictionareas();
 }
-inline const ::com::zhichenhaixin::proto::predictionArea& RadarRectDef::predictionareas(int index) const {
+inline const ::com::zhichenhaixin::proto::predictionArea& RadarRectDef::predictionareas() const {
   // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.RadarRectDef.predictionAreas)
-  return predictionareas_.Get(index);
+  return predictionareas_ != NULL ? *predictionareas_ : *default_instance_->predictionareas_;
 }
-inline ::com::zhichenhaixin::proto::predictionArea* RadarRectDef::mutable_predictionareas(int index) {
+inline ::com::zhichenhaixin::proto::predictionArea* RadarRectDef::mutable_predictionareas() {
+  set_has_predictionareas();
+  if (predictionareas_ == NULL) predictionareas_ = new ::com::zhichenhaixin::proto::predictionArea;
   // @@protoc_insertion_point(field_mutable:com.zhichenhaixin.proto.RadarRectDef.predictionAreas)
-  return predictionareas_.Mutable(index);
-}
-inline ::com::zhichenhaixin::proto::predictionArea* RadarRectDef::add_predictionareas() {
-  // @@protoc_insertion_point(field_add:com.zhichenhaixin.proto.RadarRectDef.predictionAreas)
-  return predictionareas_.Add();
-}
-inline const ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::predictionArea >&
-RadarRectDef::predictionareas() const {
-  // @@protoc_insertion_point(field_list:com.zhichenhaixin.proto.RadarRectDef.predictionAreas)
   return predictionareas_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::predictionArea >*
-RadarRectDef::mutable_predictionareas() {
-  // @@protoc_insertion_point(field_mutable_list:com.zhichenhaixin.proto.RadarRectDef.predictionAreas)
-  return &predictionareas_;
+inline ::com::zhichenhaixin::proto::predictionArea* RadarRectDef::release_predictionareas() {
+  clear_has_predictionareas();
+  ::com::zhichenhaixin::proto::predictionArea* temp = predictionareas_;
+  predictionareas_ = NULL;
+  return temp;
+}
+inline void RadarRectDef::set_allocated_predictionareas(::com::zhichenhaixin::proto::predictionArea* predictionareas) {
+  delete predictionareas_;
+  predictionareas_ = predictionareas;
+  if (predictionareas) {
+    set_has_predictionareas();
+  } else {
+    clear_has_predictionareas();
+  }
+  // @@protoc_insertion_point(field_set_allocated:com.zhichenhaixin.proto.RadarRectDef.predictionAreas)
+}
+
+// -------------------------------------------------------------------
+
+// RoutePath
+
+// repeated .com.zhichenhaixin.proto.RadarRectDef path = 1;
+inline int RoutePath::path_size() const {
+  return path_.size();
+}
+inline void RoutePath::clear_path() {
+  path_.Clear();
+}
+inline const ::com::zhichenhaixin::proto::RadarRectDef& RoutePath::path(int index) const {
+  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.RoutePath.path)
+  return path_.Get(index);
+}
+inline ::com::zhichenhaixin::proto::RadarRectDef* RoutePath::mutable_path(int index) {
+  // @@protoc_insertion_point(field_mutable:com.zhichenhaixin.proto.RoutePath.path)
+  return path_.Mutable(index);
+}
+inline ::com::zhichenhaixin::proto::RadarRectDef* RoutePath::add_path() {
+  // @@protoc_insertion_point(field_add:com.zhichenhaixin.proto.RoutePath.path)
+  return path_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RadarRectDef >&
+RoutePath::path() const {
+  // @@protoc_insertion_point(field_list:com.zhichenhaixin.proto.RoutePath.path)
+  return path_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RadarRectDef >*
+RoutePath::mutable_path() {
+  // @@protoc_insertion_point(field_mutable_list:com.zhichenhaixin.proto.RoutePath.path)
+  return &path_;
+}
+
+// -------------------------------------------------------------------
+
+// RouteNode
+
+// required .com.zhichenhaixin.proto.RadarRectDef topNode = 1;
+inline bool RouteNode::has_topnode() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void RouteNode::set_has_topnode() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void RouteNode::clear_has_topnode() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void RouteNode::clear_topnode() {
+  if (topnode_ != NULL) topnode_->::com::zhichenhaixin::proto::RadarRectDef::Clear();
+  clear_has_topnode();
+}
+inline const ::com::zhichenhaixin::proto::RadarRectDef& RouteNode::topnode() const {
+  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.RouteNode.topNode)
+  return topnode_ != NULL ? *topnode_ : *default_instance_->topnode_;
+}
+inline ::com::zhichenhaixin::proto::RadarRectDef* RouteNode::mutable_topnode() {
+  set_has_topnode();
+  if (topnode_ == NULL) topnode_ = new ::com::zhichenhaixin::proto::RadarRectDef;
+  // @@protoc_insertion_point(field_mutable:com.zhichenhaixin.proto.RouteNode.topNode)
+  return topnode_;
+}
+inline ::com::zhichenhaixin::proto::RadarRectDef* RouteNode::release_topnode() {
+  clear_has_topnode();
+  ::com::zhichenhaixin::proto::RadarRectDef* temp = topnode_;
+  topnode_ = NULL;
+  return temp;
+}
+inline void RouteNode::set_allocated_topnode(::com::zhichenhaixin::proto::RadarRectDef* topnode) {
+  delete topnode_;
+  topnode_ = topnode;
+  if (topnode) {
+    set_has_topnode();
+  } else {
+    clear_has_topnode();
+  }
+  // @@protoc_insertion_point(field_set_allocated:com.zhichenhaixin.proto.RouteNode.topNode)
+}
+
+// repeated .com.zhichenhaixin.proto.RoutePath pathlist = 2;
+inline int RouteNode::pathlist_size() const {
+  return pathlist_.size();
+}
+inline void RouteNode::clear_pathlist() {
+  pathlist_.Clear();
+}
+inline const ::com::zhichenhaixin::proto::RoutePath& RouteNode::pathlist(int index) const {
+  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.RouteNode.pathlist)
+  return pathlist_.Get(index);
+}
+inline ::com::zhichenhaixin::proto::RoutePath* RouteNode::mutable_pathlist(int index) {
+  // @@protoc_insertion_point(field_mutable:com.zhichenhaixin.proto.RouteNode.pathlist)
+  return pathlist_.Mutable(index);
+}
+inline ::com::zhichenhaixin::proto::RoutePath* RouteNode::add_pathlist() {
+  // @@protoc_insertion_point(field_add:com.zhichenhaixin.proto.RouteNode.pathlist)
+  return pathlist_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RoutePath >&
+RouteNode::pathlist() const {
+  // @@protoc_insertion_point(field_list:com.zhichenhaixin.proto.RouteNode.pathlist)
+  return pathlist_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RoutePath >*
+RouteNode::mutable_pathlist() {
+  // @@protoc_insertion_point(field_mutable_list:com.zhichenhaixin.proto.RouteNode.pathlist)
+  return &pathlist_;
+}
+
+// -------------------------------------------------------------------
+
+// RouteNodes
+
+// repeated .com.zhichenhaixin.proto.RouteNode nodes = 1;
+inline int RouteNodes::nodes_size() const {
+  return nodes_.size();
+}
+inline void RouteNodes::clear_nodes() {
+  nodes_.Clear();
+}
+inline const ::com::zhichenhaixin::proto::RouteNode& RouteNodes::nodes(int index) const {
+  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.RouteNodes.nodes)
+  return nodes_.Get(index);
+}
+inline ::com::zhichenhaixin::proto::RouteNode* RouteNodes::mutable_nodes(int index) {
+  // @@protoc_insertion_point(field_mutable:com.zhichenhaixin.proto.RouteNodes.nodes)
+  return nodes_.Mutable(index);
+}
+inline ::com::zhichenhaixin::proto::RouteNode* RouteNodes::add_nodes() {
+  // @@protoc_insertion_point(field_add:com.zhichenhaixin.proto.RouteNodes.nodes)
+  return nodes_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RouteNode >&
+RouteNodes::nodes() const {
+  // @@protoc_insertion_point(field_list:com.zhichenhaixin.proto.RouteNodes.nodes)
+  return nodes_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RouteNode >*
+RouteNodes::mutable_nodes() {
+  // @@protoc_insertion_point(field_mutable_list:com.zhichenhaixin.proto.RouteNodes.nodes)
+  return &nodes_;
 }
 
 // -------------------------------------------------------------------

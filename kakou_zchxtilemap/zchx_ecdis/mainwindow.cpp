@@ -1969,6 +1969,11 @@ void MainWindow::itfAppendAisChart(const ZCHX::Data::ITF_AIS_Chart& data)
     m_dataMgrFactory->getAisChartMgr()->setData(data);
 }
 
+void MainWindow::itfAppendRadarRoutePathNodeList(const QList<ZCHX::Data::ITF_RadarRouteNode> &list)
+{
+    m_dataMgrFactory->getRadarRoutePathMgr()->setData(list);
+}
+
 void MainWindow::itfAppendPoint(const QList<ZCHX::Data::ITF_ElePos>& data)
 {
     m_dataMgrFactory->getPointMgr()->setData(data);

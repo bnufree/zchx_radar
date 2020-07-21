@@ -1,4 +1,4 @@
-#include "radarrectelement.h"
+﻿#include "radarrectelement.h"
 #include "zchxmapframe.h"
 #include "map_layer/zchxmaplayermgr.h"
 #include <QPainter>
@@ -563,27 +563,23 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
         drawPolygon(painter, Qt::transparent, rectColor, mRect.current.pixPoints, mRect.current.centerlatitude, mRect.current.centerlongitude);
 #if 1
         //画出目标的预推区域
-        if(mRect.current.predictionAreas.size() > 0)
+        QPolygonF shapePnts;
+        for(int k=0; k<mRect.current.predictionArea.size(); k++)
         {
-            for(int i=0; i<mRect.current.predictionAreas.size(); i++)
-            {
-                ITF_SingleVideoBlockList src = mRect.current.predictionAreas[i];
-                QPolygonF shapePnts;
-                for(int k=0; k<src.size(); k++)
-                {
-                    ITF_SingleVideoBlock block = src[k];
-                    shapePnts.append(mView->framework()->LatLon2Pixel(block.latitude, block.longitude).toPointF());
-                }
+            ITF_SingleVideoBlock block = mRect.current.predictionArea[k];
+            shapePnts.append(mView->framework()->LatLon2Pixel(block.latitude, block.longitude).toPointF());
+        }
+        if(shapePnts.size() > 0)
+        {
 
-                painter->save();
-                painter->setPen(Qt::darkMagenta);
-                painter->setBrush(Qt::transparent);
-                painter->drawPolygon(shapePnts);
-                QString text ;
-                text.sprintf("%d, %s", mRect.rectNumber, QDateTime::fromTime_t(mRect.current.updateTime).toString("yyyy-MM-dd hh:mm:ss").toStdString().data());
-                painter->drawText(shapePnts.boundingRect().center(),text);
-                painter->restore();
-            }
+            painter->save();
+            painter->setPen(Qt::darkMagenta);
+            painter->setBrush(Qt::transparent);
+            painter->drawPolygon(shapePnts);
+            QString text ;
+            text.sprintf("%d, %s", mRect.rectNumber, QDateTime::fromTime_t(mRect.current.updateTime).toString("yyyy-MM-dd hh:mm:ss").toStdString().data());
+            painter->drawText(shapePnts.boundingRect().center(),text);
+            painter->restore();
         }
 
 //        //画出预推区域的起点和中点

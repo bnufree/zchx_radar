@@ -395,81 +395,89 @@ Mercator latlonToMercator(const Latlon& ll)
     return Mercator(mx, my);
 }
 
-bool zchxTargetPredictionLine::isValid() const
+bool zchxTargetPrediction::isValid() const
 {
-    return length() >= 1.0;
+    if(mMode == Prediction_Rect) return length() >= 1.0;
+    return mRadius > 1.0;
 }
 
-void zchxTargetPredictionLine::makePridictionArea()
+void zchxTargetPrediction::makePridiction()
 {
-    mPredictionArea.clear();
+    mPredictionAreaMC.clear();
     mPredictionAreaLL.clear();
     if(!isValid()) return;
-    if(mStartOffsetCoeff > 1.0) mStartOffsetCoeff = 1.0;
-    else if(mStartOffsetCoeff < 0.0) mStartOffsetCoeff = 0.0;
+    if(mMode == Prediction_Rect)
+    {
+        if(mRectStartOffsetCoeff > 1.0) mRectStartOffsetCoeff = 1.0;
+        else if(mRectStartOffsetCoeff < 0.0) mRectStartOffsetCoeff = 0.0;
 
-    //计算直线的角度
-    double angle = atan2(mEnd.mY - mStart.mY, mEnd.mX - mStart.mX);
-    QLineF line(mStart.mX, mStart.mY, mEnd.mX, mEnd.mY);
-    QLineF low = line.translated(mWidth * 0.5 * sin(angle), -mWidth *0.5 * cos(angle));
-    QLineF high = line.translated(-mWidth * 0.5* sin(angle), mWidth *0.5 * cos(angle));
+        //计算直线的角度
+        double angle = atan2(mEnd.mY - mStart.mY, mEnd.mX - mStart.mX);
+        QLineF line(mStart.mX, mStart.mY, mEnd.mX, mEnd.mY);
+        QLineF low = line.translated(mRectWidth * 0.5 * sin(angle), -mRectWidth *0.5 * cos(angle));
+        QLineF high = line.translated(-mRectWidth * 0.5* sin(angle), mRectWidth *0.5 * cos(angle));
 
-    double offset_len = mStartOffsetCoeff * length();
-    double offset_X = offset_len * cos(angle);
-    double offset_y = offset_len * sin(angle);
-    QPointF offset(offset_X, offset_y);
+        double offset_len = mRectStartOffsetCoeff * length();
+        double offset_X = offset_len * cos(angle);
+        double offset_y = offset_len * sin(angle);
+        QPointF offset(offset_X, offset_y);
 
-    //添加起点
-    mPredictionArea.append(line.p1());
-    mPredictionArea.append(low.p1() + offset);
-    mPredictionArea.append(low.p2());
-    mPredictionArea.append(high.p2());
-    mPredictionArea.append(high.p1() + offset);
-    mPredictionArea.append(line.p1());
+        //添加起点
+        mPredictionAreaMC.append(line.p1());
+        mPredictionAreaMC.append(low.p1() + offset);
+        mPredictionAreaMC.append(low.p2());
+        mPredictionAreaMC.append(high.p2());
+        mPredictionAreaMC.append(high.p1() + offset);
+        mPredictionAreaMC.append(line.p1());
+    } else
+    {
+        int angle = 0;
+        Latlon center = mercatorToLatlon(mStart);
+        while (angle <= 360) {
+            QGeoCoordinate dest = QGeoCoordinate(center.lat, center.lon).atDistanceAndAzimuth(mRadius, angle);
+            mPredictionAreaLL.append(Latlon(dest.latitude(), dest.longitude()));
+            mPredictionAreaMC.append(latlonToMercator(dest.latitude(), dest.longitude()).toPointF());
+            angle += 10;
+        }
+    }
 
     //转换成经纬度
-    for(QPointF pnt : mPredictionArea)
+    for(QPointF pnt : mPredictionAreaMC)
     {
         mPredictionAreaLL.append(mercatorToLatlon(Mercator(pnt)));
     }
 }
 
-//void zchxTargetPredictionLine::setPridictionType(int type)
-//{
-//    if(mType != type)
-//    {
-//        mType = type;
-//        makePridictionArea();
-//    }
-//}
-
-void zchxTargetPredictionLine::setStartOffset(double offset)
+void zchxTargetPrediction::setRectStartOffset(double offset)
 {
-    if(mStartOffsetCoeff != offset)
+    if(mMode == Prediction_Circle) return;
+    if(mRectStartOffsetCoeff != offset)
     {
-        mStartOffsetCoeff = offset;
-        makePridictionArea();
+        mRectStartOffsetCoeff = offset;
+        makePridiction();
     }
 }
 
-void zchxTargetPredictionLine::setPridictionWidth(int width)
+void zchxTargetPrediction::setRectPridictionWidth(int width)
 {
-    if(width != mWidth)
+    if(mMode == Prediction_Circle) return;
+    if(width != mRectWidth)
     {
-        mWidth = width;
-        makePridictionArea();
+        mRectWidth = width;
+        makePridiction();
     }
 }
 
 
-bool zchxTargetPredictionLine::isPointIn(const Mercator &point)
+bool zchxTargetPrediction::isPointIn(const Mercator &point)
 {
-    bool sts = mPredictionArea.containsPoint(point.toPointF(), Qt::OddEvenFill);
+    bool sts = mPredictionAreaMC.containsPoint(point.toPointF(), Qt::OddEvenFill);
     return sts;
 }
 
-PNTPOSTION zchxTargetPredictionLine::pointPos(double& dist_to_line, double& dist_div_line, const Mercator &point)
+PNTPOSTION zchxTargetPrediction::pointPos(double& dist_to_line, double& dist_div_line, const Mercator &point)
 {
+    if(mMode == Prediction_Circle) return POS_UNDETERMINED;
     //检查目标直线是不是一个点的情况
     if(!isValid()) return POS_UNDETERMINED;
 
@@ -545,7 +553,7 @@ PNTPOSTION zchxTargetPredictionLine::pointPos(double& dist_to_line, double& dist
 }
 
 
-PNTPOSTION zchxTargetPredictionLine::pointPos(double& dist_to_line, double& dist_div_line, double lat, double lon)
+PNTPOSTION zchxTargetPrediction::pointPos(double& dist_to_line, double& dist_div_line, double lat, double lon)
 {
     return pointPos(dist_to_line, dist_div_line, latlonToMercator(Latlon(lat, lon)));
 }
@@ -614,7 +622,7 @@ QStringList  getAllIpv4List()
             if(ip.protocol() != QAbstractSocket::IPv4Protocol) continue;
             QString ip_str = ip.toString();
             if(ip_str.startsWith("127.")) continue;
-            if(ip_str.startsWith("169.254")) continue;
+//            if(ip_str.startsWith("169.254")) continue;
             list.append(ip_str);
         }
     }

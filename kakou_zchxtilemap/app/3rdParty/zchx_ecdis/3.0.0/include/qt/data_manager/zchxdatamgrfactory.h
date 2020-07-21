@@ -1,4 +1,4 @@
-#ifndef ZCHXDATAMGRFACTORY_H
+﻿#ifndef ZCHXDATAMGRFACTORY_H
 #define ZCHXDATAMGRFACTORY_H
 
 #include "zchxdatamanagers.h"
@@ -57,6 +57,7 @@ public:
     zchxPointDataMgr* getPointMgr();
     zchxLineDataMgr* getLineMgr();
     zchxPolygonDataMgr* getPolygonMgr();
+    zchxRadarNodePathDataMgr* getRadarRoutePathMgr();
 
 private:
     static zchxDataMgrFactory     *minstance;

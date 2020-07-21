@@ -1,4 +1,4 @@
-#ifndef ZCHXRADARCOMMON_H
+﻿#ifndef ZCHXRADARCOMMON_H
 #define ZCHXRADARCOMMON_H
 
 #include "ZCHXRadar.pb.h"
@@ -27,6 +27,7 @@ typedef     QMap<int,zchxRadarRect>                         zchxRadarRectMap;
 typedef     com::zhichenhaixin::proto::singleVideoBlock     zchxSingleVideoBlock;
 
 typedef     com::zhichenhaixin::proto::RadarRects           zchxRadarRects;
+typedef     com::zhichenhaixin::proto::RouteNodes           zchxRadarRouteNodes;
 
 typedef     QMap<int,QList<com::zhichenhaixin::proto::RadarHistoryTracks>> zchxHistoryTrackMap;
 

@@ -118,6 +118,7 @@ public slots:
     void slotGetGpsData(double, double);//实时更新从GPS传入的经纬度坐标
     void updateFloatSlot();//更新浮标配置
     void sendRadarRectPixmap(const zchxRadarRectMap& map);
+    void sendRadarNodeRoute(const zchxRadarRouteNodes& list);
     void slotSendComTracks(const zchxRadarSurfaceTrack&);
     float getAngle(float,float,float,float);
     void slotTrackMap(QMap<int,QList<TrackNode>>);

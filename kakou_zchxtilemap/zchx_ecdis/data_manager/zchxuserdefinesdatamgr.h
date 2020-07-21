@@ -1,7 +1,8 @@
-#ifndef ZCHXUSERDEFINESDATAMGR_H
+﻿#ifndef ZCHXUSERDEFINESDATAMGR_H
 #define ZCHXUSERDEFINESDATAMGR_H
 
 #include "zchxtemplatedatamgr.h"
+#include "element/radarpathelement.h"
 
 namespace qt {
 
@@ -159,6 +160,14 @@ class zchxPolygonDataMgr : public zchxTemplateDataMgr<PolygonElement, ZCHX::Data
 public:
     explicit zchxPolygonDataMgr(zchxMapWidget* w, QObject *parent = 0):
         zchxTemplateDataMgr<PolygonElement, ZCHX::Data::ITF_ElePolygon>(w, ZCHX::DATA_MGR_POLYGON, ZCHX::LAYER_POLYGON, parent){}
+
+};
+
+class zchxRadarNodePathDataMgr : public zchxTemplateDataMgr<RadarPathElement, ZCHX::Data::ITF_RadarRouteNode>
+{
+public:
+    explicit zchxRadarNodePathDataMgr(zchxMapWidget* w, QObject *parent = 0):
+        zchxTemplateDataMgr<RadarPathElement, ZCHX::Data::ITF_RadarRouteNode>(w, ZCHX::DATA_MGR_RADAR_ROUTE_PATH, ZCHX::LAYER_RADARPATH, parent){}
 
 };
 

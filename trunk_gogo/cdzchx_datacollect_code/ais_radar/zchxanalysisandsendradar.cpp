@@ -123,6 +123,7 @@ ZCHXAnalysisAndSendRadar::ZCHXAnalysisAndSendRadar(int id, QObject *parent)
     qRegisterMetaType<zchxRadarRectDefList>("const zchxRadarRectDefList&");
     qRegisterMetaType<zchxRadarRectMap>("const zchxRadarRectMap&");
     qRegisterMetaType<QMap<int,QList<TrackNode>>>("QMap<int,QList<TrackNode>>");
+    qRegisterMetaType<zchxRadarRouteNodes>("const zchxRadarRouteNodes&");
 
     InitializeLookupData();
 
@@ -177,6 +178,8 @@ ZCHXAnalysisAndSendRadar::ZCHXAnalysisAndSendRadar(int id, QObject *parent)
             this, SLOT(slotSendComTracks(zchxRadarSurfaceTrack)));
     connect(m_targetTrack, SIGNAL(signalSendRectData(zchxRadarRectMap)),
             this, SLOT(sendRadarRectPixmap(zchxRadarRectMap)));
+    connect(m_targetTrack, SIGNAL(signalSendRoutePath(zchxRadarRouteNodes)),
+            this, SLOT(sendRadarNodeRoute(zchxRadarRouteNodes)));
     m_VideoProcessor->start();
     if(process_sync)
     {
@@ -932,7 +935,7 @@ void ZCHXAnalysisAndSendRadar::analysisLowranceRadarSlot(const QByteArray &sRada
             if(m_VideoProcessor) m_VideoProcessor->setRadarSpr(msec / 1000.0);
             //一个扫描周期完成
 //            cout<<"一个扫描周期完成angle_raw"<<angle_raw<<" data size:"<<m_radarVideoMap.size();
-//            qDebug()<<"cycle data end:"<<QDateTime::currentDateTime().toString("hh:mm:ss zzz");
+            qDebug()<<"cycle data end:"<<QDateTime::currentDateTime().toString("hh:mm:ss zzz")<<msec;
             processVideoData(true);
             m_radarVideoMap.clear();
             mStartAzimuth = -1;
@@ -1058,6 +1061,18 @@ void ZCHXAnalysisAndSendRadar::sendRadarRectPixmap(const zchxRadarRectMap& map)
 //    totalData.resize(totalRadar_Rects.ByteSize());
 //    totalRadar_Rects.SerializeToArray(totalData.data(),totalData.size());
 //    mRadarRectPubThred->slotRecvContents(totalData);
+}
+
+//zmq发送雷达回波矩形图片
+void ZCHXAnalysisAndSendRadar::sendRadarNodeRoute(const zchxRadarRouteNodes& list)
+{
+    if((!mRadarOutMgr) || list.nodes_size() == 0) return;
+
+    zchxRadarRouteNodes* nodes = new zchxRadarRouteNodes(list);
+    qDebug()<<"send data node size:"<<list.nodes_size();
+    //通过zmq发送
+    mRadarOutMgr->appendData(zchxRadarUtils::protoBufMsg2ByteArray(nodes), "RadarRoute", mRadarTrackPort);
+    delete nodes;
 }
 
 

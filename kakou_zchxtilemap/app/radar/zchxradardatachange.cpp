@@ -1,4 +1,4 @@
-#include "ZCHXRadarDataChange.h"
+﻿#include "ZCHXRadarDataChange.h"
 #include "zchxradarrectthread.h"
 #include "zchxradarpointthread.h"
 #include "zchxradarechothread.h"
@@ -88,6 +88,8 @@ void ZCHXRadarDataChange::appendRadarPoint(const ZCHX_Radar_Setting_Param &param
     connect(thread, SIGNAL(signalConnectedStatus(bool, QString)), this, SIGNAL(sendConnectionStatus(bool, QString)));
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     connect(thread, SIGNAL(sendMsg(int,QList<ZCHX::Data::ITF_RadarPoint>)), this, SIGNAL(sendRadarPoint(int,QList<ZCHX::Data::ITF_RadarPoint>)));
+    connect(thread, SIGNAL(sendMsg(QList<ZCHX::Data::ITF_RadarRouteNode>)),
+            this, SIGNAL(sendRadarRoute(QList<ZCHX::Data::ITF_RadarRouteNode>)));
     mThreadList.append(thread);
     thread->start();
     mRadarPointList.append(param);

@@ -1,4 +1,4 @@
-#include "zchxradarrectthread.h"
+﻿#include "zchxradarrectthread.h"
 #include <QDebug>
 #include <QFile>
 #include "qt/zchxMapDatautils.h"
@@ -248,18 +248,16 @@ void ZCHXRadarRectThread::convertZMQ2ZCHX(QList<ZCHX::Data::ITF_RadarRect> &res,
         rect.current.isRealData = obj.currentrect().realdata();
 
         //添加预推区域
-        for(int k=0; k<obj.currentrect().predictionareas_size(); k++)
+        if(obj.currentrect().has_predictionareas())
         {
-            com::zhichenhaixin::proto::predictionArea area = obj.currentrect().predictionareas(k);
-            ZCHX::Data::ITF_SingleVideoBlockList list;
+            com::zhichenhaixin::proto::predictionArea area(obj.currentrect().predictionareas());
             for(int m =0; m<area.area_size(); m++)
             {
                 ZCHX::Data::ITF_SingleVideoBlock block;
                 block.latitude = area.area(m).latitude();
                 block.longitude = area.area(m).longitude();
-                list.append(block);
+                rect.current.predictionArea.append(block);
             }
-            rect.current.predictionAreas.append(list);
         }
 
         for (int j = 0; j < obj.currentrect().blocks_size(); j++)
@@ -312,18 +310,16 @@ void ZCHXRadarRectThread::convertZMQ2ZCHX(QList<ZCHX::Data::ITF_RadarRect> &res,
                 hisRect.pixPoints.append(QPoint(pnt.x(), pnt.y()));
             }
 
-            for(int k=0; k<historyObj.predictionareas_size(); k++)
+            if(historyObj.has_predictionareas())
             {
-                com::zhichenhaixin::proto::predictionArea area = historyObj.predictionareas(k);
-                ZCHX::Data::ITF_SingleVideoBlockList list;
+                com::zhichenhaixin::proto::predictionArea area(historyObj.predictionareas());
                 for(int m =0; m<area.area_size(); m++)
                 {
                     ZCHX::Data::ITF_SingleVideoBlock block;
                     block.latitude = area.area(m).latitude();
                     block.longitude = area.area(m).longitude();
-                    list.append(block);
+                    hisRect.predictionArea.append(block);
                 }
-                hisRect.predictionAreas.append(list);
             }
 
             rect.rects.append(hisRect);

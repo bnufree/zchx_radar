@@ -1,4 +1,4 @@
-#ifndef ZCHXRADARVIDEODATACHANGE_H
+﻿#ifndef ZCHXRADARVIDEODATACHANGE_H
 #define ZCHXRADARVIDEODATACHANGE_H
 #include <QObject>
 #include "zchxradarutils.h"
@@ -29,6 +29,7 @@ signals:
     void sendConnectionStatus(bool sts, const QString& msg);
     void sendRadarRect(int id, const QList<ZCHX::Data::ITF_RadarRect>&);
     void sendRadarPoint(int id, const QList<ZCHX::Data::ITF_RadarPoint>&);
+    void sendRadarRoute(const QList<ZCHX::Data::ITF_RadarRouteNode>&);
     void sendAisDataList(const QList<ZCHX::Data::ITF_AIS>&);
     void sendAisChart(const ZCHX::Data::ITF_AIS_Chart& data);
     void sendLimitDataList(const QList<ZCHX::Data::ITF_IslandLine>&);

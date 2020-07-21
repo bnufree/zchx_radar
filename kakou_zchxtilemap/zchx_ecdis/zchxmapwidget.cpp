@@ -60,7 +60,7 @@ zchxMapWidget::zchxMapWidget(zchxDataMgrFactory *dataMgrFactory, QWidget *parent
     //
     //创建数据管理容器
     m_dataMgrFactory->setDisplayWidget(this);
-    for(int i= ZCHX::DATA_MGR_UNKNOWN + 1; i< ZCHX::DATA_MGR_USER_DEFINE; i = i<<1)
+    for(int i= ZCHX::DATA_MGR_UNKNOWN + 1; i< ZCHX::DATA_MGR_USER_DEFINE; i++)
     {
         m_dataMgrFactory->createManager(i);
     }
@@ -131,6 +131,7 @@ void zchxMapWidget::paintEvent(QPaintEvent *e)
 
     //显示图元
     foreach (std::shared_ptr<zchxEcdisDataMgr> mgr, m_dataMgrFactory->getManagers()) {
+//        qDebug()<<"mgr type:"<<mgr->getType()<<mgr->metaObject()->className();
         mgr->show(&painter);
     }
     m_mapLayerMgr->show(&painter);
