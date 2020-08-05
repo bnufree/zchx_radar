@@ -1,0 +1,156 @@
+///**************************************************************************
+//* @Project : cdzchx_radar
+//* @IDL Module: ZCHXRadar
+//* @File: ZCHXRadar.proto
+//* @Description:
+//*    雷达asterix欧标标准格式;
+//*
+//* @Copyright: Copyright (c) 2014
+//* @Company: 深圳置辰海信科技有限公司
+//* @WebSite: http://www.szcenterstar.com/
+//* @author 
+//*
+//* @Revision History
+//*
+//* <pre>
+//* ----------------------------------------------------------------------
+//*   Ver     Date       Who             Comments
+//*  ----- ----------  --------  ---------------------------------------
+//*   1.0  2015/11/23     李鹭         形成初稿
+//*   1.1  2017/05/08     何江         增加会遇 历史 防区预警ID
+//*   1.2  2019/07/01     陈思颐       添加矩形回波结构体
+//*   1.3  2019/09/23     陈思颐       RadarRect增加雷达目标大小（矩形块的对角线的距离） 单位：米
+//*   1.4  2019/11/01     陈思颐       RadarRect增加对应雷达回波块所有点集(经纬度) 
+//*   1.5  2019/11/05     陈思颐       RadarRect增加对应雷达回波块最长线段角度,和起始点的经纬度 
+//* ----------------------------------------------------------------------
+//* </pre>
+//**************************************************************************/
+
+
+//package com.zhichenhaixin.proto;
+package com.zhichenhaixin.proto;
+    
+	//单个回波块单点坐标
+	message singleVideoBlock
+	{
+		required double latitude = 1;			        // 纬度
+    	required double longitude = 2;			        // 经度
+	}
+	
+	message pixelPoint
+	{
+		required uint32 x = 1;
+		required uint32 y = 2;
+	}
+	
+	message fixRectPixelImg
+	{
+		required uint32 width = 1;
+		required uint32	height = 2;
+		repeated pixelPoint points = 3;
+	}
+	message predictionArea
+	{
+		repeated singleVideoBlock area = 1;						//预推区域
+	}
+	//矩形回波块位置信息
+	message RadarRectDef
+	{ 
+		required uint32 rectNumber = 1;							// 单个矩形回波块编号
+		required double topLeftlatitude = 2;			        // 回波块左上点纬度
+    	required double topLeftlongitude = 3;			        // 回波块左上点经度
+		required double bottomRightlatitude = 4;			    // 回波块右下点纬度
+    	required double bottomRightlongitude = 5;			    // 回波块右下点经度
+		required double centerlatitude = 6;			    		// 回波块中心点纬度
+    	required double centerlongitude = 7;			  	    // 回波块中心点经度
+		required uint32 updateTime = 8;						    // 当日时间
+		optional int32 diameter = 9;     						// 雷达目标大小（矩形块的对角线的距离） 单位：米
+		repeated singleVideoBlock Blocks = 10;					// 回波块点集
+		optional double startlatitude = 11;			  	    	// 回波块内最长线段起点纬度
+		optional double startlongitude = 12;			  	    // 回波块内最长线段起点经度
+		optional double endlatitude = 13;			  	    	// 回波块内最长线段终点纬度
+		optional double endlongitude = 14;			  	    	// 回波块内最长线段终点经度
+		optional double angle = 15;			  	    			// 回波块内最长线段角度
+		required double sog = 16;								//矩形块速度
+		required double cog = 17;								//矩形块方向
+		repeated pixelPoint pixelPnts = 18;						//固定大小的矩形外框图形
+		required bool  realData = 19;							//当前目标的状态,是预推的(false) 还是实际的(true)
+		optional predictionArea predictionAreas = 20;			//目标下一个阶段的预推区域,暂定预推时间是10s
+	}
+	
+	//路由路径
+	message RoutePath
+	{
+		repeated RadarRectDef path = 1;								//一条路由路径
+	}
+	
+	message RouteNode
+	{
+		required int32		  node_num = 1;
+		required RadarRectDef top_node = 2;
+		repeated RoutePath	  path_list = 3;
+	}
+	
+	message RouteNodes
+	{
+		repeated RouteNode	node_list = 1; 
+	}
+	
+	
+	
+	
+	//矩形回波块位置信息
+	message RadarRect
+	{
+		required RadarRectDef current_rect = 1;							// 单个矩形回波块编号
+		repeated RadarRectDef history_rect_list = 2;			        // 单个矩形回波块的历史轨迹单点数据
+		required bool		  dir_confirmed = 3;					//目标方向是否已经确认
+		required uint32		  cur_est_count = 4;						//目标方向确认后目标位置预推的次数.主要是目标没有更新后,先推测数据,超出设定限制,认为目标已经消失
+		required int32		  node_num = 5;
+	}
+	//矩形回波块集合
+	message RadarRects 
+	{ 
+        required uint64 UTC  = 1;                   // 时间标记  
+        required int32 length = 2;                  // 消息个数 
+        repeated RadarRect rect_list = 3;          // 矩形回波块位置信息
+    }
+	
+	//----------------------------------------------------------------------------------------------------------
+    // 雷达视频  回波图片余辉图片及位置信息
+    //----------------------------------------------------------------------------------------------------------
+	message RadarVideo
+	{
+		required uint64 radarId = 1;                    // 雷达站ID
+        required string radarName = 2;                  // 雷达站名称
+        required double latitude = 3;			        // 雷达站 WGS84坐标计算纬度 I010/041
+    	required double longitude = 4;			        // 雷达站 WGS84坐标计算经度 I010/041
+        required uint64 UTC = 5;                        // 时间标记  
+        required bytes imageData  = 6;                 // 回波图像数据
+        required bytes curImageData  = 7;                 // 余辉图像数据
+        required bytes preImageData  = 8;              // 前一张去色图像数据
+        required uint32 width = 9;                      // 图像宽度
+        required uint32 height = 10;                     // 图像高度
+        required double radius = 11;			            //半径
+        required uint32 curIndex = 12;                     // 当前显示索引
+        required uint32 loopNum = 13;                     // 余辉循环数
+	}
+	
+        //----------------------------------------------------------------------------------------------------------
+    // 雷达视频  回波振幅数据位置信息
+    //----------------------------------------------------------------------------------------------------------
+        message RadarVideoPoint
+        {
+
+        required string radarName = 2;                  // 雷达站名称
+        required double latitude = 3;			        // 雷达站 WGS84坐标计算纬度 I010/041
+        required double longitude = 4;			        // 雷达站 WGS84坐标计算经度 I010/041
+        required uint64 UTC = 5;                        // 时间标记
+        required bytes imageData  = 6;                 // 图像数据
+                required bytes preImageData  = 7;              // 前一张去色图像数据
+        required uint32 width = 8;                      // 图像宽度
+        required uint32 height = 9;                     // 图像高度
+                required double radius = 10;			            //半径
+                required uint32 curIndex = 11;                     // 当前显示索引
+                required uint32 loopNum = 12;                     // 余辉循环数
+        }

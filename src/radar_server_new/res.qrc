@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/image">
+        <file>app.png</file>
+        <file>increase.png</file>
+        <file>decrease.png</file>
+        <file>1.png</file>
+        <file>2.png</file>
+        <file>3.png</file>
+        <file>4.png</file>
+        <file>5.png</file>
+    </qresource>
+</RCC>

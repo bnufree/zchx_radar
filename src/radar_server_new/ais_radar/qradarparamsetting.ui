@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QRadarParamSetting</class>
+ <widget class="QWidget" name="QRadarParamSetting">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>780</width>
+    <height>290</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="NetSetting">
+     <property name="title">
+      <string>接收参数设定</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>目标IP</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="4">
+       <widget class="QLabel" name="label_24">
+        <property name="text">
+         <string>心跳间隔（秒）</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_23">
+        <property name="text">
+         <string>心跳IP</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="5">
+       <widget class="QSpinBox" name="heartTimeSpinBox"/>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>目标端口</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <widget class="QComboBox" name="trackTypeComboBox">
+        <item>
+         <property name="text">
+          <string>cat010</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QSpinBox" name="videoRecPortSpinBox">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="maximum">
+         <number>999999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="trackRecIPLlineEdit"/>
+      </item>
+      <item row="0" column="4">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>目标类型</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>回波IP</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QSpinBox" name="trackRecPortSpinBox">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="maximum">
+         <number>999999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="videoRecIPLlineEdit"/>
+      </item>
+      <item row="1" column="5">
+       <widget class="QComboBox" name="videoTypeComboBox">
+        <item>
+         <property name="text">
+          <string>cat240</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>zchx240</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>回波类型</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>回波端口</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="controlIPLineEdit"/>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="heartIPLlineEdit"/>
+      </item>
+      <item row="4" column="2">
+       <widget class="QLabel" name="label_22">
+        <property name="text">
+         <string>心跳端口</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3">
+       <widget class="QSpinBox" name="heartPortSpinBox">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="maximum">
+         <number>999999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>状态端口</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>状态IP</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QSpinBox" name="controlPortSpinBox">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="maximum">
+         <number>99999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="4" colspan="2">
+       <widget class="QCheckBox" name="statusCheckBox">
+        <property name="text">
+         <string>开启状态接收控制</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="AnalysisSetting">
+     <property name="title">
+      <string>雷达数据分析参数</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_15">
+        <property name="text">
+         <string>扇区</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QSpinBox" name="cellNumSpinBox">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="maximum">
+         <number>9999999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="6">
+       <widget class="QLabel" name="label_65">
+        <property name="text">
+         <string>目标清理(秒)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="7">
+       <widget class="QSpinBox" name="trackClearTimeSpinBox">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>99999</number>
+        </property>
+        <property name="value">
+         <number>60</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLabel" name="label_17">
+        <property name="text">
+         <string>航向</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_14">
+        <property name="text">
+         <string>采样点</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <widget class="QSpinBox" name="loopNumSpinBox">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="maximum">
+         <number>9999999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_13">
+        <property name="text">
+         <string>雷达中心纬度</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="centreLatDSpinBox">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="decimals">
+         <number>6</number>
+        </property>
+        <property name="minimum">
+         <double>-180.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>180.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
+       <widget class="QSpinBox" name="headingSpinBox">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="maximum">
+         <number>9999999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>余辉循环</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QSpinBox" name="lineNumSpinBox">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="maximum">
+         <number>9999999</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="7">
+       <widget class="QDoubleSpinBox" name="distanceDSpinBox">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="maximum">
+         <double>99999.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>雷达中心经度</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QDoubleSpinBox" name="centreLonDSpinBox">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="decimals">
+         <number>6</number>
+        </property>
+        <property name="minimum">
+         <double>-180.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>180.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="6">
+       <widget class="QLabel" name="label_63">
+        <property name="text">
+         <string>范围</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="8">
+       <widget class="QLabel" name="label_18">
+        <property name="text">
+         <string>雷达类型</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="9">
+       <widget class="QComboBox" name="RadarTypeComboBox">
+        <item>
+         <property name="text">
+          <string>6G</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>4G</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="5" column="7">
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>选择</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="8">
+       <widget class="QLabel" name="label_64">
+        <property name="text">
+         <string>启动遮蔽</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="9">
+       <widget class="QCheckBox" name="limitCBox">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="8">
+       <widget class="QLabel" name="label_66">
+        <property name="text">
+         <string>打印第三方库</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="9">
+       <widget class="QCheckBox" name="limitCBox_2">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="8">
+       <widget class="QLabel" name="radar_num_label_2">
+        <property name="text">
+         <string>接入GPS数据</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="9">
+       <widget class="QCheckBox" name="gps_checkBox">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_19">
+        <property name="text">
+         <string>距离因子</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QDoubleSpinBox" name="range_factor">
+        <property name="decimals">
+         <number>1</number>
+        </property>
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="value">
+         <double>13.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="7">
+       <widget class="QPushButton" name="radar_num_pushButton">
+        <property name="text">
+         <string>修改</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="6">
+       <widget class="QLineEdit" name="radar_num_lineEdit"/>
+      </item>
+      <item row="2" column="5">
+       <widget class="QLabel" name="radar_num_label">
+        <property name="text">
+         <string>设备编号</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2" colspan="3">
+       <widget class="QLabel" name="realRangefactor">
+        <property name="minimumSize">
+         <size>
+          <width>20</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>实时数据参考值</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="QLabel" name="label_25">
+        <property name="text">
+         <string>遮蔽区域</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="3" colspan="4">
+       <widget class="QLineEdit" name="limitfile_lineEdit"/>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_20">
+        <property name="text">
+         <string>原始回波端口</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QSpinBox" name="tcpPort">
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="maximum">
+         <number>9999999</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+     <zorder>lineNumSpinBox</zorder>
+     <zorder>label_13</zorder>
+     <zorder>distanceDSpinBox</zorder>
+     <zorder>centreLonDSpinBox</zorder>
+     <zorder>label_17</zorder>
+     <zorder>label_15</zorder>
+     <zorder>cellNumSpinBox</zorder>
+     <zorder>trackClearTimeSpinBox</zorder>
+     <zorder>headingSpinBox</zorder>
+     <zorder>loopNumSpinBox</zorder>
+     <zorder>label_65</zorder>
+     <zorder>label_12</zorder>
+     <zorder>label_63</zorder>
+     <zorder>label_16</zorder>
+     <zorder>centreLatDSpinBox</zorder>
+     <zorder>limitfile_lineEdit</zorder>
+     <zorder>label_14</zorder>
+     <zorder>label_18</zorder>
+     <zorder>RadarTypeComboBox</zorder>
+     <zorder>pushButton</zorder>
+     <zorder>label_64</zorder>
+     <zorder>limitCBox</zorder>
+     <zorder>label_66</zorder>
+     <zorder>limitCBox_2</zorder>
+     <zorder>radar_num_label_2</zorder>
+     <zorder>gps_checkBox</zorder>
+     <zorder>label_19</zorder>
+     <zorder>range_factor</zorder>
+     <zorder>realRangefactor</zorder>
+     <zorder>radar_num_lineEdit</zorder>
+     <zorder>radar_num_pushButton</zorder>
+     <zorder>radar_num_label</zorder>
+     <zorder>label_25</zorder>
+     <zorder>label_20</zorder>
+     <zorder>tcpPort</zorder>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
