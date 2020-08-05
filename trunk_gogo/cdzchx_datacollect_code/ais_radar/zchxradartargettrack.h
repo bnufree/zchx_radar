@@ -1,4 +1,4 @@
-#ifndef ZCHXRADARTARGETTRACK_H
+﻿#ifndef ZCHXRADARTARGETTRACK_H
 #define ZCHXRADARTARGETTRACK_H
 
 #include <QThread>
@@ -22,12 +22,20 @@ struct TargetNode;
 struct TargetNode
 {
 public:
+    enum TargetStatus{
+        TARGET_POINT = 0,
+        TARGET_MOVING,
+        TARGET_LOST,
+    };
+
     bool                                        cog_confirmed;
     int                                         not_move_cnt;
     int                                         est_count;
     quint32                                      update_time;
-    zchxRadarRectDef                            *rect;
-    QList<QSharedPointer<TargetNode>>           children;
+    zchxRadarRectDef                            *rect;    
+    TargetStatus                                 status;
+    QList<QSharedPointer<TargetNode>>           children;           //孩子
+    TargetNode*                                  parent;             //父亲
 
     TargetNode()
     {
@@ -37,8 +45,10 @@ public:
         est_count = 0;
         update_time = QDateTime::currentDateTime().toTime_t();
         not_move_cnt = 0;
+        parent = 0;
+        status = TARGET_POINT;
     }
-    TargetNode(const zchxRadarRectDef& other)
+    TargetNode(const zchxRadarRectDef& other, TargetNode* parentNode = 0)
     {
         cog_confirmed = false;
         rect = new zchxRadarRectDef;
@@ -47,6 +57,17 @@ public:
         est_count = 0;
         update_time = rect->updatetime();
         not_move_cnt = 0;
+        parent = parentNode;
+        status = TARGET_POINT;
+        if(parentNode)
+        {
+            status = parent->status;
+        }
+    }
+
+    void setStatus(TargetStatus sts)
+    {
+        status = sts;
     }
 
     ~TargetNode()
@@ -91,7 +112,7 @@ public:
 
     bool isMotionlessObj() const
     {
-        return (not_move_cnt >= 3) && (!hasChildren());
+        return ((not_move_cnt >= 3) && (!hasChildren())) || (status == TARGET_POINT);
     }
 
     void motionlessMore()
@@ -104,15 +125,104 @@ public:
     {
         not_move_cnt = 0;
     }
+
+    double getReferenceSog(bool average = true)
+    {
+        if(!rect) return 0.0;
+        double sum = rect->sog();
+        if(!average) return sum;
+        int num = 1;
+        TargetNode* pre = parent;
+        while (pre) {
+            if(pre->rect)
+            {
+                sum += pre->rect->sog();
+            }
+            num++;
+            if(num == 5) break;
+            pre = pre->parent;
+        }
+
+        return sum / num;
+    }
+
+    double getReferenceCog(bool average = true)
+    {
+        if(!rect) return 0.0;
+        double sum = rect->cog();
+        if(!average) return sum;
+        int num = 1;
+        TargetNode* pre = parent;
+        while (pre) {
+            if(pre->rect)
+            {
+                sum += pre->rect->cog();
+            }
+            num++;
+            if(num == 5) break;
+            pre = pre->parent;
+        }
+
+        return sum / num;
+    }
+
+    void updateRectNum(int rect_num)
+    {
+        if(rect && rect->rectnumber() != rect_num) rect->set_rectnumber(rect_num);
+    }
+
+    void setAllNodeRectNum(int rect_num)
+    {
+        updateRectNum(rect_num);
+        for(int i=0; i<children.size();i++)
+        {
+            TargetNode* child = children[i].data();
+            while (child) {
+                updateRectNum(rect_num);
+                if(child->children.size() == 0) break;
+                child = child->children.first().data();
+            }
+        }
+    }
+
+    void updateRouteNodePathStatus(TargetStatus sts)
+    {
+        if(this->children.size() >= 2) return;
+        TargetNode *node = this;
+        while (node) {
+            if(node->status != sts) node->status = sts;
+            if(node->children.size() == 0) break;
+            node = node->children.first().data();
+        }
+    }
 };
 
 typedef QMap<int, QSharedPointer<TargetNode> >      TargetNodeMap;
+
+//将预推区域和目标进行关联
+struct PredictionNode{
+    zchxTargetPrediction        *mPrediction;
+    TargetNode*                 mNode;
+};
+
+struct AreaNodeTable{
+    QPolygonF           mArea;
+    QList<TargetNode*>  mNodeList;
+    zchxRadarRectDefList        mRectList;          //落入这个区域的所有目标
+};
 
 
 class zchxRadarTargetTrack : public QThread
 {
     Q_OBJECT
 public:
+    enum        TargetTrackModel{
+        Model_None = 0,
+        Model_Cross,
+        Model_Metting,
+        Model_Overtake,
+    };
+
     explicit    zchxRadarTargetTrack(int id, const Latlon& ll, int clear_time, double predictionWidth, bool route, QObject *parent = 0);
     void        setDirectionInvertVal(double val) {mDirectionInvertThresholdVal = val;}
     void        setTargetMergeDis(double val){mTargetMergeDis = val;}
@@ -122,16 +232,20 @@ public slots:
     void        appendTask(const zchxRadarRectDefList& task);
     void        process(const zchxRadarTrackTask& task);
     void        processWithPossibleRoute(const zchxRadarTrackTask& task);
+//    void        processWithPossibleRoute2(const zchxRadarTrackTask& task);
     void        processWithoutRoute(const zchxRadarTrackTask& task);
 protected:
     void     run();
 private:
+    QList<AreaNodeTable>  calculateTargetTrackMode(double max_speed, quint32 now, double scan_time);
+    TargetNode::TargetStatus        checkRoutePathSts(QList<TargetNode*> path);
     void        splitAllRoutesIntoTargets(TargetNode* node, TargetNode* routeNode);
     void        updateConfirmedRoute(TargetNode* node, zchxRadarRectDefList& left_list);
     void        updateDetermineRoute(TargetNode* node, zchxRadarRectDefList& left_list);
     TargetNode*        checkNodeConfirmed(TargetNode* node);
     void        deleteExpiredNode();
     void        outputTargets();
+    void        outputRoutePath();
     void        updateTrackPointWithNode(zchxRadarSurfaceTrack& list, TargetNode* node);
     void        updateRectMapWithNode(zchxRadarRectMap& map, TargetNode* node);
 
@@ -159,6 +273,7 @@ private:
 signals:
     void        signalSendTracks(const zchxRadarSurfaceTrack& track);
     void        signalSendRectData(const zchxRadarRectMap& map);
+    void        signalSendRoutePath(const zchxRadarRouteNodes& list);
 public slots:
 
 private:
