@@ -1,4 +1,4 @@
-#include "zchxradarvideoprocessor.h"
+﻿#include "zchxradarvideoprocessor.h"
 //#include <QDebug>
 #include <math.h>
 #include <QMutex>
@@ -224,9 +224,9 @@ void ZCHXRadarVideoProcessor::process(const ZCHXRadarVideoProcessorData& task)
 #if 1
     for(int i=0; i<task.size(); i++)
     {
-        qDebug()<<"task time:"<<task[i].m_TimeStamp;
+        qDebug()<<"task time:"<<task[i].m_IndexT;
     }
-    qDebug()<<"data time:"<<task[0].m_TimeStamp<<task.size();
+    qDebug()<<"data time:"<<task[0].m_IndexT<<task.size();
 #endif
     for(int i=1; i<task.size(); i++)
     {

@@ -1,4 +1,4 @@
-#ifndef ZCHXDATAOUTPUTSERVERMGR_H
+﻿#ifndef ZCHXDATAOUTPUTSERVERMGR_H
 #define ZCHXDATAOUTPUTSERVERMGR_H
 
 #include <QObject>
@@ -19,10 +19,12 @@ public:
 private:
     zchxDataOutputServerThread* getThread(int port);
 
-signals:
+signals:    
+    void signalSendPortStartStatus(int port,  int sts,  const QString& topic);
 
 private:
     QMap<int, zchxDataOutputServerThread*>          mThreadList;
+    QMap<int, QStringList>                          mPortTopicList;
     void*                                           mCtx;
 };
 

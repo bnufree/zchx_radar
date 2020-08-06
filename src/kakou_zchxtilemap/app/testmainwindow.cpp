@@ -175,14 +175,18 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
     m_pEcdisWin->itfSetRadarLabelVisible(true);
 #endif
     //数据接入
+    QMenu *dataMenu = ui->menuBar->addMenu(QStringLiteral("数据接收状态"));
     mDataChange = new ZCHX_RADAR_RECEIVER::ZCHXRadarDataChange(this);
-    connect(mDataChange, &ZCHX_RADAR_RECEIVER::ZCHXRadarDataChange::sendConnectionStatus, this, [=](bool sts, const QString& error)
+    connect(mDataChange, &ZCHX_RADAR_RECEIVER::ZCHXRadarDataChange::sendConnectionStatus, this, [=](bool sts, const QString& url, const QString& topic)
     {
-        QString msg = QString("connect to server status:%1 --- %2 --- %3")
-                .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"))
-                .arg(sts)
-                .arg(error);
-        this->statusBar()->showMessage(msg);
+        static QMap<QString, QString> dataStasMap;
+        QString result = QString("URL:%1 Status:%2  Topic:%3").arg(url).arg(sts == true? "ON" : "OFF").arg(topic);
+        qDebug()<<"url:"<<url;
+        dataStasMap[url] = result;
+        dataMenu->clear();
+        foreach (QString val, dataStasMap.values()) {
+            dataMenu->addAction(new QAction(val, this));
+        }
     });
     connect(mDataChange, &ZCHX_RADAR_RECEIVER::ZCHXRadarDataChange::sendRadarRect, this,
             [=](int site, const QList<ZCHX::Data::ITF_RadarRect>& list){

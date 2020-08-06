@@ -128,7 +128,8 @@ struct zchxRadarVideoTask
     QMap<int,RADAR_VIDEO_DATA>  m_RadarVideo;
     bool                        m_Rotate;
     double                      m_Range;
-    quint64                     m_TimeStamp;
+//    quint64                     m_TimeStamp;
+    int                         m_IndexT;
 };
 typedef QList<zchxRadarVideoTask>   zchxRadarVideoTaskList;
 

@@ -26,7 +26,7 @@ public slots:
     void slotSetThreadStatus(int type, bool isOn);
 signals:
     void signalRecvDataNow(int type,  int length);
-    void sendConnectionStatus(bool sts, const QString& msg);
+    void sendConnectionStatus(bool sts, const QString& msg, const QString& topic);
     void sendRadarRect(int id, const QList<ZCHX::Data::ITF_RadarRect>&);
     void sendRadarPoint(int id, const QList<ZCHX::Data::ITF_RadarPoint>&);
     void sendRadarRoute(const QList<ZCHX::Data::ITF_RadarRouteNode>&);

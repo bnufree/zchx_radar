@@ -27,9 +27,8 @@ enum NodeStatus{
 struct TargetNode
 {
 public:
-
     int                                         mSerialNum;
-    NodeStatus                                         mStatus;
+    NodeStatus                                  mStatus;
     int                                         mUpdateTime;        //目标最新的更新时间
     zchxRadarRectDef                            *mDefRect;
     QList<QSharedPointer<TargetNode>>           mChildren;           //孩子

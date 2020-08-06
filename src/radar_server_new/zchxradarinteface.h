@@ -73,6 +73,7 @@ signals:
     void signalSendComVideo(QList<TrackNode>);
     void signalSetPix(QPixmap);
     void signalRestart();
+    void signalSendPortStartStatus(int,int,QString);
 protected:
     void closeEvent(QCloseEvent *);
 private:

@@ -33,7 +33,7 @@ void ZCHXRadarDataChange::appendRadarVideo(const ZCHX_Radar_Setting_Param &param
     ZCHXRadarEchoThread* thread = new ZCHXRadarEchoThread(param);
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     connect(thread, SIGNAL(signalRecvDataNow(int,int)), this, SIGNAL(signalRecvDataNow(int,int)));
-    connect(thread, SIGNAL(signalConnectedStatus(bool, QString)), this, SIGNAL(sendConnectionStatus(bool, QString)));
+    connect(thread, SIGNAL(signalConnectedStatus(bool, QString, QString)), this, SIGNAL(sendConnectionStatus(bool, QString, QString)));
     connect(thread, SIGNAL(sendMsg(int,double,double,double,int,int,int,QByteArray,QByteArray))
             , this, SIGNAL(sendRadarVideo(int,double,double,double,int,int,int,QByteArray,QByteArray)));
     mThreadList.append(thread);
@@ -46,7 +46,7 @@ void ZCHXRadarDataChange::appendAis(const ZCHX_Radar_Setting_Param &param)
     if(mAisList.contains(param)) return;
     ZCHXAisThread* thread = new ZCHXAisThread(param);
     connect(thread, SIGNAL(signalRecvDataNow(int,int)), this, SIGNAL(signalRecvDataNow(int,int)));
-    connect(thread, SIGNAL(signalConnectedStatus(bool, QString)), this, SIGNAL(sendConnectionStatus(bool, QString)));
+    connect(thread, SIGNAL(signalConnectedStatus(bool, QString, QString)), this, SIGNAL(sendConnectionStatus(bool, QString, QString)));
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     connect(thread, SIGNAL(sendMsg(QList<ZCHX::Data::ITF_AIS>)), this, SIGNAL(sendAisDataList(QList<ZCHX::Data::ITF_AIS>)));
     mThreadList.append(thread);
@@ -59,7 +59,7 @@ void ZCHXRadarDataChange::appendAisChart(const ZCHX_Radar_Setting_Param &param)
     if(mAisChartList.contains(param)) return;
     ZCHXAisChartThread* thread = new ZCHXAisChartThread(param);
     connect(thread, SIGNAL(signalRecvDataNow(int,int)), this, SIGNAL(signalRecvDataNow(int,int)));
-    connect(thread, SIGNAL(signalConnectedStatus(bool, QString)), this, SIGNAL(sendConnectionStatus(bool, QString)));
+    connect(thread, SIGNAL(signalConnectedStatus(bool, QString, QString)), this, SIGNAL(sendConnectionStatus(bool, QString, QString)));
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     connect(thread, SIGNAL(sendMsg(ZCHX::Data::ITF_AIS_Chart)), this, SIGNAL(sendAisChart(ZCHX::Data::ITF_AIS_Chart)));
     mThreadList.append(thread);
@@ -72,7 +72,7 @@ void ZCHXRadarDataChange::appendLimit(const ZCHX_Radar_Setting_Param &param)
     if(mLimitList.contains(param)) return;
     zchxRadarLimitAreaThread* thread = new zchxRadarLimitAreaThread(param);
     connect(thread, SIGNAL(signalRecvDataNow(int,int)), this, SIGNAL(signalRecvDataNow(int,int)));
-    connect(thread, SIGNAL(signalConnectedStatus(bool, QString)), this, SIGNAL(sendConnectionStatus(bool, QString)));
+    connect(thread, SIGNAL(signalConnectedStatus(bool, QString, QString)), this, SIGNAL(sendConnectionStatus(bool, QString, QString)));
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     connect(thread, SIGNAL(sendMsg(QList<ZCHX::Data::ITF_IslandLine>)), this, SIGNAL(sendLimitDataList(QList<ZCHX::Data::ITF_IslandLine>)));
     mThreadList.append(thread);
@@ -85,7 +85,7 @@ void ZCHXRadarDataChange::appendRadarPoint(const ZCHX_Radar_Setting_Param &param
     if(mRadarPointList.contains(param)) return;
     ZCHXRadarPointThread* thread = new ZCHXRadarPointThread(param);
     connect(thread, SIGNAL(signalRecvDataNow(int,int)), this, SIGNAL(signalRecvDataNow(int,int)));
-    connect(thread, SIGNAL(signalConnectedStatus(bool, QString)), this, SIGNAL(sendConnectionStatus(bool, QString)));
+    connect(thread, SIGNAL(signalConnectedStatus(bool, QString, QString)), this, SIGNAL(sendConnectionStatus(bool, QString, QString)));
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     connect(thread, SIGNAL(sendMsg(int,QList<ZCHX::Data::ITF_RadarPoint>)), this, SIGNAL(sendRadarPoint(int,QList<ZCHX::Data::ITF_RadarPoint>)));
     connect(thread, SIGNAL(sendMsg(QList<ZCHX::Data::ITF_RadarRouteNode>)),
@@ -109,7 +109,7 @@ void ZCHXRadarDataChange::appendRadarRect(const ZCHX_RadarRect_Param &param)
     if(mRadarRectList.contains(param)) return;
     ZCHXRadarRectThread* thread = new ZCHXRadarRectThread(param);
     connect(thread, SIGNAL(signalRecvDataNow(int,int)), this, SIGNAL(signalRecvDataNow(int,int)));
-    connect(thread, SIGNAL(signalConnectedStatus(bool, QString)), this, SIGNAL(sendConnectionStatus(bool, QString)));
+    connect(thread, SIGNAL(signalConnectedStatus(bool, QString, QString)), this, SIGNAL(sendConnectionStatus(bool, QString, QString)));
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     connect(thread, SIGNAL(sendVideoMsg(int, QList<ZCHX::Data::ITF_RadarRect>)), this, SIGNAL(sendRadarRect(int,QList<ZCHX::Data::ITF_RadarRect>)));
     mThreadList.append(thread);

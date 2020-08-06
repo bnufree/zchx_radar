@@ -204,6 +204,7 @@ ZCHXAnalysisAndSendRadar::ZCHXAnalysisAndSendRadar(int id, QObject *parent)
 
     //发送雷达目标的zmq
     mRadarOutMgr = new zchxRadarDataOutputMgr(this);
+    connect(mRadarOutMgr, SIGNAL(signalSendPortStartStatus(int,int,QString)), this, SIGNAL(signalSendPortStartStatus(int,int,QString)));
 
 
     connect(this, SIGNAL(analysisLowranceRadarSignal(QByteArray,int,int,int)),
@@ -1078,6 +1079,7 @@ void ZCHXAnalysisAndSendRadar::sendRadarNodeRoute(const zchxRadarRouteNodes& lis
 
 void ZCHXAnalysisAndSendRadar::processVideoData(bool rotate)
 {
+    static int indexT = 0;
     if(m_VideoProcessor == 0) return;
     if (m_radarVideoMap.isEmpty()) {
         return;
@@ -1088,7 +1090,7 @@ void ZCHXAnalysisAndSendRadar::processVideoData(bool rotate)
     task.m_RadarVideo = m_radarVideoMap;
     task.m_Range = m_dRadius;
     task.m_Rotate = rotate;
-    task.m_TimeStamp = QDateTime::currentMSecsSinceEpoch();
+    task.m_IndexT = (++indexT);
 
     m_VideoProcessor->appendSrcData(task);
 }
@@ -1098,6 +1100,7 @@ void ZCHXAnalysisAndSendRadar::slotSendComTracks(const zchxRadarSurfaceTrack& tr
 {
    if(mRadarOutMgr)
    {
+       emit signalSendRecvedContent(QDateTime::currentMSecsSinceEpoch(), "Radar Track Points", QString("data size:%1").arg(tracks.trackpoints_size()));
 //       qDebug()<<"data outto mgr send time:"<<QDateTime::currentDateTime();
        zchxRadarSurfaceTrack* track = new zchxRadarSurfaceTrack(tracks);
        mRadarOutMgr->appendData(zchxRadarUtils::protoBufMsg2ByteArray(track), mRadarTrackTopic, mRadarTrackPort);

@@ -229,6 +229,7 @@ zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     connect(mRadarDataServer, SIGNAL(analysisCatRadar(QByteArray,int,int,int,QString)),
             mAnalysisAndSendRadar, SIGNAL(analysisCatRadarSignal(QByteArray,int,int,int,QString)));
     connect(mAnalysisAndSendRadar, SIGNAL(signalSendRecvedContent(qint64,QString,QString)), this, SLOT(receiveContent(qint64,QString,QString)));
+    connect(mAnalysisAndSendRadar, SIGNAL(signalSendPortStartStatus(int,int,QString)), this, SIGNAL(signalSendPortStartStatus(int,int,QString)));
     connect(mRadarDataServer, SIGNAL(signalSendRecvedContent(qint64,QString,QString)), this, SLOT(receiveContent(qint64,QString,QString)));
     connect(mRadarDataServer, SIGNAL(signalClientInout(QString,QString,int,int)), this, SLOT(slotUpdateClientTable(QString,QString,int,int)));
     connect(mAnalysisAndSendRadar, SIGNAL(signalClientInout(QString,QString,int,int)), this, SLOT(slotUpdateClientTable(QString,QString,int,int)));
@@ -1269,3 +1270,5 @@ void zchxradarinteface::on_restart_moni_clicked()
     restart_simulate = true;
     on_logButton_3_clicked();
 }
+
+

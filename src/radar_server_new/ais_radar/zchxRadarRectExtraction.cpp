@@ -287,9 +287,9 @@ void zchxRadarRectExtraction::parseVideoPieceFromImage(QImage& result, zchxRadar
     for(int i=0; i<parseTargetList.size(); i++)
     {
         parseTarget &target = parseTargetList[i];
-#if 1
         painter.setBrush(Qt::transparent);
         painter.drawPolygon(target.mPolygons);
+#if 0
         //添加目标中心点
         painter.setBrush(Qt::yellow);
         painter.drawEllipse(target.mCenter, 2, 2);

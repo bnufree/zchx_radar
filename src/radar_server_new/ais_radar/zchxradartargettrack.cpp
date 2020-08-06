@@ -1261,7 +1261,7 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
     deleteExpiredNode();
     //现在将目标进行输出
     outputTargets();
-    outputRoutePath();
+//    outputRoutePath();
     qDebug()<<"process end now";
 #endif
 }

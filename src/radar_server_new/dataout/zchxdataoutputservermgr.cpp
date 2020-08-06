@@ -1,4 +1,4 @@
-#include "zchxdataoutputservermgr.h"
+﻿#include "zchxdataoutputservermgr.h"
 #include "zchxdataoutputserverthread.h"
 #include "zmq.h"
 #include <QTimer>
@@ -23,7 +23,15 @@ zchxDataOutputServerMgr::~zchxDataOutputServerMgr()
 void zchxDataOutputServerMgr::appendData(const QByteArray &data, const QString &topic, int port)
 {
     zchxDataOutputServerThread* thread = getThread(port);
-    if(thread) thread->slotRecvContents(data, topic);
+    if(thread)
+    {
+        thread->slotRecvContents(data, topic);
+        if(!mPortTopicList[port].contains(topic))
+        {
+            mPortTopicList[port].append(topic);
+            emit signalSendPortStartStatus(port, thread->isOK(), mPortTopicList[port].join(","));
+        }
+    }
 }
 
 zchxDataOutputServerThread* zchxDataOutputServerMgr::getThread(int port)

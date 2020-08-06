@@ -90,6 +90,9 @@ zchxMainWindow::zchxMainWindow(QWidget *parent) :
     ui->Log_menu->addAction(log);
     QAction *help = new QAction(QIcon(":/image/app.png"), "查看帮助",this);
     ui->Help_menu->addAction(help);
+//    QAction *publish = new QAction(QIcon(":/image/app.png"), "数据状态",this);
+//    connect(publish, SIGNAL(triggered(bool)), this, SLOT(slotShowDataStatus()));
+//    ui->publish_menu->addAction(publish);
 
     connect(ui->tabWidget->tabBar(),SIGNAL(tabCloseRequested(int)),this,SLOT(removeSubTab(int)));
 
@@ -105,6 +108,7 @@ zchxMainWindow::zchxMainWindow(QWidget *parent) :
     for(int i = 0; i < radarMum; i++)
     {
         zchxradarinteface *w = new zchxradarinteface(i+1);
+        connect(w, SIGNAL(signalSendPortStartStatus(int,int,QString)), this, SLOT(slotRecvPortStartStatus(int,int,QString)));
         zchxradarintefaceList.append(w);
         ui->tabWidget->addTab(w,"雷达-"+QString::number(i+1));
         connect(w, SIGNAL(signalRestart()), this, SLOT(restartMe()));
@@ -167,6 +171,11 @@ zchxMainWindow::zchxMainWindow(QWidget *parent) :
 //            qDebug()<<"point is in check area";
 //        }
 //    }
+}
+
+void zchxMainWindow::slotShowDataStatus()
+{
+    if(mDataPortSts.size() == 0) return;
 }
 
 void zchxMainWindow::initUI()
@@ -434,4 +443,15 @@ void zchxMainWindow::restartMe()
     QString workingDirectory = QDir::currentPath();
     QProcess::startDetached(program, arguments, workingDirectory);
     QApplication::exit();
+}
+
+void zchxMainWindow::slotRecvPortStartStatus(int port, int sts, const QString &topic)
+{
+    qDebug()<<"recv port stats:"<<port<<sts<<topic;
+    QString result = QString("Port: %1 Status: %2  Tpoic:%3").arg(port).arg(sts == true ? "ON" : "OFF").arg(topic);
+    mDataPortSts[port] = result;
+    ui->publish_menu->clear();
+    foreach (QString val , mDataPortSts.values()) {
+        ui->publish_menu->addAction(new QAction(val, this));
+    }
 }

@@ -87,13 +87,13 @@ void ZCHXReceiverThread::run()
                 {
                     url.append(" ");
                     url.append(QString::fromStdString(zmq_strerror(zmq_errno())));
-                    emit signalConnectedStatus(false, url);
+                    emit signalConnectedStatus(false, url, mRadarCommonSettings.m_sTopicList.join(","));
                     sleep(3);
                     continue;
                 } else
                 {
                     mIsConnect = true;
-                    emit signalConnectedStatus(true, QString());
+                    emit signalConnectedStatus(true, url, mRadarCommonSettings.m_sTopicList.join(","));
                 }
             }
 //            qDebug()<<"start recv data:"<<mRadarCommonSettings.m_sTopicList<<QDateTime::currentDateTime();

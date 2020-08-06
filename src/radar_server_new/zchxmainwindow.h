@@ -85,6 +85,8 @@ public slots:
     void soltDealTacks2(const zchxTrackPointMap&);
     void combineTracks();
     void combineVideo(QMap<int, QList<TrackNode>>,int);
+    void slotShowDataStatus();
+    void slotRecvPortStartStatus(int port, int sts, const QString &topic);
 private slots:
     void aisInit();
     void restartMe();
@@ -102,6 +104,7 @@ private:
     zchxTrackPointMap t1,t2,t3;//目标集合1,2,3
     QMap<int,QMap<int, QList<TrackNode>>> mVideoMap;
     QThread*           mTestMapMonitorThread;
+    QMap<int, QString>  mDataPortSts;
 };
 
 #endif // MAINWINDOW_H

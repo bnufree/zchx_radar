@@ -1,4 +1,4 @@
-#ifndef ZCHXRADARUTILS_H
+﻿#ifndef ZCHXRADARUTILS_H
 #define ZCHXRADARUTILS_H
 
 #include "qt/zchxutils.hpp"
@@ -61,7 +61,7 @@ public:
     void disconnectToHost();
     int  getType() const {return mType;}
 signals:
-    void signalConnectedStatus(bool sts, const QString& msg);
+    void signalConnectedStatus(bool sts, const QString& msg, const QString& topic);
     void signalRecvDataNow(int type,  int length);
 
 protected:

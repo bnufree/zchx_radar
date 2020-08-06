@@ -99,6 +99,7 @@ signals:
     void signalCombineTrackc(const zchxTrackPointMap&);
     void signalCombineVideo(QMap<int, QList<TrackNode>>,int);
     void singalShowRadiusCoefficient(double,double);
+    void signalSendPortStartStatus(int port,  int sts,  const QString& topic);
 public slots:
     void slotReadLimitData();
     void slotDrawCombinVideo(QList<TrackNode>);
