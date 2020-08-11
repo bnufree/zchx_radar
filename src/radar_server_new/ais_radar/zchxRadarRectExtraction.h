@@ -1,4 +1,4 @@
-#ifndef ZCHXRECTEXTRACTIONTHREAD_H
+﻿#ifndef ZCHXRECTEXTRACTIONTHREAD_H
 #define ZCHXRECTEXTRACTIONTHREAD_H
 
 #include <QObject>
@@ -44,7 +44,7 @@ public:
     void  setTargetAreaRange(double min, double max);
     void  setTargetLenthRange(double min, double max);
     void  setRangeFactor(double factor) {mRangeFactor = factor;}
-    void  parseVideoPieceFromImage(QImage& result, zchxRadarRectDefList& list, const QImage &img, double range_factor, bool output = false);
+    void  parseVideoPieceFromImage(QImage& result, zchxRadarRectDefList& list, const QImage &img, double range_factor, int video_index, bool output = false);
 protected:
     void  parseLimitFile(const QString& file);
     void  transferLatlonArea2PixelArea();

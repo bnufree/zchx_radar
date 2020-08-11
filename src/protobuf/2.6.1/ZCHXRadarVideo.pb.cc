@@ -133,7 +133,7 @@ void protobuf_AssignDesc_ZCHXRadarVideo_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(predictionArea));
   RadarRectDef_descriptor_ = file->message_type(4);
-  static const int RadarRectDef_offsets_[20] = {
+  static const int RadarRectDef_offsets_[21] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, rectnumber_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, topleftlatitude_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, topleftlongitude_),
@@ -154,6 +154,7 @@ void protobuf_AssignDesc_ZCHXRadarVideo_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, pixelpnts_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, realdata_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, predictionareas_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarRectDef, videocycleindex_),
   };
   RadarRectDef_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -382,7 +383,7 @@ void protobuf_AddDesc_ZCHXRadarVideo_2eproto() {
     "\r\n\005width\030\001 \002(\r\022\016\n\006height\030\002 \002(\r\0223\n\006points"
     "\030\003 \003(\0132#.com.zhichenhaixin.proto.pixelPo"
     "int\"I\n\016predictionArea\0227\n\004area\030\001 \003(\0132).co"
-    "m.zhichenhaixin.proto.singleVideoBlock\"\261"
+    "m.zhichenhaixin.proto.singleVideoBlock\"\312"
     "\004\n\014RadarRectDef\022\022\n\nrectNumber\030\001 \002(\r\022\027\n\017t"
     "opLeftlatitude\030\002 \002(\001\022\030\n\020topLeftlongitude"
     "\030\003 \002(\001\022\033\n\023bottomRightlatitude\030\004 \002(\001\022\034\n\024b"
@@ -397,33 +398,33 @@ void protobuf_AddDesc_ZCHXRadarVideo_2eproto() {
     "\0132#.com.zhichenhaixin.proto.pixelPoint\022\020"
     "\n\010realData\030\023 \002(\010\022@\n\017predictionAreas\030\024 \001("
     "\0132\'.com.zhichenhaixin.proto.predictionAr"
-    "ea\"@\n\tRoutePath\0223\n\004path\030\001 \003(\0132%.com.zhic"
-    "henhaixin.proto.RadarRectDef\"\215\001\n\tRouteNo"
-    "de\022\020\n\010node_num\030\001 \002(\005\0227\n\010top_node\030\002 \002(\0132%"
-    ".com.zhichenhaixin.proto.RadarRectDef\0225\n"
-    "\tpath_list\030\003 \003(\0132\".com.zhichenhaixin.pro"
-    "to.RoutePath\"C\n\nRouteNodes\0225\n\tnode_list\030"
-    "\001 \003(\0132\".com.zhichenhaixin.proto.RouteNod"
-    "e\"\312\001\n\tRadarRect\022;\n\014current_rect\030\001 \002(\0132%."
-    "com.zhichenhaixin.proto.RadarRectDef\022@\n\021"
-    "history_rect_list\030\002 \003(\0132%.com.zhichenhai"
-    "xin.proto.RadarRectDef\022\025\n\rdir_confirmed\030"
-    "\003 \002(\010\022\025\n\rcur_est_count\030\004 \002(\r\022\020\n\010node_num"
-    "\030\005 \002(\005\"`\n\nRadarRects\022\013\n\003UTC\030\001 \002(\004\022\016\n\006len"
-    "gth\030\002 \002(\005\0225\n\trect_list\030\003 \003(\0132\".com.zhich"
-    "enhaixin.proto.RadarRect\"\363\001\n\nRadarVideo\022"
-    "\017\n\007radarId\030\001 \002(\004\022\021\n\tradarName\030\002 \002(\t\022\020\n\010l"
-    "atitude\030\003 \002(\001\022\021\n\tlongitude\030\004 \002(\001\022\013\n\003UTC\030"
-    "\005 \002(\004\022\021\n\timageData\030\006 \002(\014\022\024\n\014curImageData"
-    "\030\007 \002(\014\022\024\n\014preImageData\030\010 \002(\014\022\r\n\005width\030\t "
-    "\002(\r\022\016\n\006height\030\n \002(\r\022\016\n\006radius\030\013 \002(\001\022\020\n\010c"
-    "urIndex\030\014 \002(\r\022\017\n\007loopNum\030\r \002(\r\"\321\001\n\017Radar"
-    "VideoPoint\022\021\n\tradarName\030\002 \002(\t\022\020\n\010latitud"
-    "e\030\003 \002(\001\022\021\n\tlongitude\030\004 \002(\001\022\013\n\003UTC\030\005 \002(\004\022"
-    "\021\n\timageData\030\006 \002(\014\022\024\n\014preImageData\030\007 \002(\014"
-    "\022\r\n\005width\030\010 \002(\r\022\016\n\006height\030\t \002(\r\022\016\n\006radiu"
-    "s\030\n \002(\001\022\020\n\010curIndex\030\013 \002(\r\022\017\n\007loopNum\030\014 \002"
-    "(\r", 1922);
+    "ea\022\027\n\017videoCycleIndex\030\025 \001(\005\"@\n\tRoutePath"
+    "\0223\n\004path\030\001 \003(\0132%.com.zhichenhaixin.proto"
+    ".RadarRectDef\"\215\001\n\tRouteNode\022\020\n\010node_num\030"
+    "\001 \002(\005\0227\n\010top_node\030\002 \002(\0132%.com.zhichenhai"
+    "xin.proto.RadarRectDef\0225\n\tpath_list\030\003 \003("
+    "\0132\".com.zhichenhaixin.proto.RoutePath\"C\n"
+    "\nRouteNodes\0225\n\tnode_list\030\001 \003(\0132\".com.zhi"
+    "chenhaixin.proto.RouteNode\"\312\001\n\tRadarRect"
+    "\022;\n\014current_rect\030\001 \002(\0132%.com.zhichenhaix"
+    "in.proto.RadarRectDef\022@\n\021history_rect_li"
+    "st\030\002 \003(\0132%.com.zhichenhaixin.proto.Radar"
+    "RectDef\022\025\n\rdir_confirmed\030\003 \002(\010\022\025\n\rcur_es"
+    "t_count\030\004 \002(\r\022\020\n\010node_num\030\005 \002(\005\"`\n\nRadar"
+    "Rects\022\013\n\003UTC\030\001 \002(\004\022\016\n\006length\030\002 \002(\005\0225\n\tre"
+    "ct_list\030\003 \003(\0132\".com.zhichenhaixin.proto."
+    "RadarRect\"\363\001\n\nRadarVideo\022\017\n\007radarId\030\001 \002("
+    "\004\022\021\n\tradarName\030\002 \002(\t\022\020\n\010latitude\030\003 \002(\001\022\021"
+    "\n\tlongitude\030\004 \002(\001\022\013\n\003UTC\030\005 \002(\004\022\021\n\timageD"
+    "ata\030\006 \002(\014\022\024\n\014curImageData\030\007 \002(\014\022\024\n\014preIm"
+    "ageData\030\010 \002(\014\022\r\n\005width\030\t \002(\r\022\016\n\006height\030\n"
+    " \002(\r\022\016\n\006radius\030\013 \002(\001\022\020\n\010curIndex\030\014 \002(\r\022\017"
+    "\n\007loopNum\030\r \002(\r\"\321\001\n\017RadarVideoPoint\022\021\n\tr"
+    "adarName\030\002 \002(\t\022\020\n\010latitude\030\003 \002(\001\022\021\n\tlong"
+    "itude\030\004 \002(\001\022\013\n\003UTC\030\005 \002(\004\022\021\n\timageData\030\006 "
+    "\002(\014\022\024\n\014preImageData\030\007 \002(\014\022\r\n\005width\030\010 \002(\r"
+    "\022\016\n\006height\030\t \002(\r\022\016\n\006radius\030\n \002(\001\022\020\n\010curI"
+    "ndex\030\013 \002(\r\022\017\n\007loopNum\030\014 \002(\r", 1947);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ZCHXRadarVideo.proto", &protobuf_RegisterTypes);
   singleVideoBlock::default_instance_ = new singleVideoBlock();
@@ -1564,6 +1565,7 @@ const int RadarRectDef::kCogFieldNumber;
 const int RadarRectDef::kPixelPntsFieldNumber;
 const int RadarRectDef::kRealDataFieldNumber;
 const int RadarRectDef::kPredictionAreasFieldNumber;
+const int RadarRectDef::kVideoCycleIndexFieldNumber;
 #endif  // !_MSC_VER
 
 RadarRectDef::RadarRectDef()
@@ -1603,6 +1605,7 @@ void RadarRectDef::SharedCtor() {
   cog_ = 0;
   realdata_ = false;
   predictionareas_ = NULL;
+  videocycleindex_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1656,12 +1659,13 @@ void RadarRectDef::Clear() {
     ZR_(startlatitude_, diameter_);
     ZR_(angle_, sog_);
   }
-  if (_has_bits_[16 / 32] & 851968) {
+  if (_has_bits_[16 / 32] & 1900544) {
     cog_ = 0;
     realdata_ = false;
     if (has_predictionareas()) {
       if (predictionareas_ != NULL) predictionareas_->::com::zhichenhaixin::proto::predictionArea::Clear();
     }
+    videocycleindex_ = 0;
   }
 
 #undef OFFSET_OF_FIELD_
@@ -1974,6 +1978,21 @@ bool RadarRectDef::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(168)) goto parse_videoCycleIndex;
+        break;
+      }
+
+      // optional int32 videoCycleIndex = 21;
+      case 21: {
+        if (tag == 168) {
+         parse_videoCycleIndex:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &videocycleindex_)));
+          set_has_videocycleindex();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -2106,6 +2125,11 @@ void RadarRectDef::SerializeWithCachedSizes(
       20, this->predictionareas(), output);
   }
 
+  // optional int32 videoCycleIndex = 21;
+  if (has_videocycleindex()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(21, this->videocycleindex(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -2222,6 +2246,11 @@ void RadarRectDef::SerializeWithCachedSizes(
         20, this->predictionareas(), target);
   }
 
+  // optional int32 videoCycleIndex = 21;
+  if (has_videocycleindex()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(21, this->videocycleindex(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -2336,6 +2365,13 @@ int RadarRectDef::ByteSize() const {
           this->predictionareas());
     }
 
+    // optional int32 videoCycleIndex = 21;
+    if (has_videocycleindex()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->videocycleindex());
+    }
+
   }
   // repeated .com.zhichenhaixin.proto.singleVideoBlock Blocks = 10;
   total_size += 1 * this->blocks_size();
@@ -2439,6 +2475,9 @@ void RadarRectDef::MergeFrom(const RadarRectDef& from) {
     if (from.has_predictionareas()) {
       mutable_predictionareas()->::com::zhichenhaixin::proto::predictionArea::MergeFrom(from.predictionareas());
     }
+    if (from.has_videocycleindex()) {
+      set_videocycleindex(from.videocycleindex());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -2488,6 +2527,7 @@ void RadarRectDef::Swap(RadarRectDef* other) {
     pixelpnts_.Swap(&other->pixelpnts_);
     std::swap(realdata_, other->realdata_);
     std::swap(predictionareas_, other->predictionareas_);
+    std::swap(videocycleindex_, other->videocycleindex_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

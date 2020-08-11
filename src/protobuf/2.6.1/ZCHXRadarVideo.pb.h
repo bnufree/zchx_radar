@@ -617,6 +617,13 @@ class RadarRectDef : public ::google::protobuf::Message {
   inline ::com::zhichenhaixin::proto::predictionArea* release_predictionareas();
   inline void set_allocated_predictionareas(::com::zhichenhaixin::proto::predictionArea* predictionareas);
 
+  // optional int32 videoCycleIndex = 21;
+  inline bool has_videocycleindex() const;
+  inline void clear_videocycleindex();
+  static const int kVideoCycleIndexFieldNumber = 21;
+  inline ::google::protobuf::int32 videocycleindex() const;
+  inline void set_videocycleindex(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:com.zhichenhaixin.proto.RadarRectDef)
  private:
   inline void set_has_rectnumber();
@@ -655,6 +662,8 @@ class RadarRectDef : public ::google::protobuf::Message {
   inline void clear_has_realdata();
   inline void set_has_predictionareas();
   inline void clear_has_predictionareas();
+  inline void set_has_videocycleindex();
+  inline void clear_has_videocycleindex();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -680,6 +689,7 @@ class RadarRectDef : public ::google::protobuf::Message {
   double cog_;
   ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::pixelPoint > pixelpnts_;
   ::com::zhichenhaixin::proto::predictionArea* predictionareas_;
+  ::google::protobuf::int32 videocycleindex_;
   friend void  protobuf_AddDesc_ZCHXRadarVideo_2eproto();
   friend void protobuf_AssignDesc_ZCHXRadarVideo_2eproto();
   friend void protobuf_ShutdownFile_ZCHXRadarVideo_2eproto();
@@ -2328,6 +2338,30 @@ inline void RadarRectDef::set_allocated_predictionareas(::com::zhichenhaixin::pr
     clear_has_predictionareas();
   }
   // @@protoc_insertion_point(field_set_allocated:com.zhichenhaixin.proto.RadarRectDef.predictionAreas)
+}
+
+// optional int32 videoCycleIndex = 21;
+inline bool RadarRectDef::has_videocycleindex() const {
+  return (_has_bits_[0] & 0x00100000u) != 0;
+}
+inline void RadarRectDef::set_has_videocycleindex() {
+  _has_bits_[0] |= 0x00100000u;
+}
+inline void RadarRectDef::clear_has_videocycleindex() {
+  _has_bits_[0] &= ~0x00100000u;
+}
+inline void RadarRectDef::clear_videocycleindex() {
+  videocycleindex_ = 0;
+  clear_has_videocycleindex();
+}
+inline ::google::protobuf::int32 RadarRectDef::videocycleindex() const {
+  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.RadarRectDef.videoCycleIndex)
+  return videocycleindex_;
+}
+inline void RadarRectDef::set_videocycleindex(::google::protobuf::int32 value) {
+  set_has_videocycleindex();
+  videocycleindex_ = value;
+  // @@protoc_insertion_point(field_set:com.zhichenhaixin.proto.RadarRectDef.videoCycleIndex)
 }
 
 // -------------------------------------------------------------------

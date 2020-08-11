@@ -871,6 +871,7 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
 
 #else
     if(task.size() == 0) return;
+    qint64 latest_update_time = task.first().updatetime();
 //    zchxTimeElapsedCounter counter(__FUNCTION__);
     zchxRadarRectDefList temp_list(task);             //保存的未经处理的所有矩形单元
     quint32 now_time = task.first().updatetime();
@@ -1199,6 +1200,10 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
         if(!node) continue;
         node->setAllNodeSeriaNum(node->mSerialNum);
         QList<TargetNode*> children = node->getAllBranchLastChild();
+        if(children.size() > 1)
+        {
+            qDebug()<<"found abnormal children size:"<<children.size();
+        }
         TargetNode* checkNode =0;
         if(children.size() == 0)
         {
@@ -1254,6 +1259,67 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
     foreach (int key, deleteNodeList) {
         mTargetNodeMap.remove(key);
     }
+
+#if 0
+    //更新目标的回波周期，如果运动目标没有更新，则间隔两个周期进行预推
+    foreach (QSharedPointer<TargetNode> node, mTargetNodeMap)
+    {
+        if(!node) continue;
+
+        node->setAllNodeSeriaNum(node->mSerialNum);
+        QList<TargetNode*> children = node->getAllBranchLastChild();
+        TargetNode* checkNode =0;
+        if(children.size() == 0)
+        {
+            checkNode = node.data();
+        } else
+        {
+            if(children.size() == 1)
+            {
+               checkNode = node->getLastChild();
+            }
+            foreach (TargetNode* child, children) {
+                if(node->mUpdateTime < child->mUpdateTime)
+                {
+                    node->mUpdateTime = child->mUpdateTime;
+                    node->mDefRect->set_updatetime(node->mUpdateTime);
+                }
+            }
+        }
+        if(!checkNode) continue;
+        int key = checkNode->mDefRect->rectnumber();
+        QList<TargetNode*> &list = counterNode[key];
+        //检查有没有方向相同的目标
+        bool found = false;
+        foreach (TargetNode* tmpNode, list)
+        {
+            double cog_difff = checkNode->mDefRect->cog() - tmpNode->mDefRect->cog();
+            if(fabs(cog_difff) < 10)
+            {
+                //相同，删除冗余的目标（路径最短的目标）
+                found = true;
+                TargetNode* chk_parent = checkNode->topNode();
+                TargetNode* tmp_parent = tmpNode->topNode();
+                if(chk_parent && tmp_parent)
+                {
+                    if(chk_parent->getDepth() < tmp_parent->getDepth())
+                    {
+                        deleteNodeList.append(chk_parent->mSerialNum);
+                    } else
+                    {
+                        deleteNodeList.append(tmp_parent->mSerialNum);
+                    }
+                }
+
+                break;
+            }
+        }
+        if(!found)
+        {
+            counterNode[key].append(checkNode);
+        }
+    }
+#endif
 
 
 

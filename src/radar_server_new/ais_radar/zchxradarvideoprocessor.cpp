@@ -221,6 +221,7 @@ void ZCHXRadarVideoProcessor::process(const ZCHXRadarVideoProcessorData& task)
     if(task.size() == 0) return;
     //首先将所有任务的回波都合成一个回波图形
     QMap<int,RADAR_VIDEO_DATA> RadarVideo = task[0].m_RadarVideo;
+    int video_index = task[0].m_IndexT;
 #if 1
     for(int i=0; i<task.size(); i++)
     {
@@ -315,7 +316,7 @@ void ZCHXRadarVideoProcessor::process(const ZCHXRadarVideoProcessorData& task)
     zchxRadarRectDefList list;
     if(mVideoExtractionWorker)
     {
-        mVideoExtractionWorker->parseVideoPieceFromImage(result, list, img, range_factor, mOutputImg);
+        mVideoExtractionWorker->parseVideoPieceFromImage(result, list, img, range_factor, video_index, mOutputImg);
     }
     //发送回波矩形集合
 //    qDebug()<<"parse rect list size:"<<list.size();

@@ -1090,7 +1090,7 @@ void ZCHXAnalysisAndSendRadar::processVideoData(bool rotate)
     task.m_RadarVideo = m_radarVideoMap;
     task.m_Range = m_dRadius;
     task.m_Rotate = rotate;
-    task.m_IndexT = (++indexT);
+    task.m_IndexT = (++indexT) % MAX_RADAR_VIDEO_INDEX_T;
 
     m_VideoProcessor->appendSrcData(task);
 }

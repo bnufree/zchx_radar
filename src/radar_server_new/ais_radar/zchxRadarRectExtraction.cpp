@@ -157,7 +157,7 @@ void zchxRadarRectExtraction::setRadarLL(double lat, double lon)
 
 //range_factor  每像素多少米
 //debug模式下输出opencv的图像处理过程
-void zchxRadarRectExtraction::parseVideoPieceFromImage(QImage& result, zchxRadarRectDefList& list, const QImage &img, double range_factor, bool output)
+void zchxRadarRectExtraction::parseVideoPieceFromImage(QImage& result, zchxRadarRectDefList& list, const QImage &img, double range_factor, int video_index, bool output)
 {
     quint32 time_of_day = QDateTime::currentDateTime().toTime_t();
     double timestamp = QDateTime::currentMSecsSinceEpoch();
@@ -395,6 +395,7 @@ void zchxRadarRectExtraction::parseVideoPieceFromImage(QImage& result, zchxRadar
         //cout<<"angle"<<angle;
         rectDef.set_sog(0.0);
         rectDef.set_cog(0.0);
+        rectDef.set_videocycleindex(video_index);
         list.append(rectDef);
     }
     qDebug()<<__FUNCTION__<<" elapsed:"<<t.elapsed();

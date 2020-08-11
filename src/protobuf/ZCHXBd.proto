@@ -1,0 +1,45 @@
+///**************************************************************************
+//* @Project : cdzchx_bd
+//* @IDL Module: ZCHXBd
+//* @File: ZCHXBD.proto
+//* @Description:
+//*    雷达asterix欧标标准格式;
+//*
+//* @Copyright: Copyright (c) 2014
+//* @Company: 深圳置辰海信科技有限公司
+//* @WebSite: http://www.szcenterstar.com/
+//* @author 
+//*
+//* @Revision History
+//*
+//* <pre>
+//* ----------------------------------------------------------------------
+//*   Ver     Date       Who             Comments
+//*  ----- ----------  --------  --------------------------------------- 
+//*   1.0  2019/07/24     陈思颐       形成初稿
+//*   1.1  2019/07/29     陈思颐       BD添加id属性
+//* ----------------------------------------------------------------------
+//* </pre>
+//**************************************************************************/
+
+
+//package com.zhichenhaixin.proto;
+package com.zhichenhaixin.proto;
+    
+	message BD {  
+        required int32 hour = 1;                // 小时
+        required int32 minute = 2;              // 分钟
+        required int32 second = 3;              // 秒 
+		required int32 millisecond  = 4;       // 毫秒 
+        required double lon = 5;               // 经度
+        required double lat = 6;               // 纬度
+		required string id = 7;				   // 编号 
+    }
+    
+	//----------------------------------------------------------------------------------------------------------
+    // 接收采集器ais实时数据信息
+    //----------------------------------------------------------------------------------------------------------
+	message BDList{
+		required uint64 UTC = 1;
+		repeated BD bd = 2;
+	}

@@ -33,6 +33,7 @@ public:
     zchxRadarRectDef                            *mDefRect;
     QList<QSharedPointer<TargetNode>>           mChildren;           //孩子
     TargetNode*                                 mParent;             //父亲
+    QList<int>                                  mVideoIndexList;       //回波周期
 
     TargetNode()
     {
@@ -317,7 +318,6 @@ private:
     int                         mMaxEstCount;                       //目标的最大预推次数
     double                      mRangeFactor;
     double                      mPredictionWidth;                   //预推区域的宽度
-    QMap<QString, int>          mSameRectNodeCounter;               //同一个矩形区域上两个回波点在一起的统计 如果超过5次  则认为是一个 删除其中一个 key 就是num——num
 };
 
 #endif // ZCHXRADARTARGETTRACK_H
