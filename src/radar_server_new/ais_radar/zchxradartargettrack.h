@@ -6,222 +6,12 @@
 #include "zchxradarcommon.h"
 #include <QMutex>
 #include "zchxfunction.h"
+#include "radardatautils.h"
+#include "targetnode.h"
 
 typedef     zchxRadarRectDefList        zchxRadarTrackTask;
 typedef     QList<zchxRadarTrackTask>   zchxRadarTrackTaskList;
 
-enum  TARGET_DIRECTION{
-    TARGET_DIRECTION_UNDEF = 0,     //点列不足的情况
-    TARGET_DIRECTION_STABLE,        //目标点列方向稳定
-    TARGET_DIRECTION_UNSTABLE,      //目标点列方向散乱
-};
-
-//根节点可以产生很多条分支,但是每一个分支点只有一个子节点
-enum NodeStatus{
-    Node_UnDef = 0,
-    Node_Moving,
-    Node_Lost,
-};
-
-//目标状态确定为静止，则目标路径上就始终只有一个点
-struct TargetNode
-{
-public:
-    int                                         mSerialNum;
-    NodeStatus                                  mStatus;
-    int                                         mUpdateTime;        //目标最新的更新时间
-    zchxRadarRectDef                            *mDefRect;
-    QList<QSharedPointer<TargetNode>>           mChildren;           //孩子
-    TargetNode*                                 mParent;             //父亲
-    QList<int>                                  mVideoIndexList;       //回波周期
-
-    TargetNode()
-    {
-        mDefRect = 0;
-        mChildren.clear();
-        mUpdateTime = QDateTime::currentDateTime().toTime_t();
-        mParent = 0;
-        mStatus = Node_UnDef;
-        mSerialNum = 0;
-    }
-    TargetNode(const zchxRadarRectDef& other, TargetNode* parentNode = 0)
-    {
-        mDefRect = new zchxRadarRectDef(other);
-        mChildren.clear();
-        mUpdateTime = mDefRect->updatetime();
-        mParent = parentNode;
-        mSerialNum = 0;
-        mStatus = Node_UnDef;
-        if(parentNode)
-        {
-            mStatus = mParent->mStatus;
-            mSerialNum = mParent->mSerialNum;
-        }
-    }
-
-    void setStatus(NodeStatus sts)
-    {
-        mStatus = sts;
-    }
-
-    ~TargetNode()
-    {
-        mChildren.clear();
-        if(mDefRect)
-        {
-//            qDebug()<<"node has been delete now. node num:"<<rect->rectnumber();
-            delete mDefRect;
-        }
-    }
-    QList<TargetNode*> getAllBranchLastChild()
-    {
-        QList<TargetNode*> result;
-        for(int i=0; i<mChildren.size(); i++)
-        {
-            TargetNode *child = mChildren[i].data();
-            if(!child) continue;
-            result.append(child->getLastChild(child));
-        }
-        return result;
-    }
-
-    TargetNode* getLastChild(TargetNode* src)
-    {
-        if(src->mChildren.size() == 0) return src;
-        TargetNode *child = src->mChildren.first().data();
-        return child->getLastChild(child);
-    }
-
-    TargetNode* getLastChild()
-    {
-        if(mChildren.size() == 0) return this;
-        TargetNode *child = mChildren.first().data();
-        return child->getLastChild();
-    }
-
-    bool hasChildren() const
-    {
-        return mChildren.size() != 0;
-    }
-
-    bool isNodePoint() const
-    {
-        return mStatus == Node_UnDef && mChildren.size() <= 1;
-    }
-
-    bool isNodeMoving() const
-    {
-        return mStatus == Node_Moving;
-    }
-
-    double getReferenceSog(bool average = true)
-    {
-        if(!mDefRect) return 0.0;
-        double sum = mDefRect->sog();
-        if(!average) return sum;
-        int num = 1;
-        TargetNode* pre = mParent;
-        while (pre) {
-            if(pre->mDefRect && pre->mParent)  //根节点没有速度  暂且不考虑
-            {
-                sum += pre->mDefRect->sog();                
-                num++;
-            }
-            if(num == 5) break;
-            pre = pre->mParent;
-        }
-
-        return sum / num;
-    }
-
-    double getReferenceCog(bool average = true)
-    {
-        if(!mDefRect) return 0.0;
-        double sum = mDefRect->cog();
-        if(!average) return sum;
-        int num = 1;
-        TargetNode* pre = mParent;
-        while (pre) {
-            if(pre->mDefRect)
-            {
-                sum += pre->mDefRect->cog();
-            }
-            num++;
-            if(num == 5) break;
-            pre = pre->mParent;
-        }
-
-        return sum / num;
-    }
-
-    void updateSerialNum(int num)
-    {
-        if(mSerialNum != num) mSerialNum = num;
-    }
-
-    void setAllNodeSeriaNum(int num)
-    {
-        updateSerialNum(num);
-        for(int i=0; i<mChildren.size();i++)
-        {
-            TargetNode* child = mChildren[i].data();
-            while (child) {
-                updateSerialNum(num);
-                if(child->mChildren.size() == 0) break;
-                child = child->mChildren.first().data();
-            }
-        }
-    }
-
-    void updateRouteNodePathStatus(NodeStatus sts)
-    {
-        if(this->mChildren.size() >= 2) return;
-        TargetNode *node = this;
-        while (node) {
-            if(node->mStatus != sts) node->mStatus = sts;
-            if(node->mChildren.size() == 0) break;
-            node = node->mChildren.first().data();
-        }
-    }
-
-    bool isOutput() const
-    {
-        return isNodeMoving() || isNodePoint();
-    }
-
-    TargetNode* topNode()
-    {
-        if(!mParent) return this;
-        TargetNode * parent = mParent;
-        while (parent) {
-            if(parent->mParent)
-            {
-                parent = parent->mParent;
-            } else
-            {
-                break;
-            }
-        }
-
-        return parent;
-    }
-
-
-    int     getDepth()
-    {
-        if(mChildren.size() != 1) return 1;
-        int depth = 1;
-        TargetNode * now = this;
-        while (now->mChildren.size() > 0) {
-            depth++;
-            now = now->mChildren.first().data();
-        }
-
-        return depth;
-    }
-};
-
-typedef QMap<int, QSharedPointer<TargetNode> >      TargetNodeMap;
 
 //将预推区域和目标进行关联
 struct PredictionNode{
@@ -259,6 +49,8 @@ public slots:
     void        processWithPossibleRoute(const zchxRadarTrackTask& task);
 //    void        processWithPossibleRoute2(const zchxRadarTrackTask& task);
     void        processWithoutRoute(const zchxRadarTrackTask& task);
+    void        appendUserDefObj(const UserSpecifiedObj& obj);
+    void        removeUserDefObj(const UserSpecifiedObj& obj);
 protected:
     void     run();
 private:
@@ -318,6 +110,7 @@ private:
     int                         mMaxEstCount;                       //目标的最大预推次数
     double                      mRangeFactor;
     double                      mPredictionWidth;                   //预推区域的宽度
+    QMap<int, UserSpecifiedObj>     mUserDefObj;                    //
 };
 
 #endif // ZCHXRADARTARGETTRACK_H

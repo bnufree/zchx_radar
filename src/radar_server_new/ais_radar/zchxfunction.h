@@ -33,7 +33,7 @@ const double PI = 3.1415926;
 
 #define Rc  6378137
 #define	Rj  6356725
-#define     MAX_RADAR_VIDEO_INDEX_T         1000
+#define     MAX_RADAR_VIDEO_INDEX_T         INT32_MAX
 
 
 //自定义链表结构体

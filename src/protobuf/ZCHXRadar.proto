@@ -108,6 +108,14 @@ package com.zhichenhaixin.proto;
 		repeated RadarHistoryTrack track = 1;			//
 	}
 	
+	message Point{
+		required double lat = 1;
+		required double lon = 2;
+	}
+	
+	message RadarShapePoints{
+		repeated Point	pnts = 1;
+	}
     //----------------------------------------------------------------------------------------------------------
     // 雷达地面移动目标报告(cat010)
     //----------------------------------------------------------------------------------------------------------
@@ -142,6 +150,9 @@ package com.zhichenhaixin.proto;
 		optional RadarHistoryTracks tracks = 28;	   // 当前雷达的历史轨迹数据集
 		optional int32 diameter = 29;     				// 雷达目标大小（矩形块的对角线的距离） 单位：米
 		optional bool	trackConfirmed = 30;			//目标航迹是否确认.0就是点迹(速度和方向都是0) 1就是航迹(计算的速度和方向值)
+		optional int32	objType = 31;					//目标类型。0：普通目标；1：障碍物； 2：浮标；3：渔排；4：特定船舶
+		optional string	objName = 32;					//用户指定的目标名称
+		optional RadarShapePoints	shape = 33;			//目标点的外形点列
     }
 
     message RadarSurfaceTrack {

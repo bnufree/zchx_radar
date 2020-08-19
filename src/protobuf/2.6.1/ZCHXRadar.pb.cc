@@ -28,6 +28,12 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* RadarHistoryTracks_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   RadarHistoryTracks_reflection_ = NULL;
+const ::google::protobuf::Descriptor* Point_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  Point_reflection_ = NULL;
+const ::google::protobuf::Descriptor* RadarShapePoints_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  RadarShapePoints_reflection_ = NULL;
 const ::google::protobuf::Descriptor* TrackPoint_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   TrackPoint_reflection_ = NULL;
@@ -91,8 +97,39 @@ void protobuf_AssignDesc_ZCHXRadar_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RadarHistoryTracks));
-  TrackPoint_descriptor_ = file->message_type(2);
-  static const int TrackPoint_offsets_[30] = {
+  Point_descriptor_ = file->message_type(2);
+  static const int Point_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Point, lat_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Point, lon_),
+  };
+  Point_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      Point_descriptor_,
+      Point::default_instance_,
+      Point_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Point, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Point, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(Point));
+  RadarShapePoints_descriptor_ = file->message_type(3);
+  static const int RadarShapePoints_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarShapePoints, pnts_),
+  };
+  RadarShapePoints_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      RadarShapePoints_descriptor_,
+      RadarShapePoints::default_instance_,
+      RadarShapePoints_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarShapePoints, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarShapePoints, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(RadarShapePoints));
+  TrackPoint_descriptor_ = file->message_type(4);
+  static const int TrackPoint_offsets_[33] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrackPoint, systemareacode_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrackPoint, systemidentificationcode_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrackPoint, messagetype_),
@@ -123,6 +160,9 @@ void protobuf_AssignDesc_ZCHXRadar_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrackPoint, tracks_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrackPoint, diameter_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrackPoint, trackconfirmed_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrackPoint, objtype_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrackPoint, objname_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrackPoint, shape_),
   };
   TrackPoint_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -135,7 +175,7 @@ void protobuf_AssignDesc_ZCHXRadar_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(TrackPoint));
-  RadarSurfaceTrack_descriptor_ = file->message_type(3);
+  RadarSurfaceTrack_descriptor_ = file->message_type(5);
   static const int RadarSurfaceTrack_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarSurfaceTrack, flag_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RadarSurfaceTrack, sourceid_),
@@ -154,7 +194,7 @@ void protobuf_AssignDesc_ZCHXRadar_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RadarSurfaceTrack));
-  VideoFrame_descriptor_ = file->message_type(4);
+  VideoFrame_descriptor_ = file->message_type(6);
   static const int VideoFrame_offsets_[10] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(VideoFrame, systemareacode_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(VideoFrame, systemidentificationcode_),
@@ -200,6 +240,10 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     RadarHistoryTracks_descriptor_, &RadarHistoryTracks::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    Point_descriptor_, &Point::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    RadarShapePoints_descriptor_, &RadarShapePoints::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     TrackPoint_descriptor_, &TrackPoint::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     RadarSurfaceTrack_descriptor_, &RadarSurfaceTrack::default_instance());
@@ -214,6 +258,10 @@ void protobuf_ShutdownFile_ZCHXRadar_2eproto() {
   delete RadarHistoryTrack_reflection_;
   delete RadarHistoryTracks::default_instance_;
   delete RadarHistoryTracks_reflection_;
+  delete Point::default_instance_;
+  delete Point_reflection_;
+  delete RadarShapePoints::default_instance_;
+  delete RadarShapePoints_reflection_;
   delete TrackPoint::default_instance_;
   delete TrackPoint_reflection_;
   delete RadarSurfaceTrack::default_instance_;
@@ -239,60 +287,69 @@ void protobuf_AddDesc_ZCHXRadar_2eproto() {
     "om.zhichenhaixin.proto.STH\022\013\n\003cog\030\t \002(\001\022"
     "\013\n\003sog\030\n \002(\001\022\013\n\003UTC\030\013 \002(\004\"O\n\022RadarHistor"
     "yTracks\0229\n\005track\030\001 \003(\0132*.com.zhichenhaix"
-    "in.proto.RadarHistoryTrack\"\231\006\n\nTrackPoin"
-    "t\022\026\n\016systemAreaCode\030\001 \002(\005\022 \n\030systemIdent"
-    "ificationCode\030\002 \002(\005\0224\n\013messageType\030\003 \002(\016"
-    "2\037.com.zhichenhaixin.proto.MSGTYP\022\023\n\013tra"
-    "ckNumber\030\004 \002(\r\022\025\n\rcartesianPosX\030\005 \002(\002\022\025\n"
-    "\rcartesianPosY\030\006 \002(\002\022\023\n\013wgs84PosLat\030\007 \002("
-    "\001\022\024\n\014wgs84PosLong\030\010 \002(\001\022\021\n\ttimeOfDay\030\t \002"
-    "(\002\022/\n\ttrackType\030\n \001(\0162\034.com.zhichenhaixi"
-    "n.proto.CNF\022\027\n\017trackLastReport\030\013 \001(\010\0223\n\r"
-    "extrapolation\030\014 \001(\0162\034.com.zhichenhaixin."
-    "proto.CST\0227\n\021trackPositionCode\030\r \001(\0162\034.c"
-    "om.zhichenhaixin.proto.STH\022\016\n\006sigmaX\030\016 \001"
-    "(\002\022\016\n\006sigmaY\030\017 \001(\002\022\017\n\007sigmaXY\030\020 \001(\002\022\024\n\014a"
-    "mpOfPriPlot\030\021 \001(\002\022\032\n\022cartesianTrkVel_vx\030"
-    "\022 \002(\001\022\032\n\022cartesianTrkVel_vy\030\023 \002(\001\022\013\n\003cog"
-    "\030\024 \002(\001\022\013\n\003sog\030\025 \002(\001\022\023\n\013fleetNumber\030\026 \001(\005"
-    "\022\016\n\006status\030\027 \001(\005\022\017\n\007lonType\030\030 \001(\t\022\017\n\007lat"
-    "Type\030\031 \001(\t\022\014\n\004type\030\032 \001(\005\022\r\n\005aisid\030\033 \001(\t\022"
-    ";\n\006tracks\030\034 \001(\0132+.com.zhichenhaixin.prot"
-    "o.RadarHistoryTracks\022\020\n\010diameter\030\035 \001(\005\022\026"
-    "\n\016trackConfirmed\030\036 \001(\010\"\212\001\n\021RadarSurfaceT"
-    "rack\022\014\n\004flag\030\001 \002(\005\022\020\n\010sourceId\030\002 \002(\t\022\013\n\003"
-    "UTC\030\003 \002(\004\022\016\n\006length\030\004 \002(\005\0228\n\013trackPoints"
-    "\030\005 \003(\0132#.com.zhichenhaixin.proto.TrackPo"
-    "int\"\376\001\n\nVideoFrame\022\026\n\016systemAreaCode\030\001 \002"
-    "(\005\022 \n\030systemIdentificationCode\030\002 \002(\005\022\020\n\010"
-    "msgIndex\030\003 \002(\005\022\017\n\007azimuth\030\004 \002(\r\022\017\n\007headi"
-    "ng\030\005 \001(\r\022\022\n\nstartRange\030\006 \002(\001\022\023\n\013rangeFac"
-    "tor\030\007 \002(\001\0223\n\rbitResolution\030\010 \002(\0162\034.com.z"
-    "hichenhaixin.proto.RES\022\021\n\ttimeOfDay\030\t \002("
-    "\005\022\021\n\tamplitude\030\n \003(\005*}\n\006MSGTYP\022\024\n\020MSGTYP"
-    "_UNDEFINED\020\000\022\021\n\rTARGET_REPORT\020\001\022\031\n\025START"
-    "_OF_UPDATE_CYCLE\020\002\022\023\n\017PERIODIC_STATUS\020\003\022"
-    "\032\n\026EVENT_TRIGGERED_STATUS\020\004*B\n\003CNF\022\023\n\017CO"
-    "NFIRMED_TRACK\020\000\022\023\n\017TENTATIVE_TRACK\020\001\022\021\n\r"
-    "UNKNOWN_TRACK\020\002*\230\001\n\003CST\022\021\n\rCST_UNDEFINED"
-    "\020\000\022(\n$PREDICTABLE_EXTRAPOLATION_DUE_PERI"
-    "OD\020\001\022%\n!PREDICTABLE_EXTRAPOLATION_IN_ARE"
-    "A\020\002\022-\n)EXTRAPOLATION_DUE_UNPREDICTABLE_D"
-    "ETECTION\020\003*3\n\003STH\022\025\n\021MEASURED_POSITION\020\000"
-    "\022\025\n\021SMOOTHED_POSITION\020\001*\222\001\n\003RES\022\026\n\022MONOB"
-    "IT_RESOLUTION\020\001\022\022\n\016LOW_RESOLUTION\020\002\022\025\n\021M"
-    "EDIUM_RESOLUTION\020\003\022\023\n\017HIGH_RESOLUTION\020\004\022"
-    "\030\n\024VERY_HIGH_RESOLUTION\020\005\022\031\n\025ULTRA_HIGH_"
-    "RESOLUTION\020\006", 2172);
+    "in.proto.RadarHistoryTrack\"!\n\005Point\022\013\n\003l"
+    "at\030\001 \002(\001\022\013\n\003lon\030\002 \002(\001\"@\n\020RadarShapePoint"
+    "s\022,\n\004pnts\030\001 \003(\0132\036.com.zhichenhaixin.prot"
+    "o.Point\"\365\006\n\nTrackPoint\022\026\n\016systemAreaCode"
+    "\030\001 \002(\005\022 \n\030systemIdentificationCode\030\002 \002(\005"
+    "\0224\n\013messageType\030\003 \002(\0162\037.com.zhichenhaixi"
+    "n.proto.MSGTYP\022\023\n\013trackNumber\030\004 \002(\r\022\025\n\rc"
+    "artesianPosX\030\005 \002(\002\022\025\n\rcartesianPosY\030\006 \002("
+    "\002\022\023\n\013wgs84PosLat\030\007 \002(\001\022\024\n\014wgs84PosLong\030\010"
+    " \002(\001\022\021\n\ttimeOfDay\030\t \002(\002\022/\n\ttrackType\030\n \001"
+    "(\0162\034.com.zhichenhaixin.proto.CNF\022\027\n\017trac"
+    "kLastReport\030\013 \001(\010\0223\n\rextrapolation\030\014 \001(\016"
+    "2\034.com.zhichenhaixin.proto.CST\0227\n\021trackP"
+    "ositionCode\030\r \001(\0162\034.com.zhichenhaixin.pr"
+    "oto.STH\022\016\n\006sigmaX\030\016 \001(\002\022\016\n\006sigmaY\030\017 \001(\002\022"
+    "\017\n\007sigmaXY\030\020 \001(\002\022\024\n\014ampOfPriPlot\030\021 \001(\002\022\032"
+    "\n\022cartesianTrkVel_vx\030\022 \002(\001\022\032\n\022cartesianT"
+    "rkVel_vy\030\023 \002(\001\022\013\n\003cog\030\024 \002(\001\022\013\n\003sog\030\025 \002(\001"
+    "\022\023\n\013fleetNumber\030\026 \001(\005\022\016\n\006status\030\027 \001(\005\022\017\n"
+    "\007lonType\030\030 \001(\t\022\017\n\007latType\030\031 \001(\t\022\014\n\004type\030"
+    "\032 \001(\005\022\r\n\005aisid\030\033 \001(\t\022;\n\006tracks\030\034 \001(\0132+.c"
+    "om.zhichenhaixin.proto.RadarHistoryTrack"
+    "s\022\020\n\010diameter\030\035 \001(\005\022\026\n\016trackConfirmed\030\036 "
+    "\001(\010\022\017\n\007objType\030\037 \001(\005\022\017\n\007objName\030  \001(\t\0228\n"
+    "\005shape\030! \001(\0132).com.zhichenhaixin.proto.R"
+    "adarShapePoints\"\212\001\n\021RadarSurfaceTrack\022\014\n"
+    "\004flag\030\001 \002(\005\022\020\n\010sourceId\030\002 \002(\t\022\013\n\003UTC\030\003 \002"
+    "(\004\022\016\n\006length\030\004 \002(\005\0228\n\013trackPoints\030\005 \003(\0132"
+    "#.com.zhichenhaixin.proto.TrackPoint\"\376\001\n"
+    "\nVideoFrame\022\026\n\016systemAreaCode\030\001 \002(\005\022 \n\030s"
+    "ystemIdentificationCode\030\002 \002(\005\022\020\n\010msgInde"
+    "x\030\003 \002(\005\022\017\n\007azimuth\030\004 \002(\r\022\017\n\007heading\030\005 \001("
+    "\r\022\022\n\nstartRange\030\006 \002(\001\022\023\n\013rangeFactor\030\007 \002"
+    "(\001\0223\n\rbitResolution\030\010 \002(\0162\034.com.zhichenh"
+    "aixin.proto.RES\022\021\n\ttimeOfDay\030\t \002(\005\022\021\n\tam"
+    "plitude\030\n \003(\005*}\n\006MSGTYP\022\024\n\020MSGTYP_UNDEFI"
+    "NED\020\000\022\021\n\rTARGET_REPORT\020\001\022\031\n\025START_OF_UPD"
+    "ATE_CYCLE\020\002\022\023\n\017PERIODIC_STATUS\020\003\022\032\n\026EVEN"
+    "T_TRIGGERED_STATUS\020\004*B\n\003CNF\022\023\n\017CONFIRMED"
+    "_TRACK\020\000\022\023\n\017TENTATIVE_TRACK\020\001\022\021\n\rUNKNOWN"
+    "_TRACK\020\002*\230\001\n\003CST\022\021\n\rCST_UNDEFINED\020\000\022(\n$P"
+    "REDICTABLE_EXTRAPOLATION_DUE_PERIOD\020\001\022%\n"
+    "!PREDICTABLE_EXTRAPOLATION_IN_AREA\020\002\022-\n)"
+    "EXTRAPOLATION_DUE_UNPREDICTABLE_DETECTIO"
+    "N\020\003*3\n\003STH\022\025\n\021MEASURED_POSITION\020\000\022\025\n\021SMO"
+    "OTHED_POSITION\020\001*\222\001\n\003RES\022\026\n\022MONOBIT_RESO"
+    "LUTION\020\001\022\022\n\016LOW_RESOLUTION\020\002\022\025\n\021MEDIUM_R"
+    "ESOLUTION\020\003\022\023\n\017HIGH_RESOLUTION\020\004\022\030\n\024VERY"
+    "_HIGH_RESOLUTION\020\005\022\031\n\025ULTRA_HIGH_RESOLUT"
+    "ION\020\006", 2365);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ZCHXRadar.proto", &protobuf_RegisterTypes);
   RadarHistoryTrack::default_instance_ = new RadarHistoryTrack();
   RadarHistoryTracks::default_instance_ = new RadarHistoryTracks();
+  Point::default_instance_ = new Point();
+  RadarShapePoints::default_instance_ = new RadarShapePoints();
   TrackPoint::default_instance_ = new TrackPoint();
   RadarSurfaceTrack::default_instance_ = new RadarSurfaceTrack();
   VideoFrame::default_instance_ = new VideoFrame();
   RadarHistoryTrack::default_instance_->InitAsDefaultInstance();
   RadarHistoryTracks::default_instance_->InitAsDefaultInstance();
+  Point::default_instance_->InitAsDefaultInstance();
+  RadarShapePoints::default_instance_->InitAsDefaultInstance();
   TrackPoint::default_instance_->InitAsDefaultInstance();
   RadarSurfaceTrack::default_instance_->InitAsDefaultInstance();
   VideoFrame::default_instance_->InitAsDefaultInstance();
@@ -1203,6 +1260,497 @@ void RadarHistoryTracks::Swap(RadarHistoryTracks* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int Point::kLatFieldNumber;
+const int Point::kLonFieldNumber;
+#endif  // !_MSC_VER
+
+Point::Point()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:com.zhichenhaixin.proto.Point)
+}
+
+void Point::InitAsDefaultInstance() {
+}
+
+Point::Point(const Point& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:com.zhichenhaixin.proto.Point)
+}
+
+void Point::SharedCtor() {
+  _cached_size_ = 0;
+  lat_ = 0;
+  lon_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+Point::~Point() {
+  // @@protoc_insertion_point(destructor:com.zhichenhaixin.proto.Point)
+  SharedDtor();
+}
+
+void Point::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void Point::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* Point::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return Point_descriptor_;
+}
+
+const Point& Point::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ZCHXRadar_2eproto();
+  return *default_instance_;
+}
+
+Point* Point::default_instance_ = NULL;
+
+Point* Point::New() const {
+  return new Point;
+}
+
+void Point::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<Point*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(lat_, lon_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool Point::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:com.zhichenhaixin.proto.Point)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required double lat = 1;
+      case 1: {
+        if (tag == 9) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
+                 input, &lat_)));
+          set_has_lat();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(17)) goto parse_lon;
+        break;
+      }
+
+      // required double lon = 2;
+      case 2: {
+        if (tag == 17) {
+         parse_lon:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
+                 input, &lon_)));
+          set_has_lon();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:com.zhichenhaixin.proto.Point)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:com.zhichenhaixin.proto.Point)
+  return false;
+#undef DO_
+}
+
+void Point::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:com.zhichenhaixin.proto.Point)
+  // required double lat = 1;
+  if (has_lat()) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(1, this->lat(), output);
+  }
+
+  // required double lon = 2;
+  if (has_lon()) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(2, this->lon(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:com.zhichenhaixin.proto.Point)
+}
+
+::google::protobuf::uint8* Point::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:com.zhichenhaixin.proto.Point)
+  // required double lat = 1;
+  if (has_lat()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(1, this->lat(), target);
+  }
+
+  // required double lon = 2;
+  if (has_lon()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(2, this->lon(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:com.zhichenhaixin.proto.Point)
+  return target;
+}
+
+int Point::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required double lat = 1;
+    if (has_lat()) {
+      total_size += 1 + 8;
+    }
+
+    // required double lon = 2;
+    if (has_lon()) {
+      total_size += 1 + 8;
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Point::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const Point* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const Point*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void Point::MergeFrom(const Point& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_lat()) {
+      set_lat(from.lat());
+    }
+    if (from.has_lon()) {
+      set_lon(from.lon());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void Point::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Point::CopyFrom(const Point& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Point::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+
+  return true;
+}
+
+void Point::Swap(Point* other) {
+  if (other != this) {
+    std::swap(lat_, other->lat_);
+    std::swap(lon_, other->lon_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata Point::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = Point_descriptor_;
+  metadata.reflection = Point_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int RadarShapePoints::kPntsFieldNumber;
+#endif  // !_MSC_VER
+
+RadarShapePoints::RadarShapePoints()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:com.zhichenhaixin.proto.RadarShapePoints)
+}
+
+void RadarShapePoints::InitAsDefaultInstance() {
+}
+
+RadarShapePoints::RadarShapePoints(const RadarShapePoints& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:com.zhichenhaixin.proto.RadarShapePoints)
+}
+
+void RadarShapePoints::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+RadarShapePoints::~RadarShapePoints() {
+  // @@protoc_insertion_point(destructor:com.zhichenhaixin.proto.RadarShapePoints)
+  SharedDtor();
+}
+
+void RadarShapePoints::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void RadarShapePoints::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* RadarShapePoints::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return RadarShapePoints_descriptor_;
+}
+
+const RadarShapePoints& RadarShapePoints::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_ZCHXRadar_2eproto();
+  return *default_instance_;
+}
+
+RadarShapePoints* RadarShapePoints::default_instance_ = NULL;
+
+RadarShapePoints* RadarShapePoints::New() const {
+  return new RadarShapePoints;
+}
+
+void RadarShapePoints::Clear() {
+  pnts_.Clear();
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool RadarShapePoints::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:com.zhichenhaixin.proto.RadarShapePoints)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // repeated .com.zhichenhaixin.proto.Point pnts = 1;
+      case 1: {
+        if (tag == 10) {
+         parse_pnts:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_pnts()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(10)) goto parse_pnts;
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:com.zhichenhaixin.proto.RadarShapePoints)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:com.zhichenhaixin.proto.RadarShapePoints)
+  return false;
+#undef DO_
+}
+
+void RadarShapePoints::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:com.zhichenhaixin.proto.RadarShapePoints)
+  // repeated .com.zhichenhaixin.proto.Point pnts = 1;
+  for (int i = 0; i < this->pnts_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->pnts(i), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:com.zhichenhaixin.proto.RadarShapePoints)
+}
+
+::google::protobuf::uint8* RadarShapePoints::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:com.zhichenhaixin.proto.RadarShapePoints)
+  // repeated .com.zhichenhaixin.proto.Point pnts = 1;
+  for (int i = 0; i < this->pnts_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->pnts(i), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:com.zhichenhaixin.proto.RadarShapePoints)
+  return target;
+}
+
+int RadarShapePoints::ByteSize() const {
+  int total_size = 0;
+
+  // repeated .com.zhichenhaixin.proto.Point pnts = 1;
+  total_size += 1 * this->pnts_size();
+  for (int i = 0; i < this->pnts_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->pnts(i));
+  }
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void RadarShapePoints::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const RadarShapePoints* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const RadarShapePoints*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void RadarShapePoints::MergeFrom(const RadarShapePoints& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  pnts_.MergeFrom(from.pnts_);
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void RadarShapePoints::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void RadarShapePoints::CopyFrom(const RadarShapePoints& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RadarShapePoints::IsInitialized() const {
+
+  if (!::google::protobuf::internal::AllAreInitialized(this->pnts())) return false;
+  return true;
+}
+
+void RadarShapePoints::Swap(RadarShapePoints* other) {
+  if (other != this) {
+    pnts_.Swap(&other->pnts_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata RadarShapePoints::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = RadarShapePoints_descriptor_;
+  metadata.reflection = RadarShapePoints_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int TrackPoint::kSystemAreaCodeFieldNumber;
 const int TrackPoint::kSystemIdentificationCodeFieldNumber;
 const int TrackPoint::kMessageTypeFieldNumber;
@@ -1233,6 +1781,9 @@ const int TrackPoint::kAisidFieldNumber;
 const int TrackPoint::kTracksFieldNumber;
 const int TrackPoint::kDiameterFieldNumber;
 const int TrackPoint::kTrackConfirmedFieldNumber;
+const int TrackPoint::kObjTypeFieldNumber;
+const int TrackPoint::kObjNameFieldNumber;
+const int TrackPoint::kShapeFieldNumber;
 #endif  // !_MSC_VER
 
 TrackPoint::TrackPoint()
@@ -1243,6 +1794,7 @@ TrackPoint::TrackPoint()
 
 void TrackPoint::InitAsDefaultInstance() {
   tracks_ = const_cast< ::com::zhichenhaixin::proto::RadarHistoryTracks*>(&::com::zhichenhaixin::proto::RadarHistoryTracks::default_instance());
+  shape_ = const_cast< ::com::zhichenhaixin::proto::RadarShapePoints*>(&::com::zhichenhaixin::proto::RadarShapePoints::default_instance());
 }
 
 TrackPoint::TrackPoint(const TrackPoint& from)
@@ -1285,6 +1837,9 @@ void TrackPoint::SharedCtor() {
   tracks_ = NULL;
   diameter_ = 0;
   trackconfirmed_ = false;
+  objtype_ = 0;
+  objname_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  shape_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1303,8 +1858,12 @@ void TrackPoint::SharedDtor() {
   if (aisid_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete aisid_;
   }
+  if (objname_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete objname_;
+  }
   if (this != default_instance_) {
     delete tracks_;
+    delete shape_;
   }
 }
 
@@ -1357,7 +1916,8 @@ void TrackPoint::Clear() {
       }
     }
   }
-  if (_has_bits_[24 / 32] & 1056964608) {
+  if (_has_bits_[24 / 32] & 4278190080) {
+    ZR_(diameter_, objtype_);
     if (has_lattype()) {
       if (lattype_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         lattype_->clear();
@@ -1372,8 +1932,15 @@ void TrackPoint::Clear() {
     if (has_tracks()) {
       if (tracks_ != NULL) tracks_->::com::zhichenhaixin::proto::RadarHistoryTracks::Clear();
     }
-    diameter_ = 0;
     trackconfirmed_ = false;
+    if (has_objname()) {
+      if (objname_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        objname_->clear();
+      }
+    }
+  }
+  if (has_shape()) {
+    if (shape_ != NULL) shape_->::com::zhichenhaixin::proto::RadarShapePoints::Clear();
   }
 
 #undef OFFSET_OF_FIELD_
@@ -1862,6 +2429,51 @@ bool TrackPoint::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(248)) goto parse_objType;
+        break;
+      }
+
+      // optional int32 objType = 31;
+      case 31: {
+        if (tag == 248) {
+         parse_objType:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &objtype_)));
+          set_has_objtype();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(258)) goto parse_objName;
+        break;
+      }
+
+      // optional string objName = 32;
+      case 32: {
+        if (tag == 258) {
+         parse_objName:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_objname()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->objname().data(), this->objname().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "objname");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(266)) goto parse_shape;
+        break;
+      }
+
+      // optional .com.zhichenhaixin.proto.RadarShapePoints shape = 33;
+      case 33: {
+        if (tag == 266) {
+         parse_shape:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_shape()));
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -2061,6 +2673,27 @@ void TrackPoint::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(30, this->trackconfirmed(), output);
   }
 
+  // optional int32 objType = 31;
+  if (has_objtype()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(31, this->objtype(), output);
+  }
+
+  // optional string objName = 32;
+  if (has_objname()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->objname().data(), this->objname().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "objname");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      32, this->objname(), output);
+  }
+
+  // optional .com.zhichenhaixin.proto.RadarShapePoints shape = 33;
+  if (has_shape()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      33, this->shape(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -2243,6 +2876,29 @@ void TrackPoint::SerializeWithCachedSizes(
   // optional bool trackConfirmed = 30;
   if (has_trackconfirmed()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(30, this->trackconfirmed(), target);
+  }
+
+  // optional int32 objType = 31;
+  if (has_objtype()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(31, this->objtype(), target);
+  }
+
+  // optional string objName = 32;
+  if (has_objname()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->objname().data(), this->objname().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "objname");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        32, this->objname(), target);
+  }
+
+  // optional .com.zhichenhaixin.proto.RadarShapePoints shape = 33;
+  if (has_shape()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        33, this->shape(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -2439,6 +3095,29 @@ int TrackPoint::ByteSize() const {
       total_size += 2 + 1;
     }
 
+    // optional int32 objType = 31;
+    if (has_objtype()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->objtype());
+    }
+
+    // optional string objName = 32;
+    if (has_objname()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->objname());
+    }
+
+  }
+  if (_has_bits_[32 / 32] & (0xffu << (32 % 32))) {
+    // optional .com.zhichenhaixin.proto.RadarShapePoints shape = 33;
+    if (has_shape()) {
+      total_size += 2 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->shape());
+    }
+
   }
   if (!unknown_fields().empty()) {
     total_size +=
@@ -2562,6 +3241,17 @@ void TrackPoint::MergeFrom(const TrackPoint& from) {
     if (from.has_trackconfirmed()) {
       set_trackconfirmed(from.trackconfirmed());
     }
+    if (from.has_objtype()) {
+      set_objtype(from.objtype());
+    }
+    if (from.has_objname()) {
+      set_objname(from.objname());
+    }
+  }
+  if (from._has_bits_[32 / 32] & (0xffu << (32 % 32))) {
+    if (from.has_shape()) {
+      mutable_shape()->::com::zhichenhaixin::proto::RadarShapePoints::MergeFrom(from.shape());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -2583,6 +3273,9 @@ bool TrackPoint::IsInitialized() const {
 
   if (has_tracks()) {
     if (!this->tracks().IsInitialized()) return false;
+  }
+  if (has_shape()) {
+    if (!this->shape().IsInitialized()) return false;
   }
   return true;
 }
@@ -2619,7 +3312,11 @@ void TrackPoint::Swap(TrackPoint* other) {
     std::swap(tracks_, other->tracks_);
     std::swap(diameter_, other->diameter_);
     std::swap(trackconfirmed_, other->trackconfirmed_);
+    std::swap(objtype_, other->objtype_);
+    std::swap(objname_, other->objname_);
+    std::swap(shape_, other->shape_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
+    std::swap(_has_bits_[1], other->_has_bits_[1]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }

@@ -5,8 +5,7 @@
 #define PROTOBUF_ZCHXRadar_2eproto__INCLUDED
 
 #include <string>
-#include <QList>
-#include <QMap>
+
 #include <google/protobuf/stubs/common.h>
 
 #if GOOGLE_PROTOBUF_VERSION < 2006000
@@ -39,6 +38,8 @@ void protobuf_ShutdownFile_ZCHXRadar_2eproto();
 
 class RadarHistoryTrack;
 class RadarHistoryTracks;
+class Point;
+class RadarShapePoints;
 class TrackPoint;
 class RadarSurfaceTrack;
 class VideoFrame;
@@ -401,6 +402,177 @@ class RadarHistoryTracks : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class Point : public ::google::protobuf::Message {
+ public:
+  Point();
+  virtual ~Point();
+
+  Point(const Point& from);
+
+  inline Point& operator=(const Point& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Point& default_instance();
+
+  void Swap(Point* other);
+
+  // implements Message ----------------------------------------------
+
+  Point* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Point& from);
+  void MergeFrom(const Point& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required double lat = 1;
+  inline bool has_lat() const;
+  inline void clear_lat();
+  static const int kLatFieldNumber = 1;
+  inline double lat() const;
+  inline void set_lat(double value);
+
+  // required double lon = 2;
+  inline bool has_lon() const;
+  inline void clear_lon();
+  static const int kLonFieldNumber = 2;
+  inline double lon() const;
+  inline void set_lon(double value);
+
+  // @@protoc_insertion_point(class_scope:com.zhichenhaixin.proto.Point)
+ private:
+  inline void set_has_lat();
+  inline void clear_has_lat();
+  inline void set_has_lon();
+  inline void clear_has_lon();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  double lat_;
+  double lon_;
+  friend void  protobuf_AddDesc_ZCHXRadar_2eproto();
+  friend void protobuf_AssignDesc_ZCHXRadar_2eproto();
+  friend void protobuf_ShutdownFile_ZCHXRadar_2eproto();
+
+  void InitAsDefaultInstance();
+  static Point* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class RadarShapePoints : public ::google::protobuf::Message {
+ public:
+  RadarShapePoints();
+  virtual ~RadarShapePoints();
+
+  RadarShapePoints(const RadarShapePoints& from);
+
+  inline RadarShapePoints& operator=(const RadarShapePoints& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RadarShapePoints& default_instance();
+
+  void Swap(RadarShapePoints* other);
+
+  // implements Message ----------------------------------------------
+
+  RadarShapePoints* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const RadarShapePoints& from);
+  void MergeFrom(const RadarShapePoints& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .com.zhichenhaixin.proto.Point pnts = 1;
+  inline int pnts_size() const;
+  inline void clear_pnts();
+  static const int kPntsFieldNumber = 1;
+  inline const ::com::zhichenhaixin::proto::Point& pnts(int index) const;
+  inline ::com::zhichenhaixin::proto::Point* mutable_pnts(int index);
+  inline ::com::zhichenhaixin::proto::Point* add_pnts();
+  inline const ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::Point >&
+      pnts() const;
+  inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::Point >*
+      mutable_pnts();
+
+  // @@protoc_insertion_point(class_scope:com.zhichenhaixin.proto.RadarShapePoints)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::Point > pnts_;
+  friend void  protobuf_AddDesc_ZCHXRadar_2eproto();
+  friend void protobuf_AssignDesc_ZCHXRadar_2eproto();
+  friend void protobuf_ShutdownFile_ZCHXRadar_2eproto();
+
+  void InitAsDefaultInstance();
+  static RadarShapePoints* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class TrackPoint : public ::google::protobuf::Message {
  public:
   TrackPoint();
@@ -681,6 +853,34 @@ class TrackPoint : public ::google::protobuf::Message {
   inline bool trackconfirmed() const;
   inline void set_trackconfirmed(bool value);
 
+  // optional int32 objType = 31;
+  inline bool has_objtype() const;
+  inline void clear_objtype();
+  static const int kObjTypeFieldNumber = 31;
+  inline ::google::protobuf::int32 objtype() const;
+  inline void set_objtype(::google::protobuf::int32 value);
+
+  // optional string objName = 32;
+  inline bool has_objname() const;
+  inline void clear_objname();
+  static const int kObjNameFieldNumber = 32;
+  inline const ::std::string& objname() const;
+  inline void set_objname(const ::std::string& value);
+  inline void set_objname(const char* value);
+  inline void set_objname(const char* value, size_t size);
+  inline ::std::string* mutable_objname();
+  inline ::std::string* release_objname();
+  inline void set_allocated_objname(::std::string* objname);
+
+  // optional .com.zhichenhaixin.proto.RadarShapePoints shape = 33;
+  inline bool has_shape() const;
+  inline void clear_shape();
+  static const int kShapeFieldNumber = 33;
+  inline const ::com::zhichenhaixin::proto::RadarShapePoints& shape() const;
+  inline ::com::zhichenhaixin::proto::RadarShapePoints* mutable_shape();
+  inline ::com::zhichenhaixin::proto::RadarShapePoints* release_shape();
+  inline void set_allocated_shape(::com::zhichenhaixin::proto::RadarShapePoints* shape);
+
   // @@protoc_insertion_point(class_scope:com.zhichenhaixin.proto.TrackPoint)
  private:
   inline void set_has_systemareacode();
@@ -743,11 +943,16 @@ class TrackPoint : public ::google::protobuf::Message {
   inline void clear_has_diameter();
   inline void set_has_trackconfirmed();
   inline void clear_has_trackconfirmed();
+  inline void set_has_objtype();
+  inline void clear_has_objtype();
+  inline void set_has_objname();
+  inline void clear_has_objname();
+  inline void set_has_shape();
+  inline void clear_has_shape();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
-  ::google::protobuf::uint32 _has_bits_[1];
-  mutable int _cached_size_;
+  ::google::protobuf::uint32 _has_bits_[2];
   ::google::protobuf::int32 systemareacode_;
   ::google::protobuf::int32 systemidentificationcode_;
   int messagetype_;
@@ -778,6 +983,10 @@ class TrackPoint : public ::google::protobuf::Message {
   ::std::string* aisid_;
   ::com::zhichenhaixin::proto::RadarHistoryTracks* tracks_;
   ::google::protobuf::int32 diameter_;
+  ::google::protobuf::int32 objtype_;
+  ::std::string* objname_;
+  ::com::zhichenhaixin::proto::RadarShapePoints* shape_;
+  mutable int _cached_size_;
   friend void  protobuf_AddDesc_ZCHXRadar_2eproto();
   friend void protobuf_AssignDesc_ZCHXRadar_2eproto();
   friend void protobuf_ShutdownFile_ZCHXRadar_2eproto();
@@ -1366,6 +1575,92 @@ inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::RadarH
 RadarHistoryTracks::mutable_track() {
   // @@protoc_insertion_point(field_mutable_list:com.zhichenhaixin.proto.RadarHistoryTracks.track)
   return &track_;
+}
+
+// -------------------------------------------------------------------
+
+// Point
+
+// required double lat = 1;
+inline bool Point::has_lat() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Point::set_has_lat() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Point::clear_has_lat() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Point::clear_lat() {
+  lat_ = 0;
+  clear_has_lat();
+}
+inline double Point::lat() const {
+  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.Point.lat)
+  return lat_;
+}
+inline void Point::set_lat(double value) {
+  set_has_lat();
+  lat_ = value;
+  // @@protoc_insertion_point(field_set:com.zhichenhaixin.proto.Point.lat)
+}
+
+// required double lon = 2;
+inline bool Point::has_lon() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Point::set_has_lon() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Point::clear_has_lon() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Point::clear_lon() {
+  lon_ = 0;
+  clear_has_lon();
+}
+inline double Point::lon() const {
+  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.Point.lon)
+  return lon_;
+}
+inline void Point::set_lon(double value) {
+  set_has_lon();
+  lon_ = value;
+  // @@protoc_insertion_point(field_set:com.zhichenhaixin.proto.Point.lon)
+}
+
+// -------------------------------------------------------------------
+
+// RadarShapePoints
+
+// repeated .com.zhichenhaixin.proto.Point pnts = 1;
+inline int RadarShapePoints::pnts_size() const {
+  return pnts_.size();
+}
+inline void RadarShapePoints::clear_pnts() {
+  pnts_.Clear();
+}
+inline const ::com::zhichenhaixin::proto::Point& RadarShapePoints::pnts(int index) const {
+  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.RadarShapePoints.pnts)
+  return pnts_.Get(index);
+}
+inline ::com::zhichenhaixin::proto::Point* RadarShapePoints::mutable_pnts(int index) {
+  // @@protoc_insertion_point(field_mutable:com.zhichenhaixin.proto.RadarShapePoints.pnts)
+  return pnts_.Mutable(index);
+}
+inline ::com::zhichenhaixin::proto::Point* RadarShapePoints::add_pnts() {
+  // @@protoc_insertion_point(field_add:com.zhichenhaixin.proto.RadarShapePoints.pnts)
+  return pnts_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::Point >&
+RadarShapePoints::pnts() const {
+  // @@protoc_insertion_point(field_list:com.zhichenhaixin.proto.RadarShapePoints.pnts)
+  return pnts_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::com::zhichenhaixin::proto::Point >*
+RadarShapePoints::mutable_pnts() {
+  // @@protoc_insertion_point(field_mutable_list:com.zhichenhaixin.proto.RadarShapePoints.pnts)
+  return &pnts_;
 }
 
 // -------------------------------------------------------------------
@@ -2267,6 +2562,147 @@ inline void TrackPoint::set_trackconfirmed(bool value) {
   set_has_trackconfirmed();
   trackconfirmed_ = value;
   // @@protoc_insertion_point(field_set:com.zhichenhaixin.proto.TrackPoint.trackConfirmed)
+}
+
+// optional int32 objType = 31;
+inline bool TrackPoint::has_objtype() const {
+  return (_has_bits_[0] & 0x40000000u) != 0;
+}
+inline void TrackPoint::set_has_objtype() {
+  _has_bits_[0] |= 0x40000000u;
+}
+inline void TrackPoint::clear_has_objtype() {
+  _has_bits_[0] &= ~0x40000000u;
+}
+inline void TrackPoint::clear_objtype() {
+  objtype_ = 0;
+  clear_has_objtype();
+}
+inline ::google::protobuf::int32 TrackPoint::objtype() const {
+  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.TrackPoint.objType)
+  return objtype_;
+}
+inline void TrackPoint::set_objtype(::google::protobuf::int32 value) {
+  set_has_objtype();
+  objtype_ = value;
+  // @@protoc_insertion_point(field_set:com.zhichenhaixin.proto.TrackPoint.objType)
+}
+
+// optional string objName = 32;
+inline bool TrackPoint::has_objname() const {
+  return (_has_bits_[0] & 0x80000000u) != 0;
+}
+inline void TrackPoint::set_has_objname() {
+  _has_bits_[0] |= 0x80000000u;
+}
+inline void TrackPoint::clear_has_objname() {
+  _has_bits_[0] &= ~0x80000000u;
+}
+inline void TrackPoint::clear_objname() {
+  if (objname_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    objname_->clear();
+  }
+  clear_has_objname();
+}
+inline const ::std::string& TrackPoint::objname() const {
+  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.TrackPoint.objName)
+  return *objname_;
+}
+inline void TrackPoint::set_objname(const ::std::string& value) {
+  set_has_objname();
+  if (objname_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    objname_ = new ::std::string;
+  }
+  objname_->assign(value);
+  // @@protoc_insertion_point(field_set:com.zhichenhaixin.proto.TrackPoint.objName)
+}
+inline void TrackPoint::set_objname(const char* value) {
+  set_has_objname();
+  if (objname_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    objname_ = new ::std::string;
+  }
+  objname_->assign(value);
+  // @@protoc_insertion_point(field_set_char:com.zhichenhaixin.proto.TrackPoint.objName)
+}
+inline void TrackPoint::set_objname(const char* value, size_t size) {
+  set_has_objname();
+  if (objname_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    objname_ = new ::std::string;
+  }
+  objname_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:com.zhichenhaixin.proto.TrackPoint.objName)
+}
+inline ::std::string* TrackPoint::mutable_objname() {
+  set_has_objname();
+  if (objname_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    objname_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:com.zhichenhaixin.proto.TrackPoint.objName)
+  return objname_;
+}
+inline ::std::string* TrackPoint::release_objname() {
+  clear_has_objname();
+  if (objname_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = objname_;
+    objname_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void TrackPoint::set_allocated_objname(::std::string* objname) {
+  if (objname_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete objname_;
+  }
+  if (objname) {
+    set_has_objname();
+    objname_ = objname;
+  } else {
+    clear_has_objname();
+    objname_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:com.zhichenhaixin.proto.TrackPoint.objName)
+}
+
+// optional .com.zhichenhaixin.proto.RadarShapePoints shape = 33;
+inline bool TrackPoint::has_shape() const {
+  return (_has_bits_[1] & 0x00000001u) != 0;
+}
+inline void TrackPoint::set_has_shape() {
+  _has_bits_[1] |= 0x00000001u;
+}
+inline void TrackPoint::clear_has_shape() {
+  _has_bits_[1] &= ~0x00000001u;
+}
+inline void TrackPoint::clear_shape() {
+  if (shape_ != NULL) shape_->::com::zhichenhaixin::proto::RadarShapePoints::Clear();
+  clear_has_shape();
+}
+inline const ::com::zhichenhaixin::proto::RadarShapePoints& TrackPoint::shape() const {
+  // @@protoc_insertion_point(field_get:com.zhichenhaixin.proto.TrackPoint.shape)
+  return shape_ != NULL ? *shape_ : *default_instance_->shape_;
+}
+inline ::com::zhichenhaixin::proto::RadarShapePoints* TrackPoint::mutable_shape() {
+  set_has_shape();
+  if (shape_ == NULL) shape_ = new ::com::zhichenhaixin::proto::RadarShapePoints;
+  // @@protoc_insertion_point(field_mutable:com.zhichenhaixin.proto.TrackPoint.shape)
+  return shape_;
+}
+inline ::com::zhichenhaixin::proto::RadarShapePoints* TrackPoint::release_shape() {
+  clear_has_shape();
+  ::com::zhichenhaixin::proto::RadarShapePoints* temp = shape_;
+  shape_ = NULL;
+  return temp;
+}
+inline void TrackPoint::set_allocated_shape(::com::zhichenhaixin::proto::RadarShapePoints* shape) {
+  delete shape_;
+  shape_ = shape;
+  if (shape) {
+    set_has_shape();
+  } else {
+    clear_has_shape();
+  }
+  // @@protoc_insertion_point(field_set_allocated:com.zhichenhaixin.proto.TrackPoint.shape)
 }
 
 // -------------------------------------------------------------------
