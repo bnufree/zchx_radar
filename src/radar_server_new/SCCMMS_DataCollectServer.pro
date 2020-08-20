@@ -234,7 +234,6 @@ FORMS    += \
 
 
 DISTFILES += \
-    SCCMMSComData.proto \
     zmq/SCCMMSComData.proto \
     increase.png \
     ../protobuf/doc/ZCHXAISVessel.proto \

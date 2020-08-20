@@ -42,6 +42,8 @@ zchxRadarTargetTrack::zchxRadarTargetTrack(int id, const Latlon& ll, int clear_t
     , mMaxEstCount(5)
     , mRangeFactor(10)
     , mPredictionWidth(predictionWidth)
+    , mTargetPredictionInterval(2)
+    , mIsTargetPrediction(false)
 {
     mDirectionInvertThresholdVal = 60.0;
     mTargetMergeDis = 100.0;
@@ -1250,33 +1252,16 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
         //更新时间
         if(node->mUpdateTime < child_time) node->mUpdateTime = child_time;
         //虚警判断
-        if(node->isNodePoint())
-        {
-            bool false_alarm = node->isFalseAlarm(cur_cycle_index);
-        }
+        node->mFalseAlarm = node->isFalseAlarm(cur_cycle_index);
+        //寻找重复目标（速度和方向都相同）
         QList<TargetNode*> children = node->getAllBranchLastChild();
-//        if(children.size() > 1)
-//        {
-//            qDebug()<<"found abnormal children size:"<<children.size();
-//        }
-        TargetNode* checkNode =0;
-        if(children.size() == 0)
+        if(children.size() > 1)
         {
-            checkNode = node.data();
-        } else
-        {
-            if(children.size() == 1)
-            {
-               checkNode = node->getLastChild();
-            }
-            foreach (TargetNode* child, children) {
-                if(node->mUpdateTime < child->mUpdateTime)
-                {
-                    node->mUpdateTime = child->mUpdateTime;
-                    node->mDefRect->set_updatetime(node->mUpdateTime);
-                }
-            }
+            //目标现在还没有输出，不处理
+            continue;
         }
+        TargetNode* checkNode = node.data();
+        if(children.size() > 0 ) checkNode = node->getLastChild();
         if(!checkNode) continue;
         int key = checkNode->mDefRect->rectnumber();
         QList<TargetNode*> &list = counterNode[key];
@@ -1285,25 +1270,22 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
         foreach (TargetNode* tmpNode, list)
         {
             double cog_difff = checkNode->mDefRect->cog() - tmpNode->mDefRect->cog();
-            if(fabs(cog_difff) < 10)
+            if(fabs(cog_difff) >= 10) continue;
+            //相同，删除冗余的目标（路径最短的目标）
+            found = true;
+            TargetNode* chk_parent = checkNode->topNode();
+            TargetNode* tmp_parent = tmpNode->topNode();
+            if(chk_parent && tmp_parent)
             {
-                //相同，删除冗余的目标（路径最短的目标）
-                found = true;
-                TargetNode* chk_parent = checkNode->topNode();
-                TargetNode* tmp_parent = tmpNode->topNode();
-                if(chk_parent && tmp_parent)
+                if(chk_parent->getDepth() < tmp_parent->getDepth())
                 {
-                    if(chk_parent->getDepth() < tmp_parent->getDepth())
-                    {
-                        deleteNodeList.append(chk_parent->mSerialNum);
-                    } else
-                    {
-                        deleteNodeList.append(tmp_parent->mSerialNum);
-                    }
+                    deleteNodeList.append(chk_parent->mSerialNum);
+                } else
+                {
+                    deleteNodeList.append(tmp_parent->mSerialNum);
                 }
-
-                break;
             }
+            break;
         }
         if(!found)
         {
@@ -1314,69 +1296,33 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
     foreach (int key, deleteNodeList) {
         mTargetNodeMap.remove(key);
     }
-
-#if 0
-    //更新目标的回波周期，如果运动目标没有更新，则间隔两个周期进行预推
-    foreach (QSharedPointer<TargetNode> node, mTargetNodeMap)
+    //检查是否要对当次没有更新的目标进行预推更新
+    if(mIsTargetPrediction)
     {
-        if(!node) continue;
-
-        node->setAllNodeSeriaNum(node->mSerialNum);
-        QList<TargetNode*> children = node->getAllBranchLastChild();
-        TargetNode* checkNode =0;
-        if(children.size() == 0)
+        foreach (QSharedPointer<TargetNode> node, mTargetNodeMap)
         {
-            checkNode = node.data();
-        } else
-        {
-            if(children.size() == 1)
+            //只对运动目标进行预推
+            if(!node || !node->isNodeMoving()) continue;
+            QList<uint> list = node->getVideoIndexList();
+            if(list.size() == 0) continue;
+            if(cur_cycle_index == list.last())
             {
-               checkNode = node->getLastChild();
+                //目标本次进行了更新，则清楚目标原来的预推参数信息
+                node->clearPrediction();
+                continue;
             }
-            foreach (TargetNode* child, children) {
-                if(node->mUpdateTime < child->mUpdateTime)
-                {
-                    node->mUpdateTime = child->mUpdateTime;
-                    node->mDefRect->set_updatetime(node->mUpdateTime);
-                }
-            }
-        }
-        if(!checkNode) continue;
-        int key = checkNode->mDefRect->rectnumber();
-        QList<TargetNode*> &list = counterNode[key];
-        //检查有没有方向相同的目标
-        bool found = false;
-        foreach (TargetNode* tmpNode, list)
-        {
-            double cog_difff = checkNode->mDefRect->cog() - tmpNode->mDefRect->cog();
-            if(fabs(cog_difff) < 10)
+            //目标本次没有更新，需要进行检查本次是否需要预推
+            uint baseIndex = list.last();
+            if(node->mPredictionTimes > 0)
             {
-                //相同，删除冗余的目标（路径最短的目标）
-                found = true;
-                TargetNode* chk_parent = checkNode->topNode();
-                TargetNode* tmp_parent = tmpNode->topNode();
-                if(chk_parent && tmp_parent)
-                {
-                    if(chk_parent->getDepth() < tmp_parent->getDepth())
-                    {
-                        deleteNodeList.append(chk_parent->mSerialNum);
-                    } else
-                    {
-                        deleteNodeList.append(tmp_parent->mSerialNum);
-                    }
-                }
-
-                break;
+                baseIndex = node->mPredictionIndex;
             }
-        }
-        if(!found)
-        {
-            counterNode[key].append(checkNode);
+
+            if(cur_cycle_index - baseIndex  < mTargetPredictionInterval) continue;
+            //开始执行目标预推
+            node->makePrediction(cur_cycle_index, task.first().updatetime());
         }
     }
-#endif
-
-
 
     //删除很久没有更新的目标点
     deleteExpiredNode();
@@ -1631,12 +1577,9 @@ void zchxRadarTargetTrack::deleteExpiredNode()
         if(!node) continue;
         quint32 node_time = node->mUpdateTime;
         quint32 delta_time = time_of_day - node_time;
-        bool reason1 = (delta_time > /*mClearTrackTime*/120);
-        bool reason2 = /*(node->est_count >= mMaxEstCount)*/false;
-        if( reason1 || reason2)
+        if(delta_time >= mClearTrackTime)
         {
-            qDebug()<<"now:"<<time_of_day<<" node time:"<<node_time<<" delta_time:"<<delta_time<<" clear time:"<<mClearTrackTime;
-            qDebug()<<"remove node:"<<node.data()->mSerialNum<<" reason:"<<(reason1 == true ? "time expired": (reason2 == true ? "max estmation" : "" ));
+            if(DEBUG_TRACK_INFO) qDebug()<<"remove node:"<<node.data()->mSerialNum<<"now:"<<time_of_day<<" node time:"<<node_time<<" delta_time:"<<delta_time<<" clear time:"<<mClearTrackTime;
             mTargetNodeMap.remove(key);
             continue;
         }

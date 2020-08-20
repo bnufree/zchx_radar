@@ -29,6 +29,9 @@ public:
     TargetNode*                                 mParent;             //父亲
     QList<uint>                                  mVideoIndexList;       //回波周期
     bool                                        mFalseAlarm;         //是否为虚警
+    TargetNode*                                 mPredictionNode;    //预推节点
+    uint                                        mPredictionIndex;   //预推节点对应的回波周期
+    uint                                        mPredictionTimes;   //预推次数
 
     TargetNode();
     TargetNode(const zchxRadarRectDef& other, TargetNode* parentNode = 0);
@@ -56,6 +59,9 @@ public:
     //获取子节点最后的更新时间
     uint getLatestChildUpdateTime();
     bool isFalseAlarm(int video_index_now);
+    //清除预推信息
+    void clearPrediction();
+    void makePrediction(int videoIndex, uint videoTime, bool fixed_space_time = false);
 
 };
 

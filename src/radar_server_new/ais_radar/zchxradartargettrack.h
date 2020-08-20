@@ -111,6 +111,9 @@ private:
     double                      mRangeFactor;
     double                      mPredictionWidth;                   //预推区域的宽度
     QMap<int, UserSpecifiedObj>     mUserDefObj;                    //
+    //目标是否预推更新
+    bool                        mIsTargetPrediction;                //是否进行预推
+    int                         mTargetPredictionInterval;           //预推周期 比如2个周期更新一次
 };
 
 #endif // ZCHXRADARTARGETTRACK_H

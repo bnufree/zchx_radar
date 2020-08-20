@@ -1,5 +1,6 @@
 ﻿#include "targetnode.h"
 #include "zchxfunction.h"
+#include <QSharedPointer>
 
 #define         FALSE_ALARM_INDEX_SIZE   10
 #define         FALSE_ALARM_CONTINUE_EMPTY  5
@@ -15,8 +16,9 @@ TargetNode::TargetNode()
     mStatus = Node_UnDef;
     mSerialNum = 0;
     mFalseAlarm = false;
+    mPredictionNode = 0;
 }
-TargetNode::TargetNode(const zchxRadarRectDef& other, TargetNode* parentNode = 0)
+TargetNode::TargetNode(const zchxRadarRectDef& other, TargetNode* parentNode)
 {
     mDefRect = new zchxRadarRectDef(other);
     mChildren.clear();
@@ -31,6 +33,7 @@ TargetNode::TargetNode(const zchxRadarRectDef& other, TargetNode* parentNode = 0
     }
     mVideoIndexList.append(other.videocycleindex());
     mFalseAlarm = false;
+    mPredictionNode = 0;
 }
 
 void TargetNode::setStatus(NodeStatus sts)
@@ -88,7 +91,7 @@ bool TargetNode::isNodeMoving() const
     return mStatus == Node_Moving;
 }
 
-double TargetNode::getReferenceSog(bool average = true)
+double TargetNode::getReferenceSog(bool average)
 {
     if(!mDefRect) return 0.0;
     double sum = mDefRect->sog();
@@ -108,7 +111,7 @@ double TargetNode::getReferenceSog(bool average = true)
     return sum / num;
 }
 
-double TargetNode::getReferenceCog(bool average = true)
+double TargetNode::getReferenceCog(bool average)
 {
     if(!mDefRect) return 0.0;
     double sum = mDefRect->cog();
@@ -255,21 +258,79 @@ uint TargetNode::getLatestChildUpdateTime()
 bool TargetNode::isFalseAlarm(int video_index_now)
 {
     //静止目标才判断是不是虚警。静止目标没有子节点 只有一个节点
-    if(mChildren.size() > 0) return false;
+    if(!isNodePoint()) return false;
     QList<uint> list = getVideoIndexList();
     if(list.size() == 0) return false;
     //获取目标统计的开始周期
     uint now = video_index_now;
+    uint end = list.last();
+    if(now < end) now += MAX_RADAR_VIDEO_INDEX_T;
     uint start = list.first();
-    uint end = video_index_now;
-    if(end < start) end += MAX_RADAR_VIDEO_INDEX_T;
-    int seg = end - start + 1;
+    uint seg = now - start + 1;
     if(seg < FALSE_ALARM_INDEX_SIZE) return false;
-
-    //检查是否连续空缺的周期数
-    for(int i=1 ; i<list.size(); i++)
+    start = now - FALSE_ALARM_INDEX_SIZE + 1;
+    //从开始位置看，各个值是否包含在回波周期队列中，进行连续计数或者缺失统计
+    int continue_num = 0;
+    int total_num = 0;
+    for(uint i=start; i<=now; i++)
     {
-        int now = list[i];
-
+        if(list.contains(i))
+        {
+            continue_num = 0;
+            continue;
+        }
+        continue_num++;
+        total_num++;
+        if(continue_num == FALSE_ALARM_CONTINUE_EMPTY)
+        {
+            return true;
+        }
+        if(total_num >= int(ceil(FALSE_ALARM_INDEX_SIZE * FALSE_ALARM_COUNTER_PERCENT)))
+        {
+            return true;
+        }
     }
+    return false;
+}
+
+void TargetNode::clearPrediction()
+{
+    if(mPredictionNode) delete mPredictionNode;
+    mPredictionIndex = 0;
+    mPredictionTimes = 0;
+    mPredictionNode = 0;
+}
+
+void TargetNode::makePrediction(int videoIndex, uint videoTime, bool fixed_space_time)
+{
+    TargetNode *baseNode = getLastChild();
+    if(mPredictionTimes > 0)
+    {
+        baseNode = mPredictionNode;
+    }
+    //构造回波矩形
+    zchxRadarRectDef def(*mDefRect);
+    if(mPredictionNode) def.CopyFrom(*(mPredictionNode->mDefRect));
+    uint last_time = def.updatetime();
+    uint delta_time = videoTime - last_time;        //预推的时间间隔（S）
+    if(fixed_space_time) delta_time = 3;
+    double distance = def.sog() * delta_time;
+    QGeoCoordinate src(def.centerlatitude(), def.centerlongitude());
+    QGeoCoordinate dest = src.atDistanceAndAzimuth(distance, def.cog());
+    def.set_centerlatitude(dest.latitude());
+    def.set_centerlongitude(dest.longitude());
+    def.set_updatetime(videoTime);
+    def.set_videocycleindex(videoIndex);
+    mPredictionIndex = videoIndex;
+    mPredictionTimes++;
+    if(mPredictionNode)
+    {
+        mPredictionNode->mDefRect->CopyFrom(def);
+    } else
+    {
+        mPredictionNode = new TargetNode(def, 0);
+    }
+    mPredictionNode->mSerialNum = mSerialNum;
+    mPredictionNode->mUpdateTime = videoTime;
+    mPredictionNode->mStatus = mStatus;
 }
