@@ -129,7 +129,8 @@ SOURCES += main.cpp\
     ../protobuf/2.6.1/ZCHXRadarDataDef.pb.cc \
     ../protobuf/2.6.1/ZCHXBd.pb.cc \
     msgserver.cpp \
-    ais_radar/targetnode.cpp
+    ais_radar/targetnode.cpp \
+    mainprocess.cpp
 
 HEADERS  += \
     Log.h \
@@ -201,7 +202,8 @@ HEADERS  += \
     ../protobuf/2.6.1/ZCHXBd.pb.h \
     msgserver.h \
     radardatautils.h \
-    ais_radar/targetnode.h
+    ais_radar/targetnode.h \
+    mainprocess.h
 
 
 
