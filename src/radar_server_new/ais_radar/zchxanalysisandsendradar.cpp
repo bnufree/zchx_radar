@@ -673,7 +673,6 @@ void ZCHXAnalysisAndSendRadar::analysisLowranceRadarSlot(const QByteArray &sRada
 //    QList<int> pIndexList;
 //    struct SAzmData sAzmData;
     //std::list<TrackInfo> trackList;
-    zchxVideoFrameList frameList;
     double range_factor;
     for (int scanline = 0; scanline < scanlines_in_packet; scanline++) {
         QDateTime curDateTime_1 = QDateTime::currentDateTime();
@@ -1003,35 +1002,19 @@ void ZCHXAnalysisAndSendRadar::setRadarAfterglowPixmap(const int uIndex, const Q
     if(!m_prePixmap.isNull())
         m_prePixmap.save(&preBuffer ,"PNG");
 
-    com::zhichenhaixin::proto::RadarVideo *objRadarVideo = new com::zhichenhaixin::proto::RadarVideo;
+    com::zhichenhaixin::proto::RadarVideoImage *objRadarVideo = new com::zhichenhaixin::proto::RadarVideoImage;
 
     //封装proto
     radar_num = Utils::Profiles::instance()->value(str_radar,"radar_num").toInt();//雷达编号
     objRadarVideo->set_radarid(radar_num);
     objRadarVideo->set_radarname("雷达回波余辉");
-    objRadarVideo->set_latitude(m_dCentreLat);
-    objRadarVideo->set_longitude(m_dCentreLon);
+    objRadarVideo->mutable_center()->set_latitude(m_dCentreLat);
+    objRadarVideo->mutable_center()->set_longitude(m_dCentreLon);
     objRadarVideo->set_utc(QDateTime::currentMSecsSinceEpoch());
     objRadarVideo->set_height(videoPixmap.height());
     objRadarVideo->set_width(videoPixmap.width());
     objRadarVideo->set_radius(m_dRadius);
     objRadarVideo->set_imagedata(videoArray.data(),videoArray.size());
-
-//    cout<<"图片纬度m_dCentreLat"<<m_dCentreLat;
-//    cout<<"图片经度m_dCentreLat"<<m_dCentreLon;
-    //以下是余辉要用的
-    objRadarVideo->set_curimagedata(pixArray.data(),pixArray.size());
-    if(!m_prePixmap.isNull())
-        objRadarVideo->set_preimagedata(preArray.data(),preArray.size());
-    else
-        objRadarVideo->set_preimagedata(NULL,0);
-    objRadarVideo->set_loopnum(m_uLoopNum);
-    objRadarVideo->set_curindex(uIndex);
-
-    //通过zmq发送
-//    QByteArray sendData;
-//    sendData.resize(objRadarVideo.ByteSize());
-//    objRadarVideo.SerializePartialToArray(sendData.data(),sendData.size());
 
     mRadarOutMgr->appendData(zchxRadarUtils::protoBufMsg2ByteArray(objRadarVideo), mRadarVideoTopic, mRadarVideoPort);
     delete objRadarVideo;

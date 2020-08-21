@@ -1,4 +1,4 @@
-#include "fusedatautil.h"
+﻿#include "fusedatautil.h"
 #include "util.h"
 #include "profiles.h"
 #include "math.h"
@@ -173,12 +173,12 @@ void FuseDataUtil::slotSendComTracks(const zchxTrackPointMap& srcMap)
         RadarSimpleData* hisItem = new RadarSimpleData();
         hisItem->trackNumber = obj.tracknumber();
         hisItem->utc = QDateTime::currentMSecsSinceEpoch();
-        hisItem->wgs84PosLat = obj.wgs84poslat();
-        hisItem->wgs84PosLong = obj.wgs84poslong();
-        hisItem->cog = obj.cog();
-        hisItem->sog = obj.sog();
+        hisItem->wgs84PosLat = obj.current().center().latitude();
+        hisItem->wgs84PosLong = obj.current().center().longitude();
+        hisItem->cog = obj.current().cog();
+        hisItem->sog = obj.current().sogknot();
 
-        obj.set_type(TYPE_AIS);
+//        obj.set_type(TYPE_AIS);
 
         RadarSimpleData* radar = NULL;
         if (RadarDataEhcache.contains(hisItem->trackNumber))
@@ -213,8 +213,8 @@ void FuseDataUtil::slotSendComTracks(const zchxTrackPointMap& srcMap)
             {
                 qDebug() << "dddddddddddddddddddd" << data->id << trackNumber;
                 zchxTrackPoint & newData = radarMap[trackNumber];
-                newData.set_type(TYPE_MERGE);
-                newData.set_aisid(data->id.toUtf8().data());
+//                newData.set_type(TYPE_MERGE);
+//                newData.set_aisid(data->id.toUtf8().data());
 //                qDebug() << "eeeeeeeeeeeeeeeeeeee"
 //                         << radarMap.value(trackNumber).type()
 //                         << radarMap.value(trackNumber).aisid().c_str();

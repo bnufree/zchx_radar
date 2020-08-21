@@ -9,9 +9,7 @@
 #include <QMap>
 #include <QList>
 #include <QPixmap>
-#include "ZCHXRadar.pb.h"
 #include "zmq.h"
-#include "ZCHXRadarVideo.pb.h"
 #include "zchxdrawvideorunnable.h"
 #include <QThread>
 #include "zchxfunction.h"
@@ -24,7 +22,6 @@
 #include <QTcpSocket>
 #include "zchxRadarVideoRecvThread.h"
 
-typedef com::zhichenhaixin::proto::RadarVideo  ITF_RadarVideo;
 typedef com::zhichenhaixin::proto::TrackPoint  ITF_RadarPoint;
 
 struct RadarSimpleData

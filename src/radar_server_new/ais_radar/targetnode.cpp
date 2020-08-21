@@ -94,14 +94,14 @@ bool TargetNode::isNodeMoving() const
 double TargetNode::getReferenceSog(bool average)
 {
     if(!mDefRect) return 0.0;
-    double sum = mDefRect->sog();
+    double sum = mDefRect->sogms();
     if(!average) return sum;
     int num = 1;
     TargetNode* pre = mParent;
     while (pre) {
         if(pre->mDefRect && pre->mParent)  //根节点没有速度  暂且不考虑
         {
-            sum += pre->mDefRect->sog();
+            sum += pre->mDefRect->sogms();
             num++;
         }
         if(num == 5) break;
@@ -314,11 +314,11 @@ void TargetNode::makePrediction(int videoIndex, uint videoTime, bool fixed_space
     uint last_time = def.updatetime();
     uint delta_time = videoTime - last_time;        //预推的时间间隔（S）
     if(fixed_space_time) delta_time = 3;
-    double distance = def.sog() * delta_time;
-    QGeoCoordinate src(def.centerlatitude(), def.centerlongitude());
+    double distance = def.sogms() * delta_time;
+    QGeoCoordinate src(def.center().latitude(), def.center().longitude());
     QGeoCoordinate dest = src.atDistanceAndAzimuth(distance, def.cog());
-    def.set_centerlatitude(dest.latitude());
-    def.set_centerlongitude(dest.longitude());
+    def.mutable_center()->set_latitude(dest.latitude());
+    def.mutable_center()->set_longitude(dest.longitude());
     def.set_updatetime(videoTime);
     def.set_videocycleindex(videoIndex);
     mPredictionIndex = videoIndex;

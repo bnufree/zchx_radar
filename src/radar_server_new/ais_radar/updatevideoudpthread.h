@@ -1,10 +1,9 @@
-#ifndef UPDATEVIDEOUDPTHREAD_H
+﻿#ifndef UPDATEVIDEOUDPTHREAD_H
 #define UPDATEVIDEOUDPTHREAD_H
 
 #include <QThread>
 #include <QMap>
 #include <QDateTime>
-#include "ZCHXRadar.pb.h"
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
@@ -12,9 +11,7 @@
 #include <QTimer>
 #include <QMap>
 #include <QList>
-//#include "zchxdrawradarvideo.h"
 #include <QPixmap>
-#include "ZCHXRadar.pb.h"
 #include "zmq.h"
 #include "zchxdrawvideorunnable.h"
 #include <QThread>

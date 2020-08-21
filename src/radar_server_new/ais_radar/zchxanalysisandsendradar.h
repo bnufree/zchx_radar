@@ -73,8 +73,6 @@ signals:
                                int uLineNum,int uCellNum,int uHeading,const QString &sRadarType);//新科雷达
     void signalSendRecvedContent(qint64 time, const QString& name, const QString& content);
     void signalClientInout(const QString& ip, const QString& name, int port, int inout);
-
-    void startTrackProcessSignal(const zchxVideoFrameList& list);
     //void show_info(QString, double, float);//1_打印txt信号
     void show_info(QString);//1_打印txt信号
     void show_video(int, int);//1_打印目标个数

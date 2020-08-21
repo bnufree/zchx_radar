@@ -331,13 +331,13 @@ void zchxRadarRectExtraction::parseVideoPieceFromImage(QImage& result, zchxRadar
         com::zhichenhaixin::proto::RadarRectDef rectDef;
         rectDef.set_realdata(true);
         foreach (QPointF point, target.mPolygons) {
-            zchxSingleVideoBlock *block = rectDef.add_blocks();
+            zchxLatlon *block = rectDef.add_outline();
             Latlon ll = posConverter.pixel2Latlon(point);
             block->set_latitude(ll.lat);
             block->set_longitude(ll.lon);
         }
         foreach (QPointF point, target.mScaledPolygons) {
-            com::zhichenhaixin::proto::pixelPoint *pnt = rectDef.add_pixelpnts();
+            com::zhichenhaixin::proto::PixelPoint *pnt = rectDef.mutable_fixedimg()->add_points();
             pnt->set_x(point.x());
             pnt->set_y(point.y());
         }
@@ -363,38 +363,47 @@ void zchxRadarRectExtraction::parseVideoPieceFromImage(QImage& result, zchxRadar
         }
         rectDef.set_rectnumber(i);
         rectDef.set_updatetime(time_of_day);
-        Latlon ll = posConverter.pixel2Latlon(bound.topLeft());
-        rectDef.set_topleftlatitude(ll.lat);
-        rectDef.set_topleftlongitude(ll.lon);
-        ll = posConverter.pixel2Latlon(bound.bottomRight());
-        rectDef.set_bottomrightlatitude(ll.lat);
-        rectDef.set_bottomrightlongitude(ll.lon);
-        ll = posConverter.pixel2Latlon(target.mCenter);
-        rectDef.set_centerlatitude(ll.lat);
-        rectDef.set_centerlongitude(ll.lon);
-        ll = posConverter.pixel2Latlon(startPoint);
-        rectDef.set_startlatitude(ll.lat);
-        rectDef.set_startlongitude(ll.lon);
-        ll = posConverter.pixel2Latlon(endPoint);
-        rectDef.set_endlatitude(ll.lat);
-        rectDef.set_endlongitude(ll.lon);
-        double diameter = getDisDeg(rectDef.topleftlatitude(),
-                                    rectDef.topleftlongitude(),
-                                    rectDef.bottomrightlatitude(),
-                                    rectDef.bottomrightlongitude());
-        rectDef.set_diameter(diameter);
 
-        QGeoCoordinate coord1(rectDef.startlatitude(),rectDef.startlongitude());
-        QGeoCoordinate coord2(rectDef.endlatitude(),rectDef.endlongitude());
+        Latlon ll = posConverter.pixel2Latlon(bound.topLeft());
+        rectDef.mutable_boundrect()->mutable_topleft()->set_latitude(ll.lat);
+        rectDef.mutable_boundrect()->mutable_topleft()->set_longitude(ll.lon);
+
+        ll = posConverter.pixel2Latlon(bound.bottomRight());
+        rectDef.mutable_boundrect()->mutable_bottomright()->set_latitude(ll.lat);
+        rectDef.mutable_boundrect()->mutable_bottomright()->set_longitude(ll.lon);
+
+        double diameter = getDisDeg(rectDef.boundrect().topleft().latitude(),
+                                    rectDef.boundrect().topleft().longitude(),
+                                    rectDef.boundrect().bottomright().latitude(),
+                                    rectDef.boundrect().bottomright().longitude());
+        rectDef.mutable_boundrect()->set_diameter(diameter);
+
+        ll = posConverter.pixel2Latlon(target.mCenter);
+        rectDef.mutable_center()->set_latitude(ll.lat);
+        rectDef.mutable_center()->set_longitude(ll.lon);
+
+        ll = posConverter.pixel2Latlon(startPoint);
+        rectDef.mutable_seg()->mutable_start()->set_latitude(ll.lat);
+        rectDef.mutable_seg()->mutable_start()->set_longitude(ll.lon);
+
+        ll = posConverter.pixel2Latlon(endPoint);
+        rectDef.mutable_seg()->mutable_end()->set_latitude(ll.lat);
+        rectDef.mutable_seg()->mutable_end()->set_longitude(ll.lon);
+
+        QGeoCoordinate coord1(rectDef.seg().start().latitude(),rectDef.seg().start().longitude());
+        QGeoCoordinate coord2(rectDef.seg().end().latitude(),rectDef.seg().end().longitude());
         double angle = coord1.azimuthTo(coord2);
-        //cout<<"角度"<<angle;
-        if(angle > 180)
-            rectDef.set_angle(angle - 180 + 90);
-        else
-            rectDef.set_angle(angle + 90);
+//        //cout<<"角度"<<angle;
+//        if(angle > 180)
+//            rectDef.set_angle(angle - 180 + 90);
+//        else
+//            rectDef.set_angle(angle + 90);
+        rectDef.mutable_seg()->set_angle(angle);
+
         //cout<<"angle"<<angle;
-        rectDef.set_sog(0.0);
+        rectDef.set_sogms(0.0);
         rectDef.set_cog(0.0);
+        rectDef.set_sogknot(0.0);
         rectDef.set_videocycleindex(video_index);
         list.append(rectDef);
     }

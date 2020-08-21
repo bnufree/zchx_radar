@@ -101,6 +101,7 @@ private:
     double                      mTargetMergeDis;                    //目标合并的距离值
     bool                        mAdjustCogEnabled;
     int                         mRectNum;
+    int                         mRadarID;
     int                         mMinNum;
     int                         mMaxNum;
     int                         mClearTrackTime;

@@ -317,6 +317,7 @@ void zchxMainWindow::soltDealTacks2(const zchxTrackPointMap& m2)
 
 void zchxMainWindow::combineTracks()
 {
+#if 0
     //cout<<"t2"<<t2.size();
     //if(t1.size()<1)return;
     t3.clear();
@@ -340,6 +341,7 @@ void zchxMainWindow::combineTracks()
     }
     //cout<<"t1"<<t1.size()<<"t2"<<t2.size()<<"t3"<<t3.size();
     signalSendComTracks(t3);
+#endif
 }
 
 //删除显示页

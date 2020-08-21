@@ -1,0 +1,220 @@
+///**************************************************************************
+//* @Project : cdzchx_radar
+//* @IDL Module: ZCHXRadar
+//* @File: ZCHXRadar.proto
+//* @Description:
+//*    雷达asterix欧标标准格式;
+//*
+//* @Copyright: Copyright (c) 2014
+//* @Company: 深圳置辰海信科技有限公司
+//* @WebSite: http://www.szcenterstar.com/
+//* @author 
+//*
+//* @Revision History
+//*
+//* <pre>
+//* ----------------------------------------------------------------------
+//*   Ver     Date       Who             Comments
+//*  ----- ----------  --------  ---------------------------------------
+//*   1.0  2015/11/23     李鹭         形成初稿
+//* ----------------------------------------------------------------------
+//* </pre>
+//**************************************************************************/
+
+package com.zhichenhaixin.proto;
+    //----------------------------------------------------------------------------------------------------------
+    // Message Type  This data item allows for a more convenient handling of the messages 
+    // at the receiver side by further defining the type of transaction.
+    //----------------------------------------------------------------------------------------------------------
+    //-|num|-------------Status Discription---------|------------中文-------------------
+    // | 0 | Undefined                              |  未定义(默认)
+    // | 1 | Target Report                          |  目标报告
+    // | 2 | Start of Update Cycle                  |  更新周期开始
+    // | 3 | Periodic Status Message                |  周期性的状态信息
+    // | 4 | Event-triggered Status Message         |  事件驱动的状态信息
+    //----------------------------------------------------------------------------------------------------------
+    enum MSGTYP {
+        MSGTYP_UNDEFINED  = 0;
+        TARGET_REPORT = 1;
+        START_OF_UPDATE_CYCLE  = 2;
+        PERIODIC_STATUS = 3;
+        EVENT_TRIGGERED_STATUS = 4;
+    }
+
+
+    //----------------------------------------------------------------------------------------------------------
+    // Track Type  航迹状态
+    //----------------------------------------------------------------------------------------------------------
+    //-|num|-------------Status Discription---------|------------中文-------------------
+    // | 0 | Confirmed track                        |  表示确认的航迹
+    // | 1 | Track in initiation phase              |  初始状态的航迹
+    // | 2 | Unknown track                          |  未知跟踪
+    //----------------------------------------------------------------------------------------------------------
+    enum CNF {
+        CONFIRMED_TRACK  = 0;
+        TENTATIVE_TRACK  = 1;
+        UNKNOWN_TRACK  = 2;
+    }
+
+    //----------------------------------------------------------------------------------------------------------
+    // extrapolation  外推法
+    //----------------------------------------------------------------------------------------------------------
+    //-|num|-------------Status Discription-----------------------------|------------中文-------------------
+    // | 0 | No extrapolation                                           |  没有推算
+    // | 1 | Predictable extrapolation due to sensor refresh period     |  在感知设备刷新周期中预推算
+    // | 2 | Predictable extrapolation in masked area                   |  在遮挡去中预推算
+    // | 3 | Extrapoltion due to unpredictable absence of detection     |  在盲区中预推算
+    //----------------------------------------------------------------------------------------------------------
+    enum CST {
+        CST_UNDEFINED  = 0;
+        PREDICTABLE_EXTRAPOLATION_DUE_PERIOD = 1;
+        PREDICTABLE_EXTRAPOLATION_IN_AREA  = 2;
+        EXTRAPOLATION_DUE_UNPREDICTABLE_DETECTION = 3;
+    }
+
+
+    //----------------------------------------------------------------------------------------------------------
+    // Track Position Code  位置来历
+    //----------------------------------------------------------------------------------------------------------
+    //-|num|-------------Status Discription---------|------------中文-------------------
+    // | 0 | Measured position                      |  测量出的位置
+    // | 1 | Smoothed position                      |  平滑插值的位置
+    //----------------------------------------------------------------------------------------------------------
+    enum STH {
+        MEASURED_POSITION  = 0;
+        SMOOTHED_POSITION  = 1;
+    }
+    
+	//单个回波块单点坐标
+	message Latlon
+	{
+		required double latitude = 1;			        // 纬度
+    	required double longitude = 2;			        // 经度
+	}
+	
+	//像素点坐标
+	message PixelPoint
+	{
+		required uint32 x = 1;
+		required uint32 y = 2;
+	}
+	//固定大小的目标回波块
+	message VideoImage
+	{
+		required uint32 width = 1;
+		required uint32	height = 2;
+		repeated PixelPoint points = 3;
+	}
+	message PredictionArea
+	{
+		repeated Latlon area = 1;						//预推区域
+	}
+	message Segment{
+		required Latlon	start = 1;						//线段起点
+		required Latlon end = 2;						//线段终点
+		optional double angle = 3;								//线段的角度(起点到终点的地理方位角)
+	}
+	message BoundRect{
+		required Latlon topLeft = 1;			        		// 回波块左上点
+		required Latlon bottomRight = 2;			    		// 回波块右下点
+		optional int32 diameter = 3;     						// 雷达目标大小（矩形块的对角线的距离） 单位：米
+	}
+	//矩形回波块位置信息
+	message RadarRectDef
+	{ 
+		required uint32 rectNumber = 1;							// 单个矩形回波块编号,回波数据解析过程中赋值		
+		required Latlon center = 2;			    				// 回波块中心点
+		required uint32 updateTime = 3;						    // 回波块更新时间 10时间戳	
+		required bool  realData = 4;							//当前目标的状态,是预推的(false) 还是实际的(true)
+		required double sogKnot = 5;								//矩形块速度(节)
+		required double sogMS = 6;								//矩形块速度(节)
+		required double cog = 7;								//矩形块方向		
+		repeated Latlon outline = 8;							// 回波块轮廓点集		
+		optional BoundRect	boundRect = 9;						// 回波外接矩形
+		optional Segment	seg = 10;							// 回波块内的最长线段		
+		optional VideoImage fixedImg = 11;						//固定大小的矩形外框图形		
+		optional PredictionArea prediction = 12;				//目标下一个阶段的预推区域,暂定预推时间是10s
+		optional int32 videoCycleIndex = 13;					//所在的回波周期
+	}
+	
+	//路由路径
+	message RoutePath
+	{
+		repeated RadarRectDef path = 1;								//一条路由路径
+	}
+	
+	message RouteNode
+	{
+		required int32		  node_num = 1;
+		required RadarRectDef top_node = 2;
+		repeated RoutePath	  path_list = 3;
+	}
+	
+	message RouteNodes
+	{
+		repeated RouteNode	node_list = 1; 
+	}
+	
+	
+	
+	
+	//矩形回波块位置信息
+	message RadarRect
+	{
+		required RadarRectDef current_rect = 1;							// 单个矩形回波块编号
+		repeated RadarRectDef history_rect_list = 2;			        // 单个矩形回波块的历史轨迹单点数据
+		required bool		  dir_confirmed = 3;					//目标方向是否已经确认
+		required uint32		  cur_est_count = 4;						//目标方向确认后目标位置预推的次数.主要是目标没有更新后,先推测数据,超出设定限制,认为目标已经消失
+		required int32		  node_num = 5;
+	}
+	
+	//矩形回波块集合
+	message RadarRects 
+	{ 
+        required uint64 UTC  = 1;                   // 时间标记  
+        required int32 length = 2;                  // 消息个数 
+        repeated RadarRect rect_list = 3;          // 矩形回波块位置信息
+    }
+
+	
+    //----------------------------------------------------------------------------------------------------------
+    // 雷达地面移动目标报告(cat010)
+    //----------------------------------------------------------------------------------------------------------
+    message TrackPoint {
+    	required string radarSiteID = 1;			   	// 目标来源的雷达编号，如果是多个雷达共同识别，用逗号分割
+    	required uint32 trackNumber = 2;		       	// 航迹号 I010/161
+		required RadarRectDef	current = 3;			// 当前目标信息
+		repeated RadarRectDef tracks = 4;	   			// 当前目标的历史轨迹数据集
+		optional bool	trackConfirmed = 5;			//目标航迹是否确认.0就是点迹(速度和方向都是0) 1就是航迹(计算的速度和方向值)
+		optional int32	objType = 6;					//目标类型。0：普通目标；1：障碍物； 2：浮标；3：渔排；4：特定船舶
+		optional string	objName = 7;					//用户指定的目标名称
+    }
+
+    message RadarSurfaceTrack {
+        required int32 flag = 1;                    // 消息类型
+        required string sourceId = 2;               // 数据来源唯一识别符
+        required uint64 UTC  = 3;                   // 时间标记  
+        required int32 length = 4;                  // 消息个数 
+        repeated TrackPoint trackPoints = 5;        // 轨迹点  
+    }
+
+    enum RES {
+        MONOBIT_RESOLUTION      = 1;
+        LOW_RESOLUTION          = 2;
+        MEDIUM_RESOLUTION       = 3;
+        HIGH_RESOLUTION         = 4;
+        VERY_HIGH_RESOLUTION    = 5;
+        ULTRA_HIGH_RESOLUTION   = 6;
+    }
+	
+	message RadarVideoImage
+	{
+		required uint64 radarId = 1;                    // 雷达站ID
+        required string radarName = 2;                  // 雷达站名称
+        required Latlon center = 3;			        	// 雷达站 WGS84坐标计算
+        required uint64 UTC = 4;                        // 时间标记  
+        required bytes imageData  = 5;                 // 回波图像数据
+        required uint32 width = 6;                      // 图像宽度
+        required uint32 height = 7;                     // 图像高度
+        required double radius = 8;			            //半径
+	}

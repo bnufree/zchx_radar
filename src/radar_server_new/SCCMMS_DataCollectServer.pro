@@ -126,8 +126,7 @@ SOURCES += main.cpp\
     ais/ais26.cpp \
     ais/ais27.cpp \
     ../protobuf/2.6.1/ZCHXAISVessel.pb.cc \
-    ../protobuf/2.6.1/ZCHXRadar.pb.cc \
-    ../protobuf/2.6.1/ZCHXRadarVideo.pb.cc \
+    ../protobuf/2.6.1/ZCHXRadarDataDef.pb.cc \
     ../protobuf/2.6.1/ZCHXBd.pb.cc \
     msgserver.cpp \
     ais_radar/targetnode.cpp
@@ -198,8 +197,7 @@ HEADERS  += \
     ais/ais.h \
     ais/ais8_001_22.h \
     ../protobuf/2.6.1/ZCHXAISVessel.pb.h \
-    ../protobuf/2.6.1/ZCHXRadar.pb.h \
-    ../protobuf/2.6.1/ZCHXRadarVideo.pb.h \
+    ../protobuf/2.6.1/ZCHXRadarDataDef.pb.h \
     ../protobuf/2.6.1/ZCHXBd.pb.h \
     msgserver.h \
     radardatautils.h \
@@ -237,8 +235,6 @@ DISTFILES += \
     zmq/SCCMMSComData.proto \
     increase.png \
     ../protobuf/doc/ZCHXAISVessel.proto \
-    ../protobuf/doc/ZCHXRadar.proto \
-    ../protobuf/doc/ZCHXRadarVideo.proto \
     ../protobuf/doc/ZCHXBd.proto
 RC_FILE  =  app.rc
 

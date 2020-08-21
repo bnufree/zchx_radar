@@ -9,9 +9,7 @@
 #include <QMap>
 #include <QList>
 #include <QPixmap>
-#include "ZCHXRadar.pb.h"
 #include "zmq.h"
-#include "ZCHXRadarVideo.pb.h"
 #include "zchxdrawvideorunnable.h"
 #include <QThread>
 #include "zchxfunction.h"
