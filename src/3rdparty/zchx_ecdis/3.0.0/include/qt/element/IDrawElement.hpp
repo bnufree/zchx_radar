@@ -18,7 +18,7 @@ class ZCHX_ECDIS_EXPORT Element// : public QObject
 {
 
 public:
-    Element(const double &lat, const double &lon, zchxMapWidget* view, ZCHX::Data::ELETYPE type, const QColor& flashColor = QColor());
+    Element(const double &lat, const double &lon, zchxMapWidget* view, ZCHX::Data::ELETYPE type, const QString& layer, const QColor& flashColor = QColor());
     Element(const Element &element);
     virtual ~Element();
 

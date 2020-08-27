@@ -1,4 +1,4 @@
-#ifndef FIXELEMENT_H
+﻿#ifndef FIXELEMENT_H
 #define FIXELEMENT_H
 
 #include "IDrawElement.hpp"
@@ -9,7 +9,7 @@ class ZCHX_ECDIS_EXPORT FixElement : public Element
 {
 public:
     explicit  FixElement(const T& data, ZCHX::Data::ELETYPE type, const QString& layer, zchxMapWidget* w)
-        :Element(data.getLat(), data.getLon(), w, type)
+        :Element(data.getLat(), data.getLon(), w, type, layer)
     {
         setData(data);
         setLayer(layer);

@@ -4,11 +4,10 @@
 #include <QThread>
 #include <QMap>
 #include <QDateTime>
-#include "ZCHXRadarVideo.pb.h"
+#include "ZCHXRadarDataDef.pb.h"
 #include "zchxradarutils.h"
 
-typedef com::zhichenhaixin::proto::RadarVideo  ITF_VideoFrame;
-typedef QMap<int, ITF_VideoFrame> Map_RadarVideo;
+typedef com::zhichenhaixin::proto::RadarVideoImage  zchxRadarVideoImg;
 
 namespace ZCHX_RADAR_RECEIVER{
 
@@ -20,13 +19,12 @@ public:
     virtual void parseRecvData(const QByteArrayList&);
 
 private:
-    void dealRadarEchoData(const ITF_VideoFrame &objVideoFrame);
+    void dealRadarEchoData(const zchxRadarVideoImg &objVideoFrame);
 
 signals:
-    void sendMsg(int siteID, double lon, double lat, double dis, int type, int loop, int curIndex, const QByteArray& objPixmap, const QByteArray& prePixMap);
+    void sendMsg(int siteID, double lon, double lat, double dis, const QByteArray& objPixmap);
 private:
     qint64 m_lastUpdateRadarEchoTime;       //最后更雷达回波数据的时间
-    Map_RadarVideo m_videoFrameMap;
 };
 }
 

@@ -1,5 +1,5 @@
 ﻿#include "ZCHXRadarDataChange.h"
-#include "zchxradarrectthread.h"
+//#include "zchxradarrectthread.h"
 #include "zchxradarpointthread.h"
 #include "zchxradarechothread.h"
 #include "zchxaisthread.h"
@@ -34,8 +34,8 @@ void ZCHXRadarDataChange::appendRadarVideo(const ZCHX_Radar_Setting_Param &param
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     connect(thread, SIGNAL(signalRecvDataNow(int,int)), this, SIGNAL(signalRecvDataNow(int,int)));
     connect(thread, SIGNAL(signalConnectedStatus(bool, QString, QString)), this, SIGNAL(sendConnectionStatus(bool, QString, QString)));
-    connect(thread, SIGNAL(sendMsg(int,double,double,double,int,int,int,QByteArray,QByteArray))
-            , this, SIGNAL(sendRadarVideo(int,double,double,double,int,int,int,QByteArray,QByteArray)));
+    connect(thread, SIGNAL(sendMsg(int,double,double,double,QByteArray))
+            , this, SIGNAL(sendRadarVideo(int,double,double,double,QByteArray)));
     mThreadList.append(thread);
     thread->start();
     mRadarVideoList.append(param);
@@ -103,26 +103,6 @@ void ZCHXRadarDataChange::appendRadarPointList(const QList<ZCHX_Radar_Setting_Pa
     }
 }
 
-
-void ZCHXRadarDataChange::appendRadarRect(const ZCHX_RadarRect_Param &param)
-{
-    if(mRadarRectList.contains(param)) return;
-    ZCHXRadarRectThread* thread = new ZCHXRadarRectThread(param);
-    connect(thread, SIGNAL(signalRecvDataNow(int,int)), this, SIGNAL(signalRecvDataNow(int,int)));
-    connect(thread, SIGNAL(signalConnectedStatus(bool, QString, QString)), this, SIGNAL(sendConnectionStatus(bool, QString, QString)));
-    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-    connect(thread, SIGNAL(sendVideoMsg(int, QList<ZCHX::Data::ITF_RadarRect>)), this, SIGNAL(sendRadarRect(int,QList<ZCHX::Data::ITF_RadarRect>)));
-    mThreadList.append(thread);
-    thread->start();
-    mRadarRectList.append(param);
-}
-
-void ZCHXRadarDataChange::appendRadarRectList(const QList<ZCHX_RadarRect_Param>& list)
-{
-    foreach (ZCHX_RadarRect_Param param, list) {
-        appendRadarRect(param);
-    }
-}
 
 void ZCHXRadarDataChange::slotSetThreadStatus(int type, bool ison)
 {

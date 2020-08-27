@@ -30,8 +30,28 @@ unix{
     INCLUDEPATH += $${ZCHX_OPENCV_HEADERS}
 
 mingw{
-    CONFIG(release, debug|release) {
-        LIBS +=-L$${ZCHX_OPENCV_LIBS} \
+#    CONFIG(release, debug|release) {
+#        LIBS +=-L$${ZCHX_OPENCV_LIBS} \
+#                        -llibopencv_core420 \
+#                        -llibopencv_imgcodecs420 \
+#                        -llibopencv_imgproc420 \
+
+#        ZCHX_OPENCV_install.files += $${ZCHX_OPENCV_PATH}/x64/mingw/bin/libopencv_core420.dll}
+#        ZCHX_OPENCV_install.files += $${ZCHX_OPENCV_PATH}/x64/mingw/bin/libopencv_imgcodecs420.dll
+#        ZCHX_OPENCV_install.files += $${ZCHX_OPENCV_PATH}/x64/mingw/bin/libopencv_imgproc420.dll
+#    }
+#    CONFIG(debug, debug|release){
+#        LIBS +=-L$${ZCHX_OPENCV_LIBS} \
+#                        -llibopencv_core420d \
+#                        -llibopencv_imgcodecs420d \
+#                        -llibopencv_imgproc420d \
+
+#        ZCHX_OPENCV_install.files += $${ZCHX_OPENCV_PATH}/x64/mingw/bin/libopencv_core420d.dll
+#        ZCHX_OPENCV_install.files += $${ZCHX_OPENCV_PATH}/x64/mingw/bin/libopencv_imgcodecs420d.dll
+#        ZCHX_OPENCV_install.files += $${ZCHX_OPENCV_PATH}/x64/mingw/bin/libopencv_imgproc420d.dll
+#    }
+
+LIBS +=-L$${ZCHX_OPENCV_LIBS} \
                         -llibopencv_core420 \
                         -llibopencv_imgcodecs420 \
                         -llibopencv_imgproc420 \
@@ -39,17 +59,7 @@ mingw{
         ZCHX_OPENCV_install.files += $${ZCHX_OPENCV_PATH}/x64/mingw/bin/libopencv_core420.dll}
         ZCHX_OPENCV_install.files += $${ZCHX_OPENCV_PATH}/x64/mingw/bin/libopencv_imgcodecs420.dll
         ZCHX_OPENCV_install.files += $${ZCHX_OPENCV_PATH}/x64/mingw/bin/libopencv_imgproc420.dll
-    }
-    CONFIG(debug, debug|release){
-        LIBS +=-L$${ZCHX_OPENCV_LIBS} \
-                        -llibopencv_core420d \
-                        -llibopencv_imgcodecs420d \
-                        -llibopencv_imgproc420d \
 
-        ZCHX_OPENCV_install.files += $${ZCHX_OPENCV_PATH}/x64/mingw/bin/libopencv_core420d.dll
-        ZCHX_OPENCV_install.files += $${ZCHX_OPENCV_PATH}/x64/mingw/bin/libopencv_imgcodecs420d.dll
-        ZCHX_OPENCV_install.files += $${ZCHX_OPENCV_PATH}/x64/mingw/bin/libopencv_imgproc420d.dll
-    }
     ZCHX_OPENCV_install.path = $${IDE_APP_PATH}/
     INSTALLS += ZCHX_OPENCV_install
 }

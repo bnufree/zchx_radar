@@ -1,10 +1,10 @@
-#include "islandlineelement.h"
+﻿#include "islandlineelement.h"
 #include "map_layer/zchxmaplayermgr.h"
 #include "zchxmapframe.h"
 
 namespace qt {
 IslandLineElement::IslandLineElement(const ZCHX::Data::ITF_IslandLine &ele, zchxMapWidget* f)
-    : Element(0, 0, f, ZCHX::Data::ELE_ISLAND_LINE)
+    : Element(0, 0, f, ZCHX::Data::ELE_ISLAND_LINE, ZCHX::LAYER_ISLAND)
     , m_path(ele.path)
     , m_type((RADARTYPE)ele.type)
 {

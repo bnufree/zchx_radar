@@ -163,11 +163,16 @@ ZCHXAnalysisAndSendRadar::ZCHXAnalysisAndSendRadar(int id, QObject *parent)
     bool process_sync = true;
     m_VideoProcessor =  new ZCHXRadarVideoProcessor(m_uSourceID, this);
     double prediction_width = Utils::Profiles::instance()->value(str_radar, "prediction_width", 20).toDouble();
+    int max_speed = Utils::Profiles::instance()->value(str_radar, "max_speed", 40).toInt();
+    double scan_time = Utils::Profiles::instance()->value(str_radar, "scan_time", 3.0).toDouble();
+
 
     m_targetTrack = new zchxRadarTargetTrack(radar_num, Latlon(m_dCentreLat, m_dCentreLon), clear_track_time, prediction_width, true, this);
     m_targetTrack->setAdjustCogEnabled(cog_adjust);
     m_targetTrack->setTargetMergeDis(merge_dis);
     m_targetTrack->setDirectionInvertVal(dir_invert);
+    m_targetTrack->setMaxSpeed(max_speed * 1.852 / 3.6);
+    m_targetTrack->setScanTime(scan_time);
 
     connect(m_VideoProcessor,SIGNAL(signalSendVideoPixmap(QPixmap)), this,SLOT(slotRecvVideoImg(QPixmap)));
     //回波颜色设置
@@ -1084,7 +1089,7 @@ void ZCHXAnalysisAndSendRadar::slotSendComTracks(const zchxRadarSurfaceTrack& tr
    if(mRadarOutMgr)
    {
        emit signalSendRecvedContent(QDateTime::currentMSecsSinceEpoch(), "Radar Track Points", QString("data size:%1").arg(tracks.trackpoints_size()));
-//       qDebug()<<"data outto mgr send time:"<<QDateTime::currentDateTime();
+       qDebug()<<"data outto mgr send time:"<<QDateTime::currentDateTime();
        zchxRadarSurfaceTrack* track = new zchxRadarSurfaceTrack(tracks);
        mRadarOutMgr->appendData(zchxRadarUtils::protoBufMsg2ByteArray(track), mRadarTrackTopic, mRadarTrackPort);
        delete track;

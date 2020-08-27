@@ -1,4 +1,4 @@
-#include "zchxradardatamgr.h"
+﻿#include "zchxradardatamgr.h"
 #include "zchxmapframe.h"
 
 namespace qt {
@@ -19,76 +19,66 @@ zchxRadarDataMgr::zchxRadarDataMgr(zchxMapWidget* w, QObject *parent)
 
 void zchxRadarDataMgr::show(QPainter* painter)
 {
-    if(mDisplayWidget->getLayerMgr()->isLayerVisible(ZCHX::LAYER_RADAR))
+    QMutexLocker locker(&mDataMutex);
+
+    QMap<int, QMap<QString, std::shared_ptr<RadarPointElement> > >::iterator topIt = m_RadarPointMap.begin();
+    for(; topIt != m_RadarPointMap.end(); ++topIt)
     {
-        QMutexLocker locker(&mDataMutex);
+        const QMap<QString, std::shared_ptr<RadarPointElement> > &radarPoint
+                = m_RadarPointMap.value(topIt.key());
+        QMap<QString, std::shared_ptr<RadarPointElement>>::const_iterator it = radarPoint.begin();
 
-        QMap<int, QMap<QString, std::shared_ptr<RadarPointElement> > >::iterator topIt = m_RadarPointMap.begin();
-        for(; topIt != m_RadarPointMap.end(); ++topIt)
+        for(; it != radarPoint.end(); ++it)
         {
-            const QMap<QString, std::shared_ptr<RadarPointElement> > &radarPoint
-                    = m_RadarPointMap.value(topIt.key());
-            QMap<QString, std::shared_ptr<RadarPointElement>>::const_iterator it = radarPoint.begin();
-
-            for(; it != radarPoint.end(); ++it)
+            std::shared_ptr<RadarPointElement> item = it.value();
+            item->setIsOpenMeet(mDisplayWidget->getIsOpenMeet());
+            //检查当前点是否在矩形区域内
+            if (!mDisplayWidget->rect().contains(item->getCurrentPos().toPoint()))
             {
-                std::shared_ptr<RadarPointElement> item = it.value();
-                if(mDisplayWidget->getLayerMgr()->isLayerVisible(ZCHX::LAYER_RADAR_CURRENT))
-                {
-                    item->setIsOpenMeet(mDisplayWidget->getIsOpenMeet());
-                    //检查当前点是否在矩形区域内
-                    if (!mDisplayWidget->rect().contains(item->getCurrentPos().toPoint()))
-                    {
-                        continue;
-                    }
+                continue;
+            }
 
-                    //显示设置
-                    bool showStatus = isRadarDisplayByTargetSize(item->getData(), m_targetSizeIndex);
-                    if (!showStatus)
-                    {
-                        continue;
-                    }
+            //显示设置
+            bool showStatus = isRadarDisplayByTargetSize(item->getData(), m_targetSizeIndex);
+            if (!showStatus)
+            {
+                continue;
+            }
 
-                    item->setShowRadarLabel(m_showRadarLabel);
+            item->setShowRadarLabel(m_showRadarLabel);
 
-                    QString id = QString::number(item->getData().trackNumber);
-                    if(isConcern(id)){
-                        item->setIsConcern(true);
-                    } else {
-                        item->setIsConcern(false);
-                    }
-                    if(isRealtimeTailTrack(id)){
-                        item->setIsRealtimeTailTrack(true);
-                    } else {
-                        item->setIsRealtimeTailTrack(false);
-                    }
+            QString id = QString::number(item->getData().trackNumber);
+            if(isConcern(id)){
+                item->setIsConcern(true);
+            } else {
+                item->setIsConcern(false);
+            }
+            if(isRealtimeTailTrack(id)){
+                item->setIsRealtimeTailTrack(true);
+            } else {
+                item->setIsRealtimeTailTrack(false);
+            }
 
-                    if(isHistoryTrack(id)){
-                        item->setIsHistoryTrack(true);
-                    } else {
-                        item->setIsHistoryTrack(false);
-                    }
+            if(isHistoryTrack(id)){
+                item->setIsHistoryTrack(true);
+            } else {
+                item->setIsHistoryTrack(false);
+            }
 
-                    if(item.get() == mDisplayWidget->getCurrentSelectedElement()) {
-                        item->setIsActive(true);
-                    } else {
-                        item->setIsActive(false);
-                    }
-                    //预警状态, 闪烁; 0为无预警
-                    if(item->getStatus() > 0)
-                    {
-                        item->drawFlashRegion(painter, item->getCurrentPos(), item->getStatus(), item->getData().warnStatusColor);
-                    }
-                    item->drawElement(painter);
-                }
-                if(mDisplayWidget->getLayerMgr()->isLayerVisible(ZCHX::LAYER_RADAR_TRACK) && item->getIsRealtimeTailTrack())
-                {
-                    item->drawTrack(painter);
-                }
+            if(item.get() == mDisplayWidget->getCurrentSelectedElement()) {
+                item->setIsActive(true);
+            } else {
+                item->setIsActive(false);
+            }
+
+            item->drawElement(painter);
+            if(mDisplayWidget->getLayerMgr()->isLayerVisible(ZCHX::LAYER_RADAR_TRACK) && item->getIsRealtimeTailTrack())
+            {
+                item->drawTrack(painter);
             }
         }
     }
-
+#if 0
     if(mDisplayWidget->getLayerMgr()->isLayerVisible(ZCHX::LAYER_HISTORY_RADAR))
     {
         for(int i = 0; i < m_HistoryRadarPoint.size(); i++)
@@ -134,8 +124,10 @@ void zchxRadarDataMgr::show(QPainter* painter)
             item->drawElement(painter);
         }
     }
+#endif
 }
 
+//这里可以显示多雷达站的数据。每一个雷达站的保存格式为QMap 所有雷达站的数据就是QMap<key, QMap>
 void zchxRadarDataMgr::setRadarPointData(int radarSiteId, const QList<ZCHX::Data::ITF_RadarPoint> &data)
 {
     QMutexLocker locker(&mDataMutex);

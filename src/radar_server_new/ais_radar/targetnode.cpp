@@ -17,6 +17,7 @@ TargetNode::TargetNode()
     mSerialNum = 0;
     mFalseAlarm = false;
     mPredictionNode = 0;
+    clearPrediction();
 }
 TargetNode::TargetNode(const zchxRadarRectDef& other, TargetNode* parentNode)
 {
@@ -34,6 +35,7 @@ TargetNode::TargetNode(const zchxRadarRectDef& other, TargetNode* parentNode)
     mVideoIndexList.append(other.videocycleindex());
     mFalseAlarm = false;
     mPredictionNode = 0;
+    clearPrediction();
 }
 
 void TargetNode::setStatus(NodeStatus sts)
@@ -83,7 +85,7 @@ bool TargetNode::hasChildren() const
 
 bool TargetNode::isNodePoint() const //静止目标
 {
-    return mStatus == Node_UnDef && mChildren.size() == 0;
+    return mStatus == Node_UnDef && mChildren.size() == 0 && mVideoIndexList.size() >= 3;
 }
 
 bool TargetNode::isNodeMoving() const
@@ -169,7 +171,7 @@ bool TargetNode::isOutput() const
 TargetNode* TargetNode::topNode()
 {
     if(!mParent) return this;
-    TargetNode * parent = mParent;
+    TargetNode *parent = mParent;
     while (parent) {
         if(parent->mParent)
         {
@@ -188,7 +190,7 @@ int TargetNode::getDepth()
 {
     if(mChildren.size() != 1) return 1;
     int depth = 1;
-    TargetNode * now = this;
+    TargetNode *now = this;
     while (now->mChildren.size() > 0) {
         depth++;
         now = now->mChildren.first().data();

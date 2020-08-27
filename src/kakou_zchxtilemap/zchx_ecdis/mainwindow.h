@@ -546,9 +546,7 @@ public slots: //定义Recive数据接口
     void itfSetCameraObservationZoneData(const QList<ZCHX::Data::ITF_CameraView> &data);
 
     //设置回波数据，uType==1回波显示，uType==2余辉显示
-    void itfSetRadarVideoData(int radarSiteId, double dCentreLon,double dCentreLat,double dDistance,int uType,int uLoopNum);
-    void itfSetRadarVideoPixmap(int radarSiteId, int uIndex,const QByteArray &objPixmap,const QByteArray &prePixmap);
-    void itfSetCurrentRadarVideoPixmap(int radarSiteId, const QByteArray &objPixmap);//只设置当前的图片
+    void itfSetRadarVideoData(int radarSiteId, double dCentreLon,double dCentreLat,double dDistance, const QByteArray &objPixmap);
     void itfSetRadarRect(int radarSiteId, QList<ZCHX::Data::ITF_RadarRect> rectList);
 
     //    void itfSetMultibeamData(const QList<ZCHX::Data::ITF_Multibeam> &data,

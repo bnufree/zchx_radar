@@ -130,7 +130,8 @@ SOURCES += main.cpp\
     ../protobuf/2.6.1/ZCHXBd.pb.cc \
     msgserver.cpp \
     ais_radar/targetnode.cpp \
-    mainprocess.cpp
+    mainprocess.cpp \
+    ../exchange/radarserverconfig.cpp
 
 HEADERS  += \
     Log.h \
@@ -203,7 +204,8 @@ HEADERS  += \
     msgserver.h \
     radardatautils.h \
     ais_radar/targetnode.h \
-    mainprocess.h
+    mainprocess.h \
+    ../exchange/radarserverconfig.h
 
 
 
@@ -243,5 +245,5 @@ RC_FILE  =  app.rc
 RESOURCES += \
     res.qrc
 
-#SUBDIRS += \
-#    side_car_parse/Messages/Messages.pro
+QMAKE_CXXFLAGS_RELEASE *= $$QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO
+QMAKE_LFLAGS_RELEASE *= $$QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO

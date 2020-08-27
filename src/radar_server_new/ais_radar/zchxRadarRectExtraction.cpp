@@ -336,10 +336,13 @@ void zchxRadarRectExtraction::parseVideoPieceFromImage(QImage& result, zchxRadar
             block->set_latitude(ll.lat);
             block->set_longitude(ll.lon);
         }
+        QSizeF fixSize = target.mScaledPolygons.boundingRect().size();
+        rectDef.mutable_fixedimg()->set_width(int(fixSize.width()+0.5));
+        rectDef.mutable_fixedimg()->set_height(int(fixSize.height()+0.5));
         foreach (QPointF point, target.mScaledPolygons) {
             com::zhichenhaixin::proto::PixelPoint *pnt = rectDef.mutable_fixedimg()->add_points();
-            pnt->set_x(point.x());
-            pnt->set_y(point.y());
+            pnt->set_x(int(point.x() + 0.5));
+            pnt->set_y(int(point.y() + 0.5));
         }
 
 

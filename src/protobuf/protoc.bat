@@ -1,1 +1,1 @@
-protoc.exe -I=. --cpp_out=./2.6.1/  ./ZCHXRadarDataDef.proto
+protoc.exe -I=. --cpp_out=./2.6.1/  ./SCCMMSComData.proto

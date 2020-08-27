@@ -29,7 +29,7 @@ QPointF pointfFromString(const QString& str)
 
 namespace qt {
 RadarPathElement::RadarPathElement(const ZCHX::Data::ITF_RadarRouteNode& data, zchxMapWidget* frame)
-    :Element(data.mTop.centerlatitude, data.mTop.centerlongitude, frame, ZCHX::Data::ELE_RADAR_RADARPATH)
+    :Element(data.mTop.center.lat, data.mTop.center.lon, frame, ZCHX::Data::ELE_RADAR_RADARPATH, ZCHX::LAYER_RADARPATH)
 {
     setData(data);
 }
@@ -68,7 +68,7 @@ void RadarPathElement::drawElement(QPainter *painter)
         PainterPair chk(painter);
         painter->setPen(QColor(128, 128, 128, 128));
         painter->setBrush(QBrush(QColor(0, 0, 255, 100)));
-        QPointF centerPos = mView->framework()->LatLon2Pixel(mRoutePath.mTop.centerlatitude, mRoutePath.mTop.centerlongitude).toPointF();
+        QPointF centerPos = mView->framework()->LatLon2Pixel(mRoutePath.mTop.center.lat, mRoutePath.mTop.center.lon).toPointF();
         QList<QPointF> circle_pnts_list;
         QList<QPolygonF> predictionAreaList;
         circle_pnts_list.append(centerPos);
@@ -82,7 +82,7 @@ void RadarPathElement::drawElement(QPainter *painter)
             for(int k=0; k<children.size();k++)
             {
                 ZCHX::Data::ITF_RadarRectDef child = children[k];
-                QPointF curPos = mView->framework()->LatLon2Pixel(child.centerlatitude, child.centerlongitude).toPointF();
+                QPointF curPos = mView->framework()->LatLon2Pixel(child.center.lat, child.center.lon).toPointF();
                 path.append(curPos);
                 circle_pnts_list.append(curPos);
                 textMap[pointfTostring(curPos)].append(QString("    %1%2-%3-%4").arg(i+1).arg(k+1).arg(child.rectNumber).arg(mRoutePath.mNum));
@@ -92,8 +92,8 @@ void RadarPathElement::drawElement(QPainter *painter)
                     QPolygonF poly;
                     for(int m=0; m<child.predictionArea.size();m++)
                     {
-                        ITF_SingleVideoBlock block = child.predictionArea[m];
-                        curPos = mView->framework()->LatLon2Pixel(block.latitude, block.longitude).toPointF();
+                        ZCHX::Data::LatLon block = child.predictionArea[m];
+                        curPos = mView->framework()->LatLon2Pixel(block.lat, block.lon).toPointF();
                         poly.append(curPos);
                     }
                     predictionAreaList.append(poly);
@@ -108,8 +108,8 @@ void RadarPathElement::drawElement(QPainter *painter)
             QPolygonF poly;
             for(int m=0; m<mRoutePath.mTop.predictionArea.size();m++)
             {
-                ITF_SingleVideoBlock block = mRoutePath.mTop.predictionArea[m];
-                QPointF curPos = mView->framework()->LatLon2Pixel(block.latitude, block.longitude).toPointF();
+                ZCHX::Data::LatLon block = mRoutePath.mTop.predictionArea[m];
+                QPointF curPos = mView->framework()->LatLon2Pixel(block.lat, block.lon).toPointF();
                 poly.append(curPos);
             }
             predictionAreaList.append(poly);

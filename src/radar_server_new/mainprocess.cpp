@@ -19,9 +19,19 @@ MainProcess* MainProcess::instance()
 void MainProcess::start()
 {
     mStartFlag = true;
-
-    //开启数据服务交互服务
+    //获取配置文件
     //开启数据数据服务
     //开启雷达数据接收
+    //开启数据服务交互服务
+}
 
+void MainProcess::initConfig()
+{
+
+}
+
+void MainProcess::slotSendSocketServerMsg(QTcpSocket *socket)
+{
+    if(!socket) return;
+    socket->write(mCfgDoc.toJson());
 }

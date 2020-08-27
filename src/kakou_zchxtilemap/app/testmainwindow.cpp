@@ -188,18 +188,10 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
             dataMenu->addAction(new QAction(val, this));
         }
     });
-    connect(mDataChange, &ZCHX_RADAR_RECEIVER::ZCHXRadarDataChange::sendRadarRect, this,
-            [=](int site, const QList<ZCHX::Data::ITF_RadarRect>& list){
-//            QString msg = QString("Radar Rect:%1").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
-//            this->statusBar()->showMessage(msg);
-            m_pEcdisWin->itfSetRadarRect(site, list);
-    });
-//    connect(change, SIGNAL(sendRadarRect(int,QList<ZCHX::Data::ITF_RadarRect>)),
-//            m_pEcdisWin, SLOT(itfSetRadarRect(int,QList<ZCHX::Data::ITF_RadarRect>)));
     connect(mDataChange, SIGNAL(sendRadarPoint(int,QList<ZCHX::Data::ITF_RadarPoint>)),
             m_pEcdisWin, SLOT(itfSetRadarPointData(int,QList<ZCHX::Data::ITF_RadarPoint>)));
-    connect(mDataChange, SIGNAL(sendRadarVideo(int,double,double,double,int,int,int,QByteArray,QByteArray)),
-            this, SLOT(slotSetRadarVideoWholeData(int,double,double,double,int,int,int,QByteArray,QByteArray)));
+    connect(mDataChange, SIGNAL(sendRadarVideo(int,double,double,double,QByteArray)),
+            this, SLOT(slotSetRadarVideoWholeData(int,double,double,double,QByteArray)));
     connect(mDataChange, SIGNAL(sendAisDataList(QList<ZCHX::Data::ITF_AIS>)),
             m_pEcdisWin, SLOT(itfSetAisData(QList<ZCHX::Data::ITF_AIS>)));
     connect(mDataChange, SIGNAL(sendLimitDataList(QList<ZCHX::Data::ITF_IslandLine>)),
@@ -298,6 +290,7 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
         {
             title = QStringLiteral("雷达目标余晖");
             sec = SEC_RADAR_RECT;
+            continue;
         } else if(i == Data_Radar_Limit)
         {
             title = QStringLiteral("雷达屏蔽区域");
@@ -317,62 +310,10 @@ TestMainWindow::TestMainWindow(QWidget *parent) :
 //        mDataSourceMap[data.mId] = data;
     }
 
-    if(0)
-    {
-        QList<ZCHX::Data::ITF_LocalMark> marks;
-        int k = 0;
-        QList<PointData> pnts;
-        PointData data;
-        data.lat = 22.123456;
-        data.lon = 113.123456;
-        data.name = QStringLiteral("测我是");
-        pnts.append(data);
-        foreach (PointData point, pnts) {
-            ZCHX::Data::ITF_LocalMark mark;
-            mark.ll.lat = point.lat;
-            mark.ll.lon = point.lon;
-            mark.uuid = 1000;
-            mark.name = point.name;
-            marks.append(mark);
-            k++;
-        }
-        m_pEcdisWin->itfSetLocalMarkData(marks);
-    }
 
-    QAction *btn = new QAction(QStringLiteral("测距"), this);
+
     ui->menuBar->addAction(QStringLiteral("测距"),this, SLOT(slotTestDistance()));
-
-    QAction *btn2 = new QAction(QStringLiteral("预推区域"), this);
     ui->menuBar->addAction(QStringLiteral("预推区域"),this, SLOT(slotTestPrediction()));
-
-
-//    ZCHX::Data::ITF_ElePos p1;
-//    p1.ll.lat = 21.600171;
-//    p1.ll.lon = 111.806594;
-//    p1.brush = Qt::red;
-//    p1.pen.setColor(Qt::black);
-//    p1.radius = 1;
-//    p1.name = "P1";
-
-//    ZCHX::Data::ITF_ElePos p2;
-//    p2.ll.lat = 21.600676;
-//    p2.ll.lon = 111.806412;
-//    p2.brush = Qt::red;
-//    p2.pen.setColor(Qt::black);
-//    p2.radius = 1;
-//    p2.name = "P2";
-
-//    ZCHX::Data::ITF_ElePos p3;
-//    p3.ll.lat = 21.600342;
-//    p3.ll.lon = 111.806775;
-//    p3.brush = Qt::red;
-//    p3.pen.setColor(Qt::black);
-//    p3.radius = 1;
-//    p3.name = "P3";
-
-//    m_pEcdisWin->itfAppendPoint(p1);
-//    m_pEcdisWin->itfAppendPoint(p2);
-//    m_pEcdisWin->itfAppendPoint(p3);
 }
 
 void TestMainWindow::slotTestDistance()
@@ -431,7 +372,9 @@ void TestMainWindow::getLonlatListFromFile(const QString &fileName, QList<PointD
 
 void TestMainWindow::slotRadarPointLayerDisplay(bool sts)
 {
-    std::shared_ptr<qt::MapLayer> layer = m_pEcdisWin->itfGetLayer(ZCHX::LAYER_RADAR);
+    std::shared_ptr<qt::MapLayer> layer = m_pEcdisWin->itfGetLayer(ZCHX::LAYER_RADAR_CURRENT);
+    if(layer) layer->setVisible(sts);
+    layer = m_pEcdisWin->itfGetLayer(ZCHX::LAYER_RADARRECT);
     if(layer) layer->setVisible(sts);
     if(mDataChange) mDataChange->slotSetThreadStatus(ZCHX_RADAR_RECEIVER::ZCHX_RECV_RADAR_POINT, sts);
     mSetting->setUserValue(SEC_RADAR_TRACK, STATUS, sts);
@@ -481,111 +424,11 @@ void TestMainWindow::slotRadarLimitAreaDisplay(bool sts)
 
 void TestMainWindow::slotTimerout()
 {
-    //开始构造数据
-    ZCHX::Data::ITF_RadarRect rect;
-    rect.mBlockColor = Qt::yellow;
-    rect.mBlockEdgeColor = Qt::darkGray;
-    rect.mHisBlockColor.setRgb(0,78,183);
-    rect.mNodeNumber = 1005;
-    ZCHX::Data::LatLon ll[] = {
-        {22.212637,113.122392},
-        {22.213532,113.122477},
-        {22.211724,113.121148},
-        {22.212614,113.121283},
-        {22.211247,113.120504},
-        {22.212129,113.120689},
-        {22.210730,113.119860},
-        {22.211602,113.120095},
-        {22.210134,113.119174},
-        {22.210993,113.119458},
-        {22.209618,113.118358},
-        {22.210462,113.118690},
-        {22.208744,113.117243},
-        {22.209571,113.117622},
-        {22.207750,113.115784},
-        {22.208557,113.116209},
-        {22.206837,113.114281},
-        {22.207623,113.114751},
-        {22.205923,113.112908},
-        {22.206685,113.113422},
-        {22.204930,113.111621},
-        {22.205666,113.112178},
-        {22.203698,113.110076},
-        {22.204406,113.110673},
-        {22.202824,113.109089},
-        {22.203502,113.109726},
-        {22.202228,113.107973},
-        {22.202874,113.108647},
-        {22.201314,113.106557},
-        {22.201927,113.107267},
-        {22.200440,113.105827},
-        {22.201017,113.106570},
-        {22.199605,113.104497},
-        {22.200146,113.105272},
-        {22.198612,113.103510},
-        {22.199114,113.104314},
-        {22.197738,113.102995},
-        {22.198201,113.103827},
-        {22.196903,113.102480},
-        {22.197325,113.103337},
-        {22.196109,113.102094},
-        {22.196489,113.102973},
-        {22.195314,113.101922},
-        {22.195651,113.102822},
-        {22.194082,113.101536},
-        {22.194374,113.102453},
-        {22.192373,113.101021},
-        {22.192621,113.101954},
-        {22.191976,113.100334},
-        {22.192178,113.101279},
-        {22.190228,113.098102},
-        {22.190384,113.099057},
-        {22.189632,113.096858},
-        {22.189741,113.097821},
-        {22.188797,113.095742},
-        {22.188860,113.096710},
-        {22.188042,113.094626},
-        {22.188058,113.095596},
-        {22.187247,113.093296},
-        {22.187216,113.094266}
-    };
-    int size = sizeof(ll) / sizeof(ZCHX::Data::LatLon);
-//    qDebug()<<"size = "<<size;
-    static int index = 0;
-    index++;
-    for(int i=0; i<size; i=i+2)
-    {
-//        qDebug()<<"ll"<<ll[i].lat<<ll[i+1].lon;
-        ZCHX::Data::ITF_RadarRectDef his;
-        his.rectNumber = 1005;
-        his.startlatitude = ll[i].lat;
-        his.startlongitude = ll[i].lon;
-        his.endlatitude = ll[i+1].lat;
-        his.endlongitude = ll[i+1].lon;
-        his.centerlatitude = (his.startlatitude + his.endlatitude)/2;
-        his.centerlongitude = (his.startlongitude + his.endlongitude) / 2;
-        his.isRealData= true;
-        his.angle = ZCHX::Utils::calcAzimuth(his.startlongitude, his.startlatitude, his.endlongitude, his.endlatitude);
-        his.updateTime = QDateTime::currentDateTime().toTime_t();
-        rect.mHistoryRects.prepend(his);
-//        if(i >= index) break;
     }
-    rect.mCurrentRect = rect.mHistoryRects.first();
-    rect.mHistoryRects.removeFirst();;
 
-    QList<ZCHX::Data::ITF_RadarRect> list;
-    list.append(rect);
-    m_pEcdisWin->itfSetRadarRect(2, list);
-//    m_pEcdisWin->setMapCenter(rect.current.centerlatitude, rect.current.centerlongitude);
-    if(index >= size) index = 0;
-
-
-}
-
-void TestMainWindow::slotSetRadarVideoWholeData(int siteID, double lon, double lat, double dis, int type, int loop, int curIndex, const QByteArray &objPixmap, const QByteArray &prePixMap)
+void TestMainWindow::slotSetRadarVideoWholeData(int siteID, double lon, double lat, double dis, const QByteArray &objPixmap)
 {
-    m_pEcdisWin->itfSetRadarVideoData(siteID, lon, lat, dis, type, loop);
-    m_pEcdisWin->itfSetRadarVideoPixmap(siteID, curIndex,objPixmap, prePixMap);
+    m_pEcdisWin->itfSetRadarVideoData(siteID, lon, lat, dis, objPixmap);
 }
 
 bool TestMainWindow::getLayerDisplay(const QString &layerName)
@@ -664,18 +507,18 @@ void TestMainWindow::slotSetDataSource(bool sts)
 
     } else if(i == Data_radar_Rect)
     {
-        //先将线程添加进去
-        ZCHX_RADAR_RECEIVER::ZCHX_RadarRect_Param param;
-        param.mSetting.m_sIP = mSetting->getUserValue(SEC_RADAR_RECT, SERVER).toString();
-        param.mSetting.m_sPort = mSetting->getUserValue(SEC_RADAR_RECT, PORT).toString();
-        param.mSetting.m_sTopicList.append(mSetting->getUserValue(SEC_RADAR_RECT, TOPIC).toString());
-        param.mSetting.m_sSiteID = 1;
-        param.m_sCurColor = mSetting->getUserValue(SEC_RADAR_RECT, CURCOLOR).toString();
-        param.m_sEdgeColor = "#c0c0c0";
-        param.m_sHistoryColor = "#0000ff";
-        param.m_sHistoryBackgroundColor = mSetting->getUserValue(SEC_RADAR_RECT, HISCOLOR).toString();
-        mDataChange->appendRadarRect(param);
-        slotRadarRectLayerDisplay(sts);
+//        //先将线程添加进去
+//        ZCHX_RADAR_RECEIVER::ZCHX_RadarRect_Param param;
+//        param.mSetting.m_sIP = mSetting->getUserValue(SEC_RADAR_RECT, SERVER).toString();
+//        param.mSetting.m_sPort = mSetting->getUserValue(SEC_RADAR_RECT, PORT).toString();
+//        param.mSetting.m_sTopicList.append(mSetting->getUserValue(SEC_RADAR_RECT, TOPIC).toString());
+//        param.mSetting.m_sSiteID = 1;
+//        param.m_sCurColor = mSetting->getUserValue(SEC_RADAR_RECT, CURCOLOR).toString();
+//        param.m_sEdgeColor = "#c0c0c0";
+//        param.m_sHistoryColor = "#0000ff";
+//        param.m_sHistoryBackgroundColor = mSetting->getUserValue(SEC_RADAR_RECT, HISCOLOR).toString();
+//        mDataChange->appendRadarRect(param);
+//        slotRadarRectLayerDisplay(sts);
 
     } else if(i == Data_Radar_Limit)
     {

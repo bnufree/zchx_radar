@@ -1,4 +1,4 @@
-#ifndef RADARELE_H
+﻿#ifndef RADARELE_H
 #define RADARELE_H
 
 #include "IDrawElement.hpp"
@@ -9,13 +9,14 @@ namespace qt
 class  RadarPointElement: public Element
 {
 public:
-    RadarPointElement(const double &lat, const double &lon, zchxMapWidget* frame);
+//    RadarPointElement(const double &lat, const double &lon, zchxMapWidget* frame);
     RadarPointElement(const ZCHX::Data::ITF_RadarPoint &ele, zchxMapWidget* frame);
     RadarPointElement(const RadarPointElement& pt);
 
-    enum RADAR_SHARE{
+    enum RADAR_SHAPE{       //雷达目标的图形样式  默认是矩形。
         Radar_Rect = 0,
         Radar_Ellipse,
+        Radar_Ais,
     };
 
     std::pair<double, double> getPoint();
@@ -23,19 +24,10 @@ public:
     const ZCHX::Data::ITF_RadarPoint& getData() const;
     void setData(const ZCHX::Data::ITF_RadarPoint& data);
 
-    const std::vector<std::pair<double, double> > &getPath() const;
-    void setPath(const std::vector<std::pair<double, double> > &path);
+    void setDrawAsAis(bool sts) {if(sts) m_shape = Radar_Ais;}
+    bool getDrawAsAis() const {return m_shape == Radar_Ais;}
 
-    RADARTYPE getRadarType() const;
-    void setRadarType(const RADARTYPE &type);
-
-    bool getShan() const;
-    void setShan(bool shan);
-
-    void setDrawAsAis(bool sts) {mDrawAsAis = sts;}
-    bool getDrawAsAis() const {return mDrawAsAis;}
-
-    bool  getDrawShapeAsRect() const {return mRadarShapeAsRect;}
+    bool  getDrawShapeAsRect() const {return m_shape == Radar_Rect;}
 
     //0不闪，1闪
     uint getStatus() const;
@@ -55,18 +47,12 @@ public:
     void showToolTip(const QPoint &pos);
 
     void setShowRadarLabel(bool showRadarLabel);
+    int  getRadarObjType() const {return m_data.objType;}
 private:
     int getSideLen();
-
-    std::vector<std::pair<double, double>> m_path;
-    RADARTYPE    m_radar_type;
-    ZCHX::Data::ITF_RadarPoint m_data;
-    bool m_shan;
-    bool m_needDrawBox;
-    uint m_status; //0不闪，1闪
-    bool mRadarShapeAsRect; //true:矩形,false:圆形
-    bool mDrawAsAis;  //是否将目标画为一个船舶图标
-    bool m_showRadarLabel;
+    ZCHX::Data::ITF_RadarPoint  m_data;
+    int                         m_shape;
+    bool                        m_showRadarLabel;
 };
 
 class  RadarAreaElement: public Element

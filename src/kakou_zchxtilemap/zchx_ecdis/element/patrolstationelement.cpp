@@ -1,10 +1,10 @@
-#include "patrolstationelement.h"
+﻿#include "patrolstationelement.h"
 #include "map_layer/zchxmaplayermgr.h"
 #include "zchxmapframe.h"
 
 namespace qt {
 PastrolStationElement::PastrolStationElement(const ZCHX::Data::ITF_PastrolStation &data, zchxMapWidget* f)
-    :Element(data.ll.lat,data.ll.lon, f, ZCHX::Data::ELE_PATROL_STATION)
+    :Element(data.ll.lat,data.ll.lon, f, ZCHX::Data::ELE_PATROL_STATION, ZCHX::LAYER_PATROL_SITE)
 {
     m_data = data;
     setIsUpdate(true);

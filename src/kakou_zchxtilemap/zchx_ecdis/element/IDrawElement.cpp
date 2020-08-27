@@ -1,4 +1,4 @@
-#include "IDrawElement.hpp"
+﻿#include "IDrawElement.hpp"
 #include "zchxmapwidget.h"
 #include "map_layer/zchxmaplayermgr.h"
 #include "zchxmapframe.h"
@@ -12,7 +12,7 @@ namespace qt {
 int Element::g_maxLineLength = 100;
 int Element::gSetFlashAlphaStep = 100;
 
-Element::Element(const double &lat, const double &lon, zchxMapWidget* view, ZCHX::Data::ELETYPE type, const QColor& flashColor)
+Element::Element(const double &lat, const double &lon, zchxMapWidget* view, ZCHX::Data::ELETYPE type, const QString& layer, const QColor& flashColor)
     : elelat(lat)
     , elelon(lon)
     , displayLat(lat)
@@ -37,7 +37,7 @@ Element::Element(const double &lat, const double &lon, zchxMapWidget* view, ZCHX
     , mTextColor(QColor())
     , mBorderColor(QColor())
     , mFillingColor(QColor())
-    , m_layerName("")
+    , m_layerName(layer)
 {
 
     Element::g_maxLineLength = Profiles::instance()->value(MAP_INDEX, MAX_LINE_LENGTH).toInt();

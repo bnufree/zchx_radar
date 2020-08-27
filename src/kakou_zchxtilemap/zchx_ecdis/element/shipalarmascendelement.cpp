@@ -1,11 +1,11 @@
-#include "shipalarmascendelement.h"
+﻿#include "shipalarmascendelement.h"
 #include "map_layer/zchxmaplayermgr.h"
 #include "zchxmapframe.h"
 
 namespace qt {
 
 ShipAlarmAscendElement::ShipAlarmAscendElement(const ZCHX::Data::ITF_ShipAlarmAscend &ele, zchxMapWidget* f)
-    :Element(ele.lat, ele.lon, f, ZCHX::Data::ELE_SHIP_ALARM_ASCEND)
+    :Element(ele.lat, ele.lon, f, ZCHX::Data::ELE_SHIP_ALARM_ASCEND, ZCHX::LAYER_ALARMASCEND)
 {
     setData(ele);
     setIsUpdate(true);

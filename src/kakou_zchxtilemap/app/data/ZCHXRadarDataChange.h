@@ -14,8 +14,6 @@ public:
     explicit ZCHXRadarDataChange(QObject *parent = 0);
     ~ZCHXRadarDataChange();
     void stop();
-    void appendRadarRect(const ZCHX_RadarRect_Param& param);
-    void appendRadarRectList(const QList<ZCHX_RadarRect_Param>& list);
     void appendRadarPoint(const ZCHX_Radar_Setting_Param& param);
     void appendRadarPointList(const QList<ZCHX_Radar_Setting_Param>& list);
     void appendRadarVideo(const ZCHX_Radar_Setting_Param &param);
@@ -33,7 +31,7 @@ signals:
     void sendAisDataList(const QList<ZCHX::Data::ITF_AIS>&);
     void sendAisChart(const ZCHX::Data::ITF_AIS_Chart& data);
     void sendLimitDataList(const QList<ZCHX::Data::ITF_IslandLine>&);
-    void sendRadarVideo(int siteID, double lon, double lat, double dis, int type, int loop, int curIndex, const QByteArray& objPixmap, const QByteArray& prePixMap);
+    void sendRadarVideo(int siteID, double lon, double lat, double dis, const QByteArray& objPixmap);
 
 
 private:

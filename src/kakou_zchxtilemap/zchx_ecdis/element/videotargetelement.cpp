@@ -1,4 +1,4 @@
-#include "videotargetelement.h"
+﻿#include "videotargetelement.h"
 #include "zchxmapframe.h"
 #include "zchxmapwidget.h"
 #include "map_layer/zchxmaplayermgr.h"
@@ -6,7 +6,7 @@
 
 namespace qt {
 VideoTargetElement::VideoTargetElement(const ZCHX::Data::ITF_VideoTarget &data, zchxMapWidget* work)
-    :Element(data.objectMapPosY, data.objectMapPosX, work, ZCHX::Data::ELE_VIDEO_TARGET)
+    :Element(data.objectMapPosY, data.objectMapPosX, work, ZCHX::Data::ELE_VIDEO_TARGET, ZCHX::LAYER_VESSEL_TARGET)
 {
     m_data = data;
     mTargetIImgList<< ":/element/ren.png"

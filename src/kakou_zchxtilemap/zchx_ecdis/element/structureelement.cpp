@@ -1,10 +1,10 @@
-#include "structureelement.h"
+﻿#include "structureelement.h"
 #include "map_layer/zchxmaplayermgr.h"
 #include "zchxmapframe.h"
 
 namespace qt {
 StructureElement::StructureElement(const ZCHX::Data::ITF_Structure &ele, zchxMapWidget* f)
-    :Element(0,0,f, ZCHX::Data::ELE_STRUCTURE)
+    :Element(0,0,f, ZCHX::Data::ELE_STRUCTURE, ZCHX::LAYER_STRUCTURE)
 {
     setData(ele);
     setIsUpdate(true);

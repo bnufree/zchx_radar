@@ -43,6 +43,8 @@ public:
     void        setTargetMergeDis(double val){mTargetMergeDis = val;}
     void        setAdjustCogEnabled(bool sts) {mAdjustCogEnabled = sts;}
     void        setRangefactor(double factor) {mRangeFactor = factor;}
+    void        setMaxSpeed(double speed) {mMaxSpeed = speed;}
+    void        setScanTime(double secs) {mScanTime = secs;}
 public slots:
     void        appendTask(const zchxRadarRectDefList& task);
     void        process(const zchxRadarTrackTask& task);
@@ -115,6 +117,8 @@ private:
     //目标是否预推更新
     bool                        mIsTargetPrediction;                //是否进行预推
     int                         mTargetPredictionInterval;           //预推周期 比如2个周期更新一次
+    double                         mMaxSpeed;
+    double                      mScanTime;                           //最大速度(m/s)  时间周期秒
 };
 
 #endif // ZCHXRADARTARGETTRACK_H

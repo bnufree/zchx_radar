@@ -28,7 +28,7 @@ namespace qt{
 /// \brief 环岛线
 
 RouteLine::RouteLine(const ZCHX::Data::RouteLine &ele)
-    :Element(0,0, 0, ZCHX::Data::ELE_ROUTE_LINE)
+    :Element(0,0, 0, ZCHX::Data::ELE_ROUTE_LINE, ZCHX::LAYER_ROUTE_LINE)
 {
     m_data = ele;
     m_backData = ele;
@@ -261,7 +261,7 @@ void RouteLine::delPathPoint(int idx)
 }
 
 ShipPlanLine::ShipPlanLine(const ZCHX::Data::ShipPlanLine &ele)
-    :Element(0, 0, 0, ZCHX::Data::ELE_PLAN_LINE)
+    :Element(0, 0, 0, ZCHX::Data::ELE_PLAN_LINE, ZCHX::LAYER_SHIPPLAN_LINE)
 {
     m_data = ele;
     m_backData = ele;
@@ -366,7 +366,7 @@ void ShipPlanLine::delPathPoint(int idx)
 }
 
 RouteCross::RouteCross(const ZCHX::Data::ITF_RouteCross &ele)
-    :Element(ele.m_fCrossLat, ele.m_fCrossLon, 0, ZCHX::Data::ELE_ROUTE_CROSS_POINT)
+    :Element(ele.m_fCrossLat, ele.m_fCrossLon, 0, ZCHX::Data::ELE_ROUTE_CROSS_POINT, ZCHX::LAYER_ROUTE_CROSS)
 {
     m_data = ele;
 }
@@ -377,7 +377,7 @@ ZCHX::Data::ITF_RouteCross RouteCross::data() const
 }
 
 Multibeam::Multibeam(const ZCHX::Data::ITF_Multibeam &ele)
-    :Element(ele.m_dLat,ele.m_dLon, 0, ZCHX::Data::ELE_MULTIBEAM)
+    :Element(ele.m_dLat,ele.m_dLon, 0, ZCHX::Data::ELE_MULTIBEAM, ZCHX::LAYER_MULTIBEAM)
 {
     m_data = ele;
 }
@@ -392,35 +392,8 @@ void Multibeam::setData(const ZCHX::Data::ITF_Multibeam &data)
     m_data = data;
 }
 
-RadarVideoElement::RadarVideoElement(const ZCHX::Data::ITF_RadarVideo &ele, int uIndex)
-    :Element(ele.dCentreLat,ele.dCentreLon, 0, ZCHX::Data::ELE_RADAR_ECHO),m_uMsgIndex(uIndex)
-{
-    m_data = ele;
-}
-
-ZCHX::Data::ITF_RadarVideo RadarVideoElement::data() const
-{
-    return m_data;
-}
-
-void RadarVideoElement::setData(const ZCHX::Data::ITF_RadarVideo &data)
-{
-    m_data = data;
-}
-
-
-void RadarVideoElement::setMsgIndex(int uIndex)
-{
-    m_uMsgIndex = uIndex;
-}
-
-int RadarVideoElement::getMsgIndex()
-{
-    return m_uMsgIndex;
-}
-
 SpecialRouteLine::SpecialRouteLine(const ZCHX::Data::SpecialRouteLine &ele)
-    :Element(0, 0, 0, ZCHX::Data::ELE_ROUTE_LINE)
+    :Element(0, 0, 0, ZCHX::Data::ELE_ROUTE_LINE, ZCHX::LAYER_SPECIAL_ROUTELINE)
 {
     m_data = ele;
 }

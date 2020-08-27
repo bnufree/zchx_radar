@@ -1,4 +1,4 @@
-#ifndef MOVEELEMENT_H
+﻿#ifndef MOVEELEMENT_H
 #define MOVEELEMENT_H
 
 #include "IDrawElement.hpp"
@@ -10,7 +10,7 @@ class ZCHX_ECDIS_EXPORT MoveElement : public Element
 {
 public:
     explicit MoveElement(ZCHX::Data::ELETYPE type, const QString& layer, zchxMapWidget* w)
-        : Element(0, 0, w, type), m_activePathPoint(-1)
+        : Element(0, 0, w, type, layer), m_activePathPoint(-1)
     {
         setLayer(layer);
     }

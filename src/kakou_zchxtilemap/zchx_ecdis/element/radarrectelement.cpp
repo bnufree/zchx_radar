@@ -14,11 +14,17 @@
 
 using namespace ZCHX::Data;
 
+QColor  rect_block_color = QColor(Qt::red);     //目标回波图形的填充颜色
+QColor  rect_block_edge_color = QColor(Qt::darkGray); //目标回波
+QColor  rect_history_block_color = QColor(0,47,147,255);   //历史轨迹数据矩形的填充颜色
+QColor  rect_history_Background_color = QColor(68,89,182);         //背景台阶图形的颜色b
+
+
 namespace qt {
 int RadarRectGlowElement::mMaxRectLength = Profiles::instance()->value(MAP_INDEX, MAX_RECT_PIXEL_LENGTH).toInt();
 int RadarRectGlowElement::mMaxGapOf2Rect = 20;
 RadarRectGlowElement::RadarRectGlowElement(const ZCHX::Data::ITF_RadarRect& data, zchxMapWidget* frame)
-    :Element(data.mCurrentRect.centerlatitude, data.mCurrentRect.centerlongitude, frame, ZCHX::Data::ELE_RADAR_RECTGLOW)
+    :Element(data.mCurrentRect.center.lat, data.mCurrentRect.center.lon, frame, ZCHX::Data::ELE_RADAR_RECTGLOW, ZCHX::LAYER_RADARRECT)
 {
     setData(data);
 }
@@ -78,7 +84,7 @@ void RadarRectGlowElement::setData(const ZCHX::Data::ITF_RadarRect &rect)
             {
                 ITF_RadarRectDef &cur_rect = mRect.rects[i];
                 //计算当前点和前一个点之间的距离
-                int dis = qRound(ZCHX::Utils::getDistanceDeg(pre_rect.centerlatitude, pre_rect.centerlongitude, cur_rect.centerlatitude, cur_rect.centerlongitude));
+                int dis = qRound(ZCHX::Utils::getDistanceDeg(pre_rect.center.lat, pre_rect.center.lon, cur_rect.center.lat, cur_rect.center.lon));
                 if(dis < mMaxGapOf2Rect)
                 {
                     mRect.mHistoryRects.removeAt(i);
@@ -87,10 +93,10 @@ void RadarRectGlowElement::setData(const ZCHX::Data::ITF_RadarRect &rect)
 
                 if(PROFILE_INS->value(MAP_INDEX, MAP_USE_RECT_COG, true).toBool())
                 {
-                    double angle = ZCHX::Utils::calcAzimuth(cur_rect.centerlongitude,
-                                                            cur_rect.centerlatitude,
-                                                            pre_rect.centerlongitude,
-                                                            pre_rect.centerlatitude);
+                    double angle = ZCHX::Utils::calcAzimuth(cur_rect.center.lon,
+                                                            cur_rect.center.lat,
+                                                            pre_rect.center.lon,
+                                                            pre_rect.center.lat);
                     cur_rect.angle = angle;
                 }
                 pre_rect = cur_rect;
@@ -169,8 +175,8 @@ int  RadarRectGlowElement::getRectHight(double refer_dis)
 void RadarRectGlowElement::calculateRect(double& angle, double& length, const ITF_RadarRectDef &rect)
 {
     //计算起始和结束的两者之间的长边角度差的过度值
-    QPoint p1 = mView->framework()->LatLon2Pixel(rect.startlatitude, rect.startlongitude).toPoint();
-    QPoint p2 = mView->framework()->LatLon2Pixel(rect.endlatitude, rect.endlongitude).toPoint();
+    QPoint p1 = mView->framework()->LatLon2Pixel(rect.maxSeg.start.lat, rect.maxSeg.start.lon).toPoint();
+    QPoint p2 = mView->framework()->LatLon2Pixel(rect.maxSeg.end.lat, rect.maxSeg.end.lon).toPoint();
     QPoint sub_p = p2 - p1;
     QVector2D sub(sub_p);
     angle = atan2(sub.y(), sub.x());  //长轴的角度
@@ -198,30 +204,30 @@ void RadarRectGlowElement::calculateRect(double& angle, double& length, const IT
 void RadarRectGlowElement::calculateSkipRect(ITF_RadarRectDefList& list, const ITF_RadarRectDef &pre, const ITF_RadarRectDef &cur)
 {
     //检查两者之间的距离是否超出了阈值,如果是,就生成临时的中间图形,否则不生产
-    int dis = qRound(ZCHX::Utils::getDistanceDeg(pre.centerlatitude, pre.centerlongitude, cur.centerlatitude, cur.centerlongitude));
+    int dis = qRound(ZCHX::Utils::getDistanceDeg(pre.center.lat, pre.center.lon, cur.center.lat, cur.center.lon));
     if(dis <= mMaxGapOf2Rect) return;
-    double pre_length = ZCHX::Utils::getDistanceDeg(pre.startlatitude, pre.startlongitude, pre.endlatitude,pre.endlongitude);
-    double cur_length = ZCHX::Utils::getDistanceDeg(cur.startlatitude, cur.startlongitude, cur.endlatitude,cur.endlongitude);
-    double pre_angle  = ZCHX::Utils::calcAzimuth(pre.startlongitude, pre.startlatitude, pre.endlongitude, pre.endlatitude);
-    double cur_angle  = ZCHX::Utils::calcAzimuth(cur.startlongitude, cur.startlatitude, cur.endlongitude, cur.endlatitude);
+    double pre_length = pre.maxSeg.length();
+    double cur_length = cur.maxSeg.length();
+    double pre_angle  = pre.maxSeg.angle();
+    double cur_angle  = cur.maxSeg.angle();
     int num = (dis + mMaxGapOf2Rect - 1) / mMaxGapOf2Rect; //中间的线段数
 //    qDebug()<<"dis:"<<dis<<num;
     double unit_dis = dis * 1.0 / num;
     double unit_angle = (cur_angle - pre_angle) /num;
     double unit_lenth = (cur_length - pre_length) /num;
-    double unit_cog = (cur.angle - pre.angle)/num;
+    double unit_cog = (cur.cog - pre.cog)/num;
     double unit_time = (cur.updateTime - pre.updateTime) / num;
     num --;  //实际的点的个数
     if(num == 0) return;
 
 
     //计算方位角
-    double azimuth = ZCHX::Utils::calcAzimuth(pre.centerlongitude, pre.centerlatitude, cur.centerlongitude, cur.centerlatitude);
-    double src_lat = pre.centerlatitude;
-    double src_lon = pre.centerlongitude;
+    double azimuth = ZCHX::Utils::calcAzimuth(pre.center.lon, pre.center.lat, cur.center.lon, cur.center.lat);
+    double src_lat = pre.center.lat;
+    double src_lon = pre.center.lon;
     double angle = pre_angle;
     double length = pre_length;
-    double cog = pre.angle + unit_cog;
+    double cog = pre.cog + unit_cog;
     double time_of_day = pre.updateTime + unit_time;
     for(int i=0; i<num; i++)
     {
@@ -236,10 +242,10 @@ void RadarRectGlowElement::calculateSkipRect(ITF_RadarRectDefList& list, const I
 //        mInsertPointList.append(ll);
         //开始生成模拟的点
         ITF_RadarRectDef rect;
-        rect.centerlatitude = ll.lat;
-        rect.centerlongitude = ll.lon;
-        rect.angle = cog;
-        rect.diameter = cur.diameter;
+        rect.center.lat = ll.lat;
+        rect.center.lon = ll.lon;
+        rect.cog = cog;
+        rect.boundRect.diameter = cur.boundRect.diameter;
         rect.rectNumber = cur.rectNumber;
         rect.isRealData = false;
         rect.updateTime = time_of_day;
@@ -249,12 +255,12 @@ void RadarRectGlowElement::calculateSkipRect(ITF_RadarRectDefList& list, const I
         time_of_day += unit_time;
         //计算开始点的坐标值
         ZCHX::Data::LatLon start = ZCHX::Utils::distbear_to_latlon(ll.lat, ll.lon, 0.5 * length, 180+angle);
-        rect.startlatitude = start.lat;
-        rect.startlongitude = start.lon;
+        rect.maxSeg.start.lat = start.lat;
+        rect.maxSeg.start.lon = start.lon;
         //计算结束点的坐标
         ZCHX::Data::LatLon end = ZCHX::Utils::distbear_to_latlon(ll.lat, ll.lon, 0.5*length, angle);
-        rect.endlatitude = end.lat;
-        rect.endlongitude = end.lon;
+        rect.maxSeg.end.lat= end.lat;
+        rect.maxSeg.end.lon = end.lon;
         list.append(rect);
         src_lat = ll.lat;
         src_lon = ll.lon;
@@ -305,14 +311,14 @@ void RadarRectGlowElement::drawRadarRect(QPainter *painter,
     //将矩形长轴的坐标转换为屏幕坐标,获取长轴的长度和角度
     double dis = 0.0, angle = 0.0;
     calculateRect(angle, dis, rect);
-    QPoint center = mView->framework()->LatLon2Pixel(rect.centerlatitude, rect.centerlongitude).toPoint();
+    QPoint center = mView->framework()->LatLon2Pixel(rect.center.lat, rect.center.lon).toPoint();
 
 
     //开始进行坐标转换
     QTransform transform;
     transform.translate(center.x(), center.y());  //坐标原点移到中心位置
     double rotate = angle *180 / GLOB_PI;
-    transform.rotate(rect.angle);
+    transform.rotate(rect.cog);
 
     //目标框的大小设定
     int rect_width = dis;
@@ -371,7 +377,7 @@ void RadarRectGlowElement::drawRadarRect(QPainter *painter,
 
 
     //生成渐变颜色的目标矩形框
-    if(!target_draw)drawTarget(painter, targetColor, edgeColor, back_rect, transform, first, rect.angle);
+    if(!target_draw)drawTarget(painter, targetColor, edgeColor, back_rect, transform, first, rect.cog);
 //    QLinearGradient back_color(back_rect.topLeft(), back_rect.bottomRight());
 //    back_color.setColorAt(0, Qt::transparent );
 //    back_color.setColorAt(0.1, edgeColor );
@@ -397,29 +403,6 @@ void RadarRectGlowElement::drawRadarRect(QPainter *painter,
 
 void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
 {
-    //开始画历史轨迹
-//    if(!mRect.HisBlockColor.isValid())
-//    {
-        mRect.mHisBlockColor.setNamedColor(QColor(0, 47, 147, 255).name());
-//    }
-    if(!mRect.mBlockColor.isValid())
-    {
-        mRect.mBlockColor = Qt::red;
-
-    }
-    if(!mRect.mBlockEdgeColor.isValid())
-    {
-        mRect.mBlockEdgeColor = Qt::darkGray;
-    }
-    //    if(!mRect.historyBackgroundColor.isValid())
-    //    {
-    mRect.mHistoryBackgroundColor.setRgb(68,89,182);
-    //    }
-
-//    if(mRect.isEstObj)
-//    {
-//        mRect.blockColor = Qt::green;
-//    }
 
 #if 0
     //这里开始旧版本的矩形框输出
@@ -435,8 +418,8 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
     {
         ITF_RadarRectDef pre_rect = mRect.mHistoryRects.last();
         ITF_RadarRectDef cur_rect = mRect.current;
-        QPoint p1 = mView->framework()->LatLon2Pixel(pre_rect.centerlatitude, pre_rect.centerlongitude).toPoint();
-        QPoint p2 = mView->framework()->LatLon2Pixel(cur_rect.centerlatitude, pre_rect.centerlongitude).toPoint();
+        QPoint p1 = mView->framework()->LatLon2Pixel(pre_rect.center.lat, pre_rect.center.lon).toPoint();
+        QPoint p2 = mView->framework()->LatLon2Pixel(cur_rect.center.lat, pre_rect.center.lon).toPoint();
         QVector2D vec(p1-p2);
         mHistoryPixelLength = vec.length();
     }
@@ -501,7 +484,7 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
 #else
     //这里开始输出目标的历史轨迹,再输出目标实际的矩形
     QPolygonF path;
-    path.append(mView->framework()->LatLon2Pixel(mRect.mCurrentRect.centerlatitude, mRect.mCurrentRect.centerlongitude).toPointF());
+    path.append(mView->framework()->LatLon2Pixel(mRect.mCurrentRect.center.lat, mRect.mCurrentRect.center.lon).toPointF());
     //1)开始画目标的历史轨迹图形
     int size = mRect.mHistoryRects.size();
     double delta = 1.0;
@@ -517,16 +500,16 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
         if(his.updateTime == mRect.mCurrentRect.updateTime) continue;
         //根据目标的长度进行图形缩放透明处理
         int alpha = qRound( index * delta);
-        QColor rectColor = mRect.mBlockColor;
+        QColor rectColor = rect_block_color;
         if(!his.isRealData) rectColor = Qt::green;
         rectColor.setAlpha(alpha);
 #if 1
         if(his.pixPoints.size() == 0)
         {
-            drawPolygon(painter, Qt::transparent, rectColor, prePolygon, his.centerlatitude, his.centerlongitude);
+            drawPolygon(painter, Qt::transparent, rectColor, prePolygon, his.center.lat, his.center.lon);
         } else
         {
-            drawPolygon(painter, Qt::transparent, rectColor, his.pixPoints, his.centerlatitude, his.centerlongitude);
+            drawPolygon(painter, Qt::transparent, rectColor, his.pixPoints, his.center.lat, his.center.lon);
         }
 #endif
 #if 0
@@ -552,22 +535,22 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
             }
         }
 #endif
-        path.append(mView->framework()->LatLon2Pixel(his.centerlatitude, his.centerlongitude).toPointF());
+        path.append(mView->framework()->LatLon2Pixel(his.center.lat, his.center.lon).toPointF());
 
     }
     //2)画出实际的图形
     if(mRect.mCurrentRect.pixPoints.size() > 0)
     {
-        QColor rectColor = mRect.mBlockColor;
+        QColor rectColor = rect_block_color;
         if(!mRect.mCurrentRect.isRealData) rectColor = Qt::green;
-        drawPolygon(painter, Qt::transparent, rectColor, mRect.mCurrentRect.pixPoints, mRect.mCurrentRect.centerlatitude, mRect.mCurrentRect.centerlongitude);
+        drawPolygon(painter, Qt::transparent, rectColor, mRect.mCurrentRect.pixPoints, mRect.mCurrentRect.center.lat, mRect.mCurrentRect.center.lon);
 #if 1
         //画出目标的预推区域
         QPolygonF shapePnts;
         for(int k=0; k<mRect.mCurrentRect.predictionArea.size(); k++)
         {
-            ITF_SingleVideoBlock block = mRect.mCurrentRect.predictionArea[k];
-            shapePnts.append(mView->framework()->LatLon2Pixel(block.latitude, block.longitude).toPointF());
+            LatLon block = mRect.mCurrentRect.predictionArea[k];
+            shapePnts.append(mView->framework()->LatLon2Pixel(block.lat, block.lon).toPointF());
         }
         if(shapePnts.size() > 0)
         {
@@ -599,10 +582,10 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
     } else
     {
         QPolygonF shapePnts;
-        for(int i=0; i<mRect.mCurrentRect.blocks.size(); i++)
+        for(int i=0; i<mRect.mCurrentRect.outline.size(); i++)
         {
-            ITF_SingleVideoBlock block = mRect.mCurrentRect.blocks[i];
-            shapePnts.append(mView->framework()->LatLon2Pixel(block.latitude, block.longitude).toPointF());
+            LatLon block = mRect.mCurrentRect.outline[i];
+            shapePnts.append(mView->framework()->LatLon2Pixel(block.lat, block.lon).toPointF());
         }
 
         painter->save();
@@ -619,7 +602,7 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
                       mView->framework()->LatLon2Pixel(mRect.mCurrentRect.endlatitude, mRect.mCurrentRect.endlongitude).toPointF());
 
     //开始画目标的中心
-    painter->drawEllipse(mView->framework()->LatLon2Pixel(mRect.mCurrentRect.centerlatitude, mRect.mCurrentRect.centerlongitude).toPointF(), 6 ,6);
+    painter->drawEllipse(mView->framework()->LatLon2Pixel(mRect.mCurrentRect.center.lat, mRect.mCurrentRect.center.lon).toPointF(), 6 ,6);
     painter->restore();
 #endif
     //画出目标的轨迹线
@@ -679,7 +662,7 @@ QPixmap RadarRectGlowElement::drawPixmap(const QColor& edgeColor, const QColor& 
     painter.setPen(edgeColor);
     if(!brushColor.isValid())
     {
-        painter.setBrush(mRect.mBlockColor);
+        painter.setBrush(rect_block_color);
     } else
     {
         painter.setBrush(brushColor);
@@ -700,8 +683,8 @@ QPixmap RadarRectGlowElement::drawPixmap(const QColor& edgeColor, const QColor& 
     painter.setBrush(mRect.blockColor);
     //将经纬度点对应到图片上.图元的中心经纬度对应图片的中心
     //1)计算中心点对应的墨卡托坐标
-    double lat = mRect.mCurrentRect.centerlatitude;
-    double lon = mRect.mCurrentRect.centerlongitude;
+    double lat = mRect.mCurrentRect.center.lat;
+    double lon = mRect.mCurrentRect.center.lon;
     ZCHX::Data::Mercator cen_mct = zchxMapDataUtils::wgs84LatLonToMercator(lat, lon);
     painter.save();
     painter.translate(img_size / 2 + 1, img_size / 2 + 1);
@@ -958,9 +941,9 @@ void RadarRectGlowElement::drawElement(QPainter *painter)
         painter->setPen(QColor(128, 128, 128, 128));
         painter->setBrush(QBrush(QColor(0, 0, 255, 255)));
 
-        QPointF centerPos = mView->framework()->LatLon2Pixel(mRect.centerlatitude, mRect.centerlongitude).toPointF();
-        QPointF leftTopPos = mView->framework()->LatLon2Pixel(mRect.centerlatitude + OFFSET_Y / 2, mRect.centerlongitude - OFFSET_X / 2).toPointF();
-        QPointF bottomRightPos = mView->framework()->LatLon2Pixel(mRect.centerlatitude - OFFSET_Y / 2, mRect.centerlongitude + OFFSET_X / 2).toPointF();
+        QPointF centerPos = mView->framework()->LatLon2Pixel(mRect.center.lat, mRect.center.lon).toPointF();
+        QPointF leftTopPos = mView->framework()->LatLon2Pixel(mRect.center.lat + OFFSET_Y / 2, mRect.center.lon - OFFSET_X / 2).toPointF();
+        QPointF bottomRightPos = mView->framework()->LatLon2Pixel(mRect.center.lat - OFFSET_Y / 2, mRect.center.lon + OFFSET_X / 2).toPointF();
         QRectF rect(leftTopPos, bottomRightPos);
         painter->drawRect(rect);
 //        drawRadarRect(leftTopPos, bottomRightPos, painter);
@@ -999,14 +982,14 @@ void RadarRectGlowElement::drawElement(QPainter *painter)
             const ITF_RadarRectDef & hisRect1 = mRect.mHistoryRects.at(0);
             const ITF_RadarRectDef & hisRect2 = mRect.mHistoryRects.at(hisNum - 1);
 
-            int dis = ZCHX::Utils::instance()->getDistanceDeg(hisRect1.centerlatitude, hisRect1.centerlongitude, hisRect2.centerlatitude, hisRect2.centerlongitude);
+            int dis = ZCHX::Utils::instance()->getDistanceDeg(hisRect1.center.lat, hisRect1.center.lon, hisRect2.center.lat, hisRect2.center.lon);
             if (dis < MIN_SHOW_DIS)
             {
                 return;
             }
 
-            QPointF centerPos1 = mView->framework()->LatLon2Pixel(hisRect1.centerlatitude, hisRect1.centerlongitude).toPointF();
-            QPointF centerPos2 = mView->framework()->LatLon2Pixel(hisRect2.centerlatitude, hisRect2.centerlongitude).toPointF();
+            QPointF centerPos1 = mView->framework()->LatLon2Pixel(hisRect1.center.lat, hisRect1.center.lon).toPointF();
+            QPointF centerPos2 = mView->framework()->LatLon2Pixel(hisRect2.center.lat, hisRect2.center.lon).toPointF();
 
             angle = atan2(centerPos2.y() - centerPos1.y(), centerPos2.x() - centerPos1.x()) * 180 / 3.1415926;
 
@@ -1016,12 +999,12 @@ void RadarRectGlowElement::drawElement(QPainter *painter)
                 painter->setPen(QColor(128, 128, 128, colorDeep));
                 painter->setBrush(QBrush(QColor(0, 0, 255, colorDeep)));
 
-                double centerlatitude = hisRect1.centerlatitude + (hisRect2.centerlatitude - hisRect1.centerlatitude) * i / hisNum;
-                double centerlongitude = hisRect1.centerlongitude + (hisRect2.centerlongitude - hisRect1.centerlongitude) * i / hisNum;
+                double center.lat = hisRect1.center.lat + (hisRect2.center.lat - hisRect1.center.lat) * i / hisNum;
+                double center.lon = hisRect1.center.lon + (hisRect2.center.lon - hisRect1.center.lon) * i / hisNum;
 
-                QPointF centerPos = mView->framework()->LatLon2Pixel(centerlatitude, centerlongitude).toPointF();
-                QPointF leftTopPos = mView->framework()->LatLon2Pixel(centerlatitude + OFFSET_Y, centerlongitude - OFFSET_X / 2).toPointF();
-                QPointF bottomRightPos = mView->framework()->LatLon2Pixel(centerlatitude - OFFSET_Y, centerlongitude + OFFSET_X / 2).toPointF();
+                QPointF centerPos = mView->framework()->LatLon2Pixel(center.lat, center.lon).toPointF();
+                QPointF leftTopPos = mView->framework()->LatLon2Pixel(center.lat + OFFSET_Y, center.lon - OFFSET_X / 2).toPointF();
+                QPointF bottomRightPos = mView->framework()->LatLon2Pixel(center.lat - OFFSET_Y, center.lon + OFFSET_X / 2).toPointF();
                 double roomValue = (double)(i + 1) / (hisNum + 1) / 4;
                 double leftX = leftTopPos.x() + (bottomRightPos.x() - leftTopPos.x()) * roomValue;
                 double leftY = leftTopPos.y() + (bottomRightPos.y() - leftTopPos.y()) * roomValue;
@@ -1128,9 +1111,9 @@ void RadarRectGlowElement::drawElement(QPainter *painter)
 //            painter->setBrush(QBrush(QColor(0, 0, 255, colorDeep)));
 //            const ITF_RadarRectDef & hisRect = mRect.mHistoryRects.at(i);
 
-//            QPointF centerPos = mView->framework()->LatLon2Pixel(hisRect.centerlatitude, hisRect.centerlongitude).toPointF();
-//            QPointF leftTopPos = mView->framework()->LatLon2Pixel(hisRect.centerlatitude + OFFSET_Y, hisRect.centerlongitude - OFFSET_X / 2).toPointF();
-//            QPointF bottomRightPos = mView->framework()->LatLon2Pixel(hisRect.centerlatitude - OFFSET_Y, hisRect.centerlongitude + OFFSET_X / 2).toPointF();
+//            QPointF centerPos = mView->framework()->LatLon2Pixel(hisRect.center.lat, hisRect.center.lon).toPointF();
+//            QPointF leftTopPos = mView->framework()->LatLon2Pixel(hisRect.center.lat + OFFSET_Y, hisRect.center.lon - OFFSET_X / 2).toPointF();
+//            QPointF bottomRightPos = mView->framework()->LatLon2Pixel(hisRect.center.lat - OFFSET_Y, hisRect.center.lon + OFFSET_X / 2).toPointF();
 //            double leftX = leftTopPos.x() + (bottomRightPos.x() - leftTopPos.x()) * (i + 1) / (hisNum + 1) / 2;
 //            double leftY = leftTopPos.y() + (bottomRightPos.y() - leftTopPos.y()) * (i + 1) / (hisNum + 1) / 2;
 //            double rightX = bottomRightPos.x() - (bottomRightPos.x() - leftTopPos.x()) * (i + 1) / (hisNum + 1) / 2;
@@ -1168,7 +1151,7 @@ void RadarRectGlowElement::drawElement(QPainter *painter)
 //        for (int i = 1; i < hisNum; i++)
 //        {
 //            const ITF_RadarRectDef & hisRect = mRect.mHistoryRects.at(i);
-//            QPointF centerPos = mView->framework()->LatLon2Pixel(hisRect.centerlatitude, hisRect.centerlongitude).toPointF();
+//            QPointF centerPos = mView->framework()->LatLon2Pixel(hisRect.center.lat, hisRect.center.lon).toPointF();
 //            points.append(centerPos);
 //        }
 //        painter->setPen(Qt::SolidLine);
@@ -1187,7 +1170,7 @@ bool RadarRectGlowElement::isRadarDisplayByTargetSize(const ZCHX::Data::ITF_Rada
         return true;
     }
 
-    int diameter = data.mCurrentRect.diameter;
+    int diameter = data.mCurrentRect.boundRect.diameter;
 
     switch (targetSizeIndex)
     {
@@ -1241,10 +1224,10 @@ bool RadarRectGlowElement::isRadarDisplayByTraceLen(const ZCHX::Data::ITF_RadarR
         return true;
     }
 
-    int traceLen = ZCHX::Utils::instance()->getDistanceDeg(data.mHistoryRects.at(0).centerlatitude,
-                                                           data.mHistoryRects.at(0).centerlongitude,
-                                                           data.mHistoryRects.at(data.mHistoryRects.size() - 1).centerlatitude,
-                                                           data.mHistoryRects.at(data.mHistoryRects.size() - 1).centerlongitude);
+    int traceLen = ZCHX::Utils::instance()->getDistanceDeg(data.mHistoryRects.at(0).center.lat,
+                                                           data.mHistoryRects.at(0).center.lon,
+                                                           data.mHistoryRects.at(data.mHistoryRects.size() - 1).center.lat,
+                                                           data.mHistoryRects.at(data.mHistoryRects.size() - 1).center.lon);
 
     switch (traceLenIndex)
     {

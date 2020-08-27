@@ -7,39 +7,52 @@ using namespace ZCHX_RADAR_RECEIVER;
 ZCHXRadarPointThread::ZCHXRadarPointThread(const ZCHX_Radar_Setting_Param& param, QObject *parent)
     : ZCHXReceiverThread(ZCHX_RECV_RADAR_POINT, param, parent)
 {
-    qRegisterMetaType<ITF_TrackPoint>("ITF_TrackPoint");
-    qRegisterMetaType<ITF_RadarSurfaceTrack>("ITF_RadarSurfaceTrack");
+    qRegisterMetaType<PROTOBUF_TrackPoint>("PROTOBUF_TrackPoint");
+    qRegisterMetaType<PROTOBUF_RadarSurfaceTrack>("PROTOBUF_RadarSurfaceTrack");
     qRegisterMetaType<QList<ZCHX::Data::ITF_RadarPoint>>("const QList<ZCHX::Data::ITF_RadarPoint>&");
     qRegisterMetaType<QList<ZCHX::Data::ITF_RadarRouteNode>>("const QList<ZCHX::Data::ITF_RadarRouteNode>&");
+    qRegisterMetaType<ZCHX::Data::ITF_RadarRectList>("const ZCHX::Data::ITF_RadarRectList&");
 }
 
-void ZCHXRadarPointThread::transferNodeRect(ZCHX::Data::ITF_RadarRectDef &out, const PROTOBUF_RECT_DEF &in)
+void ZCHXRadarPointThread::transferNodeRect(ZCHX::Data::ITF_RadarRectDef &out, const PROTOBUF_Rectdef &in)
 {
     out.rectNumber = in.rectnumber();
-    out.topLeftlatitude = in.topleftlatitude();
-    out.topLeftlongitude = in.topleftlongitude();
-    out.bottomRightlatitude = in.bottomrightlatitude();
-    out.bottomRightlongitude = in.bottomrightlongitude();
-    out.centerlatitude = in.centerlatitude();
-    out.centerlongitude = in.centerlongitude();
+    out.center.lat = in.center().latitude();
+    out.center.lon = in.center().longitude();
     out.updateTime = in.updatetime();
-    out.diameter = in.diameter();
-    out.startlatitude = in.startlatitude();
-    out.startlongitude = in.startlongitude();
-    out.endlatitude = in.endlatitude();
-    out.endlongitude = in.endlongitude();
-    out.angle = in.cog();
     out.isRealData = in.realdata();
+    out.cog = in.cog();
+    out.sogKnot = in.sogknot();
+    out.sogMps = in.sogms();
+    for(int i=0; i<in.outline_size(); i++)
+    {
+        out.outline.append(ZCHX::Data::LatLon(in.outline(i).latitude(), in.outline(i).longitude()));
+    }
+    out.boundRect.bottomRight.lat = in.boundrect().bottomright().latitude();
+    out.boundRect.bottomRight.lon = in.boundrect().bottomright().longitude();
+    out.boundRect.topLeft.lat = in.boundrect().topleft().latitude();
+    out.boundRect.topLeft.lon = in.boundrect().topleft().longitude();
+    out.boundRect.diameter = in.boundrect().diameter();
+    out.maxSeg.start.lat = in.seg().start().latitude();
+    out.maxSeg.start.lon = in.seg().start().longitude();
+    out.maxSeg.end.lat = in.seg().end().latitude();
+    out.maxSeg.end.lon = in.seg().end().longitude();
+    out.referWidth = in.fixedimg().width();
+    out.referHeight = in.fixedimg().height();
+    for(int i=0; i<in.fixedimg().points_size(); i++)
+    {
+        out.pixPoints.append(QPoint(in.fixedimg().points(i).x(), in.fixedimg().points(i).y()));
+    }
 
     //添加预推区域
-    if(in.has_predictionareas())
+    if(in.has_prediction())
     {
-        com::zhichenhaixin::proto::predictionArea area(in.predictionareas());
+        com::zhichenhaixin::proto::PredictionArea area(in.prediction());
         for(int m =0; m<area.area_size(); m++)
         {
-            ZCHX::Data::ITF_SingleVideoBlock block;
-            block.latitude = area.area(m).latitude();
-            block.longitude = area.area(m).longitude();
+            ZCHX::Data::LatLon block;
+            block.lat = area.area(m).latitude();
+            block.lon = area.area(m).longitude();
             out.predictionArea.append(block);
         }
     }
@@ -55,7 +68,7 @@ void ZCHXRadarPointThread::parseRecvData(const QByteArrayList& list)
     QString topic = QString::fromLatin1(list.first().data());
     if(topic.contains("track", Qt::CaseInsensitive))
     {
-        ITF_RadarSurfaceTrack objRadarSurfaceTrack;
+        PROTOBUF_RadarSurfaceTrack objRadarSurfaceTrack;
         QList<ZCHX::Data::ITF_RadarPoint> radarPointList;
         if(!objRadarSurfaceTrack.ParseFromArray(list.last().data(), list.last().size())) return;
         parseRadarList(objRadarSurfaceTrack, radarPointList);
@@ -94,39 +107,33 @@ void ZCHXRadarPointThread::parseRecvData(const QByteArrayList& list)
 
 
 
-void ZCHXRadarPointThread::parseRadarList(const ITF_RadarSurfaceTrack &objRadarSurfaceTrack,
+void ZCHXRadarPointThread::parseRadarList(const PROTOBUF_RadarSurfaceTrack &objRadarSurfaceTrack,
                                        QList<ZCHX::Data::ITF_RadarPoint>& radarPointList)
 {
     int size = objRadarSurfaceTrack.trackpoints_size();
 
     for (int i = 0; i < size; i++)
     {
-        const ITF_TrackPoint & point = objRadarSurfaceTrack.trackpoints(i);
+        const PROTOBUF_TrackPoint &point = objRadarSurfaceTrack.trackpoints(i);
         ZCHX::Data::ITF_RadarPoint item;
-        item.trackNumber              = point.tracknumber();
-        item.timeOfDay                      = point.timeofday();
-        item.systemAreaCode           = point.systemareacode();
-        item.systemIdentificationCode = point.systemidentificationcode();
-        item.cartesianPosX            = point.cartesianposx();
-        item.cartesianPosY            = point.cartesianposy();
-        item.wgs84PosLat              = point.wgs84poslat();
-        item.wgs84PosLon             = point.wgs84poslong();
-        item.timeOfDay                = point.timeofday();
-        item.trackLastReport          = point.tracklastreport();
-        item.sigmaX                   = point.sigmax();
-        item.sigmaY                   = point.sigmay();
-        item.sigmaXY                  = point.sigmaxy();
-        item.ampOfPriPlot             = point.ampofpriplot();
-        item.cartesianTrkVel_vx        = point.cartesiantrkvel_vx();
-        item.cartesianTrkVel_vy        = point.cartesiantrkvel_vy();
-        item.cog                      = point.cog();
-        item.sog                      = point.sog();
-        item.trackType                = ZCHX::Data::CNF(point.tracktype());
-        item.fllow              = point.fleetnumber();
-        item.status                   = point.status();
-        item.extrapolation            = ZCHX::Data::CST(point.extrapolation());
-        item.trackPositionCode        = ZCHX::Data::STH(point.trackpositioncode());
-        item.diameter                 = point.diameter();
+        item.radarSiteID                = QString::fromStdString(point.radarsiteid());
+        item.trackNumber                = point.tracknumber();
+        transferNodeRect(item.currentRect, point.current());
+        for(int k=0; k<point.tracks_size(); k++)
+        {
+            ZCHX::Data::ITF_RadarRectDef temp;
+            transferNodeRect(temp, point.tracks(k));
+            item.historyRects.append(temp);
+        }
+        item.directionConfirmed = point.trackconfirmed();
+        if(!point.has_objtype())
+        {
+            item.objType = ZCHX::Data::RadarPointNormal;
+        } else
+        {
+            item.objType = point.objtype();
+        }
+        if(point.has_objname()) item.objName = QString::fromStdString(point.objname());
 
         radarPointList.append(item);
     }

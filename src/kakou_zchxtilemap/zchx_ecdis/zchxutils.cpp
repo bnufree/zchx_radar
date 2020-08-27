@@ -1434,6 +1434,15 @@ bool tagITF_ChannelLine::operator ==(const tagITF_ChannelLine &other)
     }
 }
 
+double ITF_Segment::length() const
+{
+    return ZCHX::Utils::getDistanceDeg(start.lat, start.lon, end.lat, end.lon);
+}
+double ITF_Segment::angle() const
+{
+    return ZCHX::Utils::calcAzimuth(start.lon, start.lat, end.lon, end.lat);
+}
+
 }
 }
 //} //ZCHX

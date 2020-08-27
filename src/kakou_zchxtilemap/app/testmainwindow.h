@@ -1,4 +1,4 @@
-#ifndef TESTMAINWINDOW_H
+﻿#ifndef TESTMAINWINDOW_H
 #define TESTMAINWINDOW_H
 
 #include <QMainWindow>
@@ -59,7 +59,7 @@ public:
 
 public slots:
     void slotTimerout();
-    void slotSetRadarVideoWholeData(int siteID, double lon, double lat, double dis, int type, int loop, int curIndex, const QByteArray &objPixmap, const QByteArray &prePixMap);
+    void slotSetRadarVideoWholeData(int siteID, double lon, double lat, double dis ,const QByteArray &objPixmap);
     void slotRadarPointLayerDisplay(bool sts);
     void slotRadarVideoLayerDisplay(bool sts);
     void slotSelectPointFileDlg();

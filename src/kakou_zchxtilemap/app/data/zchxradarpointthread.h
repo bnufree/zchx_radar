@@ -2,13 +2,12 @@
 #define DIRECTRADARTHREAD_H
 
 #include <QThread>
-#include "ZCHXRadar.pb.h"
-#include "ZCHXRadarVideo.pb.h"
+#include "ZCHXRadarDataDef.pb.h"
 #include "zchxradarutils.h"
 
-typedef com::zhichenhaixin::proto::TrackPoint ITF_TrackPoint;
-typedef com::zhichenhaixin::proto::RadarSurfaceTrack ITF_RadarSurfaceTrack;
-typedef com::zhichenhaixin::proto::RadarRectDef      PROTOBUF_RECT_DEF;
+typedef com::zhichenhaixin::proto::TrackPoint           PROTOBUF_TrackPoint;
+typedef com::zhichenhaixin::proto::RadarSurfaceTrack    PROTOBUF_RadarSurfaceTrack;
+typedef com::zhichenhaixin::proto::RadarRectDef         PROTOBUF_Rectdef;
 
 namespace ZCHX_RADAR_RECEIVER
 {
@@ -22,10 +21,11 @@ public:
 signals:
     void sendMsg(int, const QList<ZCHX::Data::ITF_RadarPoint>&);
     void sendMsg(const QList<ZCHX::Data::ITF_RadarRouteNode>&);
+    void sendMsg(int, const ZCHX::Data::ITF_RadarRectList&);
 private:
-    void parseRadarList(const ITF_RadarSurfaceTrack &objRadarSurfaceTrack,
+    void parseRadarList(const PROTOBUF_RadarSurfaceTrack &objRadarSurfaceTrack,
                         QList<ZCHX::Data::ITF_RadarPoint>& radarPointList);
-    void transferNodeRect(ZCHX::Data::ITF_RadarRectDef& out, const PROTOBUF_RECT_DEF& in);
+    void transferNodeRect(ZCHX::Data::ITF_RadarRectDef& out, const PROTOBUF_Rectdef& in);
 };
 }
 

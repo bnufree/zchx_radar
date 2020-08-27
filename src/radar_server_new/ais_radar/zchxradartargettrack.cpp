@@ -5,7 +5,7 @@
 const bool track_debug = true;
 
 const double point_near_line = 200;
-const double ship_max_speed = 5;            //5m/s ~~ 10节  10m/s 就是20节
+const double ship_max_speed = 5.0;            //5m/s ~~ 10节  10m/s 就是20节
 
 #define     PATH_CONFIRM_NODE_COUNT         5
 #define     DEBUG_TRACK_INFO                0
@@ -45,6 +45,8 @@ zchxRadarTargetTrack::zchxRadarTargetTrack(int id, const Latlon& ll, int clear_t
     , mPredictionWidth(predictionWidth)
     , mTargetPredictionInterval(2)
     , mIsTargetPrediction(false)
+    , mMaxSpeed(5)
+    , mScanTime(3.0)
 {
     mDirectionInvertThresholdVal = 60.0;
     mTargetMergeDis = 100.0;
@@ -871,7 +873,7 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
     qDebug()<<"now process list time:"<<QDateTime::fromTime_t(task.first().updatetime()).toString("yyyy-MM-dd hh:mm:ss");
 
     //默认扫描周期是3s，最大速度是10m/s
-    QList<AreaNodeTable> areaTableList = calculateTargetTrackMode(ship_max_speed, task.first().updatetime(), 3.2);
+    QList<AreaNodeTable> areaTableList = calculateTargetTrackMode(mMaxSpeed, task.first().updatetime(), mScanTime);
     QList<int>  used_index_list;
     qDebug()<<"exist prediction area size:"<<areaTableList.size();
 
@@ -1211,6 +1213,8 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
                     topNode.data()->mParent = 0;
                     int node_num = getCurrentNodeNum();
                     topNode->mSerialNum = node_num;
+                    topNode->mPredictionNode = 0;
+                    topNode->clearPrediction();
                     mTargetNodeMap.insert(node_num, topNode);
                     //删除这一条路径
                     node->mChildren.removeAt(i);
@@ -1320,7 +1324,7 @@ void zchxRadarTargetTrack::processWithPossibleRoute(const zchxRadarTrackTask &ta
     //现在将目标进行输出
     outputTargets();
 //    outputRoutePath();
-    qDebug()<<"process end now";
+    qDebug()<<"process end now"<<mMaxSpeed<<mScanTime;
 #endif
 }
 
@@ -1550,9 +1554,12 @@ void zchxRadarTargetTrack::splitAllRoutesIntoTargets(TargetNode *node, TargetNod
         QSharedPointer<TargetNode> topNode = node->mChildren.takeAt(i);
         if(topNode)
         {
-            topNode.data()->mStatus = Node_UnDef;
+            topNode->mStatus = Node_UnDef;
+            topNode->mParent = 0;
             int node_num = getCurrentNodeNum();
             topNode->mSerialNum = node_num;
+            topNode->mPredictionNode = 0;
+            topNode->clearPrediction();
             mTargetNodeMap.insert(node_num, topNode);
         }
     }
@@ -1579,7 +1586,7 @@ void zchxRadarTargetTrack::deleteExpiredNode()
 
 void zchxRadarTargetTrack::updateTrackPointWithNode(zchxRadarSurfaceTrack& list, TargetNode *node)
 {
-    if(!node || node->isOutput()) return;
+    if(!node || !node->isOutput()) return;
     TargetNode *child = node->getLastChild();
     if(node->mStatus == Node_Moving && node->mPredictionNode)
     {
@@ -1597,6 +1604,7 @@ void zchxRadarTargetTrack::updateTrackPointWithNode(zchxRadarSurfaceTrack& list,
     trackObj->set_radarsiteid(QString::number(mRadarID).toStdString());
     trackObj->set_tracknumber(node_number);
     trackObj->set_trackconfirmed(node->mStatus == Node_Moving? true : false);
+    trackObj->set_objtype(1);
     //当前目标
     trackObj->mutable_current()->CopyFrom(*target);
     trackObj->mutable_current()->set_sogknot(target->sogms() * 3.6 / 1.852);  //输出的速度为节
@@ -1728,6 +1736,7 @@ void zchxRadarTargetTrack::outputTargets()
         }
     }
     track_list.set_length(track_list.trackpoints_size());
+
     if(track_list.trackpoints_size())
     {
         emit signalSendTracks(track_list);
@@ -1739,6 +1748,9 @@ void zchxRadarTargetTrack::appendNode(TargetNode *node, int source)
     if(!node) return;
     node->mStatus = Node_UnDef;
     node->mSerialNum = getCurrentNodeNum();
+    node->mParent = 0;
+    node->mPredictionNode = 0;
+    node->clearPrediction();
     if(source == 0)
     {
         if(DEBUG_TRACK_INFO)qDebug()<<"make new now from orignal rect:"<<node<<node->mDefRect->rectnumber()<<node->mSerialNum;

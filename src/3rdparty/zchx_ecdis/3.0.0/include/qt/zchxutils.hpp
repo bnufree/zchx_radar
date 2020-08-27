@@ -605,57 +605,121 @@ typedef struct tagITF_RadarSite
 
 }ITF_RadarSite;
 
+struct ITF_Segment{
+public:
+    LatLon	start;						//线段起点
+    LatLon end;						//线段终点
+    double length() const;
+    double angle() const;
+};
+struct BoundRect{
+    LatLon topLeft;			        		// 回波块左上点
+    LatLon bottomRight;			    		// 回波块右下点
+    qint32 diameter;     						// 雷达目标大小（矩形块的对角线的距离） 单位：米
+};
+
+class ZCHX_ECDIS_EXPORT ITF_RadarRectDef
+{
+public:
+    int                 rectNumber; 					    // 单个矩形回波块编号
+    LatLon              center;
+    quint64             updateTime;						// 当日时间(单位秒)
+    bool                isRealData;
+    double              cog;
+    double              sogKnot;
+    double              sogMps;
+    QList<LatLon>       outline;
+    BoundRect           boundRect;
+    ITF_Segment         maxSeg;
+    int                 referWidth;                             //屏幕对应的方快的大小.这个就和目标的实际大小没有关系.保证目标的历史轨迹的方块越来越小
+    int                 referHeight;
+    bool                isRealSize;                           //1:实际的最大长度来确定大小 0:参考实时目标来推断矩形框的大小
+    QPolygon            pixPoints;                   //矩形块回波块对应的图片点列和图片大小.这个只在某些层级显示,且大小固定不变
+    QList<LatLon>       predictionArea;         //目标的预推区域
+//    int             pixWidth;
+//    int             pixHeight;
+
+    ITF_RadarRectDef () {referWidth = 0; referHeight = 0; isRealSize = true;}
+
+    QString getName() const {return QString::number(rectNumber);}
+
+};
+typedef QList<ITF_RadarRectDef> ITF_RadarRectDefList;
+
+
+class ZCHX_ECDIS_EXPORT ITF_RadarRouteNode
+{
+public:
+    int                             mNum;
+    ITF_RadarRectDef                mTop;
+    QList<ITF_RadarRectDefList>     mPaths;
+    QString getName() const {return QString::number(mNum);}
+};
+
+typedef QList<ITF_RadarRouteNode> ITF_RadarRouteNodeList;
+
+class ZCHX_ECDIS_EXPORT ITF_RadarRect
+{
+public:
+    bool                        mIsEstObj;
+    QString                         mRadarSiteId;
+    int                         mNodeNumber;
+    ITF_RadarRectDef            mCurrentRect;
+    ITF_RadarRectDefList        mHistoryRects; // 当前回波块的历史轨迹数据集
+//    QColor                      mBlockColor;     //目标回波图形的填充颜色
+//    QColor                      mBlockEdgeColor; //目标回波
+//    QColor                      mHisBlockColor;   //历史轨迹数据矩形的填充颜色
+//    QColor                      mHistoryBackgroundColor;         //背景台阶图形的颜色
+
+    QString getName() const {return mRadarSiteId + "_"+ QString::number(mNodeNumber);}
+
+};
+typedef QList<ITF_RadarRect> ITF_RadarRectList;
+
 //radar数据
+enum RadarPointType{
+    RadarPointUndef = 0,        //未知
+    RadarPointNormal,
+    RadarPointBarrier,          //障碍物
+    RadarPointBuyo,             //浮标
+    RadarPointFishRaft,         //渔排
+    RadarPointSpecialShip,      //特定船舶
+    RadarPointPerson,           //人
+    RadarPointCar,              //车
+    RadarPointShip,             //一般船舶
+};
+
 typedef struct tagITF_RadarPoint
 {
-    double getLat() const {return wgs84PosLat;}
-    double getLon() const {return wgs84PosLon;}
+    double  getLat() const {return currentRect.center.lat;}
+    double  getLon() const {return currentRect.center.lon;}
     QString getName() const {return QString("T%1").arg(trackNumber);}
 
-    int uuid;
-    std::vector<RadarMeet> RadarMeetVec; //交汇点集合
-    std::vector<std::pair<double, double> > path;
-    int systemAreaCode;			   // 数据源唯一标识符:系统区域代码 I010/010 _sac
-    int systemIdentificationCode;   // 数据源唯一标识符:系统识别代码 I010/010 _sic
-    MSGTYP  messageType;              // 消息类型 I010/001
-    unsigned int trackNumber;		       // 航迹号 I010/161
-    float cartesianPosX;	           // 笛卡尔坐标计算X位置 I010/042
-    float cartesianPosY;			   // 笛卡尔坐标计算Y位置 I010/042
-    double wgs84PosLat;			   // WGS84坐标计算纬度 I010/041
-    double wgs84PosLon;			   // WGS84坐标计算经度 I010/041
-    float timeOfDay;			       // 当日时间，世界标准时间(UTC)表示的绝对时间戳
-    CNF   trackType ;			       // 航迹状态: I010/170_CNF
-    bool  trackLastReport;   // 当前目标最后一次上报 I010/170_TRE
-    CST   extrapolation;   // 外推法 I010/170_CST
-    STH   trackPositionCode;         // 位置来历 I010/170_STH
-    float sigmaX;                    // x轴标准差     I010/500
-    float sigmaY ;                    // y轴标准差     I010/500
-    float sigmaXY;                   // 2轴平方方差     I010/500
-    float ampOfPriPlot;              // 震荡波强度检测   I010/131
-    double cartesianTrkVel_vx;       // 迪卡尔坐标航迹计算x速度(米/秒)  I010/202
-    double cartesianTrkVel_vy;       // 迪卡尔坐标航迹计算y速度(米/秒)  I010/202
-    double cog;                      // 方位角
-    double sog ;                      // 速度
-    //gou yuan jie add
-    int  status;                   //预警
-    QString trackby;                  // 半自动跟踪
-    int  cameraId;                 // 锁定摄像头编号
-    quint64   timeStamp;                // 进入报警区域时间  2015-1-4
-    uint isSmuggle;                //1为走私 0为非走私
-    double distance;
-    QString warn_color;               //报警颜色
-    uint targetType;               //目标类型  0: 未知   4: 人   2: 车   6: 船
-    uint sign_window;              // 提示窗口 1:有提示窗口 0:不显示提示窗口
-    uint is_warn;                  //离岸预警
-    QString rtsp;                     // rtsp视频地址
-    uint    fllow;                    // 1:转动  2:联动跟踪 3:停止跟踪
-    uint    mode;                      // 模式 1:自动 2:手动
-    int diameter;                // 雷达目标大小
-//    QMap<int, QColor>          mWarnStsColorMap;
-    QColor      warnStatusColor;
+    QString                 radarSiteID;
+    quint32                 trackNumber;
+    ITF_RadarRectDef        currentRect;
+    ITF_RadarRectDefList    historyRects;
+    bool                    directionConfirmed;
+    QString                 objName;
+    quint32                 objType;
+    std::vector<RadarMeet>  radarMeetVec; //交汇点集合
+    int                     warnStatus;                   //预警状态
+    quint64                 timeStampWaringarea;                // 进入报警区域时间  2015-1-4
+    QString                 trackby;                  // 半自动跟踪
+    QString                 warnColor;               //报警颜色
+    int                     cameraId;                 // 锁定摄像头编号
+    uint                    isSmuggle;                //1为走私 0为非走私
+    double                  distance;
+    uint                    signWindow;              // 提示窗口 1:有提示窗口 0:不显示提示窗口
+    uint                    isWarn;                  //离岸预警
+    QString                 rtsp;                     // rtsp视频地址
+    uint                    fllow;                    // 1:转动  2:联动跟踪 3:停止跟踪
+    uint                    mode;                      // 模式 1:自动 2:手动
+    int                     diameter;                // 雷达目标大小
+    QColor                  warnStatusColor;
     //添加是否显示关注,是否显示尾迹
-    bool        isConcern;
-    bool        isTailTrack;
+    bool                    isConcern;
+    bool                    isTailTrack;
 
 }ITF_RadarPoint;
 
@@ -1925,125 +1989,24 @@ struct GPSPoint
     std::list<std::shared_ptr<GPSPoint> > track;
 };
 
-//回波余晖数据
-const int RadarVideoPixmapWidth = 1364*2;
-const int RadarVideoPixmapHeight = 1364*2;
-
-class ZCHX_ECDIS_EXPORT ITF_RadarVideo
-{
-public:
-    int    radarId;               //雷达站ID
-    double dCentreLon;            //中心点经度
-    double dCentreLat;            //中心点纬度
-//    double dAzimuth;              //方位角
-//    double dStartDis;             //开始距离
-//    double dDisInterval;          //距离间隔
-//    int    uBitResolution;        //分辨率
-//    QList<int> amplitudeList;     //该方位角线上点集合(总共1364个点)
-//    QList<int> indexList;         //该方位角线上点集合(总共1364个点)
-};
-
-class ZCHX_ECDIS_EXPORT ITF_SingleVideoBlock
-{
-public:
-    double latitude;			    	// 纬度
-    double longitude;			  	    // 经度
-};
-typedef QList<ITF_SingleVideoBlock> ITF_SingleVideoBlockList;
-
-class ZCHX_ECDIS_EXPORT ITF_RadarRectDef
-{
-public:
-    int rectNumber; 					    // 单个矩形回波块编号
-    double topLeftlatitude;			        // 回波宽左上点纬度
-    double topLeftlongitude;			    // 回波宽左上点经度
-    double bottomRightlatitude;			    // 回波宽右下点纬度
-    double bottomRightlongitude;			// 回波宽右下点经度
-    double centerlatitude;			    	// 回波宽中心点纬度
-    double centerlongitude;			  	    // 回波宽中心点经度
-    quint64 updateTime;						// 当日时间(单位秒)
-    ITF_SingleVideoBlockList blocks;        // 回波块点集
-    double startlatitude;			  	    	// 回波块内最长线段起点纬度
-    double startlongitude;			  	    // 回波块内最长线段起点经度
-    double endlatitude;			  	    	// 回波块内最长线段终点纬度
-    double endlongitude;			  	    	// 回波块内最长线段终点经度
-    double angle;			  	    			// 回波块内最长线段角度
-    int diameter;                               // 雷达目标大小
-    bool  isRealData;
-    int   referWidth;                             //屏幕对应的方快的大小.这个就和目标的实际大小没有关系.保证目标的历史轨迹的方块越来越小
-    int   referHeight;
-    bool  isRealSize;                           //1:实际的最大长度来确定大小 0:参考实时目标来推断矩形框的大小
-    QPolygon        pixPoints;                   //矩形块回波块对应的图片点列和图片大小.这个只在某些层级显示,且大小固定不变
-    ITF_SingleVideoBlockList    predictionArea;         //目标的预推区域
-//    int             pixWidth;
-//    int             pixHeight;
-
-    ITF_RadarRectDef () {referWidth = 0; referHeight = 0; isRealSize = true;}
-
-    QString getName() const {return QString::number(rectNumber);}
-
-};
-typedef QList<ITF_RadarRectDef> ITF_RadarRectDefList;
-
-
-class ZCHX_ECDIS_EXPORT ITF_RadarRouteNode
-{
-public:
-    int                             mNum;
-    ITF_RadarRectDef                mTop;
-    QList<ITF_RadarRectDefList>     mPaths;
-    QString getName() const {return QString::number(mNum);}
-};
-
-typedef QList<ITF_RadarRouteNode> ITF_RadarRouteNodeList;
-
-class ZCHX_ECDIS_EXPORT ITF_RadarRect
-{
-public:
-    bool                        mIsEstObj;
-    int                         mRadarSiteId;
-    int                         mNodeNumber;
-    ITF_RadarRectDef            mCurrentRect;
-    ITF_RadarRectDefList        mHistoryRects; // 当前回波块的历史轨迹数据集
-    QColor                      mBlockColor;     //目标回波图形的填充颜色
-    QColor                      mBlockEdgeColor; //目标回波
-    QColor                      mHisBlockColor;   //历史轨迹数据矩形的填充颜色
-    QColor                      mHistoryBackgroundColor;         //背景台阶图形的颜色
-
-    QString getName() const {return QString::number(mRadarSiteId) + "_"+ QString::number(mNodeNumber);}
-
-};
-typedef QList<ITF_RadarRect> ITF_RadarRectList;
-
-class ZCHX_ECDIS_EXPORT ITF_RadarVideoGLow
+class ZCHX_ECDIS_EXPORT ITF_RadarVideoImage
 {
 public:
     double getLat() const {return lat;}
     double getLon() const {return lon;}
     QString getName() const {return name;}
-
-    enum RadarVideoGLowType{
-        RadarVideo = 1,
-        RadarGlow,
-    };
     QString                     name;           //雷达站的名字,便于区分是那个雷达
+    quint64                     timestamp;
 
     //回波
-    QByteArray*                 videoPixmap;
+    QByteArray                  image;
     double                      lat;//回波中心经度
     double                      lon;//回波中心纬度
     double                      distance;  //半径距离
-    bool                        showvideo;
-
-    RadarVideoGLowType          type;//1回波显示，2余辉显示
-    //余辉
-    QByteArray*                 afterglowPixmap[12];
-    int                         afterglowType;//1,3,6,12
-    qint64                      afterglowIndex;//余辉图片索引
-
-    ITF_RadarVideoGLow()
+    ITF_RadarVideoImage()
     {
         name = "default_radar";
+        timestamp = 0;
     }
 };
 

@@ -1,4 +1,4 @@
-#include "rodelement.h"
+﻿#include "rodelement.h"
 #include "zchxmapframe.h"
 #include "cameraelement.h"
 #include "ipcelement.h"
@@ -7,7 +7,7 @@
 namespace qt
 {
 RodElement::RodElement(const ZCHX::Data::ITF_CameraRod &data,zchxMapWidget* f)
-    :Element(data.nLatLon.lat,data.nLatLon.lon, f, ZCHX::Data::ELE_ROD)
+    :Element(data.nLatLon.lat,data.nLatLon.lon, f, ZCHX::Data::ELE_ROD, ZCHX::LAYER_WIREROD)
 {
     m_data = data;
 }

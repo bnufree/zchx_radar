@@ -78,6 +78,15 @@ zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
     ui->import_report_btn->setVisible(true);
+    ui->outputRoutePathChk->setVisible(false);
+    ui->pause_moni->setVisible(false);
+    ui->restart_moni->setVisible(false);
+    ui->scrollArea->setVisible(false);
+    ui->control_pushButton->setVisible(false);
+    ui->setfubiao_pushButton->setVisible(false);
+    ui->shownum_pushButton->setVisible(false);
+    ui->serial_pushButton->setVisible(false);
+    ui->draw_pushButton->setVisible(false);
     ui->radar_type_combox->addItem(QStringLiteral("BR24雷达"), RADAR_BR24);
     ui->radar_type_combox->addItem(QStringLiteral("3G雷达"), RADAR_3G);
     ui->radar_type_combox->addItem(QStringLiteral("4G雷达"), RADAR_4G);
@@ -190,6 +199,14 @@ zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     Utils::Profiles::instance()->setDefault(str_radar, "prediction_width", 20);
     int prediction_width = Utils::Profiles::instance()->value(str_radar, "prediction_width", 20).toInt();
     ui->predictionWidth->setValue(prediction_width);
+
+    Utils::Profiles::instance()->setDefault(str_radar, "max_speed", 40);
+    int max_speed = Utils::Profiles::instance()->value(str_radar, "max_speed", 40).toInt();
+    ui->targetMaxSpeedSpinBox->setValue(max_speed);
+
+    Utils::Profiles::instance()->setDefault(str_radar, "scan_time", 3.0);
+    double scan_time = Utils::Profiles::instance()->value(str_radar, "scan_time", 3.0).toDouble();
+    ui->scanCycleTime->setValue(scan_time);
 
 
     ui->send_dj_checkBox->setChecked(mSend);
@@ -1192,7 +1209,8 @@ void zchxradarinteface::on_update_setting_btn_clicked()
     Utils::Profiles::instance()->setValue(str_radar, "video_cycle_or", ui->video_or_count->value());
     Utils::Profiles::instance()->setValue(str_radar, "native_radius", ui->useNativeRadiusCHK->isChecked());    
     Utils::Profiles::instance()->setValue(str_radar, "prediction_width", ui->predictionWidth->value());
-
+    Utils::Profiles::instance()->setValue(str_radar, "max_speed", ui->targetMaxSpeedSpinBox->value());
+    Utils::Profiles::instance()->setValue(str_radar, "scan_time", ui->scanCycleTime->value());
 
 
     int ret1 = QMessageBox::information(0,QStringLiteral("信息"),QStringLiteral("配置修改成功"));

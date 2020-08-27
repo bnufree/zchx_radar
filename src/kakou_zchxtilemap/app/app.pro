@@ -37,7 +37,7 @@ SOURCES += main.cpp \
     data/zchxradardatachange.cpp \
     data/zchxradarechothread.cpp \
     data/zchxradarpointthread.cpp \
-    data/zchxradarrectthread.cpp \
+#    data/zchxradarrectthread.cpp \
     data/zchxaisthread.cpp \
     data/zchxradarutils.cpp \
     data/zchxfuntiontimer.cpp \
@@ -45,8 +45,7 @@ SOURCES += main.cpp \
     data/zchxradarlimitareathread.cpp \
     zchxfunction.cpp \
     ../../protobuf/2.6.1/ZCHXAISVessel.pb.cc \
-    ../../protobuf/2.6.1/ZCHXRadar.pb.cc \
-    ../../protobuf/2.6.1/ZCHXRadarVideo.pb.cc
+    ../../protobuf/2.6.1/ZCHXRadarDataDef.pb.cc
 
 FORMS += \
     testmainwindow.ui \
@@ -58,7 +57,7 @@ HEADERS += \
     data/zchxradardatachange.h \
     data/zchxradarechothread.h \
     data/zchxradarpointthread.h \
-    data/zchxradarrectthread.h \
+#    data/zchxradarrectthread.h \
     data/zchxradarutils.h \
     data/zchxaisthread.h \
     data/zchxfuntiontimer.h \
@@ -66,14 +65,8 @@ HEADERS += \
     data/zchxradarlimitareathread.h \
     zchxfunction.h \
     ../../protobuf/2.6.1/ZCHXAISVessel.pb.h \
-    ../../protobuf/2.6.1/ZCHXRadar.pb.h \
-    ../../protobuf/2.6.1/ZCHXRadarVideo.pb.h
+    ../../protobuf/2.6.1/ZCHXRadarDataDef.pb.h
 
 
 DEFINES += QT_MESSAGELOGCONTEXT
-
-DISTFILES += \
-    ../../protobuf/doc/ZCHXAISVessel.proto \
-    ../../protobuf/doc/ZCHXRadar.proto \
-    ../../protobuf/doc/ZCHXRadarVideo.proto
 

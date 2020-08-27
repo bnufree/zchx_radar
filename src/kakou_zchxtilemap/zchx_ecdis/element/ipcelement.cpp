@@ -1,10 +1,10 @@
-#include "ipcelement.h"
+﻿#include "ipcelement.h"
 #include "zchxmapframe.h"
 
 namespace qt
 {
 IPCElement::IPCElement(const ZCHX::Data::IPCastDevice &data, zchxMapWidget* f)
-    :Element(data.lat, data.lon, f, ZCHX::Data::ELE_IPC)
+    :Element(data.lat, data.lon, f, ZCHX::Data::ELE_IPC, ZCHX::LAYER_CAMERA)
 {
     m_data = data;
 }

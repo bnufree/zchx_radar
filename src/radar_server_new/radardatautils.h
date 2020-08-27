@@ -4,12 +4,15 @@
 #include <QString>
 
 enum RadarObjType{
-    Obj_Normal = 0,      //未定义
-    Obj_Barrier = 1,       //障碍物
-    Obj_Buoy,              //浮标
-    Obj_FishRaft,      //鱼排
-    Obj_SpecialShip,      //监控船
-    Obj_Other,
+    RadarPointUndef = 0,        //未知
+    RadarPointNormal,
+    RadarPointBarrier,          //障碍物
+    RadarPointBuyo,             //浮标
+    RadarPointFishRaft,         //渔排
+    RadarPointSpecialShip,      //特定船舶
+    RadarPointPerson,           //人
+    RadarPointCar,              //车
+    RadarPointShip,             //一般船舶
 };
 
 

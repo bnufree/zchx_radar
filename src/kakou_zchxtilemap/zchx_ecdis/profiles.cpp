@@ -77,8 +77,7 @@ void Profiles::initDefaultValues()
     setDefault(RADAR_DISPLAY_SETTING, RADAR_TEXT_COLOR, QColor(Qt::black).name());
     setDefault(RADAR_DISPLAY_SETTING, RADAR_CONCERN_COLOR, QColor(Qt::red).name());
     setDefault(RADAR_DISPLAY_SETTING, RADAR_BORDER_COLOR, QColor(Qt::black).name());
-    setDefault(RADAR_DISPLAY_SETTING, RADAR_SHAPE_RECT, true);
-    setDefault(RADAR_DISPLAY_SETTING, RADAR_FORCED_AIS, false);
+    setDefault(RADAR_DISPLAY_SETTING, RADAR_DRAW_SHAPE, 1);
     setDefault(RADAR_DISPLAY_SETTING, RADAR_CONCERN_NUM, 10);
     setDefault(RADAR_DISPLAY_SETTING, RADAR_REPLACE_CONCERN, true);
     setDefault(RADAR_DISPLAY_SETTING, RADAR_TAIL_TRACK_NUM, 10);

@@ -673,19 +673,9 @@ void MainWindow::itfSetCameraObservationZoneData(const QList<ZCHX::Data::ITF_Cam
     m_dataMgrFactory->getCameraViewMgr()->setData(data);
 }
 
-void MainWindow::itfSetRadarVideoData(int radarSiteId, double dCentreLon, double dCentreLat, double dDistance, int uType, int uLoopNum)
+void MainWindow::itfSetRadarVideoData(int radarSiteId, double dCentreLon,double dCentreLat,double dDistance, const QByteArray &objPixmap)
 {
-    m_dataMgrFactory->getRadarVideoMgr()->setRadarVideoData(radarSiteId, dCentreLon,dCentreLat,dDistance,uType,uLoopNum);
-}
-
-void MainWindow::itfSetRadarVideoPixmap(int radarSiteId, int uIndex, const QByteArray &objPixmap, const QByteArray &prePixmap)
-{
-    m_dataMgrFactory->getRadarVideoMgr()->setRadarVideoPixmap(radarSiteId, uIndex,objPixmap,prePixmap);
-}
-
-void MainWindow::itfSetCurrentRadarVideoPixmap(int radarSiteId, const QByteArray &objPixmap)
-{
-    m_dataMgrFactory->getRadarVideoMgr()->setCurrentRadarVideoPixmap(radarSiteId, objPixmap);
+    m_dataMgrFactory->getRadarVideoMgr()->setRadarVideoData(radarSiteId, dCentreLon,dCentreLat,dDistance,objPixmap);
 }
 
 void MainWindow::itfSetRadarRect(int radarSiteId, QList<ZCHX::Data::ITF_RadarRect> rectList)
