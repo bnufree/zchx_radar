@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1129</width>
-    <height>745</height>
+    <height>767</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -153,659 +153,11 @@
         <property name="verticalSpacing">
          <number>3</number>
         </property>
-        <item row="0" column="1">
-         <widget class="ScrollArea" name="scrollArea">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <widget class="QWidget" name="scrollAreaWidgetContents">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>621</width>
-             <height>682</height>
-            </rect>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_5">
-            <item row="0" column="0">
-             <widget class="myLabel" name="videoImageLabel">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>10000000</width>
-                <height>10000000</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">background-color: rgb(0, 0, 0); </string>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QWidget" name="widget" native="true">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>217</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>217</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <layout class="QGridLayout" name="gridLayout_15">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_35">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>目标长度区间(米)</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="minTradius_lineEdit"/>
-             </item>
-             <item row="0" column="2">
-              <widget class="QLineEdit" name="tradius_lineEdit"/>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_4">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>目标面积区间(米)</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="minAreaEdit"/>
-             </item>
-             <item row="1" column="2">
-              <widget class="QLineEdit" name="maxAreaEdit"/>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QGridLayout" name="gridLayout_16">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_3">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>振幅区间</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="minzf_lineEdit"/>
-             </item>
-             <item row="0" column="2">
-              <widget class="QLabel" name="label_16">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>---</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="3">
-              <widget class="QLineEdit" name="maxzf_lineEdit"/>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_32">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>跳动距离</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="jump_lineEdit"/>
-             </item>
-             <item row="1" column="2">
-              <widget class="QLabel" name="label_27">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>定时清理</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="3">
-              <widget class="QLineEdit" name="lineEdit_2"/>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_33">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>雷达编号</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QLineEdit" name="bh_lineEdit"/>
-             </item>
-             <item row="2" column="2">
-              <widget class="QLabel" name="label_29">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>缓存点迹</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="3">
-              <widget class="QLineEdit" name="angle_lineEdit"/>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QGridLayout" name="gridLayout_4">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_13">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>距离判断</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_2">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>半径系数 </string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_10">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>方向反向</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1" colspan="2">
-              <widget class="QLineEdit" name="direction_change_edit"/>
-             </item>
-             <item row="2" column="3" colspan="2">
-              <widget class="QCheckBox" name="cog_adjust_chk">
-               <property name="text">
-                <string>方位角调整</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1" colspan="2">
-              <widget class="QLineEdit" name="k_lineEdit">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="3" colspan="2">
-              <widget class="QCheckBox" name="send_dj_checkBox">
-               <property name="text">
-                <string>点迹目标</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="3" colspan="2">
-              <widget class="QCheckBox" name="useNativeRadiusCHK">
-               <property name="text">
-                <string>原始回波半径</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1" colspan="2">
-              <widget class="QLineEdit" name="radius_lineEdit"/>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QGridLayout" name="gridLayout_14">
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_11">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>回波叠加</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QSpinBox" name="video_or_count">
-               <property name="minimum">
-                <number>1</number>
-               </property>
-               <property name="maximum">
-                <number>5</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QLabel" name="label_14">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>个周期</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QGridLayout" name="gridLayout_6">
-             <item row="0" column="1">
-              <widget class="QSpinBox" name="predictionWidth">
-               <property name="minimum">
-                <number>1</number>
-               </property>
-               <property name="maximum">
-                <number>200</number>
-               </property>
-               <property name="value">
-                <number>20</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_15">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
-               </property>
-               <property name="text">
-                <string>预推矩形宽度(米)</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_17">
-               <property name="text">
-                <string>目标最大速度(节)</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QSpinBox" name="targetMaxSpeedSpinBox"/>
-             </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="label_18">
-               <property name="text">
-                <string>雷达扫描周期(秒)</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QDoubleSpinBox" name="scanCycleTime">
-               <property name="maximum">
-                <double>60.000000000000000</double>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QPushButton" name="update_setting_btn">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>设置</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="k_label">
-             <property name="styleSheet">
-              <string notr="true">color: rgb(0, 0, 0); </string>
-             </property>
-             <property name="text">
-              <string>半径参考值</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">color: rgb(0, 0, 0); </string>
-             </property>
-             <property name="text">
-              <string>实时距离因子</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout">
-             <item>
-              <widget class="QPushButton" name="pushButton_5">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>打印回波</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="pushButton_6">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>停止打印</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
-              <widget class="QPushButton" name="closeRadarBtn">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>关闭雷达</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="openRadarBtn">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>打开雷达</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QGridLayout" name="gridLayout_2">
-             <property name="leftMargin">
-              <number>2</number>
-             </property>
-             <property name="topMargin">
-              <number>2</number>
-             </property>
-             <property name="rightMargin">
-              <number>2</number>
-             </property>
-             <property name="bottomMargin">
-              <number>2</number>
-             </property>
-             <property name="spacing">
-              <number>9</number>
-             </property>
-             <item row="2" column="0">
-              <widget class="QPushButton" name="control_pushButton">
-               <property name="text">
-                <string>消息构造</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
-              <widget class="QPushButton" name="serial_pushButton">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>串口通讯</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
-              <widget class="QPushButton" name="shownum_pushButton">
-               <property name="text">
-                <string>显示编号</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QPushButton" name="setfubiao_pushButton">
-               <property name="text">
-                <string>设置浮标</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="videoDataPath_label">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);</string>
-               </property>
-               <property name="text">
-                <string>雷达类型</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QPushButton" name="setButton">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>接入设置</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QPushButton" name="pushButton_7">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>选择文件</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="2">
-              <widget class="QPushButton" name="save_restart_btn">
-               <property name="text">
-                <string>保存重启</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="2">
-              <widget class="QPushButton" name="draw_pushButton">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>关闭绘图</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0" colspan="2">
-              <widget class="QComboBox" name="mac_comboBox">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QPushButton" name="logButton_3">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>导入回波</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_12">
-               <property name="styleSheet">
-                <string notr="true">color: rgb(0, 0, 0);</string>
-               </property>
-               <property name="text">
-                <string>遮蔽区域</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="lineEdit_7"/>
-             </item>
-             <item row="5" column="0" colspan="3">
-              <widget class="QPushButton" name="import_report_btn">
-               <property name="text">
-                <string>导入雷达报告信息</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QComboBox" name="radar_type_combox"/>
-             </item>
-             <item row="6" column="0" colspan="3">
-              <widget class="QCheckBox" name="outputRoutePathChk">
-               <property name="text">
-                <string>输出目标路径</string>
-               </property>
-              </widget>
-             </item>
-             <item row="7" column="0">
-              <widget class="QPushButton" name="pause_moni">
-               <property name="text">
-                <string>暂停模拟</string>
-               </property>
-              </widget>
-             </item>
-             <item row="7" column="1">
-              <widget class="QPushButton" name="restart_moni">
-               <property name="text">
-                <string>重新模拟</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
         <item row="0" column="0">
          <widget class="QWidget" name="widget_2" native="true">
           <property name="maximumSize">
            <size>
-            <width>259</width>
+            <width>16777215</width>
             <height>16777215</height>
            </size>
           </property>
@@ -825,7 +177,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
            <property name="spacing">
             <number>6</number>
            </property>
-           <item row="3" column="0">
+           <item row="2" column="0">
             <widget class="QGroupBox" name="groupBox">
              <property name="title">
               <string>数据接入</string>
@@ -845,27 +197,17 @@ font: 9pt &quot;Agency FB&quot;;</string>
               </property>
               <item row="0" column="0">
                <layout class="QGridLayout" name="gridLayout_7">
-                <item row="1" column="3" colspan="2">
-                 <widget class="QLabel" name="label_38">
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(0, 0, 0);</string>
+                <item row="1" column="5">
+                 <widget class="QSpinBox" name="videoRecPortSpinBox">
+                  <property name="buttonSymbols">
+                   <enum>QAbstractSpinBox::NoButtons</enum>
                   </property>
-                  <property name="text">
-                   <string>状态端口</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="2">
-                 <widget class="QLineEdit" name="lineEdit_4">
-                  <property name="minimumSize">
-                   <size>
-                    <width>59</width>
-                    <height>0</height>
-                   </size>
+                  <property name="maximum">
+                   <number>999999</number>
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="0">
+                <item row="2" column="0">
                  <widget class="QLabel" name="label_39">
                   <property name="maximumSize">
                    <size>
@@ -881,47 +223,17 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="5">
-                 <widget class="QSpinBox" name="videoRecPortSpinBox">
-                  <property name="buttonSymbols">
-                   <enum>QAbstractSpinBox::NoButtons</enum>
-                  </property>
-                  <property name="maximum">
-                   <number>999999</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0" colspan="2">
-                 <widget class="QLabel" name="label_5">
+                <item row="2" column="3" colspan="2">
+                 <widget class="QLabel" name="label_38">
                   <property name="styleSheet">
                    <string notr="true">color: rgb(0, 0, 0);</string>
                   </property>
                   <property name="text">
-                   <string>推送目标</string>
+                   <string>状态端口</string>
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="4" colspan="2">
-                 <widget class="QLineEdit" name="lineEdit_5">
-                  <property name="maximumSize">
-                   <size>
-                    <width>234</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="4" colspan="2">
-                 <widget class="QLineEdit" name="lineEdit_6">
-                  <property name="maximumSize">
-                   <size>
-                    <width>234</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
+                <item row="1" column="3">
                  <widget class="QLabel" name="label_36">
                   <property name="styleSheet">
                    <string notr="true">color: rgb(0, 0, 0);</string>
@@ -931,7 +243,47 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="5">
+                <item row="6" column="4" colspan="2">
+                 <widget class="QLineEdit" name="lineEdit_6">
+                  <property name="maximumSize">
+                   <size>
+                    <width>234</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0" colspan="2">
+                 <widget class="QLabel" name="label_5">
+                  <property name="styleSheet">
+                   <string notr="true">color: rgb(0, 0, 0);</string>
+                  </property>
+                  <property name="text">
+                   <string>推送目标</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="4" colspan="2">
+                 <widget class="QLineEdit" name="lineEdit_5">
+                  <property name="maximumSize">
+                   <size>
+                    <width>234</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="2">
+                 <widget class="QLineEdit" name="lineEdit_4">
+                  <property name="minimumSize">
+                   <size>
+                    <width>59</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="5">
                  <widget class="QSpinBox" name="heartPortSpinBox">
                   <property name="buttonSymbols">
                    <enum>QAbstractSpinBox::NoButtons</enum>
@@ -941,7 +293,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="1" colspan="2">
+                <item row="1" column="1" colspan="2">
                  <widget class="QLineEdit" name="videoRecIPLlineEdit">
                   <property name="minimumSize">
                    <size>
@@ -951,7 +303,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="0">
+                <item row="1" column="0">
                  <widget class="QLabel" name="label_34">
                   <property name="styleSheet">
                    <string notr="true">color: rgb(0, 0, 0);</string>
@@ -961,37 +313,37 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="1" colspan="2">
-                 <widget class="QLineEdit" name="heartIPLlineEdit">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="2">
-                 <widget class="QLineEdit" name="lineEdit_3">
-                  <property name="minimumSize">
-                   <size>
-                    <width>59</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_31">
+                <item row="7" column="0" colspan="2">
+                 <widget class="QLabel" name="label_6">
                   <property name="styleSheet">
                    <string notr="true">color: rgb(0, 0, 0);</string>
                   </property>
                   <property name="text">
-                   <string>心跳IP</string>
+                   <string>显示目标</string>
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="5">
+                <item row="7" column="3">
+                 <widget class="QLabel" name="label_8">
+                  <property name="styleSheet">
+                   <string notr="true">color: rgb(0, 0, 0);</string>
+                  </property>
+                  <property name="text">
+                   <string>packets</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="3">
+                 <widget class="QLabel" name="label_37">
+                  <property name="styleSheet">
+                   <string notr="true">color: rgb(0, 0, 0);</string>
+                  </property>
+                  <property name="text">
+                   <string>心跳端口</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="5">
                  <widget class="QSpinBox" name="controlPortSpinBox">
                   <property name="buttonSymbols">
                    <enum>QAbstractSpinBox::NoButtons</enum>
@@ -1001,7 +353,17 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="1" colspan="2">
+                <item row="4" column="0" colspan="2">
+                 <widget class="QLabel" name="label_7">
+                  <property name="styleSheet">
+                   <string notr="true">color: rgb(0, 0, 0);</string>
+                  </property>
+                  <property name="text">
+                   <string>中心经度</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1" colspan="2">
                  <widget class="QLineEdit" name="controlIPLineEdit">
                   <property name="minimumSize">
                    <size>
@@ -1017,7 +379,17 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="3">
+                <item row="6" column="2">
+                 <widget class="QLineEdit" name="lineEdit_3">
+                  <property name="minimumSize">
+                   <size>
+                    <width>59</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="3">
                  <widget class="QLabel" name="label_9">
                   <property name="styleSheet">
                    <string notr="true">color: rgb(0, 0, 0);</string>
@@ -1027,37 +399,27 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="0" colspan="2">
-                 <widget class="QLabel" name="label_6">
+                <item row="3" column="1" colspan="2">
+                 <widget class="QLineEdit" name="heartIPLlineEdit">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_31">
                   <property name="styleSheet">
                    <string notr="true">color: rgb(0, 0, 0);</string>
                   </property>
                   <property name="text">
-                   <string>显示目标</string>
+                   <string>心跳IP</string>
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="3">
-                 <widget class="QLabel" name="label_8">
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(0, 0, 0);</string>
-                  </property>
-                  <property name="text">
-                   <string>packets</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="3">
-                 <widget class="QLabel" name="label_37">
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(0, 0, 0);</string>
-                  </property>
-                  <property name="text">
-                   <string>心跳端口</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="0">
+                <item row="5" column="0">
                  <widget class="QLabel" name="label_26">
                   <property name="styleSheet">
                    <string notr="true">color: rgb(0, 0, 0);</string>
@@ -1067,17 +429,10 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="0" colspan="2">
-                 <widget class="QLabel" name="label_7">
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(0, 0, 0);</string>
-                  </property>
-                  <property name="text">
-                   <string>中心经度</string>
-                  </property>
-                 </widget>
+                <item row="5" column="2" colspan="4">
+                 <widget class="QLineEdit" name="lineEdit_9"/>
                 </item>
-                <item row="3" column="2" colspan="4">
+                <item row="4" column="2" colspan="4">
                  <widget class="QLineEdit" name="lineEdit_8">
                   <property name="minimumSize">
                    <size>
@@ -1087,31 +442,49 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="4" column="2" colspan="4">
-                 <widget class="QLineEdit" name="lineEdit_9"/>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_20">
+                  <property name="text">
+                   <string>本地IP</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QComboBox" name="mac_comboBox">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </widget>
                 </item>
                </layout>
+              </item>
+              <item row="1" column="0">
+               <widget class="QPushButton" name="setButton">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>详细接入设定</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QPushButton" name="save_restart_btn">
+                <property name="text">
+                 <string>保存重启</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
            </item>
-           <item row="1" column="0">
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
            <item row="0" column="0">
             <widget class="QGroupBox" name="groupBox_3">
              <property name="title">
-              <string>雷达状态</string>
+              <string>雷达状态控制</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_10">
               <property name="leftMargin">
@@ -1168,73 +541,31 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="Power_label">
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(0, 0, 0);</string>
-                  </property>
+                <item row="4" column="1">
+                 <widget class="zchxRadarCtrlBtn" name="gain_btn">
                   <property name="text">
-                   <string>雷达电源</string>
+                   <string/>
                   </property>
                  </widget>
                 </item>
-                <item row="4" column="2">
-                 <widget class="QLabel" name="Local_label">
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(0, 0, 0);</string>
-                  </property>
+                <item row="7" column="1">
+                 <widget class="zchxRadarCtrlBtn" name="noise_injection_btn">
                   <property name="text">
-                   <string>本地抗干扰</string>
+                   <string/>
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="2">
-                 <widget class="QLabel" name="Side_label">
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(0, 0, 0);</string>
-                  </property>
+                <item row="3" column="1">
+                 <widget class="zchxRadarCtrlBtn" name="range_btn">
                   <property name="text">
-                   <string>旁瓣抑制  </string>
+                   <string/>
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="2">
-                 <widget class="QLabel" name="Antenna_label">
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(0, 0, 0);</string>
-                  </property>
+                <item row="7" column="3">
+                 <widget class="zchxRadarCtrlBtn" name="target_boost_btn">
                   <property name="text">
-                   <string>天线高度  </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QLabel" name="Rang_label">
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(0, 0, 0);</string>
-                  </property>
-                  <property name="text">
-                   <string>半径    </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0">
-                 <widget class="QLabel" name="Sea_label">
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(0, 0, 0);</string>
-                  </property>
-                  <property name="text">
-                   <string>海杂波  </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="0">
-                 <widget class="QLabel" name="Rain_label">
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(0, 0, 0);</string>
-                  </property>
-                  <property name="text">
-                   <string>雨杂波  </string>
+                   <string/>
                   </property>
                  </widget>
                 </item>
@@ -1258,16 +589,6 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="7" column="0">
-                 <widget class="QLabel" name="Noise_label">
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(0, 0, 0);</string>
-                  </property>
-                  <property name="text">
-                   <string>噪声抑制</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="6" column="2">
                  <widget class="QLabel" name="expansion_label">
                   <property name="styleSheet">
@@ -1278,50 +599,8 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="3">
-                 <widget class="zchxRadarCtrlBtn" name="antenna_btn">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="zchxRadarCtrlBtn" name="bearing_btn">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="zchxRadarCtrlBtn" name="range_btn">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1">
-                 <widget class="zchxRadarCtrlBtn" name="gain_btn">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="1">
-                 <widget class="zchxRadarCtrlBtn" name="sea_culter_btn">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
                 <item row="6" column="1">
                  <widget class="zchxRadarCtrlBtn" name="rain_culter_btn">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="3">
-                 <widget class="zchxRadarCtrlBtn" name="sidelobe_btn">
                   <property name="text">
                    <string/>
                   </property>
@@ -1334,29 +613,109 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
-                <item row="7" column="1">
-                 <widget class="zchxRadarCtrlBtn" name="noise_injection_btn">
+                <item row="1" column="2">
+                 <widget class="QLabel" name="Antenna_label">
+                  <property name="styleSheet">
+                   <string notr="true">color: rgb(0, 0, 0);</string>
+                  </property>
+                  <property name="text">
+                   <string>天线高度  </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="Sea_label">
+                  <property name="styleSheet">
+                   <string notr="true">color: rgb(0, 0, 0);</string>
+                  </property>
+                  <property name="text">
+                   <string>海杂波  </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QLabel" name="Rain_label">
+                  <property name="styleSheet">
+                   <string notr="true">color: rgb(0, 0, 0);</string>
+                  </property>
+                  <property name="text">
+                   <string>雨杂波  </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="Power_label">
+                  <property name="styleSheet">
+                   <string notr="true">color: rgb(0, 0, 0);</string>
+                  </property>
+                  <property name="text">
+                   <string>雷达电源</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="0">
+                 <widget class="QLabel" name="Noise_label">
+                  <property name="styleSheet">
+                   <string notr="true">color: rgb(0, 0, 0);</string>
+                  </property>
+                  <property name="text">
+                   <string>噪声抑制</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="2">
+                 <widget class="QLabel" name="Local_label">
+                  <property name="styleSheet">
+                   <string notr="true">color: rgb(0, 0, 0);</string>
+                  </property>
+                  <property name="text">
+                   <string>本地抗干扰</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QLabel" name="Side_label">
+                  <property name="styleSheet">
+                   <string notr="true">color: rgb(0, 0, 0);</string>
+                  </property>
+                  <property name="text">
+                   <string>旁瓣抑制  </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="zchxRadarCtrlBtn" name="antenna_btn">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
-                <item row="7" column="3">
-                 <widget class="zchxRadarCtrlBtn" name="target_boost_btn">
+                <item row="3" column="0">
+                 <widget class="QLabel" name="Rang_label">
+                  <property name="styleSheet">
+                   <string notr="true">color: rgb(0, 0, 0);</string>
+                  </property>
+                  <property name="text">
+                   <string>半径    </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="zchxRadarCtrlBtn" name="bearing_btn">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="3">
-                 <widget class="zchxRadarCtrlBtn" name="target_expansion_btn">
+                <item row="5" column="1">
+                 <widget class="zchxRadarCtrlBtn" name="sea_culter_btn">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="3">
-                 <widget class="zchxRadarCtrlBtn" name="target_separat_btn">
+                <item row="2" column="3">
+                 <widget class="zchxRadarCtrlBtn" name="sidelobe_btn">
                   <property name="text">
                    <string/>
                   </property>
@@ -1376,6 +735,13 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
+                <item row="6" column="3">
+                 <widget class="zchxRadarCtrlBtn" name="target_expansion_btn">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
                 <item row="0" column="1" colspan="3">
                  <widget class="zchxRadarCtrlBtn" name="power_statsu_btn">
                   <property name="text">
@@ -1383,59 +749,584 @@ font: 9pt &quot;Agency FB&quot;;</string>
                   </property>
                  </widget>
                 </item>
+                <item row="5" column="3">
+                 <widget class="zchxRadarCtrlBtn" name="target_separat_btn">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="2" colspan="2">
+                 <widget class="QPushButton" name="openRadarBtn">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>打开雷达</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="0">
+                 <widget class="QCheckBox" name="restart_checkBox">
+                  <property name="text">
+                   <string>雷达重启(分钟)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="8" column="0" colspan="2">
+                 <widget class="QPushButton" name="closeRadarBtn">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>关闭雷达</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="9" column="1" colspan="2">
+                 <widget class="QLineEdit" name="restart_lineEdit"/>
+                </item>
+                <item row="9" column="3">
+                 <widget class="QPushButton" name="restart_pushButton">
+                  <property name="text">
+                   <string>确定</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </item>
-              <item row="1" column="0">
-               <widget class="QPushButton" name="saveRadarBtn">
-                <property name="styleSheet">
-                 <string notr="true"/>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QWidget" name="widget" native="true">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>10</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QGroupBox" name="video_parse_group">
+             <property name="styleSheet">
+              <string notr="true">QSpinBox{
+	max_width:30px;
+	min_width:30px;
+}</string>
+             </property>
+             <property name="title">
+              <string>目标解析参数设定</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_14">
+              <item row="9" column="0" colspan="4">
+               <widget class="QFrame" name="district_filter_frame">
+                <layout class="QHBoxLayout" name="horizontalLayout_3">
+                 <item>
+                  <widget class="QCheckBox" name="checkBox">
+                   <property name="text">
+                    <string>屏蔽区域开启</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_12">
+                   <property name="text">
+                    <string>文件路径</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="lineEdit_7"/>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pushButton_7">
+                   <property name="styleSheet">
+                    <string notr="true"/>
+                   </property>
+                   <property name="text">
+                    <string>选择文件</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QSpinBox" name="predictionWidth">
+                <property name="minimum">
+                 <number>1</number>
                 </property>
-                <property name="text">
-                 <string>复位</string>
+                <property name="maximum">
+                 <number>2000000</number>
+                </property>
+                <property name="value">
+                 <number>20</number>
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
-               <widget class="QPushButton" name="uploadRadarBtn">
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_29">
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+                </property>
                 <property name="text">
-                 <string>上传参数</string>
+                 <string>历史轨迹最大点数</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="3">
+               <widget class="QSpinBox" name="video_or_count">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>5</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QLabel" name="label_33">
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+                </property>
+                <property name="text">
+                 <string>雷达设备编号</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QSpinBox" name="max_history"/>
+              </item>
+              <item row="3" column="2">
+               <widget class="QLabel" name="label_27">
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+                </property>
+                <property name="text">
+                 <string>目标超时清理时间（秒）</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="3">
+               <widget class="QSpinBox" name="clear_track_time">
+                <property name="maximum">
+                 <number>99999999</number>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="2">
+               <widget class="QLabel" name="label_11">
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+                </property>
+                <property name="text">
+                 <string>回波叠加（周期）</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="3">
+               <widget class="QLineEdit" name="bh_lineEdit"/>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_15">
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+                </property>
+                <property name="text">
+                 <string>预推矩形宽度(米)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QDoubleSpinBox" name="video_radius_coeff"/>
+              </item>
+              <item row="7" column="0">
+               <widget class="QLabel" name="label_10">
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+                </property>
+                <property name="text">
+                 <string>方向反向</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="label_2">
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(0, 0, 0);
+font: 9pt &quot;Agency FB&quot;;</string>
+                </property>
+                <property name="text">
+                 <string>半径系数 </string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="2">
+               <widget class="QCheckBox" name="useNativeRadiusCHK">
+                <property name="text">
+                 <string>强制使用原始回波半径</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QLineEdit" name="direction_change_edit"/>
+              </item>
+              <item row="7" column="2">
+               <widget class="QCheckBox" name="cog_adjust_chk">
+                <property name="text">
+                 <string>方位角调整</string>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="0" colspan="4">
+               <widget class="QPushButton" name="update_setting_btn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>设置重启</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0" colspan="3">
+               <widget class="QFrame" name="target_length_filter_frame">
+                <layout class="QGridLayout" name="gridLayout_4">
+                 <item row="0" column="0">
+                  <widget class="QCheckBox" name="target_length_filter_chk">
+                   <property name="text">
+                    <string>目标长度区间过滤</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QSpinBox" name="target_length_min">
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>999999999</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="QLabel" name="label_14">
+                   <property name="text">
+                    <string>---</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="3">
+                  <widget class="QSpinBox" name="target_length_max">
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>999999999</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="4">
+                  <widget class="QLabel" name="label_13">
+                   <property name="text">
+                    <string>m</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="1" column="0" colspan="3">
+               <widget class="QFrame" name="target_area_filter_frame">
+                <layout class="QGridLayout" name="gridLayout_5">
+                 <item row="0" column="0">
+                  <widget class="QCheckBox" name="target_area_filter_chk">
+                   <property name="text">
+                    <string>目标面积区间过滤</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QSpinBox" name="target_area_min">
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>999999999</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="QLabel" name="label_16">
+                   <property name="text">
+                    <string>---</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="3">
+                  <widget class="QSpinBox" name="target_area_max">
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>999999999</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="4">
+                  <widget class="QLabel" name="label_4">
+                   <property name="text">
+                    <string>㎡</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="2" column="0" colspan="2">
+               <widget class="QFrame" name="video_amplitude_filter_frame">
+                <layout class="QGridLayout" name="gridLayout_13">
+                 <item row="0" column="3">
+                  <widget class="QSpinBox" name="video_amplitude_max">
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>255</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="QLabel" name="label_3">
+                   <property name="text">
+                    <string>---</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QSpinBox" name="video_amplitude_min">
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>255</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_19">
+                   <property name="text">
+                    <string>回波振幅过滤</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="label_17">
+                <property name="text">
+                 <string>目标最大速度(节)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QSpinBox" name="targetMaxSpeedSpinBox"/>
+              </item>
+              <item row="5" column="2">
+               <widget class="QLabel" name="label_18">
+                <property name="text">
+                 <string>雷达扫描周期(秒)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="3">
+               <widget class="QCheckBox" name="send_dj_checkBox">
+                <property name="text">
+                 <string>点迹目标</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="3">
+               <widget class="QDoubleSpinBox" name="scanCycleTime">
+                <property name="maximum">
+                 <double>60.000000000000000</double>
                 </property>
                </widget>
               </item>
              </layout>
             </widget>
            </item>
-           <item row="4" column="0">
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
-             <item>
-              <widget class="QCheckBox" name="restart_checkBox">
-               <property name="text">
-                <string>雷达重启(分钟)</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="restart_lineEdit"/>
-             </item>
-             <item>
-              <widget class="QPushButton" name="restart_pushButton">
-               <property name="text">
-                <string>确定</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+           <item>
+            <widget class="QLabel" name="k_label">
+             <property name="styleSheet">
+              <string notr="true">color: rgb(0, 0, 0); </string>
+             </property>
+             <property name="text">
+              <string>半径参考值</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(0, 0, 0); </string>
+             </property>
+             <property name="text">
+              <string>实时距离因子</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="data_simulate_group">
+             <property name="title">
+              <string>数据模拟</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_6">
+              <item row="0" column="1">
+               <widget class="QPushButton" name="video_output_end_btn">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>停止打印</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QPushButton" name="video_output_start_btn">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>打印回波</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QComboBox" name="radar_type_combox"/>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="videoDataPath_label">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(0, 0, 0);</string>
+                </property>
+                <property name="text">
+                 <string>雷达类型</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QPushButton" name="logButton_3">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>导入回波</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QPushButton" name="import_report_btn">
+                <property name="text">
+                 <string>导入雷达报告信息</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QPushButton" name="pause_moni">
+                <property name="text">
+                 <string>暂停模拟</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QPushButton" name="restart_moni">
+                <property name="text">
+                 <string>重新模拟</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </item>
           </layout>
          </widget>
         </item>
        </layout>
-      </widget>
-      <widget class="QWidget" name="ecdis">
-       <attribute name="title">
-        <string>地图</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_4"/>
       </widget>
      </widget>
     </item>
@@ -1482,17 +1373,6 @@ font: 9pt &quot;Agency FB&quot;;</string>
    <extends>QWidget</extends>
    <header>./ais_radar/zchxradaraissetting.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ScrollArea</class>
-   <extends>QScrollArea</extends>
-   <header>scrollarea.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>myLabel</class>
-   <extends>QLabel</extends>
-   <header location="global">myLabel.h</header>
   </customwidget>
   <customwidget>
    <class>zchxRadarCtrlBtn</class>

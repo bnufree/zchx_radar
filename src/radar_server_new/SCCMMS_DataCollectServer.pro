@@ -60,17 +60,10 @@ SOURCES += main.cpp\
     up_video_pthread.cpp \
     up_ais_pthread.cpp \
     scrollarea.cpp \
-    myLabel.cpp \
     globlefun/glogfunction.cpp \
     protobuf/protobufdataprocessor.cpp \
-    comdata/comdataworker.cpp \
     protobuf/TWQMSComData.pb.cc \
-    comdata/comdatamgr.cpp \
-    comdata/comconfigwidget.cpp \
-    comdata/comselectedcombobox.cpp \
-    dataout/comdatapubworker.cpp \
     protobuf/protobufdatadisplaywidget.cpp \
-    comdata/comparser.cpp \
     ais_setting.cpp \
     drawaistrack.cpp \
     radar_control.cpp \
@@ -79,7 +72,6 @@ SOURCES += main.cpp\
     ais_radar/zchxRadarVideoRecvThread.cpp \
     float_setting.cpp \
     zchxmainwindow.cpp \
-    aisbaseinfosetting.cpp \
     zchxradarinteface.cpp \
     beidoudata.cpp \
     fusedatautil.cpp \
@@ -155,19 +147,11 @@ HEADERS  += \
     up_video_pthread.h \
     up_ais_pthread.h \
     scrollarea.h \
-    myLabel.h \
     globlefun/glogfunction.h \
     protobuf/protobufdataprocessor.h \
     common.h \
-    comdata/comdataworker.h \
     protobuf/TWQMSComData.pb.h \
-    comdata/comdatamgr.h \
-    comdata/comconfigwidget.h \
-    comdata/comselectedcombobox.h \
-    dataout/comdatapubworker.h \
     protobuf/protobufdatadisplaywidget.h \
-    comdata/comdefines.h \
-    comdata/comparser.h \
     ais_setting.h \
     drawaistrack.h \
     radar_control.h \
@@ -176,7 +160,6 @@ HEADERS  += \
     ais_radar/zchxRadarVideoRecvThread.h \
     float_setting.h \
     zchxmainwindow.h \
-    aisbaseinfosetting.h \
     zchxradarinteface.h \
     beidoudata.h \
     fusedatautil.h \
@@ -219,14 +202,12 @@ FORMS    += \
     dialog_log.ui \
     dialog_set.ui \
     dialog_cli.ui \
-    comdata/comconfigwidget.ui \
     protobuf/protobufdatadisplaywidget.ui \
     ais_setting.ui \
     radar_control.ui \
     dialog_help.ui \
     float_setting.ui \
     zchxmainwindow.ui \
-    aisbaseinfosetting.ui \
     zchxradarinteface.ui \
     beidoudata.ui \
     zchxradaroptwidget.ui

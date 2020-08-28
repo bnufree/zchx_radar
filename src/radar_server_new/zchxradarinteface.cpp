@@ -23,9 +23,6 @@
 #include <QRect>
 #include <QPainter>
 #include <QPointF>
-#include "myLabel.h"
-//#include <Windows.h>
-//#include <DbgHelp.h>
 #include <QThread>
 #include <QDateTime>
 #include <QDebug>
@@ -78,15 +75,8 @@ zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
     ui->import_report_btn->setVisible(true);
-    ui->outputRoutePathChk->setVisible(false);
     ui->pause_moni->setVisible(false);
     ui->restart_moni->setVisible(false);
-    ui->scrollArea->setVisible(false);
-    ui->control_pushButton->setVisible(false);
-    ui->setfubiao_pushButton->setVisible(false);
-    ui->shownum_pushButton->setVisible(false);
-    ui->serial_pushButton->setVisible(false);
-    ui->draw_pushButton->setVisible(false);
     ui->radar_type_combox->addItem(QStringLiteral("BR24雷达"), RADAR_BR24);
     ui->radar_type_combox->addItem(QStringLiteral("3G雷达"), RADAR_3G);
     ui->radar_type_combox->addItem(QStringLiteral("4G雷达"), RADAR_4G);
@@ -97,13 +87,6 @@ zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     "}"
     );
 
-
-    //地图初始化
-#ifdef USE_ZCHX_ECDIS
-    ui->verticalLayout_4->addWidget((mMap = new QMapWidget(this)));
-#else
-    ui->tabWidget->removeTab(ui->tabWidget->indexOf(ui->ecdis));
-#endif
     //this->resize(1367, 784);
     //this->setMinimumSize(1367, 805);
     initUI();
@@ -116,46 +99,15 @@ zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     t_2 = false;//1_初始化打印AIS标志
     t_3= false;//1_初始化打印回波标志
     index = Utils::Profiles::instance()->value("Ais","AIS_Num").toInt();//AIS个数编号
-    ui->lineEdit_2->setText(Utils::Profiles::instance()->value(str_radar,"ClearTrack_Time").toString());
-    ui->radius_lineEdit->setText(Utils::Profiles::instance()->value(str_radar,"Radius").toString());
+    ui->clear_track_time->setValue(Utils::Profiles::instance()->value(str_radar,"ClearTrack_Time").toInt());
 
     ui->lineEdit_3->setText(QString::number(0));
     ui->lineEdit_4->setText(QString::number(0));
 
-    ui->minzf_lineEdit->setText(Utils::Profiles::instance()->value(str_radar,"min_amplitude").toString());
-    ui->maxzf_lineEdit->setText(Utils::Profiles::instance()->value(str_radar,"max_amplitude").toString());
-    ui->angle_lineEdit->setText(Utils::Profiles::instance()->value(str_radar,"historyNum").toString());
-    QString k = Utils::Profiles::instance()->value(str_radar,"RadiusCoefficient").toString();
-    ui->k_lineEdit->setText(QString::number(k.toDouble(), 'f', 4));
-
-    //从串口接收GPS数据 ****************************************************************************
-    //初始化COM数据接收和解析
-//    mComConfigWidget = new ComConfigWidget;
-//    mComDataMgr = new ComDataMgr;
-//    connect(mComDataMgr, SIGNAL(signalSendRecvedContent(qint64,QString,QString)), \
-//            this, SLOT(receiveContent(qint64,QString,QString)));
-//    connect(mComDataMgr, SIGNAL(signalSendLogMsg(QString)), this, SLOT(slotRecvWorkerMsg(QString)));
-//    //界面参数配置和数据接收线程连接在一起)),
-//    connect(mComConfigWidget, SIGNAL(updateSerialPort(QMap<QString,COMDEVPARAM>)),
-//            this, SLOT(slotSetComDevParams(QMap<QString,COMDEVPARAM>)));
-
-//    //发送出去
-//    PROFILES_INSTANCE->setDefault(SERVER_SETTING_SEC, "GPS_Topic", "GPSData");
-//    PROFILES_INSTANCE->setDefault(SERVER_SETTING_SEC, "GPS_Send_Port", 5656);
-//    mOutWorker = new ComDataPubWorker();
-//    connect(PROTOBUF_DATA, SIGNAL(signalSendComData(QByteArray)), mOutWorker, SLOT(slotRecvPubData(QByteArray)));
-//    connect(PROTOBUF_DATA, SIGNAL(signalSendGpsData(double, double)), ui->settingWidget, SLOT(slotGetGpsData(double,double)));
-
-//    mOutWorker->setServerIP(PROFILES_INSTANCE->value(SERVER_SETTING_SEC, SERVER_SETTING_SERVER_IP).toString());
-
-//    mOutWorker->setServerPort(PROFILES_INSTANCE->value(SERVER_SETTING_SEC, SERVER_SETTING_SERVER_PORT).toInt());
-//    mOutWorker->setTimerInterval(PROFILES_INSTANCE->value(SERVER_SETTING_SEC, SERVER_SETTING_OPLOAD_FREQUENCY).toInt());
-//    mOutWorker->setTrackSendPort(PROFILES_INSTANCE->value(SERVER_SETTING_SEC, "GPS_Send_Port").toInt());
-//    mOutWorker->setTrackTopic(PROFILES_INSTANCE->value(SERVER_SETTING_SEC, "GPS_Topic").toString());
-//    connect(mComConfigWidget,SIGNAL(signalUpdataZmq(QString,QString)),this,SLOT(slotUpdateZmq(QString,QString)));
-//    //开始数据接收
-//    slotSetComDevParams(mComConfigWidget->getComDevParams());
-//    PROTOBUF_DATA->startPublish();
+    ui->video_amplitude_min->setValue(Utils::Profiles::instance()->value(str_radar,"min_amplitude").toInt());
+    ui->video_amplitude_max->setValue(Utils::Profiles::instance()->value(str_radar,"max_amplitude").toInt());
+    ui->max_history->setValue(Utils::Profiles::instance()->value(str_radar,"historyNum").toInt());
+    ui->video_radius_coeff->setValue(Utils::Profiles::instance()->value(str_radar,"RadiusCoefficient").toDouble());
 
     int i = radarId;
     str_radar = QString("Radar_%1").arg(i);
@@ -212,12 +164,15 @@ zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     ui->send_dj_checkBox->setChecked(mSend);
     ui->restart_checkBox->setChecked(mf);
     ui->restart_lineEdit->setText(restart_time);
-    ui->minTradius_lineEdit->setText(QString::number(track_min_radius.toDouble(), 'f', 2) );
+    ui->target_length_min->setValue(track_min_radius.toInt());
+    ui->target_length_max->setValue(track_radius.toInt());
+    ui->target_area_min->setValue(track_min_area.toInt());
+    ui->target_area_max->setValue(track_max_area.toInt());
+
+
     ui->bh_lineEdit->setText(radar_num);
-    ui->tradius_lineEdit->setText(QString::number(track_radius.toDouble(), 'f', 2) );
-    ui->minAreaEdit->setText(track_min_area);
-    ui->maxAreaEdit->setText(track_max_area);
-    ui->jump_lineEdit->setText(m_jupmdis);
+
+
     ui->lineEdit_7->setText(sLimit_File);
     ui->lineEdit_8->setText( QString::number(dCentreLon.toDouble(), 'f', 6));
     ui->lineEdit_9->setText(QString::number(dCentreLat.toDouble(), 'f', 6));
@@ -296,8 +251,6 @@ zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     connect(this, SIGNAL(signal_set_penwidth(int)), mAnalysisAndSendRadar, SIGNAL(set_pen_width(int)));
     //实时打印接收到的雷达状态信息
     connect(mRadarDataServer, SIGNAL(signalRadarStatusChanged(QList<RadarStatus>, int)),this,SLOT(slotRecvRadarReportInfo_1(QList<RadarStatus>,int)));
-    //采集器显示回波图片
-    connect(mAnalysisAndSendRadar,SIGNAL(signalRadarVideoAndTargetPixmap(QPixmap,Afterglow)),this,SLOT(setRadarVideoAndTargetPixmap(QPixmap,Afterglow)));
     //打印回波数据
     connect(this, SIGNAL(prtVideoSignal(bool)),mRadarDataServer,SIGNAL(prtVideoSignal_1(bool)));
     //是否显示雷达目标编号
@@ -347,9 +300,6 @@ zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     QString ip_str = Utils::Profiles::instance()->value("Radar_Control","Mac_IP").toString();
     cout<<"ip_str"<<ip_str;
     ui->mac_comboBox->setCurrentText(ip_str);
-    //21类AIS数据
-    mAisbaseinfosetting = new aisBaseInfoSetting();
-    mAisbaseinfosetting->startProcess();
     //回波颜色
     a1 =(Utils::Profiles::instance()->value("Color","color1_R",255).toInt());
     a2 = (Utils::Profiles::instance()->value("Color","color1_G",255).toInt());
@@ -441,10 +391,6 @@ void zchxradarinteface::initUI()
 
     connect(this, SIGNAL(signalRadarConfigChanged(int,int,int)), this, SLOT(slotRadarConfigChanged(int,int,int)));
     //ui->doubleSpinBox->setValue(13.0);
-
-    //初始化雷达控制的列表
-     ui->saveRadarBtn->setVisible(false);
-     ui->uploadRadarBtn->setVisible(false);
 }
 
 void zchxradarinteface::closeEvent(QCloseEvent *)
@@ -569,113 +515,6 @@ void zchxradarinteface::on_closeRadarBtn_clicked()
     emit signalcloseRadar();
 }
 
-void zchxradarinteface::on_uploadRadarBtn_clicked()
-{
-
-//    int radarID = radarId;
-//    bool ok;
-//    // 雷达电源
-//    int type = INFOTYPE::POWER;
-//    int value = ui->power_status_cbx->currentData().toInt();
-//    emit signalRadarConfigChanged(radarID, type, value);
-
-//    // 扫描速度
-//    type = INFOTYPE::SCAN_SPEED;
-//    value = ui->scan_speed_cbx->currentData().toInt();
-//    emit signalRadarConfigChanged(radarID, type, value);
-
-    // 天线高度
-//    type = INFOTYPE::ANTENNA_HEIGHT;
-//    value = ui->Antenna_lineEdit->text().toInt(&ok);
-//    if (ok)
-//    {
-//        emit signalRadarConfigChanged(radarID, type, value);
-//    }
-
-    // 方位校准
-//    type = INFOTYPE::BEARING_ALIGNMENT;
-//    value = ui->Bearing_lineEdit->text().toInt(&ok);
-//    if (ok)
-//    {
-//        emit signalRadarConfigChanged(radarID, type, value);
-//    }
-
-//    // 半径
-//    type = INFOTYPE::RANG;
-//    value = ui->Rang_lineEdit->text().toInt(&ok);
-//    if (ok)
-//    {
-//        if(mUpRad != value)
-//        {
-//            mUpRad = value;
-//            Utils::Profiles::instance()->setValue(str_radar,"Radar_up_radius", value);
-//        }
-//        emit signalRadarConfigChanged(radarID, type, value);
-//    }
-
-//    // 增益
-//    type = INFOTYPE::GAIN;
-//    value = ui->Gain_lineEdit->text().toInt(&ok);
-//    if (ok)
-//    {
-//        emit signalRadarConfigChanged(radarID, type, value);
-//    }
-
-//    // 海杂波
-//    type = INFOTYPE::SEA_CLUTTER;
-//    value = ui->Sea_lineEdit->text().toInt(&ok);
-//    if (ok)
-//    {
-//        emit signalRadarConfigChanged(radarID, type, value);
-//    }
-
-//    // 雨杂波
-//    type = INFOTYPE::RAIN_CLUTTER;
-//    value = ui->Rain_lineEdit->text().toInt(&ok);
-//    if (ok)
-//    {
-//        emit signalRadarConfigChanged(radarID, type, value);
-//    }
-
-    // 噪声抑制
-//    type = INFOTYPE::NOISE_REJECTION;
-//    value = ui->noise_injection_cbx->currentData().toInt();
-//    emit signalRadarConfigChanged(radarID, type, value);
-
-//    // 旁瓣抑制
-//    type = INFOTYPE::SIDE_LOBE_SUPPRESSION;
-//    value = ui->Side_lineEdit->text().toInt(&ok);
-//    if (ok)
-//    {
-//        emit signalRadarConfigChanged(radarID, type, value);
-//    }
-
-//    // 抗干扰
-//    type = INFOTYPE::INTERFERENCE_REJECTION;
-//    value = ui->injection_cbx->currentData().toInt();
-//    emit signalRadarConfigChanged(radarID, type, value);
-
-//    // 本地抗干扰
-//    type = INFOTYPE::LOCAL_INTERFERENCE_REJECTION;
-//    value = ui->local_injection_cbx->currentData().toInt();
-//    emit signalRadarConfigChanged(radarID, type, value);
-
-//    // 目标分离
-//    type = INFOTYPE::TARGET_SEPARATION;
-//    value = ui->target_separation_cbx->currentData().toInt();
-//    emit signalRadarConfigChanged(radarID, type, value);
-
-//    // 目标扩展
-//    type = INFOTYPE::TARGET_EXPANSION;
-//    value = ui->target_expansion_cbx->currentData().toInt();
-//    emit signalRadarConfigChanged(radarID, type, value);
-
-//    // 目标推进
-//    type = INFOTYPE::TARGET_BOOST;
-//    value = ui->target_boost_cbx->currentData().toInt();
-//    emit signalRadarConfigChanged(radarID, type, value);
-}
-
 void zchxradarinteface::slotRadarConfigChanged(int radarID, int type, int value)
 {
     if(!mRadarDataServer) return;
@@ -719,40 +558,6 @@ void zchxradarinteface::show_video_slot(int a, int b)
 {
     ui->lineEdit_3->setText(QString::number(a));
     ui->lineEdit_4->setText(QString::number(b));
-}
-//打印传入周老师库的数据
-void zchxradarinteface::show_info_slot(QString str)
-{
-        QString info_r =  str+"\n";
-        static int name_num = 1;
-        //cout<<"标志打印"<<prt;
-        if(txt == true)
-        {
-            QDir dir;
-            dir.cd("../");  //进入某文件夹
-            if(!dir.exists("传入周老师库的数据"))//判断需要创建的文件夹是否存在
-            {
-                dir.mkdir("传入周老师库的数据"); //创建文件夹
-            }
-            QString file_name ="../传入周老师库的数据/传入周老师库的数据_" + QString::number(name_num) + ".txt";
-            QFile file(file_name);//创建文件对象
-            bool isOk = file.open(QIODevice::Text |QIODevice::WriteOnly |QIODevice::Append);
-            int a = file.size()/1024;
-            if(a > 30720) //当文本大于30M时 新建另一个文本写入数据
-            {
-                name_num++;
-            }
-            if(false == isOk)
-            {
-                cout <<"打开文件失败";
-                return;
-            }
-            if(true == isOk)
-            {
-                file.write(info_r.toStdString().data());
-            }
-            file.close();
-        }
 }
 //网卡选择
 void zchxradarinteface::on_save_restart_btn_clicked()
@@ -902,24 +707,6 @@ void zchxradarinteface::slotRecvRangeFactorChanged(double factor)
 //    }
 }
 
-void zchxradarinteface::setRadarVideoAndTargetPixmap(const QPixmap &videoPixmap,const Afterglow &dataAfterglow)
-{
-    //cout<<"主界面开始画图";
-    QPixmap pixmap = videoPixmap;
-    //cout<<"pixmap.scaled"<<pixmap.size();
-    if(pixmap.size() == QSize(0,0))
-    {
-        cout<<"图片太小了";
-        return;
-    }
-    emit signalSetPix(videoPixmap);
-    QPixmap pixmap_1 = pixmap.scaled(ui->videoImageLabel->width(), ui->videoImageLabel->height(), Qt::KeepAspectRatio);
-    //cout<<"是否为空";
-    if(m_drawpic == false)
-        ui->videoImageLabel->clear();
-    else
-        ui->videoImageLabel->setPixmap(pixmap_1);
-}
 
 //帮助菜单按下
 void zchxradarinteface::help_clicked()
@@ -976,54 +763,9 @@ void zchxradarinteface::on_logButton_3_clicked()
     connect(up_video, SIGNAL(finished()), up_video, SLOT(deleteLater()));
 
 }
-//打开绘图
-void zchxradarinteface::on_draw_pushButton_clicked()
-{
-    switch(m_drawpic)
-    {
-        case true:
-            cout<<"关闭";
-            m_drawpic = false;
-            ui->draw_pushButton->setText("打开绘图");
-            Utils::Profiles::instance()->setValue(str_radar,"draw_pic", m_drawpic);
-            ui->videoImageLabel->clear();
-            break;
-        case false:
-            m_drawpic = true;
-            cout<<"打开";
-            ui->draw_pushButton->setText("关闭绘图");
-            Utils::Profiles::instance()->setValue(str_radar,"draw_pic", m_drawpic);
-            break;
-    }
-}
-//设置目标距离
-void zchxradarinteface::on_pushButton_9_clicked()
-{
-    cout<<"设置目标距离"<<ui->radius_lineEdit->text().toInt();
-    Utils::Profiles::instance()->setValue(str_radar,"Radius", ui->radius_lineEdit->text().toInt());
 
-}
 
-//显示串口通讯
-void zchxradarinteface::on_serial_pushButton_clicked()
-{
-    //mComConfigWidget->show();
-}
-//开始接收串口数据
-void zchxradarinteface::slotSetComDevParams(const QMap<QString, COMDEVPARAM> &param)
-{
-    //开始接收串口数据
-    mComDataMgr->setComDevParams(param);
-}
-//配置GPS输出zmq
-void zchxradarinteface::slotUpdateZmq(QString port, QString topic)
-{
-    PROFILES_INSTANCE->setValue(SERVER_SETTING_SEC, "GPS_Send_Port", port.toInt());
-    PROFILES_INSTANCE->setValue(SERVER_SETTING_SEC, "GPS_Topic", topic);
 
-    mOutWorker->setTrackSendPort( port.toInt());
-    mOutWorker->setTrackTopic(topic);
-}
 //删除显示页
 void zchxradarinteface::removeSubTab(int dex)
 {
@@ -1055,12 +797,6 @@ void zchxradarinteface::on_xinke_pushButton_clicked()
     up_video->start();
     connect(up_video,SIGNAL(send_video_signal(QByteArray,QString,int,int,int)),
             this,SIGNAL(send_video_signal(QByteArray,QString,int,int,int)));*/
-}
-//雷达控制,助航设备信息
-void zchxradarinteface::on_control_pushButton_clicked()
-{
-    //mControl->exec();
-    mAisbaseinfosetting->show();
 }
 
 void zchxradarinteface::joinGropslot(QString str)//判断加入组播是否成功
@@ -1105,20 +841,6 @@ void zchxradarinteface::show_range_slot(double r, double factor)
     ui->label->setText(tr("半径:%1  距离因子:%2").arg(r).arg(factor, 0, 'f', 2));
 }
 
-void zchxradarinteface::on_shownum_pushButton_clicked()
-{
-    QString str = ui->shownum_pushButton->text();
-    if(str == "显示编号")
-    {
-        ui->shownum_pushButton->setText("隐藏编号");
-        emit showTrackNumSignal(true);
-    }
-    else
-    {
-        ui->shownum_pushButton->setText("显示编号");
-        emit showTrackNumSignal(false);
-    }
-}
 //缓存点迹
 //void zchxradarinteface::on_angle_push_Button_clicked()
 //{
@@ -1178,31 +900,20 @@ void zchxradarinteface::on_color_2_pushButton_clicked()
 //设置
 void zchxradarinteface::on_update_setting_btn_clicked()
 {
-    int angle = ui->angle_lineEdit->text().toInt();
-    Utils::Profiles::instance()->setValue(str_radar,"historyNum", angle);
-    int time_1 = ui->lineEdit_2->text().toInt();
-    Utils::Profiles::instance()->setValue(str_radar,"ClearTrack_Time", time_1);
-    int jump_distance = ui->jump_lineEdit->text().toInt();
-    Utils::Profiles::instance()->setValue(str_radar,"jump_distance", jump_distance);
+    Utils::Profiles::instance()->setValue(str_radar,"historyNum", ui->max_history->value());
+    Utils::Profiles::instance()->setValue(str_radar,"ClearTrack_Time", ui->clear_track_time->value());
     int radar_num = ui->bh_lineEdit->text().toInt();
     Utils::Profiles::instance()->setValue(str_radar,"radar_num", radar_num);
-    double track_radius = ui->tradius_lineEdit->text().toDouble();
-    Utils::Profiles::instance()->setValue(str_radar,"track_radius", track_radius);
-    double minTradius = ui->minTradius_lineEdit->text().toDouble();
-    Utils::Profiles::instance()->setValue(str_radar,"track_min_radius", minTradius);
-    cout<<"设置目标距离"<<ui->radius_lineEdit->text().toInt();
-    Utils::Profiles::instance()->setValue(str_radar,"Radius", ui->radius_lineEdit->text().toInt());
-    int min_amplitude = ui->minzf_lineEdit->text().toInt();
-    Utils::Profiles::instance()->setValue(str_radar,"min_amplitude", min_amplitude);
-    int max_amplitude = ui->maxzf_lineEdit->text().toInt();
-    Utils::Profiles::instance()->setValue(str_radar,"max_amplitude", max_amplitude);
-    cout<<"设置半径系数:"<<ui->k_lineEdit->text().toDouble();
-    Utils::Profiles::instance()->setValue(str_radar,"RadiusCoefficient", ui->k_lineEdit->text().toDouble());
+    Utils::Profiles::instance()->setValue(str_radar,"track_radius", ui->target_length_max->value());
+    Utils::Profiles::instance()->setValue(str_radar,"track_min_radius", ui->target_length_min->value());
+    Utils::Profiles::instance()->setValue(str_radar,"min_amplitude", ui->video_amplitude_min->value());
+    Utils::Profiles::instance()->setValue(str_radar,"max_amplitude", ui->video_amplitude_max->value());
+    Utils::Profiles::instance()->setValue(str_radar,"RadiusCoefficient", ui->video_radius_coeff->value());
     bool send = ui->send_dj_checkBox->isChecked();
     Utils::Profiles::instance()->setValue(str_radar,"send_dianjian", send);
 
-    Utils::Profiles::instance()->setValue(str_radar,"track_min_area", ui->minAreaEdit->text());
-    Utils::Profiles::instance()->setValue(str_radar,"track_max_area", ui->maxAreaEdit->text());
+    Utils::Profiles::instance()->setValue(str_radar,"track_min_area", ui->target_area_min->value());
+    Utils::Profiles::instance()->setValue(str_radar,"track_max_area", ui->target_area_max->value());
 
     Utils::Profiles::instance()->setValue(str_radar, "Direction_Invert", ui->direction_change_edit->text());
     Utils::Profiles::instance()->setValue(str_radar, "azimuth_adjustment", ui->cog_adjust_chk->isChecked());
@@ -1218,11 +929,6 @@ void zchxradarinteface::on_update_setting_btn_clicked()
     if(ret1 == 1024) reset_window();
 }
 
-void zchxradarinteface::on_k_pushButton_clicked()
-{
-    cout<<"设置半径系数:"<<ui->k_lineEdit->text().toDouble();
-    Utils::Profiles::instance()->setValue(str_radar,"RadiusCoefficient", ui->k_lineEdit->text().toDouble());
-}
 
 void zchxradarinteface::slotShowRadiusCoefficient(double Radius,double Coefficient)
 {
@@ -1250,10 +956,6 @@ void zchxradarinteface::handleTimeout()
     }
 }
 
-void zchxradarinteface::on_saveRadarBtn_clicked()
-{
-
-}
 
 void zchxradarinteface::on_import_report_btn_clicked()
 {

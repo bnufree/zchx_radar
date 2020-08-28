@@ -3,8 +3,6 @@
 
 #include <QMainWindow>
 #include "dataserverutils.h"
-
-#include "aisbaseinfosetting.h"
 #include "ais/zchxaisdataserver.h"
 #include "ais_radar/zchxradardataserver.h"
 #include "ais_radar/zchxanalysisandsendradar.h"
@@ -18,22 +16,11 @@
 #include "up_ais_pthread.h"
 #include<QMouseEvent>
 #include<QWheelEvent>
-#include "myLabel.h"
-#include "comdata/comdatamgr.h"
-#include "dataout/comdatapubworker.h"
-#include "comdata/comconfigwidget.h"
-#include "ui_comconfigwidget.h"
 #include "ais_setting.h"
 #include "radar_control.h"
 #include "dialog_help.h"
 #include "float_setting.h"
-//#include "side_car_parse/Messages/RadarConfig.h"
-//#include "side_car_parse/Messages/VideoConfig.h"
-//#include "side_car_parse/Messages/TSPIConfig.h"
 #include "zchxradarinteface.h"
-#ifdef USE_ZCHX_ECDIS
-#include "qmapwidget.h"
-#endif
 
 class QLabel;
 class ZCHXAisDataServer;

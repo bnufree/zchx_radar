@@ -2,8 +2,6 @@
 #define ZCHXRADARINTEFACE_H
 #include <QMainWindow>
 #include "dataserverutils.h"
-
-#include "aisbaseinfosetting.h"
 #include "ais/zchxaisdataserver.h"
 #include "ais_radar/zchxradardataserver.h"
 #include "ais_radar/zchxanalysisandsendradar.h"
@@ -17,11 +15,6 @@
 #include "up_ais_pthread.h"
 #include<QMouseEvent>
 #include<QWheelEvent>
-#include "myLabel.h"
-#include "comdata/comdatamgr.h"
-#include "dataout/comdatapubworker.h"
-#include "comdata/comconfigwidget.h"
-#include "ui_comconfigwidget.h"
 #include "ais_setting.h"
 #include "radar_control.h"
 #include "dialog_help.h"
@@ -92,11 +85,7 @@ public slots:
     void show_statistics_slot(int, int, int, int, int);//1_打印统计丢包率
     void slotRecvRadarReportInfo_1(QList<RadarStatus>,int);//1_实时打印接收到的雷达状态信息
     void slotRecvRangeFactorChanged(double factor);
-    void setRadarVideoAndTargetPixmap(const QPixmap &videoPixmap,const Afterglow &dataAfterglow);
     void reset_window();//重新初始化
-    void show_info_slot(QString);//显示传入周老师库的数据
-    void slotSetComDevParams(const QMap<QString,COMDEVPARAM>& param);//开始串口数据接收
-    void slotUpdateZmq(QString,QString);
     void removeSubTab(int);
     void help_clicked();//帮助菜单按下
     void joinGropslot(QString);//判断加入组播是否成功
@@ -123,8 +112,6 @@ private slots:
 
     void on_pushButton_7_clicked();
 
-    void on_uploadRadarBtn_clicked();
-
     void logButton();
 
     void on_setButton_clicked();
@@ -135,15 +122,7 @@ private slots:
 
     //void logButton_2_clicked();
 
-    void on_draw_pushButton_clicked();
-
-    void on_pushButton_9_clicked();
-
-    void on_serial_pushButton_clicked();
-
     void on_xinke_pushButton_clicked();
-
-    void on_control_pushButton_clicked();
 
     //void on_doubleSpinBox_valueChanged(double arg1);
 
@@ -155,7 +134,6 @@ private slots:
 
     void show_range_slot(double, double);
 
-    void on_shownum_pushButton_clicked();
 
     //void on_angle_push_Button_clicked();
 
@@ -170,11 +148,8 @@ private slots:
     //void on_jump_pushButton_clicked();
 
 
-    void on_k_pushButton_clicked();
 
     void on_restart_pushButton_clicked();
-
-    void on_saveRadarBtn_clicked();
 
 
     void on_update_setting_btn_clicked();
@@ -212,12 +187,6 @@ private:
     ZCHXRadarDataServer* mRadarDataServer;
     ZCHXAnalysisAndSendRadar* mAnalysisAndSendRadar;
     QList<AIS_Setting*> mAisSettingList;
-    //串口类
-    ComDataMgr      *mComDataMgr;
-    ComDataPubWorker* mOutWorker;
-    ComConfigWidget *mComConfigWidget;
-    //21类AIS助航消息
-    aisBaseInfoSetting *mAisbaseinfosetting;
     QAction *color1 ;
     QAction *color2 ;
     int a1,a2,a3,b1,b2,b3;//回波颜色

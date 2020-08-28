@@ -23,9 +23,6 @@
 #include <QRect>
 #include <QPainter>
 #include <QPointF>
-#include "myLabel.h"
-//#include <Windows.h>
-//#include <DbgHelp.h>
 #include "zchxmainwindow.h"
 #include "ui_zchxmainwindow.h"
 #include <QThread>
