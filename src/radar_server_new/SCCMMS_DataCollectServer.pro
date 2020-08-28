@@ -97,7 +97,6 @@ SOURCES += main.cpp\
     ais/zchxaisdataclient.cpp \
     zchxsimulatethread.cpp \
     ais_radar/zchxlowranceradardataserver.cpp \
-    zchxhostsetting.cpp \
     ais/ais.cpp \
     ais/ais1_2_3.cpp \
     ais/ais4_11.cpp \
@@ -195,7 +194,6 @@ HEADERS  += \
     ais/zchxaisdataclient.h \
     zchxsimulatethread.h \
     ais_radar/zchxlowranceradardataserver.h \
-    zchxhostsetting.h \
     ais/ais.h \
     ais/ais8_001_22.h \
     ../protobuf/2.6.1/ZCHXAISVessel.pb.h \
@@ -231,8 +229,7 @@ FORMS    += \
     aisbaseinfosetting.ui \
     zchxradarinteface.ui \
     beidoudata.ui \
-    zchxradaroptwidget.ui \
-    zchxhostsetting.ui
+    zchxradaroptwidget.ui
 
 
 DISTFILES += \
