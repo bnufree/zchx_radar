@@ -1,4 +1,4 @@
-#ifndef ZCHXDRAWZONETOOL_H
+﻿#ifndef ZCHXDRAWZONETOOL_H
 #define ZCHXDRAWZONETOOL_H
 
 #include "zchxdrawtool.h"
@@ -101,6 +101,18 @@ class zchxDrawPlayZoneTool: public zchxDrawZoneTool
 public:
     explicit zchxDrawPlayZoneTool(zchxMapWidget* w, QObject *parent = 0):
         zchxDrawZoneTool(w, qt::eTool::SELECTPLAYZONE, 3, parent) {}
+    void endDraw();
+
+signals:
+public slots:
+};
+
+class zchxDrawIslandLineZoneTool: public zchxDrawZoneTool
+{
+    Q_OBJECT
+public:
+    explicit zchxDrawIslandLineZoneTool(zchxMapWidget* w, QObject *parent = 0):
+        zchxDrawZoneTool(w, qt::eTool::ISLANDLINEDRAW, 3, parent) {}
     void endDraw();
 
 signals:

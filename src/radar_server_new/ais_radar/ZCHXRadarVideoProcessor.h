@@ -1,4 +1,4 @@
-#ifndef ZCHXRADARVIDEOPROCESSOR_H
+﻿#ifndef ZCHXRADARVIDEOPROCESSOR_H
 #define ZCHXRADARVIDEOPROCESSOR_H
 
 #include <QObject>
@@ -11,6 +11,7 @@
 #include <QColor>
 #include "zchxfunction.h"
 #include "zchxradarcommon.h"
+#include "zchxmsgcommon.h"
 
 class zchxRadarRectExtraction;
 class zchxRadarTargetTrack;
@@ -29,6 +30,8 @@ public:
     void setRangeFactor(double factor);
     void setAvgShipSpeed(double speed);
     void setRadarSpr(double spr) {mRadarSpr = spr;}
+    void setFilterAreaData(const QList<zchxMsg::filterArea>& list);
+    void setFilterAreaEnabled(bool sts);
 
 protected:
     void run();

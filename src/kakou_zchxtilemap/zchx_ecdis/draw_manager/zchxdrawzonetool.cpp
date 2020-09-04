@@ -1,4 +1,4 @@
-#include "zchxdrawzonetool.h"
+﻿#include "zchxdrawzonetool.h"
 #include "dialog/radarfeaturezone.h"
 #include "dialog/defenceinfodialog.h"
 #include "dialog/channelinfodialog.h"
@@ -20,7 +20,7 @@ void zchxDrawZoneTool::show(QPainter *painter)
     PainterPair chk(painter);
     painter->setPen(QPen(Qt::red,1,Qt::DashLine));
     painter->setBrush(QBrush(Qt::blue, Qt::Dense7Pattern));
-    painter->drawPolygon(QPolygonF(mPoints.toVector()));
+    painter->drawPolygon(pixPnts());
 }
 
 bool zchxDrawZoneTool::checkPnts()
@@ -52,8 +52,8 @@ void zchxDrawRadarFeatureZoneTool::endDraw()
 {
     if(checkPnts() && isReady()){
         ZCHX::Data::ITF_RadarFeaturesZone radar_zone_data;
-        for(QPointF pnt : mPoints) {
-            radar_zone_data.pointList.push_back(mWidget->framework()->Pixel2LatLon(pnt));
+        for(ZCHX::Data::LatLon pnt : mPnts) {
+            radar_zone_data.pointList.push_back(pnt);
         }
         RadarFeatureZone objDialog;
         if(objDialog.exec() == QDialog::Accepted)
@@ -70,8 +70,7 @@ void zchxDrawWarningZoneTool::endDraw()
 {
     if(checkPnts() && isReady()){
         std::vector<std::pair<double, double>> path;
-        for(QPointF pnt : mPoints) {
-            ZCHX::Data::LatLon ll = mWidget->framework()->Pixel2LatLon(pnt);
+        for(ZCHX::Data::LatLon ll : mPnts) {
             path.push_back(std::pair<double, double>(ll.lat, ll.lon));
         }
         ZCHX::Data::ITF_WarringZone zone;
@@ -101,8 +100,7 @@ void zchxDrawChannelZoneTool::endDraw()
 {
     if(checkPnts() && isReady()){
         std::vector<std::pair<double, double>> path;
-        for(QPointF pnt : mPoints) {
-            ZCHX::Data::LatLon ll = mWidget->framework()->Pixel2LatLon(pnt);
+        for(ZCHX::Data::LatLon ll : mPnts) {
             path.push_back(std::pair<double, double>(ll.lat, ll.lon));
         }
         ZCHX::Data::ITF_Channel zone;
@@ -143,8 +141,7 @@ void zchxDrawMooringZoneTool::endDraw()
 {
     if(checkPnts() && isReady()){
         std::vector<std::pair<double, double>> path;
-        for(QPointF pnt : mPoints) {
-            ZCHX::Data::LatLon ll = mWidget->framework()->Pixel2LatLon(pnt);
+        for(ZCHX::Data::LatLon ll : mPnts) {
             path.push_back(std::pair<double, double>(ll.lat, ll.lon));
         }
         ZCHX::Data::ITF_Mooring zone;
@@ -175,15 +172,14 @@ void zchxDrawCardMouthTool::show(QPainter *painter)
     PainterPair chk(painter);
     painter->setPen(QPen(Qt::red,1,Qt::DashLine));
     painter->setBrush(Qt::NoBrush);
-    painter->drawPolyline(QPolygonF(mPoints.toVector()));
+    painter->drawPolyline(pixPnts());
 }
 
 void zchxDrawCardMouthTool::endDraw()
 {
     if(checkPnts() && isReady()){
         std::vector<std::pair<double, double>> path;
-        for(QPointF pnt : mPoints) {
-            ZCHX::Data::LatLon ll = mWidget->framework()->Pixel2LatLon(pnt);
+        for(ZCHX::Data::LatLon ll : mPnts) {
             path.push_back(std::pair<double, double>(ll.lat, ll.lon));
         }
         ZCHX::Data::ITF_CardMouth zone;
@@ -218,15 +214,14 @@ void zchxDrawStatistcLineTool::show(QPainter *painter)
     PainterPair chk(painter);
     painter->setPen(QPen(Qt::red,1,Qt::DashLine));
     painter->setBrush(Qt::NoBrush);
-    painter->drawPolyline(QPolygonF(mPoints.toVector()));
+    painter->drawPolyline(pixPnts());
 }
 
 void zchxDrawStatistcLineTool::endDraw()
 {
     if(checkPnts() && isReady()){
         std::vector<std::pair<double, double>> path;
-        for(QPointF pnt : mPoints) {
-            ZCHX::Data::LatLon ll = mWidget->framework()->Pixel2LatLon(pnt);
+        for(ZCHX::Data::LatLon ll : mPnts) {
             path.push_back(std::pair<double, double>(ll.lat, ll.lon));
         }
         ZCHX::Data::ITF_StatistcLine zone;
@@ -254,8 +249,7 @@ void zchxDrawPlayZoneTool::endDraw()
 {
     if(checkPnts() && isReady()){
         std::vector<std::pair<double, double>> path;
-        for(QPointF pnt : mPoints) {
-            ZCHX::Data::LatLon ll = mWidget->framework()->Pixel2LatLon(pnt);
+        for(ZCHX::Data::LatLon ll : mPnts) {
             path.push_back(std::pair<double, double>(ll.lat, ll.lon));
         }
 
@@ -264,3 +258,19 @@ void zchxDrawPlayZoneTool::endDraw()
 
     zchxDrawZoneTool::endDraw();
 }
+
+
+void zchxDrawIslandLineZoneTool::endDraw()
+{
+    if(checkPnts() && isReady()){
+        std::vector<std::pair<double, double>> path;
+        for(ZCHX::Data::LatLon ll : mPnts) {
+            path.push_back(std::pair<double, double>(ll.lat, ll.lon));
+        }
+
+        emit mWidget->signalDrawRadarFilterArea(path);
+    }
+
+    zchxDrawZoneTool::endDraw();
+}
+

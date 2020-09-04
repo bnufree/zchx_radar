@@ -25,6 +25,26 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QSpinBox, QDoubleSpinBox{
+	max-width:80px;
+	min-width:80px;
+}
+
+QLabel, QCheckBox, QPushButton{
+	color:black;
+	font-family:Microsoft Yahei;
+	font-size:10pt;
+	font-weight:normal;
+}
+
+QGroupBox{
+	color:black;
+	font-family:Microsoft Yahei;
+	font-size:11pt;
+	font-weight:normal;
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_9">
     <item row="0" column="0">
@@ -840,10 +860,7 @@
            <item>
             <widget class="QGroupBox" name="video_parse_group">
              <property name="styleSheet">
-              <string notr="true">QSpinBox{
-	max_width:30px;
-	min_width:30px;
-}</string>
+              <string notr="true"/>
              </property>
              <property name="title">
               <string>目标解析参数设定</string>
@@ -898,8 +915,7 @@
               <item row="3" column="0">
                <widget class="QLabel" name="label_29">
                 <property name="styleSheet">
-                 <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>历史轨迹最大点数</string>
@@ -919,8 +935,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
               <item row="2" column="2">
                <widget class="QLabel" name="label_33">
                 <property name="styleSheet">
-                 <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>雷达设备编号</string>
@@ -933,8 +948,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
               <item row="3" column="2">
                <widget class="QLabel" name="label_27">
                 <property name="styleSheet">
-                 <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>目标超时清理时间（秒）</string>
@@ -951,8 +965,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
               <item row="4" column="2">
                <widget class="QLabel" name="label_11">
                 <property name="styleSheet">
-                 <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>回波叠加（周期）</string>
@@ -965,8 +978,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
               <item row="4" column="0">
                <widget class="QLabel" name="label_15">
                 <property name="styleSheet">
-                 <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>预推矩形宽度(米)</string>
@@ -979,8 +991,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
               <item row="7" column="0">
                <widget class="QLabel" name="label_10">
                 <property name="styleSheet">
-                 <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>方向反向</string>
@@ -990,8 +1001,7 @@ font: 9pt &quot;Agency FB&quot;;</string>
               <item row="6" column="0">
                <widget class="QLabel" name="label_2">
                 <property name="styleSheet">
-                 <string notr="true">color: rgb(0, 0, 0);
-font: 9pt &quot;Agency FB&quot;;</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>半径系数 </string>

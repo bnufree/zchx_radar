@@ -42,21 +42,29 @@ ZCHXRadarVideoProcessor::ZCHXRadarVideoProcessor(int radar_id, QObject *parent)
     mOutputImg = Utils::Profiles::instance()->value(m_radarSec,  "OutputImage").toBool();
     m_dCentreLat = Utils::Profiles::instance()->value(m_radarSec,  "Centre_Lat").toDouble();
     m_dCentreLon = Utils::Profiles::instance()->value(m_radarSec,  "Centre_Lon").toDouble();
-    QString sLimit_File = Utils::Profiles::instance()->value(m_radarSec,"Limit_File").toString();
-    mVideoExtractionWorker = new zchxRadarRectExtraction(m_dCentreLat, m_dCentreLon, sLimit_File, mRadarID);
+    mVideoExtractionWorker = new zchxRadarRectExtraction(m_dCentreLat, m_dCentreLon, mRadarID);
     double minArea = Utils::Profiles::instance()->value(m_radarSec,  "track_min_area").toDouble();
     double maxArea = Utils::Profiles::instance()->value(m_radarSec,  "track_max_area").toDouble();
     double minLen = Utils::Profiles::instance()->value(m_radarSec,  "track_min_radius").toDouble();
     double maxLen = Utils::Profiles::instance()->value(m_radarSec,  "track_radius").toDouble();
     mVideoExtractionWorker->setTargetAreaRange(minArea, maxArea);
     mVideoExtractionWorker->setTargetLenthRange(minLen, maxLen);
-    mVideoExtractionWorker->setLimitAvailable(Utils::Profiles::instance()->value(m_radarSec, "Limit").toBool());
 
     //
     setRangeFactor(10.0);
     setAvgShipSpeed(5.0);
 
     setStackSize(64000000);
+}
+
+void ZCHXRadarVideoProcessor::setFilterAreaData(const QList<zchxMsg::filterArea> &list)
+{
+    if(mVideoExtractionWorker) mVideoExtractionWorker->setFilterAreaData(list);
+}
+
+void ZCHXRadarVideoProcessor::setFilterAreaEnabled(bool sts)
+{
+    if(mVideoExtractionWorker) mVideoExtractionWorker->setFilterAreaEnabled(sts);
 }
 
 ZCHXRadarVideoProcessor::~ZCHXRadarVideoProcessor()
@@ -319,7 +327,7 @@ void ZCHXRadarVideoProcessor::process(const ZCHXRadarVideoProcessorData& task)
         mVideoExtractionWorker->parseVideoPieceFromImage(result, list, img, range_factor, video_index, mOutputImg);
     }
     //发送回波矩形集合
-//    qDebug()<<"parse rect list size:"<<list.size();
+    qDebug()<<"parse rect list size:"<<list.size();
     if(list.size() > 0)
     {
         if(!mTracker)

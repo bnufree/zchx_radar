@@ -1,9 +1,10 @@
-#include "zchxradarlimitareathread.h"
+﻿#include "zchxradarlimitareathread.h"
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonValue>
 #include <QJsonObject>
 #include <QJsonParseError>
+#include "zchxmsgcommon.h"
 
 using namespace ZCHX_RADAR_RECEIVER;
 typedef QList<ZCHX::Data::LatLon>   zchxLatlonList;
@@ -37,55 +38,33 @@ void zchxRadarLimitAreaThread::parseJsonFromByteArray(const QByteArray &data, QL
         qDebug()<<"parse completetion list error:"<<err.error;
         return ;
     }
-    if(!docRcv.isObject())
+    if(!docRcv.isArray())
     {
         qDebug()<<" limit file  with wrong json format.";
         return ;
     }
-    QJsonObject obj = docRcv.object();
-    QStringList keys =obj.keys();
-    int id = 1;
-    foreach (QString key, keys) {
-        QJsonArray array = obj.value(key).toArray();
-        if(key.contains("water") || keys.contains("sea"))
+    QJsonArray array = docRcv.array();
+    foreach (QJsonValue val, array) {
+        zchxMsg::filterArea filter(val.toObject());
+        ZCHX::Data::ITF_IslandLine line;
+        line.name = filter.name;
+        if(filter.type == 1)
         {
-            zchxLatlonList list;
-            foreach (QJsonValue val, array) {
-                QJsonArray objArray = val.toArray();
-                parseLatlonJsonArray(objArray, list);
-                if(list.size() > 0)
-                {
-                    //将水利的构造成绿色的线
-                    ZCHX::Data::ITF_IslandLine line;
-                    line.name = QString("water_%1").arg(id);
-                    line.warnColor = "#00ff00";
-                    foreach (ZCHX::Data::LatLon ll, list) {
-                        line.path.push_back(std::pair<double, double>(ll.lat, ll.lon));
-                    }
-                    line.id = id++;
-                    result.append(line);
-                }
-            }
-        } else if(key.contains("land"))
+            line.warnColor = "#00ff00";
+        } else
         {
-            zchxLatlonList list;
-            foreach (QJsonValue val, array) {
-                QJsonArray objArray = val.toArray();
-                parseLatlonJsonArray(objArray, list);
-                if(list.size() > 0)
-                {
-                    //将水利的构造成绿色的线
-                    ZCHX::Data::ITF_IslandLine line;
-                    line.name = QString("land_%1").arg(id);
-                    line.warnColor = "#ff0000";
-                    foreach (ZCHX::Data::LatLon ll, list) {
-                        line.path.push_back(std::pair<double, double>(ll.lat, ll.lon));
-                    }
-                    line.id = id++;
-                    result.append(line);
-                }
-            }
+            line.warnColor = "#ff0000";
         }
+        zchxLatlonList list;
+        foreach (zchxMsg::Latlon ll, filter.area) {
+            list.append(ZCHX::Data::LatLon(ll.lat, ll.lon));
+        }
+        foreach (ZCHX::Data::LatLon ll, list) {
+            line.path.push_back(std::pair<double, double>(ll.lat, ll.lon));
+        }
+        line.id = filter.id;
+
+        result.append(line);
     }
 }
 

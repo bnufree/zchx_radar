@@ -7,6 +7,7 @@
 #include <QMutex>
 #include "zchxradarcommon.h"
 #include <QRunnable>
+#include "zchxmsgcommon.h"
 
 typedef     QList<Latlon>       zchxLatlonList;
 struct      parseTarget{
@@ -36,18 +37,17 @@ class zchxRadarRectExtraction : public QObject
 {
     Q_OBJECT
 public:
-    explicit zchxRadarRectExtraction(double lat, double lon, const QString& file, int id,  QObject *parent = 0);
+    explicit zchxRadarRectExtraction(double lat, double lon, int id,  QObject *parent = 0);
     ~zchxRadarRectExtraction();
     void  setRadarLL(double lat, double lon);
-    void  setLimitAvailable(bool sts) {mIsLimitAvailable = sts;}
-    void  setLimitFile(const QString& file);
     void  setTargetAreaRange(double min, double max);
     void  setTargetLenthRange(double min, double max);
     void  setRangeFactor(double factor) {mRangeFactor = factor;}
     void  parseVideoPieceFromImage(QImage& result, zchxRadarRectDefList& list, const QImage &img, double range_factor, int video_index, bool output = false);
+    void  setFilterAreaData(const QList<zchxMsg::filterArea>& list);
+    void  setFilterAreaEnabled(bool sts);
 protected:
-    void  parseLimitFile(const QString& file);
-    void  transferLatlonArea2PixelArea();
+    void  transferLatlonArea2PixelArea( bool lock);
     bool  isVideoPolygonNotAvailable(const QPolygonF& poly);
     void  trackTarget(QList<parseTarget>& list, double target_merge_distance, bool merge_target = true);
     void  mergeTargetInDistance(QList<parseTarget> &list, double target_merge_distance);
@@ -61,11 +61,12 @@ private:
     double                  mCentreLat;
 
     //限制区域
-    bool                    mIsLimitAvailable;              //是否设置限制区域
-    QList<zchxLatlonList>   mLandLatlonList;
-    QList<zchxLatlonList>   mSeaLatlonList;
-    QList<QPolygonF>        mLandPolygon;                  //陆地区域设定
-    QList<QPolygonF>        mSeaPolygon;                   //海洋区域设定
+    bool                            mIsFilterAreaEnabled;              //是否设置限制区域
+    QList<zchxMsg::filterArea>      mFilterAreaLatlonList;            //原生的过滤数据
+    QList<QPolygonF>                mInFilterAreaPixelList;            //目标必须在这些区域内
+    QList<QPolygonF>                mOutFilterAreaPixelList;            //目标必须在这些区域外
+    QMutex                          mFilterAreaMutex;
+
     //回波块区域大小识别区间
     double                  mMaxTargetArea;                //参考标准是1024*1024的图片大小
     double                  mMinTargetArea;
@@ -75,12 +76,6 @@ private:
     double                  mRangeFactor;                   //当前回波的单元长度
     int                     mImageWidth;
     int                     mImageHeight;
-
-    //目标跟踪解析
-    QMap<int, parseTargetList>        mTargetTrackMap;
-    int                           mTargetNum;
-    int                           mMinTargetNum;
-    int                           mMaxTargettNum;
 };
 
 #endif // ZCHXRECTEXTRACTIONTHREAD_H

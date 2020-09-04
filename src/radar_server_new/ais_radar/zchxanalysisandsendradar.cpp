@@ -116,7 +116,8 @@ ZCHXAnalysisAndSendRadar::ZCHXAnalysisAndSendRadar(int id, QObject *parent)
       mRadarOutMgr(0),
       mRadarType(RADAR_UNKNOWN),
       mUseNativeRadius(false),
-      mDopplerVal(0)
+      mDopplerVal(0),
+      mFilterFile(0)
 {
     qRegisterMetaType<QMap< int,QList<QPointF> >>("QMap< int,QList<QPointF> >");
     qRegisterMetaType<zchxRadarRectList>("const zchxRadarRectList&");
@@ -235,26 +236,55 @@ ZCHXAnalysisAndSendRadar::ZCHXAnalysisAndSendRadar(int id, QObject *parent)
 void ZCHXAnalysisAndSendRadar::slotReadLimitData()
 {
     bool limit_enable = Utils::Profiles::instance()->value(str_radar,"Limit").toBool();
-    if(limit_enable)
-    {
-        QString file = Utils::Profiles::instance()->value(str_radar,"Limit_File").toString();
-        if(file.trimmed().isEmpty()) return;
-        QFile fp(file);
-        if(fp.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            if(mRadarOutMgr) mRadarOutMgr->appendLimitData(fp.readAll());
-            fp.close();
-        } else
-        {
-            qDebug()<<"open limit file failed....";
-        }
+    if(m_VideoProcessor) m_VideoProcessor->setFilterAreaEnabled(limit_enable);
 
+    QString file = Utils::Profiles::instance()->value(str_radar,"Limit_File").toString();
+    if(file.trimmed().isEmpty()) file = QString("%1/%2_filter_area.json").arg(QApplication::applicationDirPath()).arg(m_uSourceID);
+    mFilterFile = new zchxFilterAreaFile(file);
+    if(mFilterFile->getFilterAreaList().size() > 0)
+    {
+        if(m_VideoProcessor) m_VideoProcessor->setFilterAreaData(mFilterFile->getFilterAreaList());
+        if(mRadarOutMgr) mRadarOutMgr->appendLimitData(mFilterFile->getFilterAreaByteArray());
+    } else
+    {
+        qDebug()<<"open limit file failed....";
     }
+}
+
+bool ZCHXAnalysisAndSendRadar::removeFilterArea(qint64 id)
+{
+    if(!mFilterFile) return false;
+    bool sts = mFilterFile->removeArea(id);
+    if(sts)
+    {
+        if(m_VideoProcessor) m_VideoProcessor->setFilterAreaData(mFilterFile->getFilterAreaList());
+        if(mRadarOutMgr) mRadarOutMgr->appendLimitData(mFilterFile->getFilterAreaByteArray());
+    }
+    return sts;
+}
+
+bool ZCHXAnalysisAndSendRadar::addOrEditFilterArea(const zchxMsg::filterArea &area)
+{
+    if(!mFilterFile) return false;
+    bool sts = mFilterFile->addArea(area);
+    if(sts)
+    {
+        if(m_VideoProcessor) m_VideoProcessor->setFilterAreaData(mFilterFile->getFilterAreaList());
+        if(mRadarOutMgr) mRadarOutMgr->appendLimitData(mFilterFile->getFilterAreaByteArray());
+    }
+    return sts;
+}
+
+void ZCHXAnalysisAndSendRadar::setFilterAreaEnabled(bool sts)
+{
+    if(m_VideoProcessor) m_VideoProcessor->setFilterAreaEnabled(sts);
+    Utils::Profiles::instance()->setValue(str_radar,"Limit", sts);
 }
 
 ZCHXAnalysisAndSendRadar::~ZCHXAnalysisAndSendRadar()
 {
       cout<<"~ZCHXAnalysisAndSendRadar()0";
+      if(mFilterFile) delete mFilterFile;
       if(m_pTimer)
       {
           m_pTimer->stop();
@@ -1197,4 +1227,9 @@ void ZCHXAnalysisAndSendRadar::slotDrawCombinVideo(QList<TrackNode> mList)
 void ZCHXAnalysisAndSendRadar::slotSetRadarType(int type)
 {
     mRadarType = type;
+}
+
+void ZCHXAnalysisAndSendRadar::slotSetFilterAreas(const QList<zchxMsg::filterArea> &list)
+{
+
 }

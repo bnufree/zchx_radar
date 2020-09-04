@@ -313,7 +313,9 @@ void zchxMapWidget::mousePressEvent(QMouseEvent *e)
             case CARDMOUTHMANAGER:
             case STATISTCLINEMANAGER:
             case SELECTPLAYZONE:
+            case ISLANDLINEDRAW:
             {
+                qDebug()<<"now add point:"<<mToolPtr.get();
                 if(mToolPtr) mToolPtr->appendPoint(e->pos());
                 break;
             }
@@ -684,6 +686,7 @@ void zchxMapWidget::mousePressEvent(QMouseEvent *e)
                     //                menu.addAction(tr("固定参考点"),this,SLOT(setFixedReferencePoint()));
                     menu.addAction(tr("热点"),this,SLOT(invokeHotSpot()));
                     menu.addAction(tr("截屏"),this,SIGNAL(signalScreenShot()));
+                    menu.addAction(tr("添加雷达屏蔽区域"),this, SLOT(slotAddRadarFilterArea()));
 		 //雷达目标回波控制显示
 //                    if(m_mapLayerMgr->isLayerVisible(ZCHX::LAYER_RADARRECT))
 //                    {
@@ -1355,6 +1358,10 @@ void zchxMapWidget::initDrawTool()
         case ZONEDRAW:
             mToolPtr = std::shared_ptr<zchxDrawWarningZoneTool>(new zchxDrawWarningZoneTool(this));
             break;
+        case ISLANDLINEDRAW:
+            qDebug()<<"start draw issssss";
+            mToolPtr = std::shared_ptr<zchxDrawIslandLineZoneTool>(new zchxDrawIslandLineZoneTool(this));
+            break;
         case COMMONZONESELECT:
         case ZONESELECT:
         case CHANNELSELECT:
@@ -1721,7 +1728,7 @@ void zchxMapWidget::setETool2Draw4IslandLine()
     m_eTool = ISLANDLINEDRAW;
     isActiveETool = true;
     setCursor(Qt::CrossCursor);
-    //    update();
+    initDrawTool();
 }
 
 void zchxMapWidget::setETool2Select4IslandLine()
@@ -1884,6 +1891,13 @@ void zchxMapWidget::invokeHotSpot()
     qDebug()<<"hot spot:"<<mPressPnt<<"lon- lat:"<<FLOAT_STRING(ll.lon, 10)<<FLOAT_STRING(ll.lat, 10);
     emit signalInvokeHotSpot(data);
 }
+
+void zchxMapWidget::slotAddRadarFilterArea()
+{
+    setCurPluginUserModel(ZCHX::Data::ECDIS_PLUGIN_USE_EDIT_MODEL);
+    setETool2Draw4IslandLine();
+}
+
 
 //图元tooltip显示
 bool zchxMapWidget::event(QEvent *e)

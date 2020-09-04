@@ -359,6 +359,7 @@ signals: //定义发送信号接口
     void itfSignalUpdateStatistcLineZoneState(int type, int state); // 编辑自定义线
 
     void itfSelectPlayZone(std::vector<std::pair<double, double>>);  // 选择回放区域
+    void itfSelectRadarFilterArea(std::vector<std::pair<double, double>>);  // 选择回放区域
 
     void itfAddFleet(const ZCHX::Data::ITF_AIS&);
     void itfRemoveFleet(const ZCHX::Data::ITF_AIS&);

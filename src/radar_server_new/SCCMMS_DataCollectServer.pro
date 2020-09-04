@@ -35,6 +35,7 @@ mingw{
 }
 
 INCLUDEPATH += $${PROTOBUF_FILE_DIR}
+INCLUDEPATH += $${OTHER_COMMON_DIR}
 
 
 
@@ -119,10 +120,12 @@ SOURCES += main.cpp\
     ../protobuf/2.6.1/ZCHXAISVessel.pb.cc \
     ../protobuf/2.6.1/ZCHXRadarDataDef.pb.cc \
     ../protobuf/2.6.1/ZCHXBd.pb.cc \
-    msgserver.cpp \
     ais_radar/targetnode.cpp \
     mainprocess.cpp \
-    ../exchange/radarserverconfig.cpp
+    ../exchange/radarserverconfig.cpp \
+    dataout/zchxmsgserverthread.cpp \
+    ais_radar/zchxfilterareafile.cpp \
+    radardataoutputsettings.cpp
 
 HEADERS  += \
     Log.h \
@@ -182,11 +185,14 @@ HEADERS  += \
     ../protobuf/2.6.1/ZCHXAISVessel.pb.h \
     ../protobuf/2.6.1/ZCHXRadarDataDef.pb.h \
     ../protobuf/2.6.1/ZCHXBd.pb.h \
-    msgserver.h \
     radardatautils.h \
     ais_radar/targetnode.h \
     mainprocess.h \
-    ../exchange/radarserverconfig.h
+    ../exchange/radarserverconfig.h \
+    dataout/zchxmsgserverthread.h \
+    ais_radar/zchxfilterareafile.h \
+    ../other/zchxmsgcommon.h \
+    radardataoutputsettings.h
 
 
 
@@ -210,7 +216,8 @@ FORMS    += \
     zchxmainwindow.ui \
     zchxradarinteface.ui \
     beidoudata.ui \
-    zchxradaroptwidget.ui
+    zchxradaroptwidget.ui \
+    radardataoutputsettings.ui
 
 
 DISTFILES += \

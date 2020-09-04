@@ -1,4 +1,4 @@
-#include "zchxdrawlocalmarktool.h"
+﻿#include "zchxdrawlocalmarktool.h"
 #include "zchxmapframe.h"
 #include "localmarkdlg.h"
 
@@ -12,10 +12,11 @@ zchxDrawLocalMarkTool::zchxDrawLocalMarkTool(zchxMapWidget* w, QObject *parent) 
 
 void zchxDrawLocalMarkTool::appendPoint(const QPointF &pnt)
 {
-    if(mPoints.size() == 0) {
-        mPoints.append(pnt);
+    ZCHX::Data::LatLon ll = pix2ll(pnt);
+    if(mPnts.size() == 0) {
+        mPnts.append(ll);
     } else {
-        mPoints[0] = pnt;
+        mPnts[0] = ll;
     }
 
 }
@@ -23,7 +24,7 @@ void zchxDrawLocalMarkTool::appendPoint(const QPointF &pnt)
 void zchxDrawLocalMarkTool::endDraw()
 {
     if(!isReady()) return ;
-    LatLon ll = mWidget->framework()->Pixel2LatLon(mPoints[0]);
+    LatLon ll = mPnts.last();
     LocalMarkDlg d;
     d.setLocalMarkPos(ll.lon, ll.lat);
     d.move(QCursor::pos().x() - d.width() / 2, QCursor::pos().y() - d.height() / 2 );

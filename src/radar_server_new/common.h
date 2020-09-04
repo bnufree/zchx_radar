@@ -18,6 +18,44 @@
 #define     SOCDS_DEBUG_FUNC_START          SOCDS_DEBUG<<" START"
 #define     SOCDS_DEBUG_FUNC_END            SOCDS_DEBUG<<" END"
 
+//共同设定
+//目标输出
+#define             GENERAL_SETTINGS                        "General"
+#define             VIDEO_IMAGE_TOPIC                       "VideoImageTopic"
+#define             VIDEO_IMAGE_PORT                        "VideoImagePort"
+#define             TRACK_TOPIC                             "TrackTopic"
+#define             TRACK_PORT                              "TrackPort"
+#define             TRACK_POINT_OUTPUT                      "TrackPointOutput"
+#define             FILTER_AREA_OUTPUT                      "FilterAreaOutput"
+#define             FILTER_AREA_TOPIC                       "FilterAreaTopic"
+#define             FILTER_AREA_PORT                        "FilterAreaPort"
+//目标解析
+#define             TARGET_LENGTH_FILTER                    "TargetLengthFilter"
+#define             TARGET_LENGTH_MIN                       "TargetLengthMin"
+#define             TARGET_LENGTH_MAX                       "TargetLengthMax"
+#define             TARGET_AREA_FILTER                      "TargetAreaFilter"
+#define             TARGET_AREA_MIN                         "TargetAreaMin"
+#define             TARGET_AREA_MAX                         "TargetAreaMax"
+#define             VIDEO_AMP_MIN                           "VideoAmpMin"
+#define             VIDEO_AMP_MAX                           "VideoAmpMax"
+#define             HISTORY_MAX_COUNT                       "HistoryMaxPointCount"
+#define             TARGET_EXPIRED_TIME                     "TargetExcpiredTime(Secs)"
+#define             PREDICTION_RECT_WIDTH                   "PredictionRectWidth"
+#define             VIDEO_DATA_MERGE_COUNT                  "VideoDataMergeCycleCount"
+#define             TARGET_MAX_SPEED                        "TargetMaxSpeed(Knots)"
+
+//雷达单独的参数
+#define             RADAR_DEVICE_ID                         "DeviceID"
+#define             RADAR_SCAN_TIME                         "ScanTerm(Secs)"
+#define             RADAR_RADIUS_COEFF                      "RadiusCoeff"
+#define             RADAR_FORCE_ORIGIN_RADIUS               "UseNativeRadiusOnly"
+
+
+
+
+
+
+
 //配置文件定义
 /************************服务器设定********************************/
 #define             SERVER_SETTING_SEC                      "Setting"

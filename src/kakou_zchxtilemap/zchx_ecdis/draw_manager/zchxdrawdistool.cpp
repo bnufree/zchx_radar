@@ -1,4 +1,4 @@
-#include "zchxdrawdistool.h"
+﻿#include "zchxdrawdistool.h"
 #include "zchxmapframe.h"
 
 using namespace qt;
@@ -13,10 +13,10 @@ void zchxDrawDistanceTool::show(QPainter *painter)
 
     PainterPair chk(painter);
     painter->setPen(QPen(Qt::red,2));
-    painter->drawPolyline(mPoints.toVector());
+    painter->drawPolyline(pixPnts());
 
     double total_distance = 0;
-    for(int i=0; i<mPoints.size(); ++i)
+    for(int i=0; i<mPnts.size(); ++i)
     {
         //画点
         PainterPair chk(painter);
@@ -26,7 +26,7 @@ void zchxDrawDistanceTool::show(QPainter *painter)
         painter->setPen(QPen(Qt::red,2));
         double distance = 0;
         if(i>= 1){
-            distance = zchxMapDataUtils::DistanceOnEarth(mWidget->framework()->Pixel2LatLon(mPoints[i-1]), mWidget->framework()->Pixel2LatLon(mPoints[i]));
+            distance = zchxMapDataUtils::DistanceOnEarth(mPnts[i-1], mPnts[i]);
         }
         total_distance += distance;
         QString total_dis_text = "", line_dis_text = "";
@@ -37,12 +37,12 @@ void zchxDrawDistanceTool::show(QPainter *painter)
             line_dis_text = tr("line:%1 m").arg(distance);
         }
         //标记距离值
-        painter->drawText(mPoints[i], total_dis_text);
-        painter->drawText(QPointF(mPoints[i].x(), mPoints[i].y() + 15), line_dis_text);
+        painter->drawText(ll2pix(mPnts[i]), total_dis_text);
+        painter->drawText(ll2pix(mPnts[i]) + QPointF(0,15), line_dis_text);
 
         //画点
         painter->setPen(QPen(Qt::yellow,1));
-        painter->drawEllipse(mPoints[i], 3, 3);
+        painter->drawEllipse(ll2pix(mPnts[i]), 3, 3);
 
     }
 }

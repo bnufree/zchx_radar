@@ -60,7 +60,7 @@ zchxMainWindow::zchxMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
-    this->setWindowTitle(QStringLiteral("采集器20200828"));
+    this->setWindowTitle(QStringLiteral("采集器20200904"));
 
     //this->resize(800, 600);
     //this->resize(1367, 784);
@@ -200,7 +200,7 @@ void zchxMainWindow::closeEvent(QCloseEvent *)
     }
     //mAnalysisAndSendRadarList[0]->closeTT();
     QProcess p(0);
-    p.start("cmd", QStringList()<<"/c"<<"taskkill /f /im radar_data_collect_server.exe");
+    p.start("cmd", QStringList()<<"/c"<<QString("taskkill /f /im %1").arg(QApplication::applicationName()));
     p.waitForStarted();
     p.waitForFinished();
 

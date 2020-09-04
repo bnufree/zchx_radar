@@ -1,4 +1,5 @@
-#include "zchxdrawtool.h"
+﻿#include "zchxdrawtool.h"
+#include "zchxmapframe.h"
 
 
 namespace qt {
@@ -27,16 +28,42 @@ void zchxDrawTool::startDraw()
     clearPoints();
 }
 
+ZCHX::Data::LatLon zchxDrawTool::pix2ll(const QPointF &pnt)
+{
+    ZCHX::Data::LatLon ll = mWidget->framework()->Pixel2LatLon(ZCHX::Data::Point2D(pnt));
+    return ll;
+}
+
+QPointF zchxDrawTool::ll2pix(ZCHX::Data::LatLon ll)
+{
+    return mWidget->framework()->LatLon2Pixel(ll).toPointF();
+}
+
+QPolygonF zchxDrawTool::ll2pix(const QList<ZCHX::Data::LatLon> &lls)
+{
+    QPolygonF poly;
+    foreach (ZCHX::Data::LatLon ll, lls) {
+        poly.append(ll2pix(ll));
+    }
+    return poly;
+}
+
+QPolygonF zchxDrawTool::pixPnts()
+{
+    return ll2pix(mPnts);
+}
+
 void zchxDrawTool::appendPoint(const QPointF& pnt)
 {
     //检查是否与前一个点相同,相同就不添加
-    if(mPoints.size() > 0 && mPoints.last() == pnt) return;
-    mPoints.append(pnt);
+    ZCHX::Data::LatLon ll = pix2ll(pnt);
+    if(mPnts.size() > 0 && mPnts.last() == ll) return;
+    mPnts.append(ll);
 }
 
 int zchxDrawTool::getPointSize()
 {
-    return mPoints.size();
+    return mPnts.size();
 }
 
 void zchxDrawTool::endDraw()
@@ -47,12 +74,12 @@ void zchxDrawTool::endDraw()
 
 void zchxDrawTool::clearPoints()
 {
-    mPoints.clear();
+    mPnts.clear();
 }
 
 bool zchxDrawTool::isReady()
 {
-    if(!mWidget || !mWidget->framework() || mPoints.empty()) return false;
+    if(!mWidget || !mWidget->framework() || mPnts.empty()) return false;
     return true;
 }
 

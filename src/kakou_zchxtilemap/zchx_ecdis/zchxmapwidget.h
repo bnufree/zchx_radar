@@ -434,6 +434,8 @@ public Q_SLOTS:
     void setFixedReferencePoint();                          //固定参考点
     void invokeHotSpot();                                   //热点
     void setRadarRectTimeFilter();
+    void slotAddRadarFilterArea();
+
 //    void invokeLinkageSpot();                               //联动
 //    void invokeLinkageSpotForRadar();                       //联动
 //    void setCustomFlowLine();                               //流量统计线
@@ -769,6 +771,10 @@ signals: //发送外部信号
 
     //选择回放区域
     void signalSelectPlayZone(const std::vector<std::pair<double, double>> & path);
+
+    //
+    //添加屏蔽区域
+    void signalDrawRadarFilterArea(const std::vector<std::pair<double, double>> & path);
 
     //船队
     void signalAddFleet(const ZCHX::Data::ITF_AIS& data);

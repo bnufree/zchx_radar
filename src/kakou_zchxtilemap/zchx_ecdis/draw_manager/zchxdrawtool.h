@@ -1,4 +1,4 @@
-#ifndef ZCHXDRAWTOOL_H
+﻿#ifndef ZCHXDRAWTOOL_H
 #define ZCHXDRAWTOOL_H
 
 #include <QObject>
@@ -35,6 +35,10 @@ public:
     virtual void                updateOldPath() {}
     bool                        isStartMove() const {return mIsStartMove;}
     void                        setStartMove(bool sts) {mIsStartMove = sts;}
+    ZCHX::Data::LatLon          pix2ll(const QPointF& pnt);
+    QPointF                     ll2pix(ZCHX::Data::LatLon ll);
+    QPolygonF                   ll2pix(const QList<ZCHX::Data::LatLon>& lls);
+    QPolygonF                   pixPnts();
 
 public slots:
     virtual void                appendPoint(const QPointF& pnt);
@@ -49,7 +53,7 @@ signals:
 public slots:
 
 protected:
-    QList<QPointF>       mPoints;
+    QList<ZCHX::Data::LatLon>       mPnts;
     int                 mType;                      //数据管理类型
     zchxMapWidget*      mWidget;
     MoveElement*        mEle;

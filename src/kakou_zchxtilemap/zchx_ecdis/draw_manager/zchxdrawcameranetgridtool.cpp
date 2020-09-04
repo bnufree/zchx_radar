@@ -1,4 +1,4 @@
-#include "zchxdrawcameranetgridtool.h"
+﻿#include "zchxdrawcameranetgridtool.h"
 #include "zchxmapframe.h"
 #include "localmarkdlg.h"
 
@@ -14,10 +14,11 @@ zchxDrawCameraNetGridTool::zchxDrawCameraNetGridTool(zchxMapWidget* w, QObject *
 
 void zchxDrawCameraNetGridTool::appendPoint(const QPointF &pnt)
 {
-    if(mPoints.size() < 2) {
-        mPoints.append(pnt);
+    ZCHX::Data::LatLon ll = pix2ll(pnt);
+    if(mPnts.size() < 2) {
+        mPnts.append(ll);
     } else {
-        mPoints[1] = pnt;
+        mPnts[1] = ll;
     }
 }
 
@@ -27,10 +28,10 @@ void zchxDrawCameraNetGridTool::show(QPainter *painter)
     if(!isReady()) return;
     PainterPair chk(painter);
     painter->setRenderHint(QPainter::Antialiasing);
-    if(mPoints.size() >= 2)
+    if(mPnts.size() >= 2)
     {
-        LatLon p1 = mWidget->framework()->Pixel2LatLon(mPoints[0]);
-        LatLon p2 = mWidget->framework()->Pixel2LatLon(mPoints[1]);
+        LatLon p1 = mPnts[0];
+        LatLon p2 = mPnts[1];
         ZCHX::Data::ITF_NetGrid res = makeCameraGrid(p1, p2);
         if(res.mNetGridList.size() > 0)
         {
@@ -43,7 +44,7 @@ void zchxDrawCameraNetGridTool::show(QPainter *painter)
 
 void zchxDrawCameraNetGridTool::endDraw()
 {
-    if(mPoints.size() == 2)
+    if(mPnts.size() == 2)
     {
         //弹出对话框是否保存当前的网格
         QMessageBox box;
@@ -54,8 +55,8 @@ void zchxDrawCameraNetGridTool::endDraw()
         box.setButtonText(QMessageBox::No,tr("取消"));
         if(box.exec () == QMessageBox::Ok)
         {
-            LatLon p1 = mWidget->framework()->Pixel2LatLon(mPoints[0]);
-            LatLon p2 = mWidget->framework()->Pixel2LatLon(mPoints[1]);
+            LatLon p1 = mPnts[0];
+            LatLon p2 = mPnts[1];
             if(mWidget) mWidget->signalSendCameraNetGrid(makeCameraGrid(p1, p2));
         }
     }

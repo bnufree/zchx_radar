@@ -2,10 +2,11 @@
 #define MAINPROCESS_H
 
 #include <QObject>
-#include "msgserver.h"
 #include <QJsonDocument>
+#include "zchxmsgcommon.h"
 
 #define MainProc        MainProcess::instance()
+class ZCHXAnalysisAndSendRadar;
 
 class MainProcess : public QObject
 {
@@ -18,16 +19,16 @@ public:
     static MainProcess* instance();
     void    start();
     bool    isStart() const {return mStartFlag;}
+    bool     processFilterAreaMsg(int cmd, const zchxMsg::filterArea& area);
+    void    apendRadarAnalysisServer(int site_id, ZCHXAnalysisAndSendRadar* server);
 
 signals:
 
-public slots:
-    void    slotSendSocketServerMsg(QTcpSocket* socket);
 private:
     static  MainProcess* m_pInstance;
     bool    mStartFlag;
-    MsgServer       *mMsgServer;
     QJsonDocument       mCfgDoc;
+    QMap<int, ZCHXAnalysisAndSendRadar*>        mRadarAnalysisMap;
 
 
 };

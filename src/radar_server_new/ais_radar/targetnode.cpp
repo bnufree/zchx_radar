@@ -85,7 +85,7 @@ bool TargetNode::hasChildren() const
 
 bool TargetNode::isNodePoint() const //静止目标
 {
-    return mStatus == Node_UnDef && mChildren.size() == 0 && mVideoIndexList.size() >= 3;
+    return mStatus == Node_UnDef && mChildren.size() == 0 && mVideoIndexList.size() >= 1;
 }
 
 bool TargetNode::isNodeMoving() const

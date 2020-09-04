@@ -26,6 +26,7 @@ CONFIG += c++11
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 INCLUDEPATH += $${PROTOBUF_FILE_DIR}
+INCLUDEPATH += $${OTHER_COMMON_DIR}
 
 TARGET = zchxMapTest
 TEMPLATE = app
@@ -65,7 +66,8 @@ HEADERS += \
     data/zchxradarlimitareathread.h \
     zchxfunction.h \
     ../../protobuf/2.6.1/ZCHXAISVessel.pb.h \
-    ../../protobuf/2.6.1/ZCHXRadarDataDef.pb.h
+    ../../protobuf/2.6.1/ZCHXRadarDataDef.pb.h \
+    ../../other/zchxmsgcommon.h
 
 
 DEFINES += QT_MESSAGELOGCONTEXT

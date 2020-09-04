@@ -16,10 +16,12 @@
 //#include "QtXlsx/QtXlsx"
 #include <QFileDialog>
 #include <QTimer>
-//#include "zchxvideorects.h"
 #include <QGeoCoordinate>
-//#include "zchxrectextractionthread.h"
 #include "zchxradartargettrack.h"
+#include "zchxfilterareafile.h"
+
+
+
 #define SPOKES (4096)
 
 //自定义链表结构体
@@ -65,6 +67,11 @@ public:
         QGeoCoordinate a((lat * 180 / PI), (lon * 180 / PI));
         return a;
     }
+
+    bool removeFilterArea(qint64 id);
+    bool addOrEditFilterArea(const zchxMsg::filterArea& area);
+    void setFilterAreaEnabled(bool sts);
+
 
 signals:
     void analysisLowranceRadarSignal(const QByteArray &sRadarData,
@@ -122,6 +129,7 @@ public slots:
     float getAngle(float,float,float,float);
     void slotTrackMap(QMap<int,QList<TrackNode>>);
     void slotSetRadarType(int type);
+    void slotSetFilterAreas(const QList<zchxMsg::filterArea>& list);
 private:
     void processVideoData(bool rotate = true);
     void InitializeLookupData();
@@ -170,6 +178,7 @@ private:
     int mRadarType;
     bool mUseNativeRadius;
     int mDopplerVal;
+    zchxFilterAreaFile*         mFilterFile;
 };
 
 #endif // ZCHXANALYSISANDSENDRADAR_H

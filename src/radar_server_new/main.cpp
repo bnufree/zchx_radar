@@ -5,12 +5,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-#if 0
-    if(argc == 1)
-    {
-        if(!MainProc->isStart()) MainProc->start();
-    }
-#endif
+    if(!MainProc->isStart()) MainProc->start();
     zchxMainWindow w;
     w.show();
     return a.exec();

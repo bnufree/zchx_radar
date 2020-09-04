@@ -184,6 +184,8 @@ void MainWindow::initSignalConnect()
 
     connect(mMapWidget, SIGNAL(signalSelectPlayZone(std::vector<std::pair<double, double>>)),
             this,SIGNAL(itfSelectPlayZone(std::vector<std::pair<double, double>>)));
+    connect(mMapWidget, SIGNAL(signalDrawRadarFilterArea(std::vector<std::pair<double,double> >)),
+            this, SIGNAL(itfSelectRadarFilterArea(std::vector<std::pair<double,double> >)));
 
     connect(mMapWidget, SIGNAL(signalAddFleet(const ZCHX::Data::ITF_AIS&)), this, SIGNAL(itfAddFleet(const ZCHX::Data::ITF_AIS&)));
     connect(mMapWidget, SIGNAL(signalRemoveFleet(const ZCHX::Data::ITF_AIS&)), this, SIGNAL(itfRemoveFleet(const ZCHX::Data::ITF_AIS&)));

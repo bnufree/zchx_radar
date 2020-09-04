@@ -41,6 +41,7 @@
 #include <QColorDialog>
 #include "fusedatautil.h"
 #include "zchxsimulatethread.h"
+#include "mainprocess.h"
 
 #define         LOG_LINE_COUNT          50
 
@@ -192,6 +193,7 @@ zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     //处理雷达数据并发送
     ui->settingWidget->setId(radarId);
     mAnalysisAndSendRadar = new ZCHXAnalysisAndSendRadar(radarId,0);
+    MainProc->apendRadarAnalysisServer(radarId, mAnalysisAndSendRadar);
     connect(mRadarDataServer, SIGNAL(signalSendRadarType(int)), mAnalysisAndSendRadar, SLOT(slotSetRadarType(int)));
     emit mRadarDataServer->startProcessSignal();//开启接收
 
@@ -396,10 +398,10 @@ void zchxradarinteface::initUI()
 void zchxradarinteface::closeEvent(QCloseEvent *)
 {
     //mAnalysisAndSendRadarList[0]->closeTT();
-    QProcess p(0);
-    p.start("cmd", QStringList()<<"/c"<<"taskkill /f /im radar_data_collect_server.exe");
-    p.waitForStarted();
-    p.waitForFinished();
+//    QProcess p(0);
+//    p.start("cmd", QStringList()<<"/c"<<"taskkill /f /im radar_data_collect_server.exe");
+//    p.waitForStarted();
+//    p.waitForFinished();
 
 }
 
