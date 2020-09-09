@@ -3,6 +3,7 @@
 #include "profiles.h"
 #include "zchxmapwidget.h"
 #include "radarrectelement.h"
+#include "map_layer/zchxmaplayermgr.h"
 
 #define MIN_SIDE_LEN 10
 #define MAX_SIDE_LEN 30
@@ -283,7 +284,10 @@ void RadarPointElement::initFromSettings()
 
 void RadarPointElement::drawElement(QPainter *painter)
 {    
-    if(!painter) return;
+    if(!painter || !mView->getLayerMgr()->isLayerVisible(ZCHX::LAYER_RADAR_CURRENT) || !mView->framework())
+    {
+        return;
+    }
     //首先画儿子图元
     Element::drawElement(painter);
     //画报警背景

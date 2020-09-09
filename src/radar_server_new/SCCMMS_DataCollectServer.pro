@@ -192,7 +192,8 @@ HEADERS  += \
     dataout/zchxmsgserverthread.h \
     ais_radar/zchxfilterareafile.h \
     ../other/zchxmsgcommon.h \
-    radardataoutputsettings.h
+    radardataoutputsettings.h \
+    zchxsettingsdefines.h
 
 
 

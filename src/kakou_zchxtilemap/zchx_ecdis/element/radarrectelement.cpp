@@ -607,12 +607,12 @@ void RadarRectGlowElement::drawRadarTracks(QPainter *painter)
 #endif
     //画出目标的轨迹线
     painter->save();
-    painter->setPen(QPen(Qt::white, 1));
+    painter->setPen(QPen(Qt::white, 1, Qt::DashDotDotLine));
     painter->drawPolyline(path);
     int index = 0;
     foreach (QPointF pnt, path) {
         painter->setBrush(Qt::green);
-        painter->drawEllipse(pnt, 2, 2);
+        painter->drawEllipse(pnt, 3, 3);
         painter->drawText(pnt, QString::number(++index));
     }
     painter->restore();

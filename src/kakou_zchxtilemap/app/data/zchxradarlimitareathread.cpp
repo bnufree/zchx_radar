@@ -46,6 +46,7 @@ void zchxRadarLimitAreaThread::parseJsonFromByteArray(const QByteArray &data, QL
     QJsonArray array = docRcv.array();
     foreach (QJsonValue val, array) {
         zchxMsg::filterArea filter(val.toObject());
+        qDebug()<<filter.id<<filter.name<<filter.type<<filter.site;
         ZCHX::Data::ITF_IslandLine line;
         line.name = filter.name;
         if(filter.type == 1)
@@ -63,6 +64,7 @@ void zchxRadarLimitAreaThread::parseJsonFromByteArray(const QByteArray &data, QL
             line.path.push_back(std::pair<double, double>(ll.lat, ll.lon));
         }
         line.id = filter.id;
+
 
         result.append(line);
     }

@@ -132,7 +132,11 @@ void ZCHXRadarVideoProcessor::appendSrcData(const zchxRadarVideoTask &task)
             data.append(task);
         }
 
-        qDebug()<<"task list size:"<<mTaskList.size();
+        int size = mTaskList.size();
+        qDebug()<<"task list size:"<<size;
+//        while (mTaskList.size() > 2) {
+//            mTaskList.takeFirst();
+//        }
     }
 }
 
@@ -225,7 +229,7 @@ void ZCHXRadarVideoProcessor::slotSetColor(int a1,int a2,int a3,int b1,int b2,in
 //画回波255位黄色,1-244振幅为蓝色
 void ZCHXRadarVideoProcessor::process(const ZCHXRadarVideoProcessorData& task)
 {
-    zchxTimeElapsedCounter counter(__FUNCTION__);
+    zchxTimeElapsedCounter counter(QString(metaObject()->className()) + " : " + QString(__FUNCTION__));
     if(task.size() == 0) return;
     //首先将所有任务的回波都合成一个回波图形
     QMap<int,RADAR_VIDEO_DATA> RadarVideo = task[0].m_RadarVideo;

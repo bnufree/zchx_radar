@@ -133,7 +133,7 @@ zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     QString track_min_radius =  Utils::Profiles::instance()->value(str_radar,"track_min_radius").toString();
     QString restart_time = Utils::Profiles::instance()->value("Radar","restart_time",1).toString();
     bool mf = Utils::Profiles::instance()->value("Radar","restart_flag").toBool();
-    bool mSend = Utils::Profiles::instance()->value(str_radar,"send_dianjian").toBool();
+
     Utils::Profiles::instance()->setDefault(str_radar, "Direction_Invert", "90");
     QString direction_change = Utils::Profiles::instance()->value(str_radar, "Direction_Invert", "90").toString();
     ui->direction_change_edit->setText(direction_change);
@@ -162,7 +162,21 @@ zchxradarinteface::zchxradarinteface(int ID,QWidget *parent) :
     ui->scanCycleTime->setValue(scan_time);
 
 
-    ui->send_dj_checkBox->setChecked(mSend);
+    //目标输出
+    Utils::Profiles::instance()->setDefault(str_radar,"send_dianjian", true);
+    ui->send_dj_checkBox->setChecked(Utils::Profiles::instance()->value(str_radar,"send_dianjian").toBool());
+    Utils::Profiles::instance()->setDefault(str_radar, "target_confirm_counter", 3);
+    ui->target_confirm_spinBox->setValue(Utils::Profiles::instance()->value(str_radar,"target_confirm_counter").toInt());
+    Utils::Profiles::instance()->setDefault(str_radar, "output_target_min_speed", 20);
+    ui->move_target_min_speed_spinBox->setValue(Utils::Profiles::instance()->value(str_radar, "output_target_min_speed", 20).toInt());
+    //目标预推距离检查
+    Utils::Profiles::instance()->setDefault(str_radar, "target_prediction", false);
+    ui->target_prediction_chk->setChecked(Utils::Profiles::instance()->value(str_radar, "target_prediction", false).toBool());
+    Utils::Profiles::instance()->setDefault(str_radar, "target_gap_check", true);
+    ui->target_gap_chk->setChecked(Utils::Profiles::instance()->value(str_radar, "target_gap_check", true).toBool());
+    ui->target_prediction_chk->setVisible(false);
+
+
     ui->restart_checkBox->setChecked(mf);
     ui->restart_lineEdit->setText(restart_time);
     ui->target_length_min->setValue(track_min_radius.toInt());
@@ -924,6 +938,11 @@ void zchxradarinteface::on_update_setting_btn_clicked()
     Utils::Profiles::instance()->setValue(str_radar, "prediction_width", ui->predictionWidth->value());
     Utils::Profiles::instance()->setValue(str_radar, "max_speed", ui->targetMaxSpeedSpinBox->value());
     Utils::Profiles::instance()->setValue(str_radar, "scan_time", ui->scanCycleTime->value());
+    Utils::Profiles::instance()->setValue(str_radar, "target_confirm_counter", ui->target_confirm_spinBox->value());
+    Utils::Profiles::instance()->setValue(str_radar, "output_target_min_speed", ui->move_target_min_speed_spinBox->value());
+    Utils::Profiles::instance()->setValue(str_radar, "target_prediction", ui->target_prediction_chk->isChecked());
+    Utils::Profiles::instance()->setValue(str_radar, "target_gap_check", ui->target_gap_chk->isChecked());
+
 
 
     int ret1 = QMessageBox::information(0,QStringLiteral("信息"),QStringLiteral("配置修改成功"));

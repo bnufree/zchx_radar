@@ -217,6 +217,7 @@ void zchxRadarRectExtraction::parseVideoPieceFromImage(QImage& result, zchxRadar
         saveImg(time, "gray", gray_src);
         saveImg(time, "binary", binary);
     }
+    qDebug()<<"video countours size before filter:"<<contours.size();
     for(int i=0; i<contours.size(); i++)
     {
         double area = 0;
@@ -427,7 +428,7 @@ void zchxRadarRectExtraction::parseVideoPieceFromImage(QImage& result, zchxRadar
         rectDef.set_videocycleindex(video_index);
         list.append(rectDef);
     }
-    qDebug()<<__FUNCTION__<<" elapsed:"<<t.elapsed();
+    qDebug()<<__FUNCTION__<<" elapsed:"<<t.elapsed()<<" and total rect size:"<<list.size();
 }
 
 void zchxRadarRectExtraction::transferLatlonArea2PixelArea( bool lock)

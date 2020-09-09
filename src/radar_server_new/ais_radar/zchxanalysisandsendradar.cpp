@@ -166,14 +166,24 @@ ZCHXAnalysisAndSendRadar::ZCHXAnalysisAndSendRadar(int id, QObject *parent)
     double prediction_width = Utils::Profiles::instance()->value(str_radar, "prediction_width", 20).toDouble();
     int max_speed = Utils::Profiles::instance()->value(str_radar, "max_speed", 40).toInt();
     double scan_time = Utils::Profiles::instance()->value(str_radar, "scan_time", 3.0).toDouble();
+    int target_confirm_counter = Utils::Profiles::instance()->value(str_radar, "target_confirm_counter", 5).toInt();
+    bool send_silent_point = Utils::Profiles::instance()->value(str_radar, "send_dianjian", false).toBool();
+    double output_target_min_speed = Utils::Profiles::instance()->value(str_radar, "output_target_min_speed", 20).toInt() * 1.852 / 3.6;
 
-
-    m_targetTrack = new zchxRadarTargetTrack(radar_num, Latlon(m_dCentreLat, m_dCentreLon), clear_track_time, prediction_width, true, this);
+    m_targetTrack = new zchxRadarTargetTrack(radar_num, Latlon(m_dCentreLat, m_dCentreLon),
+                                             clear_track_time, prediction_width,
+                                             true, send_silent_point, output_target_min_speed,
+                                             target_confirm_counter, this);
     m_targetTrack->setAdjustCogEnabled(cog_adjust);
     m_targetTrack->setTargetMergeDis(merge_dis);
     m_targetTrack->setDirectionInvertVal(dir_invert);
     m_targetTrack->setMaxSpeed(max_speed * 1.852 / 3.6);
     m_targetTrack->setScanTime(scan_time);
+
+    bool target_prediction = Utils::Profiles::instance()->value(str_radar, "target_prediction", true).toBool();
+    bool target_gap_check = Utils::Profiles::instance()->value(str_radar, "target_gap_check", true).toBool();
+    m_targetTrack->setIsTargetGapCheck(target_gap_check);
+    m_targetTrack->setIsTargetPrediction(target_prediction);
 
     connect(m_VideoProcessor,SIGNAL(signalSendVideoPixmap(QPixmap)), this,SLOT(slotRecvVideoImg(QPixmap)));
     //回波颜色设置

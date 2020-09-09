@@ -7,6 +7,9 @@
 #define         FALSE_ALARM_COUNTER_PERCENT  0.5
 
 
+int             target_silent_confirm_counter = 5;
+bool            output_silent_node = true;
+
 TargetNode::TargetNode()
 {
     mDefRect = 0;
@@ -83,9 +86,26 @@ bool TargetNode::hasChildren() const
     return mChildren.size() != 0;
 }
 
-bool TargetNode::isNodePoint() const //静止目标
+bool TargetNode::containsRect(const zchxRadarRectDef &other) const
 {
-    return mStatus == Node_UnDef && mChildren.size() == 0 && mVideoIndexList.size() >= 1;
+    if(mChildren.size() == 0) return false;
+    for(int i=0; i<mChildren.size(); i++)
+    {
+        TargetNode *child = mChildren[i].data();
+        if(child && child->mDefRect)
+        {
+            if(child->mDefRect->videocycleindex() == other.videocycleindex() && child->mDefRect->rectnumber() == other.rectnumber())
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool TargetNode::isNodeSilent() const //静止目标
+{
+    return mStatus == Node_UnDef && mChildren.size() == 0 && mVideoIndexList.size() >= target_silent_confirm_counter;
 }
 
 bool TargetNode::isNodeMoving() const
@@ -163,9 +183,11 @@ void TargetNode::updateRouteNodePathStatus(NodeStatus sts)
     }
 }
 
-bool TargetNode::isOutput() const
+bool TargetNode::isOutputEnabled() const
 {
-    return isNodeMoving() || isNodePoint();
+    if(isNodeMoving()) return true;
+    if(isNodeSilent()) return true;
+    return false;
 }
 
 TargetNode* TargetNode::topNode()
@@ -229,6 +251,8 @@ QList<uint>  TargetNode::getVideoIndexList()
                 if(result.contains(id)) continue;
                 result.append(id);
             }
+            if(child->mChildren.size() == 0) break;
+            child = child->mChildren[0].data();
         }
     }
     //进行升序排列，最多保持1000个
@@ -260,7 +284,7 @@ uint TargetNode::getLatestChildUpdateTime()
 bool TargetNode::isFalseAlarm(int video_index_now)
 {
     //静止目标才判断是不是虚警。静止目标没有子节点 只有一个节点
-    if(!isNodePoint()) return false;
+    if(!isNodeSilent()) return false;
     QList<uint> list = getVideoIndexList();
     if(list.size() == 0) return false;
     //获取目标统计的开始周期

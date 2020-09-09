@@ -35,6 +35,7 @@ void zchxFilterAreaFile::init()
                 for(int i=0; i<array.size(); i++)
                 {
                     zchxMsg::filterArea area(array[i].toObject());
+                    qDebug()<<"filter:"<<area.id<<area.type<<area.name<<area.site;
                     if(area.id >= 0)
                     {
                         if(mAreaMap.contains(area.id))

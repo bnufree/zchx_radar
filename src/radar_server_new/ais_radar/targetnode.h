@@ -15,6 +15,7 @@ enum NodeStatus{
     Node_UnDef = 0,
     Node_Moving,
     Node_Lost,
+    Node_GAP_ABNORMAL,
 };
 
 //目标状态确定为静止，则目标路径上就始终只有一个点
@@ -43,14 +44,14 @@ public:
     TargetNode* getLastChild(TargetNode* src);
     TargetNode* getLastChild();
     bool hasChildren() const;
-    bool isNodePoint() const; //静止目标
+    bool isNodeSilent() const; //静止目标
     bool isNodeMoving() const;
     double getReferenceSog(bool average = true);
     double getReferenceCog(bool average = true);
     void updateSerialNum(int num);
     void setAllNodeSeriaNum(int num);
     void updateRouteNodePathStatus(NodeStatus sts);
-    bool isOutput() const;
+    bool isOutputEnabled() const;
     TargetNode* topNode();
     int     getDepth();
     bool  isTopNode() const;
@@ -62,6 +63,8 @@ public:
     //清除预推信息
     void clearPrediction();
     void makePrediction(int videoIndex, uint videoTime, bool fixed_space_time = false);
+    //
+    bool containsRect(const zchxRadarRectDef& other) const;
 
 };
 

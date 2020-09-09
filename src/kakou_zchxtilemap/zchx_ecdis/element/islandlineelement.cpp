@@ -168,6 +168,11 @@ void IslandLineElement::drawElement(QPainter *painter)
     painter->setPen(QPen(QColor(color()),3));
     painter->strokePath(polygon, QPen(QColor(color()),3, Qt::DashDotDotLine));
 
+    std::pair<double, double> ll = tmp_path[0];
+    QPointF pos = mView->framework()->LatLon2Pixel(ll.first, ll.second).toPointF();
+
+    painter->drawText(pos, m_data.name);
+
 }
 }
 

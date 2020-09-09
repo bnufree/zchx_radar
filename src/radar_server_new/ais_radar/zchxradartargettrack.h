@@ -26,6 +26,7 @@ struct AreaNodeTable{
     zchxRadarRectDefList        mRectList;          //落入这个区域的所有目标
 };
 
+#define     TARGET_CONFIRM_NODE_COUNT         5
 
 class zchxRadarTargetTrack : public QThread
 {
@@ -38,13 +39,18 @@ public:
         Model_Overtake,
     };
 
-    explicit    zchxRadarTargetTrack(int id, const Latlon& ll, int clear_time, double predictionWidth, bool route, QObject *parent = 0);
+    explicit    zchxRadarTargetTrack(int id, const Latlon& ll,
+                                     int clear_time, double predictionWidth,
+                                     bool route, bool output_silent_node, double min_target_speed,
+                                     int target_confirm_counter, QObject *parent = 0);
     void        setDirectionInvertVal(double val) {mDirectionInvertThresholdVal = val;}
     void        setTargetMergeDis(double val){mTargetMergeDis = val;}
     void        setAdjustCogEnabled(bool sts) {mAdjustCogEnabled = sts;}
     void        setRangefactor(double factor) {mRangeFactor = factor;}
     void        setMaxSpeed(double speed) {mMaxSpeed = speed;}
     void        setScanTime(double secs) {mScanTime = secs;}
+    void        setIsTargetPrediction(bool sts) {mIsTargetPrediction = sts;}
+    void        setIsTargetGapCheck(bool sts) {mIsCheckTargetGap = sts;}
 public slots:
     void        appendTask(const zchxRadarRectDefList& task);
     void        process(const zchxRadarTrackTask& task);
@@ -65,7 +71,7 @@ private:
     void        deleteExpiredNode();
     void        outputTargets();
     void        outputRoutePath();
-    void        updateTrackPointWithNode(zchxRadarSurfaceTrack& list, TargetNode* node);
+    void        updateTrackPointWithNode(zchxRadarSurfaceTrack& list, TargetNode* node, int* silent_num = 0);
     void        updateRectMapWithNode(zchxRadarRectMap& map, TargetNode* node);
 
     int         getCurrentNodeNum();
@@ -117,8 +123,14 @@ private:
     //目标是否预推更新
     bool                        mIsTargetPrediction;                //是否进行预推
     int                         mTargetPredictionInterval;           //预推周期 比如2个周期更新一次
-    double                         mMaxSpeed;
+    bool                        mIsCheckTargetGap;                  //是否检查目标之间的距离
+    //目标允许的最大速度和雷达的扫描周期
+    double                      mMaxSpeed;
     double                      mScanTime;                           //最大速度(m/s)  时间周期秒
+    //目标确认需要的周期数
+    int                         mTargetConfirmCounter;              //默认为5个周期
+    bool                        mOutputSilentPoint;                 //是否输出点目标
+    double                      mOutputTargetMinSpeed;              //运动目标的输出时的最低速度
 };
 
 #endif // ZCHXRADARTARGETTRACK_H

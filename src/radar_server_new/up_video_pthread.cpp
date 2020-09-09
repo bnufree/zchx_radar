@@ -51,7 +51,6 @@ void up_video_pthread::readAllFile(QString path)
             dir_iterator.next();
             QFileInfo file_info = dir_iterator.fileInfo();
             QString file_path = file_info.absoluteFilePath();
-            string_list.append(file_path);
             ZCHX_LOG_OUT("file_path")<<file_path;
             QFile video_file(file_path);
             if(!video_file.open(QIODevice::ReadOnly)){

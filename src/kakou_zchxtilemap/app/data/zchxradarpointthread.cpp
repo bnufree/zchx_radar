@@ -72,7 +72,7 @@ void ZCHXRadarPointThread::parseRecvData(const QByteArrayList& list)
         QList<ZCHX::Data::ITF_RadarPoint> radarPointList;
         if(!objRadarSurfaceTrack.ParseFromArray(list.last().data(), list.last().size())) return;
         parseRadarList(objRadarSurfaceTrack, radarPointList);
-        qDebug()<<"radar point send time:"<<QDateTime::currentDateTime();
+//        qDebug()<<"radar point send time:"<<QDateTime::currentDateTime();
         emit sendMsg(mRadarCommonSettings.m_sSiteID, radarPointList);
     } else
     {
@@ -116,6 +116,7 @@ void ZCHXRadarPointThread::parseRadarList(const PROTOBUF_RadarSurfaceTrack &objR
     {
         const PROTOBUF_TrackPoint &point = objRadarSurfaceTrack.trackpoints(i);
         ZCHX::Data::ITF_RadarPoint item;
+        item.warnStatus = 0;
         item.radarSiteID                = QString::fromStdString(point.radarsiteid());
         item.trackNumber                = point.tracknumber();
         transferNodeRect(item.currentRect, point.current());
@@ -134,6 +135,7 @@ void ZCHXRadarPointThread::parseRadarList(const PROTOBUF_RadarSurfaceTrack &objR
             item.objType = point.objtype();
         }
         if(point.has_objname()) item.objName = QString::fromStdString(point.objname());
+        item.diameter = item.currentRect.boundRect.diameter;
 
         radarPointList.append(item);
     }

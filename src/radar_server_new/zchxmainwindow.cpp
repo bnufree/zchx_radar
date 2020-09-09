@@ -60,7 +60,7 @@ zchxMainWindow::zchxMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
-    this->setWindowTitle(QStringLiteral("采集器20200904"));
+    this->setWindowTitle(QStringLiteral("采集器20200908"));
 
     //this->resize(800, 600);
     //this->resize(1367, 784);

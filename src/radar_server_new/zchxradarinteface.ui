@@ -866,13 +866,16 @@ QGroupBox{
               <string>目标解析参数设定</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_14">
-              <item row="9" column="0" colspan="4">
+              <item row="10" column="0" colspan="4">
                <widget class="QFrame" name="district_filter_frame">
                 <layout class="QHBoxLayout" name="horizontalLayout_3">
                  <item>
                   <widget class="QCheckBox" name="checkBox">
                    <property name="text">
                     <string>屏蔽区域开启</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
                    </property>
                   </widget>
                  </item>
@@ -899,29 +902,6 @@ QGroupBox{
                 </layout>
                </widget>
               </item>
-              <item row="4" column="1">
-               <widget class="QSpinBox" name="predictionWidth">
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <number>2000000</number>
-                </property>
-                <property name="value">
-                 <number>20</number>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="label_29">
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>历史轨迹最大点数</string>
-                </property>
-               </widget>
-              </item>
               <item row="4" column="3">
                <widget class="QSpinBox" name="video_or_count">
                 <property name="minimum">
@@ -932,36 +912,6 @@ QGroupBox{
                 </property>
                </widget>
               </item>
-              <item row="2" column="2">
-               <widget class="QLabel" name="label_33">
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>雷达设备编号</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QSpinBox" name="max_history"/>
-              </item>
-              <item row="3" column="2">
-               <widget class="QLabel" name="label_27">
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>目标超时清理时间（秒）</string>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="3">
-               <widget class="QSpinBox" name="clear_track_time">
-                <property name="maximum">
-                 <number>99999999</number>
-                </property>
-               </widget>
-              </item>
               <item row="4" column="2">
                <widget class="QLabel" name="label_11">
                 <property name="styleSheet">
@@ -969,19 +919,6 @@ QGroupBox{
                 </property>
                 <property name="text">
                  <string>回波叠加（周期）</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="3">
-               <widget class="QLineEdit" name="bh_lineEdit"/>
-              </item>
-              <item row="4" column="0">
-               <widget class="QLabel" name="label_15">
-                <property name="styleSheet">
-                 <string notr="true"/>
-                </property>
-                <property name="text">
-                 <string>预推矩形宽度(米)</string>
                 </property>
                </widget>
               </item>
@@ -1008,15 +945,12 @@ QGroupBox{
                 </property>
                </widget>
               </item>
-              <item row="6" column="2">
-               <widget class="QCheckBox" name="useNativeRadiusCHK">
-                <property name="text">
-                 <string>强制使用原始回波半径</string>
+              <item row="3" column="3">
+               <widget class="QSpinBox" name="clear_track_time">
+                <property name="maximum">
+                 <number>99999999</number>
                 </property>
                </widget>
-              </item>
-              <item row="7" column="1">
-               <widget class="QLineEdit" name="direction_change_edit"/>
               </item>
               <item row="7" column="2">
                <widget class="QCheckBox" name="cog_adjust_chk">
@@ -1025,7 +959,76 @@ QGroupBox{
                 </property>
                </widget>
               </item>
-              <item row="10" column="0" colspan="4">
+              <item row="4" column="1">
+               <widget class="QSpinBox" name="predictionWidth">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>2000000</number>
+                </property>
+                <property name="value">
+                 <number>20</number>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_29">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>历史轨迹最大点数</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QLineEdit" name="direction_change_edit"/>
+              </item>
+              <item row="3" column="1">
+               <widget class="QSpinBox" name="max_history"/>
+              </item>
+              <item row="2" column="3">
+               <widget class="QLineEdit" name="bh_lineEdit"/>
+              </item>
+              <item row="3" column="2">
+               <widget class="QLabel" name="label_27">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>目标超时清理时间（秒）</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="2">
+               <widget class="QCheckBox" name="useNativeRadiusCHK">
+                <property name="text">
+                 <string>强制使用原始回波半径</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QLabel" name="label_33">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>雷达设备编号</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_15">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>预推矩形宽度(米)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="0" colspan="4">
                <widget class="QPushButton" name="update_setting_btn">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -1038,16 +1041,40 @@ QGroupBox{
                 </property>
                </widget>
               </item>
+              <item row="5" column="1">
+               <widget class="QSpinBox" name="targetMaxSpeedSpinBox"/>
+              </item>
+              <item row="5" column="3">
+               <widget class="QDoubleSpinBox" name="scanCycleTime">
+                <property name="maximum">
+                 <double>60.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2">
+               <widget class="QLabel" name="label_18">
+                <property name="text">
+                 <string>雷达扫描周期(秒)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="label_17">
+                <property name="text">
+                 <string>目标最大速度(节)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="label_21">
+                <property name="text">
+                 <string>目标状态确认周期数</string>
+                </property>
+               </widget>
+              </item>
               <item row="0" column="0" colspan="3">
                <widget class="QFrame" name="target_length_filter_frame">
                 <layout class="QGridLayout" name="gridLayout_4">
-                 <item row="0" column="0">
-                  <widget class="QCheckBox" name="target_length_filter_chk">
-                   <property name="text">
-                    <string>目标长度区间过滤</string>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="0" column="1">
                   <widget class="QSpinBox" name="target_length_min">
                    <property name="minimum">
@@ -1085,6 +1112,16 @@ QGroupBox{
                    </property>
                   </widget>
                  </item>
+                 <item row="0" column="0">
+                  <widget class="QCheckBox" name="target_length_filter_chk">
+                   <property name="text">
+                    <string>目标长度区间过滤</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
                 </layout>
                </widget>
               </item>
@@ -1095,6 +1132,9 @@ QGroupBox{
                   <widget class="QCheckBox" name="target_area_filter_chk">
                    <property name="text">
                     <string>目标面积区间过滤</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
                    </property>
                   </widget>
                  </item>
@@ -1181,34 +1221,57 @@ QGroupBox{
                 </layout>
                </widget>
               </item>
-              <item row="5" column="0">
-               <widget class="QLabel" name="label_17">
-                <property name="text">
-                 <string>目标最大速度(节)</string>
+              <item row="8" column="1">
+               <widget class="QSpinBox" name="target_confirm_spinBox">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>10</number>
+                </property>
+                <property name="value">
+                 <number>3</number>
                 </property>
                </widget>
               </item>
-              <item row="5" column="1">
-               <widget class="QSpinBox" name="targetMaxSpeedSpinBox"/>
-              </item>
-              <item row="5" column="2">
-               <widget class="QLabel" name="label_18">
-                <property name="text">
-                 <string>雷达扫描周期(秒)</string>
-                </property>
-               </widget>
-              </item>
-              <item row="7" column="3">
+              <item row="9" column="0">
                <widget class="QCheckBox" name="send_dj_checkBox">
                 <property name="text">
-                 <string>点迹目标</string>
+                 <string>输出点迹目标</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="3">
-               <widget class="QDoubleSpinBox" name="scanCycleTime">
+              <item row="9" column="2">
+               <widget class="QLabel" name="move_target_min_speed_label">
+                <property name="text">
+                 <string>输出运动目标的最小速度（节）</string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="3">
+               <widget class="QSpinBox" name="move_target_min_speed_spinBox">
+                <property name="minimum">
+                 <number>0</number>
+                </property>
                 <property name="maximum">
-                 <double>60.000000000000000</double>
+                 <number>200</number>
+                </property>
+                <property name="value">
+                 <number>1</number>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="2">
+               <widget class="QCheckBox" name="target_gap_chk">
+                <property name="text">
+                 <string>运动目标距离间隔检查</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="3">
+               <widget class="QCheckBox" name="target_prediction_chk">
+                <property name="text">
+                 <string>目标预推</string>
                 </property>
                </widget>
               </item>
